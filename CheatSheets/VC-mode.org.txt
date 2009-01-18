@@ -1,0 +1,23 @@
+VC mode cheatsheet:
+
+On current file:
+* View diff between revisions:
+** C-x v =
+** C-u C-x v =
+* View commit log:
+** C-x v l
+** Inside this buffer:
+*** "f" to visit the revision at point
+*** "d" to visit a diff of revision at point
+* Add current file to commit
+** C-x v i
+
+
+
+Git:
+* Modeline:
+** The modeline shows the current branch
+*** "git-master" show the file is unchanged from the committed version
+*** "git:master" shows the file has been changed from the committed version
+
+
