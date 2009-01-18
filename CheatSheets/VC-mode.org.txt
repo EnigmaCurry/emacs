@@ -11,6 +11,8 @@ On current file:
 *** "d" to visit a diff of revision at point
 * Add current file to commit
 ** C-x v i
+* Commit current file
+** C-x v v
 
 
 
