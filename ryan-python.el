@@ -32,6 +32,16 @@
       )
 )
 
+;; Autofill inside of comments
+
+(defun python-auto-fill-comments-only ()
+  (auto-fill-mode 1)
+  (set (make-local-variable 'fill-nobreak-predicate)
+       (lambda ()
+         (not (python-in-string/comment)))))
+(add-hook 'python-mode-hook
+          (lambda ()
+            (python-auto-fill-comments-only)))
 
 ;; pymacs
 (autoload 'pymacs-apply "pymacs")
