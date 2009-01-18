@@ -1,0 +1,3 @@
+http://www.loveshack.ukfsn.org/emacs/sym-comp.el
+http://www.loveshack.ukfsn.org/emacs/python.el
+http://www.loveshack.ukfsn.org/emacs/emacs.py

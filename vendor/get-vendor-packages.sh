@@ -1,0 +1,49 @@
+#!/bin/bash
+
+#CEDET 1.0pre4
+wget -c "http://downloads.sourceforge.net/cedet/cedet-1.0pre4.tar.gz?modtime=1181081883&big_mirror=0"
+tar xfvz cedet-1.0pre4.tar.gz
+rm cedet-1.0pre4.tar.gz
+pushd cedet-1.0pre4
+make
+popd
+
+#BBDB 2.35
+rm -rf bbdb
+mkdir bbdb
+wget -c "http://downloads.sourceforge.net/bbdb/bbdb-2.35.tar.gz?modtime=1170198722&big_mirror=0"
+tar xfvz bbdb-2.35.tar.gz
+rm bbdb-2.35.tar.gz
+cp bbdb-2.35/lisp/*.el bbdb
+rm -rf bbdb-2.35
+
+#ECB 2.32
+wget -c "http://superb-east.dl.sourceforge.net/sourceforge/ecb/ecb-2.32.tar.gz"
+tar xfvz ecb-2.32.tar.gz
+rm ecb-2.32.tar.gz
+
+#JDEE 2.3.5.1
+wget -c "http://downloads.sourceforge.net/jdee/jde-2.3.5.1.tar.gz?modtime=1198933211&big_mirror=0"
+tar xfvz jde-2.3.5.1.tar.gz
+rm jde-2.3.5.1.tar.gz
+
+#NXHTML 
+wget -c "http://ourcomments.org/Emacs/DL/elisp/nxhtml/zip/nxhtml-1.75-090112.zip"
+unzip nxhtml-1.75-090112.zip
+rm nxhtml-1.75-090112.zip
+
+#NXML
+wget -c "http://www.thaiopensource.com/download/nxml-mode-20041004.tar.gz"
+tar xfvz nxml-mode-20041004.tar.gz
+rm nxml-mode-20041004.tar.gz
+ln -s nxml-mode-20041004 nxml-mode
+
+#Jabber 0.7.1
+git clone git://git.catap.ru/emacs-jabber.git
+pushd emacs-jabber
+autoconf
+autoreconf
+automake --add-missing
+./configure
+make
+popd

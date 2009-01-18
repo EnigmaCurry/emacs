@@ -1,0 +1,7 @@
+%inbox "inbox"
+%[Gmail]/Starred "☆"
+%[Gmail]/Sent Mail "Sent Mail"
+%[Gmail]/All Mail "All Mail"
+%[Gmail]/Trash "Trash"
+%[Gmail]/Spam "Spam"
+

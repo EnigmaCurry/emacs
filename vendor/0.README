@@ -1,0 +1,6 @@
+Files in the directory are third party libraries.
+These files should never be edited so as they can be updated whenever necessary.
+
+All customizations should go in the parent directory.
+
+Also, a few packages are way too big for me to want to replicate them on github, so I don't store them there and there is a post install procedure to get a few more packages. Run ./get-vendor-packages.sh
