@@ -13,12 +13,11 @@ On current file:
 ** C-x v i
 * Commit current file
 ** C-x v v
-
-
-
-Git:
+* Discard changes:
+** C-x v u
 * Modeline:
-** The modeline shows the current branch
+** Git:
+*** The modeline shows the current branch
 *** "git-master" show the file is unchanged from the committed version
 *** "git:master" shows the file has been changed from the committed version
 

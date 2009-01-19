@@ -33,6 +33,7 @@
 (require 'pager)
 (require 'twit)
 (require 'ledger)
+(require 'magit)
 ;; Ever since upgrading to Gutsy, ECB is broken
 ;(require 'ecb)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
