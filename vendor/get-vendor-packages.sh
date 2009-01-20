@@ -22,11 +22,6 @@ wget -c "http://superb-east.dl.sourceforge.net/sourceforge/ecb/ecb-2.32.tar.gz"
 tar xfvz ecb-2.32.tar.gz
 rm ecb-2.32.tar.gz
 
-#JDEE 2.3.5.1
-wget -c "http://downloads.sourceforge.net/jdee/jde-2.3.5.1.tar.gz?modtime=1198933211&big_mirror=0"
-tar xfvz jde-2.3.5.1.tar.gz
-rm jde-2.3.5.1.tar.gz
-
 #NXHTML 
 wget -c "http://ourcomments.org/Emacs/DL/elisp/nxhtml/zip/nxhtml-1.75-090112.zip"
 unzip nxhtml-1.75-090112.zip
