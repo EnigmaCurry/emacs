@@ -1,0 +1,3 @@
+[submodule "vendor/jde"]
+	path = vendor/jde
+	url = git://enigmacurry.com/jde
