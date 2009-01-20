@@ -7,3 +7,6 @@
 [submodule "vendor/cedet"]
 	path = vendor/cedet
 	url = git://enigmacurry.com/cedet
+[submodule "vendor/magit"]
+	path = vendor/magit
+	url = git://gitorious.org/magit/mainline.git
