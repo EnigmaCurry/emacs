@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CEDET
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-file "~/.emacs.d/vendor/cedet-1.0pre4/common/cedet.el")
+(load-file "~/.emacs.d/vendor/cedet/common/cedet.el")
 ;;make all the 'semantic.cache' files go somewhere sane
 (setq semanticdb-default-save-directory "~/emacs-meta/semantic.cache/")
 ;; Enabling various SEMANTIC minor modes.  See semantic/INSTALL for more ideas.
