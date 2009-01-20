@@ -1,13 +1,5 @@
 #!/bin/bash
 
-#CEDET 1.0pre4
-wget -c "http://downloads.sourceforge.net/cedet/cedet-1.0pre4.tar.gz?modtime=1181081883&big_mirror=0"
-tar xfvz cedet-1.0pre4.tar.gz
-rm cedet-1.0pre4.tar.gz
-pushd cedet-1.0pre4
-make
-popd
-
 #BBDB 2.35
 rm -rf bbdb
 mkdir bbdb
