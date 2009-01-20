@@ -33,8 +33,8 @@ tar xfvz nxml-mode-20041004.tar.gz
 rm nxml-mode-20041004.tar.gz
 ln -s nxml-mode-20041004 nxml-mode
 
-#Jabber 0.7.1
-git clone git://git.catap.ru/emacs-jabber.git
+#Jabber
+#Needs to be compiled
 pushd emacs-jabber
 autoconf
 autoreconf

@@ -1,3 +1,6 @@
 [submodule "vendor/jde"]
 	path = vendor/jde
 	url = git://enigmacurry.com/jde
+[submodule "vendor/emacs-jabber"]
+	path = vendor/emacs-jabber
+	url = git://git.catap.ru/emacs-jabber.git
