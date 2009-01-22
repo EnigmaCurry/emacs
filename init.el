@@ -38,7 +38,6 @@
 (require 'pager)
 (require 'twit)
 (require 'ledger)
-(require 'magit)
 (require 'auto-complete)
 
 ;; Ever since upgrading to Gutsy, ECB is broken
