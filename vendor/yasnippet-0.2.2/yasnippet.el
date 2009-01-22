@@ -65,7 +65,6 @@ current column if this variable is non-`nil'.")
 
 (defvar yas/keymap (make-sparse-keymap)
   "The keymap of snippet.")
-(define-key yas/keymap (kbd "<tab>") 'yas/next-field-group)
 (define-key yas/keymap (kbd "TAB") 'yas/next-field-group)
 (define-key yas/keymap (kbd "S-TAB") 'yas/prev-field-group)
 (define-key yas/keymap (kbd "<S-iso-lefttab>") 'yas/prev-field-group)
@@ -830,8 +829,7 @@ content of the file is the template."
 
 (defun yas/initialize ()
   "Do necessary initialization."
-  ;; I want to handle the keyboard shortcut myself -- Ryan
-  ;;(global-set-key yas/trigger-key 'yas/expand)
+  (global-set-key yas/trigger-key 'yas/expand)
   (when yas/use-menu
     (define-key-after 
       (lookup-key global-map [menu-bar])

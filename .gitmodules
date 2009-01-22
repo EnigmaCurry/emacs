@@ -10,3 +10,6 @@
 [submodule "vendor/magit"]
 	path = vendor/magit
 	url = git://gitorious.org/magit/mainline.git
+[submodule "vendor/muse"]
+	path = vendor/muse
+	url = git://repo.or.cz/muse-el.git
