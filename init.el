@@ -194,7 +194,7 @@
  '(ecb-tip-of-the-day nil)
  '(ecb-windows-width 0.2)
  '(erc-beep-match-types (quote (current-nick keyword)))
- '(erc-default-sound "/home/ryan/.emacs.d/sounds/combeep4a.wav")
+ '(erc-default-sound "~/.emacs.d/sounds/combeep4a.wav")
  '(erc-echo-timestamps t)
  '(erc-hide-timestamps t)
  '(erc-keywords (quote ("Enigma")))
