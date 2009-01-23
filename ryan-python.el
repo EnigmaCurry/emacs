@@ -111,21 +111,26 @@
                  (set (make-local-variable 'ac-auto-start) nil)))
 
 ;;Ryan's python specific tab completion
-(defun ryan-python-tab ()
   ; Try the following:
-  ; 1) Do a yasnippet expansion
-  ; 2) Do a Rope code completion
-  ; 3) Do an indent
+  ; 1) Do a yasnippet expansion without autocomplete
+  ; 2) Do a yasnippet expansion with autocomplete (you haven't type the whole snippet name)
+  ; 3) Do a Rope code completion 
+  ; 4) Do a regular indent
+(define-key python-mode-map "\t" 'yas/expand)
+(add-hook 'python-mode-hook
+          (lambda ()
+            (set (make-local-variable 'yas/trigger-fallback) 'ryan-python-expand-after-yasnippet)))
+(defun ryan-python-expand-after-yasnippet ()
   (interactive)
   (if (eql (ac-start) 0)
       (indent-for-tab-command)))
+;; End Tab completion
 
 (defadvice ac-start (before advice-turn-on-auto-start activate)
   (set (make-local-variable 'ac-auto-start) t))
 (defadvice ac-cleanup (after advice-turn-off-auto-start activate)
   (set (make-local-variable 'ac-auto-start) nil))
 
-(define-key python-mode-map "\t" 'ryan-python-tab)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; End Auto Completion
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
