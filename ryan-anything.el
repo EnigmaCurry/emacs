@@ -1,2 +1,3 @@
-(require 'anything)
-(anything-iswitchb-setup)
+;(require 'anything)
+;(require 'anything-config)
+;(anything-iswitchb-setup)
