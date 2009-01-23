@@ -1,6 +1,12 @@
 ;Work EasyPG's magic and auto decrypt and encrypt files ending in .gpg
 (require 'epa-setup)
 
+(defadvice epg--start (around advice-epg-disable-agent disable)
+  "Make epg--start not able to find a gpg-agent"
+  (let ((agent (getenv "GPG_AGENT_INFO")))
+    (setenv "GPG_AGENT_INFO" nil)
+    ad-do-it
+    (setenv "GPG_AGENT_INFO" agent)))
 
 (defun epg-disable-agent ()
   "Make EasyPG bypass any gpg-agent"
