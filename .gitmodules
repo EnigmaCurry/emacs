@@ -13,3 +13,6 @@
 [submodule "vendor/muse"]
 	path = vendor/muse
 	url = git://repo.or.cz/muse-el.git
+[submodule "vendor/anything-config"]
+	path = vendor/anything-config
+	url = git://repo.or.cz/anything-config.git
