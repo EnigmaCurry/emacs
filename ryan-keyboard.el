@@ -18,5 +18,5 @@
 (global-set-key [S-up] 'windmove-up)              ; move to upper window
 (global-set-key [S-down] 'windmove-down)          ; move to lower window
 
-;apropos-symbol is MUCH more useful than apropos-command
+;The generic apropos (of any symbol) is MUCH more useful than apropos-command
 (global-set-key "\C-ha" 'apropos)
