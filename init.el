@@ -39,7 +39,6 @@
 (require 'twit)
 (require 'ledger)
 (require 'auto-complete)
-(require 'describe-hash)
 
 ;; Ever since upgrading to Gutsy, ECB is broken
 ;(require 'ecb)
