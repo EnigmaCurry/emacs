@@ -113,17 +113,26 @@
 ;;Ryan's python specific tab completion
   ; Try the following:
   ; 1) Do a yasnippet expansion without autocomplete
-  ; 2) Do a yasnippet expansion with autocomplete (you haven't type the whole snippet name)
-  ; 3) Do a Rope code completion 
-  ; 4) Do a regular indent
+  ; 2) Do a regular indent, if possible.
+  ; 3) Do a yasnippet expansion with autocomplete (when you haven't typed the whole snippet name)
+  ; 4) Do a Rope code completion
 (define-key python-mode-map "\t" 'yas/expand)
 (add-hook 'python-mode-hook
           (lambda ()
             (set (make-local-variable 'yas/trigger-fallback) 'ryan-python-expand-after-yasnippet)))
+(defun ryan-indent ()
+  "Runs indent-for-tab-command but returns t if it actually did an indent; nil otherwise"
+  (let ((prev-point (point)))
+    (indent-for-tab-command)
+    (if (eql (point) prev-point)
+        nil
+      t)))
 (defun ryan-python-expand-after-yasnippet ()
   (interactive)
-  (if (eql (ac-start) 0)
-      (indent-for-tab-command)))
+  (if (not (ryan-indent))
+      ;;Only use autocomplete if point is on whitespace (ie end of a word)
+      (if (string-match "\\W" (buffer-substring (point) (+ (point) 1)))
+          (ac-start))))
 ;; End Tab completion
 
 
