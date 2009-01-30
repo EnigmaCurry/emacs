@@ -16,3 +16,6 @@
 [submodule "vendor/anything-config"]
 	path = vendor/anything-config
 	url = git://repo.or.cz/anything-config.git
+[submodule "vendor/gist-el"]
+	path = vendor/gist-el
+	url = git://github.com/defunkt/gist.el.git
