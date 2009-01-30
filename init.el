@@ -39,6 +39,7 @@
 (require 'twit)
 (require 'ledger)
 (require 'auto-complete)
+(require 'describe-hash)
 
 ;; Ever since upgrading to Gutsy, ECB is broken
 ;(require 'ecb)
@@ -46,6 +47,10 @@
 ;;Some misc functions that should be moved somewhere more logical
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-library "ryan-functions")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;Some common lisp helpers -- not a part of any particular package
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(load-library "ryan-lisp-helpers")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;Text mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -219,15 +224,6 @@
  '(fill-column 81)
  '(gnus-article-sort-functions (quote ((not gnus-article-sort-by-date))))
  '(gnus-thread-sort-functions (quote ((not gnus-thread-sort-by-date))))
- '(jabber-alert-info-message-hooks (quote (jabber-info-display)))
- '(jabber-alert-presence-hooks nil)
- '(jabber-auto-reconnect t)
- '(jabber-backlog-number 100)
- '(jabber-chatstates-confirm nil)
- '(jabber-global-history-filename "~/.emacs.d/jabber_global_message_log")
- '(jabber-history-dir "~/.emacs.d/jabber-history")
- '(jabber-history-enabled t)
- '(jabber-use-global-history nil)
  '(jde-complete-function (quote jde-complete-in-line))
  '(jde-jdk (quote ("1.6.0")))
  '(jde-jdk-registry (quote (("1.6.0" . "/etc/opt/java"))))
