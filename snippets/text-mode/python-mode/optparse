@@ -1,0 +1,9 @@
+from optparse import OptionParser
+parser = OptionParser(version="%prog 0.1")
+# parser.add_option("-f","--first-option",dest="first_option",
+#                   help="This is the first parameter based option.",
+#                   metavar="file")
+# parser.add_option("-b","--boolean-option",dest="boolean_option",
+#                   help="This is a ON/OFF boolean option",
+#                   action="store_true", default=False)
+(options, args) = parser.parse_args()
