@@ -105,7 +105,7 @@
           (lambda ()
                  (auto-complete-mode 1)
                  (set (make-local-variable 'ac-sources)
-                      (append ac-sources '(ac-source-rope) '(ac-source-yasnippet)))
+                      (append ac-sources '(ac-source-rope)))
                  (set (make-local-variable 'ac-find-function) 'ac-python-find)
                  (set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
                  (set (make-local-variable 'ac-auto-start) nil)))
@@ -113,9 +113,9 @@
 ;;Ryan's python specific tab completion
   ; Try the following:
   ; 1) Do a yasnippet expansion without autocomplete
-  ; 2) Do a regular indent, if possible.
-  ; 3) Do a yasnippet expansion with autocomplete (when you haven't typed the whole snippet name)
-  ; 4) Do a Rope code completion
+  ; 2) If character previous to point is "." do autocomplete
+  ; 3) Do a regular indent, if possible.
+  ; 4) Do autocomplete even though not after a "."
 (define-key python-mode-map "\t" 'yas/expand)
 (add-hook 'python-mode-hook
           (lambda ()
@@ -129,10 +129,12 @@
       t)))
 (defun ryan-python-expand-after-yasnippet ()
   (interactive)
-  (if (not (ryan-indent))
-      ;;Only use autocomplete if point is on whitespace (ie end of a word)
-      (if (string-match "\\W" (buffer-substring (point) (+ (point) 1)))
-          (ac-start))))
+  (if (string-match "\\." (buffer-substring (- (point) 1) (point)))
+      (ac-start)
+    (if (not (ryan-indent))
+        ;;Only use autocomplete if point is on whitespace (ie end of a word)
+        (if (string-match "\\W" (buffer-substring (point) (+ (point) 1)))
+            (ac-start)))))
 ;; End Tab completion
 
 
