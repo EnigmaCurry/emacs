@@ -111,11 +111,12 @@
                  (set (make-local-variable 'ac-auto-start) nil)))
 
 ;;Ryan's python specific tab completion
-  ; Try the following:
-  ; 1) Do a yasnippet expansion without autocomplete
-  ; 2) If at the end of the line, do autocomplete
-  ; 3) Do a regular indent, if possible.
-  ; 4) Do autocomplete if at the end of a word.
+  ; Try the following in order:
+  ; 1) Try a yasnippet expansion without autocomplete
+  ; 2) If at the end of the line, try to autocomplete
+  ; 3) If the char after point is not alpha-numerical, try autocomplete
+  ; 3) Try to do a regular python indent.
+  ; 4) If at the end of a word, try autocomplete.
 (define-key python-mode-map "\t" 'yas/expand)
 (add-hook 'python-mode-hook
           (lambda ()
@@ -129,7 +130,8 @@
       t)))
 (defun ryan-python-expand-after-yasnippet ()
   (interactive)
-  (if (string-match "\n" (buffer-substring (point) (+ (point) 1)))
+  (if (or (string-match "\n" (buffer-substring (point) (+ (point) 1)))
+          (not (string-match "[a-zA-Z0-9]" (buffer-substring (point) (+ (point) 1)))))
       (ac-start)
     (if (not (ryan-indent))
         ;;Only use autocomplete if point is on whitespace (ie end of a word)
