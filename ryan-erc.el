@@ -67,3 +67,8 @@
   )
 
 ;(add-hook 'erc-server-PRIVMSG-functions 'erc-notify-PRIVMSG)
+
+
+;; Ignore certain types of messages from being tracked in the modeline:
+(setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+                                "324" "329" "332" "333" "353" "477"))
