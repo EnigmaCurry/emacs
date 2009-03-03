@@ -39,9 +39,6 @@
 (require 'twit)
 (require 'ledger)
 (require 'auto-complete)
-
-;; Ever since upgrading to Gutsy, ECB is broken
-;(require 'ecb)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;Some misc functions that should be moved somewhere more logical
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
