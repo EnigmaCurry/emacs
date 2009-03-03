@@ -81,3 +81,9 @@
        (run-hooks 'find-file-root-hook))))
 
    (global-set-key [(control x) (control r)] 'find-file-root)
+
+
+(defun unfill-paragraph ()
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil)))
