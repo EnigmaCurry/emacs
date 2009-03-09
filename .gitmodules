@@ -4,9 +4,6 @@
 [submodule "vendor/emacs-jabber"]
 	path = vendor/emacs-jabber
 	url = git://git.catap.ru/emacs-jabber.git
-[submodule "vendor/cedet"]
-	path = vendor/cedet
-	url = git://enigmacurry.com/cedet
 [submodule "vendor/magit"]
 	path = vendor/magit
 	url = git://gitorious.org/magit/mainline.git
@@ -19,3 +16,6 @@
 [submodule "vendor/gist-el"]
 	path = vendor/gist-el
 	url = git://github.com/defunkt/gist.el.git
+[submodule "vendor/cedet"]
+	path = vendor/cedet
+	url = git://github.com/vjr/cedet.git
