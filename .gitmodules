@@ -1,6 +1,6 @@
 [submodule "vendor/jde"]
 	path = vendor/jde
-	url = git://enigmacurry.com/jde
+	url = git://enigmacurry.com/jde.git
 [submodule "vendor/magit"]
 	path = vendor/magit
 	url = git://gitorious.org/magit/mainline.git
