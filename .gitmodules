@@ -12,10 +12,16 @@
 	url = git://github.com/defunkt/gist.el.git
 [submodule "vendor/cedet"]
 	path = vendor/cedet
-	url = git://github.com/vjr/cedet.git
+	url = git://git.hcoop.net/git/mwolson/debian/cedet.git
 [submodule "vendor/emacs-jabber"]
 	path = vendor/emacs-jabber
 	url = git://enigmacurry.com/emacs-jabber.git
 [submodule "vendor/jde"]
 	path = vendor/jde
-	url = git://enigmacurry.com/jdee.git
+	url = git://git.hcoop.net/git/mwolson/debian/jde.git
+[submodule "vendor/emms"]
+	path = vendor/emms
+	url = git://git.sv.gnu.org/emms.git
+[submodule "jde"]
+	path = jde
+	url = git://git.hcoop.net/git/mwolson/debian/jde.git

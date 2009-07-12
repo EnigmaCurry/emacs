@@ -3,6 +3,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'jde)
+(setq jde-jdk-registry (quote (("1.6.0" . "/etc/opt/java"))))
+(setq jde-jdk (quote ("1.6.0")))
+(setq jde-complete-function (quote jde-complete-in-line))
 
 (add-to-list 'auto-mode-alist '("\\.js\\'" . java-mode))
 (setq author "Ryan McGuire")
