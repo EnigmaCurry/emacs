@@ -1,0 +1,10 @@
+.#*
+*~
+elpa/
+/ido.last
+/config.el
+/var
+/recentf
+/auto-save-list
+projectile*
+ac-comphist.dat
