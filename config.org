@@ -146,13 +146,10 @@ Who uses suspend?
   :if (window-system)
   :ensure t
   :init
-  (setq monokai-use-variable-pitch nil))
+  (setq monokai-use-variable-pitch nil)
+  (switch-theme 'monokai)
+)
 #+end_src
-** Default theme
-#+begin_src emacs-lisp
-(switch-theme 'monokai)
-#+end_src
-
 * Transparent Background
 #+BEGIN_SRC 
  (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
