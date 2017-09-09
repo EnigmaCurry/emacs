@@ -175,7 +175,7 @@ Default font:
 
 #+begin_src emacs-lisp
 (add-to-list 'default-frame-alist
-             '(font . "Ubuntu Mono-14"))
+             '(font . "Ubuntu Mono-24"))
 #+end_src
 
 Display emojis. Source of system-specific fonts is in [[https://github.com/syohex/emacs-ac-emoji][the README for
