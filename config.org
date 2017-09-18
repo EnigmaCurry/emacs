@@ -643,6 +643,7 @@ good column number to do that.
    (ruby . t)
    (lisp . t)
    (scheme . t)
+   (shell . t)
    (sh . t)
    (sqlite . t)
    (js . t)))
