@@ -14,7 +14,13 @@ Much of this adapted from [[https://github.com/danielmai/.emacs.d][danelmai's co
 (setq user-full-name "Ryan McGuire"
       user-mail-address "ryan@enigmacurry.com")
 #+end_src
- 
+* Global keybindings
+  Let's reinvent our muscle memory by unbinding the arrow and page up/down keys.
+
+  #+BEGIN_SRC emacs-lisp
+  (mapc 'global-unset-key '([left] [right] [up] [down] [prior] [next]))
+  #+END_SRC
+  
 * Customize settings
 
 Set up the customize file to its own separate file, instead of saving
