@@ -3,9 +3,11 @@
 elpa/
 /ido.last
 /config.el
+/custom.el
 /var
 /recentf
 /auto-save-list
 projectile*
 ac-comphist.dat
 notes
+tramp
