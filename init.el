@@ -12,6 +12,11 @@
 (setq inhibit-startup-message t)
 (setq initial-scratch-message "")
 
+
+;; remove org-mode shipped with emacs from the load-path
+(require 'cl)
+(setq load-path (remove-if (lambda (x) (string-match-p "org$" x)) load-path))
+
 ;;; Set up package
 (require 'package)
 (add-to-list 'package-archives
