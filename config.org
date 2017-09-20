@@ -21,6 +21,22 @@ Much of this adapted from [[https://github.com/danielmai/.emacs.d][danelmai's co
   (mapc 'global-unset-key '([left] [right] [up] [down] [prior] [next]))
   #+END_SRC
   
+  Let's use key chords for easy non-modal movement keys.
+
+  #+BEGIN_SRC emacs-lisp
+  (use-package key-chord
+    :ensure t
+    :init
+    (key-chord-mode 1)
+    (key-chord-define-global "ji" 'backward-char)
+    (key-chord-define-global "ko" 'forward-char)
+    (key-chord-define-global "io" 'previous-line)
+    (key-chord-define-global "ui" 'previous-line)
+    (key-chord-define-global "jk" 'next-line)
+    (key-chord-define-global "kl" 'next-line)
+    )
+  #+END_SRC
+
 * Customize settings
 
 Set up the customize file to its own separate file, instead of saving
@@ -231,6 +247,14 @@ Ido makes finding files/buffers/etc much easier
   (add-hook 'after-init-hook 'global-company-mode)
   )
 #+END_SRC
+** Avy
+   #+BEGIN_SRC emacs-lisp
+   (use-package avy
+     :ensure t
+     :init
+     (global-set-key (kbd "C-z") 'avy-goto-char-timer)
+     )
+   #+END_SRC
 ** Magit
 #+begin_src emacs-lisp
 (use-package magit
@@ -644,7 +668,6 @@ good column number to do that.
    (lisp . t)
    (scheme . t)
    (shell . t)
-   (sh . t)
    (sqlite . t)
    (js . t)))
 
