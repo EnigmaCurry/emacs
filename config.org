@@ -587,6 +587,40 @@ Sublime text like miniature buffer sidebar
 )
 #+END_SRC
 
+** ox-hugo
+   Blogging in org-mode with [[https://github.com/kaushalmodi/ox-hugo][ox-hugo]]!
+
+   By default, ox-hugo expects your blog posts to be subtrees within a
+   single org document. I prefer to have each post in a seperate Org
+   files in the =my/org-hugo-src-dir= directory. This way, I can have
+   people download the source file for a single post, and execute the
+   Org-Babel in it, without being distracted with all the other posts.
+
+   #+BEGIN_SRC emacs-lisp
+   (use-package ox-hugo
+     :ensure t
+     :after ox
+     :init
+     ; Where I put my Org source files for my blog:
+     (setq my/org-hugo-src-dir (expand-file-name "~/git/blog/src/"))
+     ; Whenever I save the Org source file for one of my blog posts,
+     ; auto-export it to hugo with ox-hugo. (Only applicable to Org
+     ; files saved in the directory defined by my/org-hugo-src-dir)
+     (defun my/org-hugo-publish-current-buffer-as-post ()
+       (if (string-match-p
+            (concat "^" my/org-hugo-src-dir ".*\.org$")
+            (buffer-file-name))
+           (save-excursion 
+             (goto-char (point-min))
+             (if (< (how-many "^#\\+TITLE:") 1)
+                 (message "Refusing to publish blog post without a #+TITLE property.")
+               (org-hugo-export-to-md)))))
+     (add-hook 'org-mode-hook (lambda ()
+       (add-hook 'after-save-hook 
+                 'my/org-hugo-publish-current-buffer-as-post)))
+   )
+   #+END_SRC
+
 * Python
 
 Integrates with IPython.
