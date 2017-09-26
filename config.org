@@ -601,9 +601,10 @@ Sublime text like miniature buffer sidebar
   :ensure t
   :after ox
   :init
+  (setq org-hugo-external-file-extensions-allowed-for-copying '(org jpg jpeg tiff png svg pdf odt))
   (defconst my/hugo-dir (expand-file-name "~/git/blog") 
     "Root hugo site directory")
-  (defconst my/hugo-org-content-dir (expand-file-name "src/blog" my/hugo-dir)
+  (defconst my/hugo-org-content-dir (expand-file-name "static/org" my/hugo-dir)
     "Directory containing the Org mode posts.")
 
   (defun my/org-hugo-publish-current-buffer-as-post ()
@@ -619,13 +620,15 @@ contains the #+TITLE keyword and is present in the
           (goto-char (point-min))
           (if (< (how-many "^#\\+TITLE:") 1)
               (message "Unable to export as the Org file is missing the #+TITLE keyword.")
-            (org-hugo-export-to-md))))))
+            (if (< (how-many "^#\\+DATE:") 1)
+                (message "Unable to export as the Org file is missing the #+DATE keyword.")
+              (org-hugo-export-to-md)))))))
 
   (defun my/org-mode-hook-fn ()
     "My Org mode customization."
     (add-hook 'after-save-hook #'my/org-hugo-publish-current-buffer-as-post :append :local))
 
-  (add-hook 'org-mode-hook #'my/org-mode-hook-fn))
+  (add-hook 'org-mode-hook #'my/org-mode-hook-fn)
 
   (defun hugo-server-start ()
     "Start hugo server in an inferior shell"
@@ -640,6 +643,7 @@ contains the #+TITLE keyword and is present in the
       (browse-url "http://localhost:1313")
       )
     )
+  )
    #+END_SRC
 
 * Python
@@ -776,6 +780,12 @@ I've had issues with getting BiBTeX to work correctly with the LaTeX exporter fo
 #+BEGIN_SRC emacs-lisp
 (setq org-latex-pdf-process (list "latexmk -pdf %f"))
 #+END_SRC
+* Browser
+  Make chromium my default browser:
+
+  #+BEGIN_SRC emacs-lisp
+(setq browse-url-browser-function 'browse-url-chromium)
+  #+END_SRC
 * Smart TAB completion
 This is giving me some problems so this is left unbound for now.
 #+BEGIN_SRC emacs-lisp
