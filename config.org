@@ -601,7 +601,9 @@ Sublime text like miniature buffer sidebar
   :ensure t
   :after ox
   :init
-  (defconst my/hugo-org-content-dir (expand-file-name "~/git/blog/src/blog")
+  (defconst my/hugo-dir (expand-file-name "~/git/blog") 
+    "Root hugo site directory")
+  (defconst my/hugo-org-content-dir (expand-file-name "src/blog" my/hugo-dir)
     "Directory containing the Org mode posts.")
 
   (defun my/org-hugo-publish-current-buffer-as-post ()
@@ -624,6 +626,20 @@ contains the #+TITLE keyword and is present in the
     (add-hook 'after-save-hook #'my/org-hugo-publish-current-buffer-as-post :append :local))
 
   (add-hook 'org-mode-hook #'my/org-mode-hook-fn))
+
+  (defun hugo-server-start ()
+    "Start hugo server in an inferior shell"
+    (interactive)
+    (let ((eshell-buffer-name "*hugo-server*"))
+      (eshell)
+      (eshell-return-to-prompt)
+      (insert (concat "cd " my/hugo-dir))
+      (eshell-send-input)
+      (insert "hugo server -D --navigateToChanged")
+      (eshell-send-input)
+      (browse-url "http://localhost:1313")
+      )
+    )
    #+END_SRC
 
 * Python
