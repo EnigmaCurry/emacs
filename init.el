@@ -37,8 +37,18 @@
 (require 'bind-key)
 ;; (setq use-package-verbose t)
 
-;;; Load the config
-(org-babel-load-file (concat user-emacs-directory "config.org"))
+(let ((config (concat user-emacs-directory "config.org")))
+  ;;; Load the config:
+  (org-babel-load-file config)
+  ;;; Tangle the other files referenced therein:
+  (org-babel-tangle-file config)
+  ;;; Evaluate code blocks that have explicit eval:
+  (save-excursion
+    (with-temp-buffer
+      (let ((org-confirm-babel-evaluate nil))
+        (insert-file-contents config)
+        (org-mode)
+        (org-babel-execute-buffer)))))
 
 ;; Reset normalish garbag collection setting:
 (setq gc-cons-threshold 800000)

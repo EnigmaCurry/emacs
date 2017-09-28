@@ -1,6 +1,7 @@
 .#*
 *~
 elpa/
+blog/
 /ido.last
 /config.el
 /custom.el

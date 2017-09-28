@@ -1,5 +1,6 @@
 #+TITLE: Emacs Configuration
 #+AUTHOR: Ryan McGuire
+#+PROPERTY: header-args :eval no :output none
 
 Declaring Emacs bankruptcy (again) and starting a new literate config
 using Org mode.
@@ -15,12 +16,6 @@ Much of this adapted from [[https://github.com/danielmai/.emacs.d][danelmai's co
       user-mail-address "ryan@enigmacurry.com")
 #+end_src
 * Global keybindings
-  Let's reinvent our muscle memory by unbinding the arrow and page up/down keys.
-
-  #+BEGIN_SRC emacs-lisp
-  (mapc 'global-unset-key '([left] [right] [up] [down] [prior] [next]))
-  #+END_SRC
-  
   Let's use key chords for easy non-modal movement keys.
 
   #+BEGIN_SRC emacs-lisp
@@ -46,6 +41,7 @@ customize settings in [[file:init.el][init.el]].
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file)
 #+end_src
+
 * Sane defaults
 
 Let's start with some sane defaults, shall we?
@@ -162,8 +158,9 @@ Who uses suspend?
 (bind-key "s-<f12>" 'switch-theme)
 (bind-key "s-<f11>" 'disable-active-themes)
 #+end_src
+
 ** Monokai theme
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :eval no
 (use-package monokai-theme
   :if (window-system)
   :ensure t
@@ -172,6 +169,7 @@ Who uses suspend?
   (switch-theme 'monokai)
 )
 #+end_src
+
 * Transparent Background
 #+BEGIN_SRC 
  (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
@@ -281,10 +279,6 @@ Ido makes finding files/buffers/etc much easier
   (jump-to-register :magit-fullscreen))
 
 #+end_src
-#+BEGIN_SRC emacs_lisp
-
-
-#+END_SRC
 ** Gists
 
 #+BEGIN_SRC emacs-lisp
@@ -585,67 +579,7 @@ Sublime text like miniature buffer sidebar
   ; https://github.com/domtronn/all-the-icons.el/tree/master/fonts
   :ensure t
 )
-#+END_SRC
-
-** ox-hugo
-   Blogging in org-mode with [[https://github.com/kaushalmodi/ox-hugo][ox-hugo]]!
-
-   By default, ox-hugo expects your blog posts to be subtrees within a
-   single org document. I prefer to have each post in a seperate Org
-   files in the =my/org-hugo-src-dir= directory. This way, I can have
-   people download the source file for a single post, and execute the
-   Org-Babel in it, without being distracted with all the other posts.
-
-   #+BEGIN_SRC emacs-lisp
-(use-package ox-hugo
-  :ensure t
-  :after ox
-  :init
-  (setq org-hugo-external-file-extensions-allowed-for-copying '(org jpg jpeg tiff png svg pdf odt))
-  (defconst my/hugo-dir (expand-file-name "~/git/blog") 
-    "Root hugo site directory")
-  (defconst my/hugo-org-content-dir (expand-file-name "static/org" my/hugo-dir)
-    "Directory containing the Org mode posts.")
-
-  (defun my/org-hugo-publish-current-buffer-as-post ()
-    "Export the current Org file if a valid Hugo post.
-Current file is exported using `org-hugo-export-to-md' if it
-contains the #+TITLE keyword and is present in the
-`my/hugo-org-content-dir'."
-    (let ((fname (buffer-file-name)))
-      (when (and fname
-                 (string-match-p (concat "\\`" (regexp-quote my/hugo-org-content-dir) ".*\.org\\'")
-                                 fname))
-        (save-excursion
-          (goto-char (point-min))
-          (if (< (how-many "^#\\+TITLE:") 1)
-              (message "Unable to export as the Org file is missing the #+TITLE keyword.")
-            (if (< (how-many "^#\\+DATE:") 1)
-                (message "Unable to export as the Org file is missing the #+DATE keyword.")
-              (org-hugo-export-to-md)))))))
-
-  (defun my/org-mode-hook-fn ()
-    "My Org mode customization."
-    (add-hook 'after-save-hook #'my/org-hugo-publish-current-buffer-as-post :append :local))
-
-  (add-hook 'org-mode-hook #'my/org-mode-hook-fn)
-
-  (defun hugo-server-start ()
-    "Start hugo server in an inferior shell"
-    (interactive)
-    (let ((eshell-buffer-name "*hugo-server*"))
-      (eshell)
-      (eshell-return-to-prompt)
-      (insert (concat "cd " my/hugo-dir))
-      (eshell-send-input)
-      (insert "hugo server -D --navigateToChanged")
-      (eshell-send-input)
-      (browse-url "http://localhost:1313")
-      )
-    )
-  )
-   #+END_SRC
-
+#+END_SRC   
 * Python
 
 Integrates with IPython.
@@ -786,6 +720,30 @@ I've had issues with getting BiBTeX to work correctly with the LaTeX exporter fo
   #+BEGIN_SRC emacs-lisp
 (setq browse-url-browser-function 'browse-url-chromium)
   #+END_SRC
+
+* Blog
+
+All my blog config is in [[blog.org]], there's a code block in that file to setup ox-hugo. Let's run it here:
+
+#+BEGIN_SRC emacs-lisp
+(defun rymcg/org-babel-eval-blocks-in-file (filepath block-list)
+  "Open an Org file and eval a list of named code blocks in it"
+  (save-window-excursion
+    (find-file filepath)
+    (dolist (codeblock block-list)
+      (org-babel-goto-named-src-block codeblock)
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-execute-src-block-maybe)))))
+
+; Execute things in blog.org:
+;  - Tangle the config files
+;  - Configure ox hugo by executing the ox-hugo-init block
+;  - Download the theme files by executing hugo-import-theme block
+(org-babel-tangle-file "~/.emacs.d/blog.org")
+(rymcg/org-babel-eval-blocks-in-file 
+  (expand-file-name "~/.emacs.d/blog.org")
+  '("ox-hugo-init" "hugo-import-theme"))
+#+END_SRC
 * Smart TAB completion
 This is giving me some problems so this is left unbound for now.
 #+BEGIN_SRC emacs-lisp

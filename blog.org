@@ -1,0 +1,281 @@
+#+HUGO_BASE_DIR: /home/ryan/.emacs.d/blog
+#+HUGO_WEIGHT: auto
+
+* Make your own website like this
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: ox-hugo
+:EXPORT_FILE_NAME: _index
+:END:
+This is the source for my website at [[https://blog.rymcg.tech][blog.rymcg.tech]], a technology
+blog written in [[http://orgmode.org/][org-mode]] and published with [[https://github.com/kaushalmodi/ox-hugo/][ox-hugo]]. 
+
+The sections below contain the entirety of the website: the articles
+and blog posts, its configuration, the templates, themes, build process,
+and deployment scripts. If my website were to go down, I could
+recreate it from nothing but this file (plus any static assets, images.)
+
+This is a self-documenting deployment environment, using a literate
+programming style written with [[http://org-babel.readthedocs.io][org-babel]] code blocks. Download the
+[the org source file] and you can edit it to make any customizations,
+and build your own website just like this one. 
+
+** Dependencies
+My configuration consists of:
+
+- [[https://www.gnu.org/software/emacs/][Emacs]] 25
+- [[https://www.gnu.org/software/emacs/][Org Mode]] 9 from the [[http://orgmode.org/elpa.html][project repos]]
+- [[https://gohugo.io/][Hugo]] 0.27
+
+Install Emacs, org-mode, and hugo, by following the links above.
+
+** ox-hugo
+This is the main ox-hugo config, which automatically installs via
+use-package:
+
+#+NAME: ox-hugo-init
+#+BEGIN_SRC emacs-lisp :results none
+(use-package ox-hugo
+  :ensure t
+  :after ox
+  :init
+  (setq org-hugo-external-file-extensions-allowed-for-copying 
+        '(org tex jpg png svg pdf))
+  (setq my/hugo-root (expand-file-name "~/.emacs.d/blog"))
+  (setq my/hugo-server-url "http://localhost:1313")
+  
+  (defun hugo-server-start ()
+    "Start hugo server in an inferior shell"
+    (interactive)
+    (let ((eshell-buffer-name (concat "*hugo-server-" my/hugo-root "*")))
+      (if (bufferp (get-buffer eshell-buffer-name))
+          (kill-buffer eshell-buffer-name))
+      (eshell)
+      (eshell-return-to-prompt)
+      (insert (concat "cd " my/hugo-root))
+      (eshell-send-input)
+      (insert "hugo server -D --navigateToChanged")
+      (eshell-send-input)
+      (browse-url my/hugo-server-url)
+      (message eshell-buffer-name)
+      )
+    )
+  )
+#+END_SRC
+
+I want to keep all of the configuration for the website self-contained
+in this file. Copy the next code to your Emacs config, it will run the
+configuration from this file directly.
+
+#+BEGIN_EXAMPLE emacs-lisp
+(defun rymcg/org-babel-eval-blocks-in-file (filepath block-list)
+  "Open an Org file and eval a list of named code blocks in it"
+  (save-window-excursion
+    (find-file filepath)
+    (dolist (codeblock block-list)
+      (org-babel-goto-named-src-block codeblock)
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-execute-src-block-maybe)))))
+
+; Execute things in blog.org:
+;  - Tangle the config files
+;  - Configure ox hugo by executing the ox-hugo-init block
+;  - Download the theme files by executing hugo-import-theme block
+(org-babel-tangle-file "~/.emacs.d/blog.org")
+(rymcg/org-babel-eval-blocks-in-file 
+  (expand-file-name "~/.emacs.d/blog.org")
+  '("ox-hugo-init" "hugo-import-theme"))
+#+END_EXAMPLE
+
+** Hugo site skeleton
+Here's my main hugo config file:
+
+#+BEGIN_SRC yml :tangle ~/.emacs.d/blog/config.yml :eval no :mkdirp yes
+### This file is auto-generated. Do not edit! 
+### Your changes will get overwritten. 
+### Look in ~/.emacs.d/config.org for the source.
+
+baseURL: "http://blog.rymcg.tech/"
+languageCode: "en-us"
+DefaultContentLanguage: "en"
+
+title: "rymcg.tech"
+theme: "docdock"
+
+params:
+  noHomeIcon: true
+  noSearch: false
+  showVisitedLinks: true
+  ordersectionsby: "weight"
+  themeVariant: "gray"
+  subTitle: "Technology by Ryan McGuire"
+  
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+mediaTypes:
+  "text/plain":
+    suffix: "org"
+#+END_SRC
+
+Create our site header:
+#+BEGIN_SRC markdown :mkdirp yes :eval no :tangle ~/.emacs.d/blog/content/_header.md
+rymcg.tech
+#+END_SRC
+   
+Import the theme:
+
+#+NAME: hugo-import-theme
+#+BEGIN_SRC shell :dir ~/.emacs.d/blog :results none
+if [ ! -d themes/docdock ]; then
+    mkdir -p themes/docdock
+    curl -L https://github.com/vjeantet/hugo-theme-docdock/archive/master.tar.gz | tar xz --strip-components=1 -C themes/docdock
+fi
+#+END_SRC
+
+Create the css override for the docdock theme:
+
+#+BEGIN_SRC css :mkdirp yes :eval no :tangle ~/.emacs.d/blog/static/css/dockdock.custom.css
+/* Custom overrides for the docdock theme */
+div#tags {
+    float: none;
+}
+div#breadcrumbs {
+    width: calc(100% - 20px);
+}
+#+END_SRC
+
+Create the custom head partial to include our css:
+#+BEGIN_SRC html :mkdirp yes :eval no :tangle ~/.emacs.d/blog/layouts/partials/custom-head.html
+<!-- custom docdock theme css overrides -->
+<link href="/css/docdock.custom.css" rel="stylesheet">
+#+END_SRC
+* Front Page
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: /
+:EXPORT_FILE_NAME: _index
+:END:
+** Welcome
+This will eventually be a blog.
+
+* Emacs
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: emacs
+:EXPORT_HUGO_AUTO_SET_LASTMOD: t
+:END:
+The source for [[https://rymcg.tech/emacs]]
+
+** def-advice
+:PROPERTIES:
+:EXPORT_FILE_NAME: def-advice
+:END:
+
+It's cool..
+
+** second emacs post
+:PROPERTIES:
+:EXPORT_FILE_NAME: emacs-post-2
+:END:
+
+Hi you gnu elpanizers
+
+** first emacs post and a rather unfortunately long title that just goes on and on and on and on.
+:PROPERTIES:
+:EXPORT_FILE_NAME: emacs-post-1
+:END:
+
+Hi emacsers!
+
+*** Subheading 1
+
+*** Subheading 2
+** elisp tips
+:PROPERTIES:
+:EXPORT_FILE_NAME: elips-tips
+:END:
+
+#+BEGIN_SRC emacs_lisp
+(message "Hi Emacsians!")
+#+END_SRC
+
+* Books
+** book1
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: book1
+:END:
+*** Book
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+Book 1 index.
+
+This type of organization will generate this in the =content/=
+directory:
+#+BEGIN_EXAMPLE
+> tree book1
+book1
+├── chapter1
+│   ├── _index.md
+│   ├── section1.md
+│   └── section2.md
+├── chapter2
+│   ├── _index.md
+│   ├── section1.md
+│   └── section2.md
+└── _index.md
+#+END_EXAMPLE
+
+- [[/book1/chapter1][Chapter 1]]
+  - [[/book1/chapter1/section1][Chapter 1 Section 1]]
+  - [[/book1/chapter1/section2][Chapter 1 Section 2]]
+- [[/book1/chapter2][Chapter 2]]
+  - [[/book1/chapter2/section1][Chapter 2 Section 1]]
+  - [[/book1/chapter2/section2][Chapter 2 Section 2]]
+*** chapter 1
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: book1/chapter1
+:END:
+**** Chapter 1 Index
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+Introduction for chapter 1
+**** sub section 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: section1
+:END:
+Section 1 of chapter 1
+**** sub section 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: section2
+:END:
+Section 2 of chapter 1
+*** chapter 2
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: book1/chapter2
+:END:
+**** Chapter 2 Index
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+Introduction for chapter 2
+**** sub section 1
+:PROPERTIES:
+:EXPORT_FILE_NAME: section1
+:END:
+Section 1 of chapter 2
+**** sub section 2
+:PROPERTIES:
+:EXPORT_FILE_NAME: section2
+:END:
+Section 2 of chapter 2
+* Footnotes
+* COMMENT Local Variables                    :ARCHIVE:
+# Local Variables:
+# fill-column: 70
+# eval: (auto-fill-mode 1)
+# eval: (toggle-truncate-lines 1)
+# eval: (add-hook 'after-save-hook #'org-hugo-export-subtree-to-md-after-save :append :local)
+# End:
