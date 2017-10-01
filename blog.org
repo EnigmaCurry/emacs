@@ -24,7 +24,7 @@ My configuration consists of:
 
 - [[https://www.gnu.org/software/emacs/][Emacs]] 25
 - [[https://www.gnu.org/software/emacs/][Org Mode]] 9 from the [[http://orgmode.org/elpa.html][project repos]]
-- [[https://gohugo.io/][Hugo]] 0.27
+- [[https://gohugo.io/][Hugo]] 0.29
 
 Install Emacs, org-mode, and hugo, by following the links above.
 
@@ -91,6 +91,8 @@ DefaultContentLanguage: "en"
 
 title: "rymcg.tech"
 theme: "docdock"
+
+pygmentsCodeFences: true
 
 params:
   noHomeIcon: true
