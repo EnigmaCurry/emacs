@@ -1,7 +1,8 @@
 .#*
 *~
-elpa/
-blog/
+/elpa
+/blog
+/blog.el
 /ido.last
 /config.el
 /custom.el

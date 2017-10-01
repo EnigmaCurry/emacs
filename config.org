@@ -733,28 +733,13 @@ I've had issues with getting BiBTeX to work correctly with the LaTeX exporter fo
 
 * Blog
 
-All my blog config is in [[blog.org]], there's a code block in that file to setup ox-hugo. Let's run it here:
+All my blog config is in [[blog.org]], which tangles to [[blog.el]] to
+initialize itself. Only load it if it's been manually tangled first:
 
 #+BEGIN_SRC emacs-lisp
-(defun rymcg/org-babel-eval-blocks-in-file (filepath block-list)
-  "Open an Org file and eval a list of named code blocks in it"
-  (save-window-excursion
-    (find-file filepath)
-    (dolist (codeblock block-list)
-      (org-babel-goto-named-src-block codeblock)
-      (let ((org-confirm-babel-evaluate nil))
-        (org-babel-execute-src-block-maybe)))))
-
-; Execute things in blog.org:
-;  - Tangle the config files
-;  - Configure ox hugo by executing the ox-hugo-init block
-;  - Download the theme files by executing hugo-import-theme block
-(defun blog-init (blog-file)
-  (org-babel-tangle-file blog-file)
-  (rymcg/org-babel-eval-blocks-in-file 
-   (expand-file-name blog-file)
-   '("ox-hugo-init" "hugo-import-theme")))
-(blog-init (expand-file-name "~/.emacs.d/blog.org"))
+(let ((blog-init (expand-file-name "~/.emacs.d/blog.el")))
+  (if (file-exists-p blog-init)
+    (load-file blog-init)))
 #+END_SRC
 * Smart TAB completion
 This is giving me some problems so this is left unbound for now.
