@@ -1,0 +1,3 @@
+[submodule "blog/themes/docdock"]
+	path = blog/themes/docdock
+	url = https://github.com/EnigmaCurry/hugo-theme-docdock

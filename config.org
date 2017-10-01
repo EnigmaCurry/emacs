@@ -245,6 +245,16 @@ Ido makes finding files/buffers/etc much easier
   (add-hook 'after-init-hook 'global-company-mode)
   )
 #+END_SRC
+** Whichkey
+   Whichkey is awesome, it teaches you keyboard shortcuts as you type
+   them. Let's do that gloablly:
+
+   #+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :ensure t
+  :init
+  (which-key-mode))
+   #+END_SRC
 ** Avy
    #+BEGIN_SRC emacs-lisp
    (use-package avy
@@ -739,10 +749,12 @@ All my blog config is in [[blog.org]], there's a code block in that file to setu
 ;  - Tangle the config files
 ;  - Configure ox hugo by executing the ox-hugo-init block
 ;  - Download the theme files by executing hugo-import-theme block
-(org-babel-tangle-file "~/.emacs.d/blog.org")
-(rymcg/org-babel-eval-blocks-in-file 
-  (expand-file-name "~/.emacs.d/blog.org")
-  '("ox-hugo-init" "hugo-import-theme"))
+(defun blog-init (blog-file)
+  (org-babel-tangle-file blog-file)
+  (rymcg/org-babel-eval-blocks-in-file 
+   (expand-file-name blog-file)
+   '("ox-hugo-init" "hugo-import-theme")))
+(blog-init (expand-file-name "~/.emacs.d/blog.org"))
 #+END_SRC
 * Smart TAB completion
 This is giving me some problems so this is left unbound for now.

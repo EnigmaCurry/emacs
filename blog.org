@@ -80,10 +80,12 @@ configuration from this file directly.
 ;  - Tangle the config files
 ;  - Configure ox hugo by executing the ox-hugo-init block
 ;  - Download the theme files by executing hugo-import-theme block
-(org-babel-tangle-file "~/.emacs.d/blog.org")
-(rymcg/org-babel-eval-blocks-in-file 
-  (expand-file-name "~/.emacs.d/blog.org")
-  '("ox-hugo-init" "hugo-import-theme"))
+(defun blog-init (blog-file)
+  (org-babel-tangle-file blog-file)
+  (rymcg/org-babel-eval-blocks-in-file 
+   (expand-file-name blog-file)
+   '("ox-hugo-init" "hugo-import-theme")))
+(blog-init (expand-file-name "~/.emacs.d/blog.org"))
 #+END_EXAMPLE
 
 ** Hugo site skeleton
@@ -130,20 +132,29 @@ Import the theme:
 #+NAME: hugo-import-theme
 #+BEGIN_SRC shell :dir ~/.emacs.d/blog :results none
 if [ ! -d themes/docdock ]; then
-    mkdir -p themes/docdock
-    curl -L https://github.com/vjeantet/hugo-theme-docdock/archive/master.tar.gz | tar xz --strip-components=1 -C themes/docdock
+    mkdir -p themes
+    git submodule add -f https://github.com/EnigmaCurry/hugo-theme-docdock themes/docdock
 fi
 #+END_SRC
 
 Create the css override for the docdock theme:
 
-#+BEGIN_SRC css :mkdirp yes :eval no :tangle ~/.emacs.d/blog/static/css/dockdock.custom.css
+#+BEGIN_SRC css :mkdirp yes :eval no :tangle ~/.emacs.d/blog/static/css/docdock.custom.css
 /* Custom overrides for the docdock theme */
 div#tags {
     float: none;
 }
 div#breadcrumbs {
     width: calc(100% - 20px);
+}
+div#body-inner {
+    max-width: 100ch;
+}
+div#body-inner pre {
+    margin-top: 0;
+}
+div.block-header {
+    background-color: #aaa;
 }
 #+END_SRC
 
@@ -152,8 +163,51 @@ Create the custom head partial to include our css:
 <!-- custom docdock theme css overrides -->
 <link href="/css/docdock.custom.css" rel="stylesheet">
 #+END_SRC
+
+** Prepending tangle name to code blocks
+When reading code blocks in Org file source it's pretty easy to see
+what file it's referring to:
+
+#+BEGIN_EXAMPLE
+#+BEGIN_SRC emacs-lisp :tangle /some/path/myfile.conf
+[main]
+setting1=yes
+setting2=no
+#+END_SRC
+#+END_EXAMPLE
+
+But when this is exported to HTML, you don't get to see the =:tangle=
+part, which means either the reader has to infer it from the context,
+or you need to add extra text to the document. The first form is
+confusing to the user. The latter form means you're repeating
+yourself, and now have an extra place to update when paths change, and
+an opportunity for the documentation to diverge from the code.
+
+It would be better if we only specified the =:tangle= once, and the
+path were output to the HTML output, directly before the code block.
+We can accomplish that by using =org-export-before-processing-hook=:
+
+#+BEGIN_SRC emacs-lisp
+; credit John Kitchin - https://stackoverflow.com/a/38876439/56560
+(defun rymcg/org-hugo-add-tangle-names-to-export (backend)
+  (let ((src-blocks (org-element-map (org-element-parse-buffer) 'src-block #'identity)))
+  (setq src-blocks (nreverse src-blocks))                       
+    (loop for src in src-blocks
+      do
+      (goto-char (org-element-property :begin src)) 
+      (let ((tangled-name (cdr (assoc :tangle (nth 2 (org-babel-get-src-block-info))))))
+        (if (not (equal tangled-name "no"))
+            (insert (format "\n#+HTML: <div class='block-header'>File: %s</div>\n" tangled-name)))))))
+
+(defadvice org-hugo-export-subtree-to-md (around org-hugo-export-advice)
+  (let ((org-export-before-processing-hook '(rymcg/org-hugo-add-tangle-names-to-export)))
+    ad-do-it))
+(ad-activate 'org-hugo-export-subtree-to-md)
+#+END_SRC
+
 * Front Page
 :PROPERTIES:
+:TITLE: rymcg.tech
 :EXPORT_HUGO_SECTION: /
 :EXPORT_FILE_NAME: _index
 :END:
