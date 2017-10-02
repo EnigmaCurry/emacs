@@ -250,7 +250,12 @@ div#body-inner pre {
 #body .nav:hover {
     background-color: var(--NAV-HOVER-color);
 }
+#+END_SRC
 
+Most syntax highlighting is done with Chroma, which is builtin to
+hugo. The site uses the =perldoc= theme:
+
+#+BEGIN_SRC css :tangle ~/.emacs.d/blog/static/css/theme-rymcg.css
 /* perldoc syntax highlight style */
 /* Background */ .chroma { background-color: #eeeedd }
 /* Error */ .chroma .err { color: #a61717; background-color: #e3d2d2 }
@@ -315,6 +320,47 @@ div#body-inner pre {
 /* TextWhitespace */ .chroma .w { color: #bbbbbb }
 #+END_SRC
 
+As a fallback, highlight.js is used for blocks that chroma can't
+handle. Here's a slight mod of the =purebasic= theme:
+
+#+BEGIN_SRC css :tangle ~/.emacs.d/blog/static/css/hybrid.css
+.hljs {
+	background: #eeeedd !important;
+	display: block;
+	overflow-x: auto;
+	padding: 0.5em;
+}
+.hljs,.hljs-type,.hljs-function,.hljs-name,.hljs-number,.hljs-attr,.hljs-params,.hljs-subst {
+	color: #000000;
+}
+.hljs-comment,.hljs-regexp,.hljs-section,.hljs-selector-pseudo,.hljs-addition {
+	color: #00AAAA;
+}
+.hljs-title,.hljs-tag,.hljs-variable,.hljs-code {
+	color: #006666;
+}
+.hljs-keyword,.hljs-class,.hljs-meta-keyword,.hljs-selector-class,.hljs-built_in,.hljs-builtin-name {
+	color: #006666;
+	font-weight: bold;
+}
+.hljs-string,.hljs-selector-attr {
+	color: #0080FF;
+}
+.hljs-symbol,.hljs-link,.hljs-deletion,.hljs-attribute {
+	color: #924B72;
+}
+.hljs-meta,.hljs-literal,.hljs-selector-id {
+	color: #924B72;
+	font-weight: bold;
+}
+.hljs-strong,.hljs-name {
+	font-weight: bold;
+}
+.hljs-emphasis {
+	font-style: italic;
+}
+#+END_SRC
+
 ** Code block headers
 When reading code blocks in Org file source it's pretty easy to see
 what file it's referring to, by looking at the =:tangle= parameter:
@@ -341,7 +387,7 @@ HTML.
  - Example blocks should have header with =Example= 
 
 #+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/blog.el
-                                        ; original credit to John Kitchin - https://stackoverflow.com/a/38876439/56560
+; original credit to John Kitchin - https://stackoverflow.com/a/38876439/56560
 (defun rymcg/org-hugo-add-tangle-names-to-export (backend)
   (let ((src-blocks (org-element-map (org-element-parse-buffer) 'src-block #'identity)))
     (setq src-blocks (nreverse src-blocks))
