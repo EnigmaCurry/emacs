@@ -24,12 +24,14 @@ My configuration consists of:
 
 - [[https://www.gnu.org/software/emacs/][Emacs]] 25
 - [[https://www.gnu.org/software/emacs/][Org Mode]] 9 from the [[http://orgmode.org/elpa.html][project repos]]
-- [[https://gohugo.io/][Hugo]] 0.29
+- [[https://gohugo.io/][Hugo]] git:master
+ - I'm using a [[https://gist.github.com/kaushalmodi/456b5ea26b3e869e5d63d4a67b85f676][dev build using this script]], until [[https://github.com/alecthomas/chroma/commit/cbc3d5b9f01cbd0113748fa12d9d0cb9cfdda537][this fix is in]].
 
 Install Emacs, org-mode, and hugo, by following the links above.
 
 ** ox-hugo
-This is the main config, it sets up ox-hugo
+This is the main config, it configures ox-hugo, initializes our blog
+directory, and the sets up hugo server to run inside an Emacs eshell.
 
 #+NAME: ox-hugo-init
 #+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/blog.el
@@ -52,6 +54,13 @@ This is the main config, it sets up ox-hugo
   (setq my/hugo-root (expand-file-name "~/.emacs.d/blog"))
   (setq my/hugo-server-url "http://localhost:1313")
   
+  (defun blog-init ()
+    ; Tangle all files:
+    (org-babel-tangle-file my/blog-file)
+    ; Create theme files if necessary:
+    (rymcg/org-babel-eval-blocks-in-file my/blog-file '("hugo-import-theme")))
+  (blog-init)
+
   (defun hugo-server-start ()
     "Start hugo server in an inferior shell"
     (interactive)
@@ -65,16 +74,7 @@ This is the main config, it sets up ox-hugo
       (insert "hugo server -D --navigateToChanged")
       (eshell-send-input)
       (browse-url my/hugo-server-url)
-      (message eshell-buffer-name)
-      )
-    )
-  (defun blog-init ()
-    ; Tangle all files:
-    (org-babel-tangle-file my/blog-file)
-    ; Create theme files if necessary:
-    (rymcg/org-babel-eval-blocks-in-file my/blog-file '("hugo-import-theme")))
-  (blog-init)
-  )
+      (message eshell-buffer-name))))
 #+END_SRC
 
 ** Hugo site skeleton
@@ -93,13 +93,14 @@ title: "rymcg.tech"
 theme: "docdock"
 
 pygmentsCodeFences: true
+pygmentsUseClasses: true
 
 params:
   noHomeIcon: true
   noSearch: false
   showVisitedLinks: true
   ordersectionsby: "weight"
-  themeVariant: "gray"
+  themeVariant: "rymcg"
   subTitle: "Technology by Ryan McGuire"
   
 outputs:
@@ -128,10 +129,111 @@ if [ ! -d themes/docdock ]; then
 fi
 #+END_SRC
 
-Create the css override for the docdock theme:
+Create our own theme variant:
 
-#+BEGIN_SRC css :mkdirp yes :eval no :tangle ~/.emacs.d/blog/static/css/docdock.custom.css
-/* Custom overrides for the docdock theme */
+#+BEGIN_SRC css :mkdirp yes :eval no :tangle ~/.emacs.d/blog/static/css/theme-rymcg.css
+:root{
+    --MAIN-BACK-color:#ddd;
+    --MAIN-TXT-color: #000;
+    --MAIN-LINK-color:#3995b1;
+    --MAIN-HOVER-color:#c51212;
+    --SIDE-MAIN-color:#444;
+    --SIDE-MAIN-TXT-color:#fff;
+    --SIDE-FOCUS-BACK-color:#707070;
+    --SIDE-FOCUS-FORE-color:black;
+    --MENU-LINK-color:#fff;
+    --MENU-ACTIVE-BACK-color:#505050;
+    --MENU-ACTIVE-LINK-color:white;
+    --NAV-HOVER-color:#bbb;
+}
+#header-wrapper {
+    border-bottom: none;
+}
+#sidebar ul li.visited > a .read-icon {
+	color: var(--SIDE-MAIN-color);
+}
+a {
+    color: var(--MAIN-LINK-color);
+}
+a:hover {
+    color: var(--MAIN-HOVER-color);
+}
+body {
+    background-color: var(--MAIN-BACK-color);
+    color: var(--MAIN-TXT-color) !important;
+}
+#body a.highlight:after {
+    background-color: var(--MAIN-HOVER-color);
+}
+#sidebar {
+	background-color: var(--SIDE-MAIN-color);
+}
+#sidebar #header-wrapper {
+    background: var(--SIDE-MAIN-color);
+    color: var(--BF-color)
+    border-color: var(--SIDE-FOCUS-BACK-color);
+}
+#sidebar .searchbox {
+	border-color: var(--BF-color);
+    background: var(--SIDE-FOCUS-BACK-color);
+}
+#sidebar ul.topics > li.parent, #sidebar ul.topics > li.active {
+    background: var(--SIDE-FOCUS-BACK-color);
+}
+#sidebar .searchbox * {
+    color: var(--SIDE-FOCUS-FORE-color);
+}
+#sidebar a , #sidebar a:hover {
+    color: var(--MENU-LINK-color);
+}
+#sidebar .parent li, #sidebar .active li {
+    border-color: var(--MENU-ACTIVE-LINK-color);
+}
+#sidebar ul li.active > a {
+    background: var(--MENU-ACTIVE-BACK-color);
+    color: var(--MENU-ACTIVE-LINK-color) !important;
+}
+#sidebar ul li .category-icon {
+	color: var(--MENU-LINK-color);
+}
+#sidebar #shortcuts h3 {
+    color: var(--SIDE-MAIN-TXT-color);
+}
+
+.footline {
+	border-color: var(--SIDE-FOCUS-BACK-color);
+}
+
+div.block-header {
+    color: #fff;
+    padding-left: 1em;
+    font-family: monospace;
+    font-weight: bold;
+    border-radius: 8px 8px 0 0;
+}
+div.block-header.fn {
+    background-color: #4e3a82;    
+}
+div.block-header.exec {
+    background-color: #b93838;    
+}
+div.block-header.example {
+    background-color: #4d4b54;
+}
+.copy-to-clipboard {
+    margin-top: -1px;
+}
+pre {
+    border-radius: 0 0 8px 8px;
+}
+pre .copy-to-clipboard {
+    background-color: #fff;
+    border: 1px solid #272a2c !important;
+}
+pre .copy-to-clipboard:hover {
+    background-color: #ffa;
+}
+
 div#tags {
     float: none;
 }
@@ -144,26 +246,82 @@ div#body-inner {
 div#body-inner pre {
     margin-top: 0;
 }
-div.block-header {
-    background-color: #aaa;
+
+#body .nav:hover {
+    background-color: var(--NAV-HOVER-color);
 }
+
+/* perldoc syntax highlight style */
+/* Background */ .chroma { background-color: #eeeedd }
+/* Error */ .chroma .err { color: #a61717; background-color: #e3d2d2 }
+/* LineHighlight */ .chroma .hl { background-color: #ffffcc; display: block; width: 100% }
+/* LineNumbers */ .chroma .ln { ; margin-right: 0.4em; padding: 0 0.4em 0 0.4em; }
+/* Keyword */ .chroma .k { color: #8b008b; font-weight: bold }
+/* KeywordConstant */ .chroma .kc { color: #8b008b; font-weight: bold }
+/* KeywordDeclaration */ .chroma .kd { color: #8b008b; font-weight: bold }
+/* KeywordNamespace */ .chroma .kn { color: #8b008b; font-weight: bold }
+/* KeywordPseudo */ .chroma .kp { color: #8b008b; font-weight: bold }
+/* KeywordReserved */ .chroma .kr { color: #8b008b; font-weight: bold }
+/* KeywordType */ .chroma .kt { color: #00688b; font-weight: bold }
+/* NameAttribute */ .chroma .na { color: #658b00 }
+/* NameBuiltin */ .chroma .nb { color: #658b00 }
+/* NameClass */ .chroma .nc { color: #008b45; font-weight: bold }
+/* NameConstant */ .chroma .no { color: #00688b }
+/* NameDecorator */ .chroma .nd { color: #707a7c }
+/* NameException */ .chroma .ne { color: #008b45; font-weight: bold }
+/* NameFunction */ .chroma .nf { color: #008b45 }
+/* NameNamespace */ .chroma .nn { color: #008b45 }
+/* NameTag */ .chroma .nt { color: #8b008b; font-weight: bold }
+/* NameVariable */ .chroma .nv { color: #00688b }
+/* LiteralString */ .chroma .s { color: #cd5555 }
+/* LiteralStringAffix */ .chroma .sa { color: #cd5555 }
+/* LiteralStringBacktick */ .chroma .sb { color: #cd5555 }
+/* LiteralStringChar */ .chroma .sc { color: #cd5555 }
+/* LiteralStringDelimiter */ .chroma .dl { color: #cd5555 }
+/* LiteralStringDoc */ .chroma .sd { color: #cd5555 }
+/* LiteralStringDouble */ .chroma .s2 { color: #cd5555 }
+/* LiteralStringEscape */ .chroma .se { color: #cd5555 }
+/* LiteralStringHeredoc */ .chroma .sh { color: #1c7e71; font-style: italic }
+/* LiteralStringInterpol */ .chroma .si { color: #cd5555 }
+/* LiteralStringOther */ .chroma .sx { color: #cb6c20 }
+/* LiteralStringRegex */ .chroma .sr { color: #1c7e71 }
+/* LiteralStringSingle */ .chroma .s1 { color: #cd5555 }
+/* LiteralStringSymbol */ .chroma .ss { color: #cd5555 }
+/* LiteralNumber */ .chroma .m { color: #b452cd }
+/* LiteralNumberBin */ .chroma .mb { color: #b452cd }
+/* LiteralNumberFloat */ .chroma .mf { color: #b452cd }
+/* LiteralNumberHex */ .chroma .mh { color: #b452cd }
+/* LiteralNumberInteger */ .chroma .mi { color: #b452cd }
+/* LiteralNumberIntegerLong */ .chroma .il { color: #b452cd }
+/* LiteralNumberOct */ .chroma .mo { color: #b452cd }
+/* OperatorWord */ .chroma .ow { color: #8b008b }
+/* Comment */ .chroma .c { color: #228b22 }
+/* CommentHashbang */ .chroma .ch { color: #228b22 }
+/* CommentMultiline */ .chroma .cm { color: #228b22 }
+/* CommentSingle */ .chroma .c1 { color: #228b22 }
+/* CommentSpecial */ .chroma .cs { color: #8b008b; font-weight: bold }
+/* CommentPreproc */ .chroma .cp { color: #1e889b }
+/* CommentPreprocFile */ .chroma .cpf { color: #1e889b }
+/* GenericDeleted */ .chroma .gd { color: #aa0000 }
+/* GenericEmph */ .chroma .ge { font-style: italic }
+/* GenericError */ .chroma .gr { color: #aa0000 }
+/* GenericHeading */ .chroma .gh { color: #000080; font-weight: bold }
+/* GenericInserted */ .chroma .gi { color: #00aa00 }
+/* GenericOutput */ .chroma .go { color: #888888 }
+/* GenericPrompt */ .chroma .gp { color: #555555 }
+/* GenericStrong */ .chroma .gs { font-weight: bold }
+/* GenericSubheading */ .chroma .gu { color: #800080; font-weight: bold }
+/* GenericTraceback */ .chroma .gt { color: #aa0000 }
+/* TextWhitespace */ .chroma .w { color: #bbbbbb }
 #+END_SRC
 
-Create the custom head partial to include our css:
-#+BEGIN_SRC html :mkdirp yes :eval no :tangle ~/.emacs.d/blog/layouts/partials/custom-head.html
-<!-- custom docdock theme css overrides -->
-<link href="/css/docdock.custom.css" rel="stylesheet">
-#+END_SRC
-
-** Prepending tangle name to code blocks
+** Code block headers
 When reading code blocks in Org file source it's pretty easy to see
 what file it's referring to, by looking at the =:tangle= parameter:
 
-#+BEGIN_EXAMPLE
-#+BEGIN_SRC emacs-lisp :tangle /some/path/myfile.conf
-[main]
-setting1=yes
-setting2=no
+#+BEGIN_EXAMPLE org
+#+BEGIN_SRC emacs-lisp :tangle /some/path/example.el
+  (messsage "example")
 #+END_SRC
 #+END_EXAMPLE
 
@@ -175,21 +333,38 @@ means you're repeating yourself, and when you refactor path names, you
 will have an additional thing you need to edit, or else an opportunity
 arises for the documentation to diverge from the code. Messy.
 
-It would be better if we only specified the =:tangle= once, and the
-path were output to the HTML output, directly before the code block.
-We can accomplish that by using =org-export-before-processing-hook=:
+Let's automatically add headers to all the code blocks exported to
+HTML.
+
+ - Tangled code should have header with =Create in $FILE=
+ - Shell code blocks should have header with =Run in $DIR= 
+ - Example blocks should have header with =Example= 
 
 #+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/blog.el
-; credit John Kitchin - https://stackoverflow.com/a/38876439/56560
+                                        ; original credit to John Kitchin - https://stackoverflow.com/a/38876439/56560
 (defun rymcg/org-hugo-add-tangle-names-to-export (backend)
   (let ((src-blocks (org-element-map (org-element-parse-buffer) 'src-block #'identity)))
-  (setq src-blocks (nreverse src-blocks))                       
+    (setq src-blocks (nreverse src-blocks))
     (loop for src in src-blocks
-      do
-      (goto-char (org-element-property :begin src)) 
-      (let ((tangled-name (cdr (assoc :tangle (nth 2 (org-babel-get-src-block-info))))))
-        (if (not (equal tangled-name "no"))
-            (insert (format "\n#+HTML: <div class='block-header'>%s</div>\n" tangled-name)))))))
+          do
+          (goto-char (org-element-property :begin src)) 
+          (let ((tangled-name (cdr (assoc :tangle (nth 2 (org-babel-get-src-block-info)))))
+                (directory (cdr (assoc :dir (nth 2 (org-babel-get-src-block-info)))))
+                (language-name (first (org-babel-get-src-block-info))))
+            (if (not (equal tangled-name "no"))
+                                        ; tangle files get a header for the file name:
+                (insert (format "\n#+HTML: <div class='block-header fn'>Create in %s</div>\n" tangled-name))
+              (if (equal language-name "shell")
+                                        ; Non-tangled shell scripts get a header indicating to run it:
+                                        ; Show the directory if it's set:
+                  (insert (format "\n#+HTML: <div class='block-header exec'>Run%s</div>\n" 
+                                  (if (equal directory nil) "" (format " in %s" directory)))))))))
+  (let ((example-blocks (org-element-map (org-element-parse-buffer) 'example-block #'identity)))
+    (setq example-blocks (nreverse example-blocks))
+    (loop for example in example-blocks
+          do
+          (goto-char (org-element-property :begin example))
+          (insert (format "\n#+HTML: <div class='block-header example'>Example</div>\n")))))
 
 (defadvice org-hugo-export-subtree-to-md (around org-hugo-export-advice)
   (let ((org-export-before-processing-hook '(rymcg/org-hugo-add-tangle-names-to-export)))
