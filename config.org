@@ -731,15 +731,49 @@ I've had issues with getting BiBTeX to work correctly with the LaTeX exporter fo
 (setq browse-url-browser-function 'browse-url-chromium)
   #+END_SRC
 
+* Sound effects
+Let's define some sound effects to use audible alerts:
+
+#+BEGIN_SRC emacs-lisp
+(defun play-mp3 (mp3file)
+  (let ((default-directory (expand-file-name "~/.emacs.d/audio")))
+    (start-process-shell-command "play-mp3" nil (format "mpg123 %s" mp3file))))
+
+;; CC-0 sounds from http://freesound.org/people/soneproject/packs/15057/
+(defun beep-1 nil
+  (play-mp3 "244356__soneproject__digital-life-1.mp3"))
+(defun beep-2 nil
+  (play-mp3 "255102__soneproject__jingle3.mp3"))
+(defun beep-error-1 nil
+  (play-mp3 "260084__soneproject__sfx15.mp3"))
+
+;; Try-finally wrapper with sounds:
+(defmacro audible-success (fn &rest finally)
+  `(unwind-protect
+       (let (retval)
+         (condition-case ex
+             (setq retval (progn ,fn))
+           ('error 
+            (setq retval (cons 'exception (list ex)))
+            (beep-error-1)
+            (error "%s" retval)))
+         (beep-1)
+         retval)
+     ,@finally))
+;; test:
+;;(audible-success (message "k") (message "done"))
+;;(audible-success (error "nope") (message "done"))
+#+END_SRC
+
 * Blog
 
 All my blog config is in [[blog.org]], which tangles to [[blog.el]] to
 initialize itself. Only load it if it's been manually tangled first:
 
 #+BEGIN_SRC emacs-lisp
-(let ((blog-init (expand-file-name "~/.emacs.d/blog.el")))
-  (if (file-exists-p blog-init)
-    (load-file blog-init)))
+(let ((rymcg/init (expand-file-name "~/.emacs.d/rymcg.tech.el")))
+  (if (file-exists-p rymcg/init)
+    (load-file rymcg/init)))
 #+END_SRC
 * Smart TAB completion
 This is giving me some problems so this is left unbound for now.
