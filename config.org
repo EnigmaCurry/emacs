@@ -1,6 +1,6 @@
 #+TITLE: Emacs Configuration
 #+AUTHOR: Ryan McGuire
-#+PROPERTY: header-args :eval no :output none
+#+PROPERTY: header-args :output none :results none
 
 Declaring Emacs bankruptcy (again) and starting a new literate config
 using Org mode.
@@ -263,6 +263,22 @@ Ido makes finding files/buffers/etc much easier
      (global-set-key (kbd "C-z") 'avy-goto-char-timer)
      )
    #+END_SRC
+** Ace Window
+I think avy is superior, but sometimes you simply want to "go to the
+other window" (not caring where exactly, because avy could do that
+better), but that starts to get tediously complex when you have more
+than two windows open. ace-window solves that nicely with numeric jump
+points.
+
+Rebind =C-x o= to ace-window:
+#+BEGIN_SRC emacs-lisp
+(use-package ace-window
+  :ensure t
+  :init
+  (progn
+    (global-set-key [remap other-window] 'ace-window)))
+#+END_SRC
+
 ** Magit
 #+begin_src emacs-lisp
 (use-package magit
@@ -767,10 +783,11 @@ Let's define some sound effects to use audible alerts:
 
 * Blog
 
-All my blog config is in [[blog.org]], which tangles to [[blog.el]] to
-initialize itself. Only load it if it's been manually tangled first:
+All my blog config is in [[https://github.com/EnigmaCurry/rymcg.tech][the rymcg.tech repository]], which tangles to
+=rymcg.tech.el=. Bootstrap it by loading that file if it exists:
 
 #+BEGIN_SRC emacs-lisp
+;; Load rymcg.tech.el which is tangled from rymcg.tech/README.org
 (let ((rymcg/init (expand-file-name "~/.emacs.d/rymcg.tech.el")))
   (if (file-exists-p rymcg/init)
     (load-file rymcg/init)))
