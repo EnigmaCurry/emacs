@@ -3,6 +3,8 @@ This is my new spacemacs config.
 ```
 git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
 
+git -C ~/.emacs.d/ checkout develop
+
 git clone https://github.com/EnigmaCurry/emacs ~/git/vendor/enigmacurry/emacs
 
 ln -s ~/git/vendor/enigmacurry/emacs/spacemacs.el $HOME/.spacemacs
