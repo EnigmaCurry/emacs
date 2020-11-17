@@ -420,6 +420,7 @@ you should place your code here."
   (define-key evil-emacs-state-map (kbd "C-c g") 'magit-status)
   (define-key evil-emacs-state-map (kbd "C-c t") 'vterm-toggle)
 
+  (require 'vterm)
   (define-key vterm-mode-map [prior] 'scroll-down-command)
   (define-key vterm-mode-map [S-prior] 'scroll-down-command)
   (define-key vterm-mode-map [next] 'scroll-up-command)
