@@ -32,7 +32,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(systemd
+     sql
      (go :variables go-backend 'go-mode go-tab-width 2 go-format-before-save t go-use-golangci-lint t godoc-at-point-function 'godoc-gogetdoc)
      ansible
      rust
@@ -68,7 +69,7 @@ This function should only modify configuration layer settings."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(magit vue-mode js2-mode ace-window ace-jump-mode vterm vterm-toggle glsl-mode protobuf-mode)
+   dotspacemacs-additional-packages '(magit vue-mode js2-mode ace-window ace-jump-mode vterm vterm-toggle glsl-mode protobuf-mode sicp)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
@@ -439,6 +440,10 @@ you should place your code here."
     (interactive)
     (kill-buffer)
     (jump-to-register :magit-fullscreen))
+
+  ;; fix vue-mode indentation
+  ;; https://github.com/AdamNiederer/vue-mode/issues/74#issuecomment-577338222
+  (add-hook 'vue-mode-hook (lambda () (setq syntax-ppss-table nil)))
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -477,19 +482,22 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(company-idle-delay 1.5)
+ '(evil-want-Y-yank-to-eol nil)
+ '(gofmt-command "goimports")
  '(js-indent-level 2)
  '(package-selected-packages
-   (quote
-    (systemd go-guru go-eldoc go-mode jinja2-mode ansible-doc ansible toml-mode racer pos-tip cargo rust-mode 0blayout web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode haml-mode emmet-mode edit-indirect ssass-mode vue-html-mode shell-pop ace-jump-mode smeargle orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download magit-gitflow magit-popup htmlize gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit transient git-commit with-editor magit vue-mode mmm-mode markdown-toc markdown-mode gh-md yaml-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional cython-mode anaconda-mode pythonic theme-looper color-theme-solarized ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump popup f dash s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed async aggressive-indent adaptive-wrap ace-window ace-link avy)))
+   '(sicp systemd protobuf-mode glsl-mode powershell vterm-toggle vterm flycheck-golangci-lint go-guru go-eldoc go-mode jinja2-mode ansible-doc ansible toml-mode racer pos-tip cargo rust-mode 0blayout web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode haml-mode emmet-mode edit-indirect ssass-mode vue-html-mode shell-pop ace-jump-mode smeargle orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download magit-gitflow magit-popup htmlize gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit transient git-commit with-editor magit vue-mode mmm-mode markdown-toc markdown-mode gh-md yaml-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional cython-mode anaconda-mode pythonic theme-looper color-theme-solarized ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump popup f dash s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed async aggressive-indent adaptive-wrap ace-window ace-link avy))
+ '(python-indent-offset 4)
+ '(shell-pop-autocd-to-working-dir nil)
  '(shell-pop-shell-type
-   (quote
-    ("ansi-term" "*ansi-term*"
+   '("ansi-term" "*ansi-term*"
      (lambda nil
-       (ansi-term shell-pop-term-shell))))))
+       (ansi-term shell-pop-term-shell))))
+ '(shell-pop-window-size 100))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(markdown-code-face ((t (:inherit fixed-pitch\ \(\(t\ \(:family\ \"Ubuntu\ Mono\"\)\)\))))))
 )
