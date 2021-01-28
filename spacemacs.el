@@ -73,7 +73,8 @@ This function should only modify configuration layer settings."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(magit vue-mode js2-mode ace-window
      ace-jump-mode vterm vterm-toggle glsl-mode protobuf-mode kubernetes sicp
-     gdscript-mode jupyter quelpa use-package quelpa-use-package pyenv-mode)
+     gdscript-mode jupyter quelpa use-package quelpa-use-package pyenv-mode
+     ox-hugo)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
@@ -471,6 +472,9 @@ you should place your code here."
   ;; fix vue-mode indentation
   ;; https://github.com/AdamNiederer/vue-mode/issues/74#issuecomment-577338222
   (add-hook 'vue-mode-hook (lambda () (setq syntax-ppss-table nil)))
+
+  ;; ox-hugo blog
+  (require 'ox-hugo)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -491,9 +495,14 @@ you should place your code here."
  '(explicit-shell-file-name "/bin/bash")
  '(gofmt-command "goimports")
  '(js-indent-level 2)
+ '(org-file-apps
+   '((auto-mode . emacs)
+     ("\\.mm\\'" . default)
+     ("\\.x?html?\\'" . "firefox %s")
+     ("\\.pdf\\'" . default)))
  '(org-modules
    '(ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus ol-info ol-irc ol-mhe ol-rmail org-tempo ol-w3m))
- '(org-startup-truncated t)
+ '(org-startup-truncated nil)
  '(org-structure-template-alist
    '(("a" . "export ascii")
      ("c" . "center")
@@ -505,9 +514,13 @@ you should place your code here."
      ("q" . "quote")
      ("s" . "src")
      ("v" . "verse")
-     ("p" . "src ipython :session :exports both :results raw drawer")))
+     ("p" . "src jupyter-python :session emacs-jupyter :exports both :results raw drawer")
+     ("sh" . "src shell :eval never-export :exports code")
+     ("env" . "src shell :noweb yes :eval never-export :tangle FILE.sh")
+     ("yaml" . "src yaml :noweb yes :eval never-export :tangle FILE.yaml")))
+ '(org-tags-column -40)
  '(package-selected-packages
-   '(jupyter systemd sql-indent sicp quelpa-use-package use-package-hydra quelpa gdscript-mode kubernetes rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby csv-mode protobuf-mode glsl-mode powershell vterm-toggle vterm flycheck-golangci-lint go-guru go-eldoc go-mode jinja2-mode ansible-doc ansible toml-mode racer pos-tip cargo rust-mode 0blayout web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode haml-mode emmet-mode edit-indirect ssass-mode vue-html-mode shell-pop ace-jump-mode smeargle orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download magit-gitflow magit-popup htmlize gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit transient git-commit with-editor magit vue-mode mmm-mode markdown-toc markdown-mode gh-md yaml-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional cython-mode anaconda-mode pythonic theme-looper color-theme-solarized ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump popup f dash s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed async aggressive-indent adaptive-wrap ace-window ace-link avy))
+   '(ox-hugo jupyter systemd sql-indent sicp quelpa-use-package use-package-hydra quelpa gdscript-mode kubernetes rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby csv-mode protobuf-mode glsl-mode powershell vterm-toggle vterm flycheck-golangci-lint go-guru go-eldoc go-mode jinja2-mode ansible-doc ansible toml-mode racer pos-tip cargo rust-mode 0blayout web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode haml-mode emmet-mode edit-indirect ssass-mode vue-html-mode shell-pop ace-jump-mode smeargle orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download magit-gitflow magit-popup htmlize gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit transient git-commit with-editor magit vue-mode mmm-mode markdown-toc markdown-mode gh-md yaml-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional cython-mode anaconda-mode pythonic theme-looper color-theme-solarized ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump popup f dash s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed async aggressive-indent adaptive-wrap ace-window ace-link avy))
  '(shell-pop-autocd-to-working-dir nil)
  '(shell-pop-shell-type
    '("ansi-term" "*ansi-term*"
