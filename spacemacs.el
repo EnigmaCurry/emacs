@@ -79,7 +79,6 @@ This function should only modify configuration layer settings."
                                             ace-jump-mode vterm vterm-toggle glsl-mode
                                             protobuf-mode kubernetes sicp lfe-mode
                                             gdscript-mode jupyter quelpa use-package quelpa-use-package pyenv-mode
-                                            ox-hugo
                                             (org-resolve-deps :location (recipe :fetcher github :repo "EnigmaCurry/org-resolve-deps")))
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -485,7 +484,7 @@ you should place your code here."
   (setq auto-save-file-name-transforms
         `((".*" ,temporary-file-directory t)))
   ;; ox-hugo blog
-  (require 'ox-hugo)
+  ;(require 'ox-hugo)
   (add-hook 'org-mode-hook (lambda () (flyspell-mode)))
 
   ;; additional things I don't want in git
