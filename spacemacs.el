@@ -32,10 +32,10 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(d
-     typescript
+   '(typescript
      (c-c++ :variables c-c++-enable-clang-format-on-save t)
      nginx
+     elixir
      systemd
      sql
      ruby
@@ -75,9 +75,12 @@ This function should only modify configuration layer settings."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(magit vue-mode js2-mode
-       ace-window ace-jump-mode vterm vterm-toggle glsl-mode
-   protobuf-mode kubernetes sicp lfe-mode)
+   dotspacemacs-additional-packages '(magit vue-mode js2-mode ace-window
+                                            ace-jump-mode vterm vterm-toggle glsl-mode
+                                            protobuf-mode kubernetes sicp lfe-mode
+                                            gdscript-mode jupyter quelpa use-package quelpa-use-package pyenv-mode
+                                            ox-hugo
+                                            (org-resolve-deps :location (recipe :fetcher github :repo "EnigmaCurry/org-resolve-deps")))
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
@@ -466,16 +469,29 @@ you should place your code here."
     (kill-buffer)
     (jump-to-register :magit-fullscreen))
 
+  ;; Org-babel
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((jupyter . t) (emacs-lisp . t) (shell . t)
+   ))
+
   ;; fix vue-mode indentation
   ;; https://github.com/AdamNiederer/vue-mode/issues/74#issuecomment-577338222
   (add-hook 'vue-mode-hook (lambda () (setq syntax-ppss-table nil)))
-
 
 
   (setq backup-directory-alist
         `((".*" . ,temporary-file-directory)))
   (setq auto-save-file-name-transforms
         `((".*" ,temporary-file-directory t)))
+  ;; ox-hugo blog
+  (require 'ox-hugo)
+  (add-hook 'org-mode-hook (lambda () (flyspell-mode)))
+
+  ;; additional things I don't want in git
+  (if (file-exists-p "git/emacs/spacemacs-local.el")
+      (load-file "git/emacs/spacemacs-local.el")
+    )
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -488,6 +504,7 @@ you should place your code here."
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(auth-source-save-behavior nil)
+ '(browse-url-browser-function 'browse-url-firefox)
  '(custom-enabled-themes '(wombat))
  '(custom-safe-themes
    '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
@@ -495,14 +512,54 @@ you should place your code here."
  '(explicit-shell-file-name "/bin/bash")
  '(gofmt-command "goimports")
  '(js-indent-level 2)
+ '(keycast-insert-after 'mode-line-buffer-identification)
+ '(org-export-backends '(ascii html icalendar latex odt org))
+ '(org-file-apps
+   '((auto-mode . emacs)
+     ("\\.mm\\'" . default)
+     ("\\.x?html?\\'" . "firefox %s")
+     ("\\.pdf\\'" . default)))
+ '(org-modules
+   '(ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus ol-info ol-irc ol-mhe ol-rmail org-tempo ol-w3m))
+ '(org-startup-truncated nil)
+ '(org-structure-template-alist
+   '(("a" . "export ascii")
+     ("c" . "center")
+     ("C" . "comment")
+     ("e" . "example")
+     ("E" . "export")
+     ("h" . "export html")
+     ("l" . "export latex")
+     ("q" . "quote")
+     ("s" . "src")
+     ("v" . "verse")
+     ("p" . "src jupyter-python :session emacs-jupyter :exports both :results raw drawer")
+     ("sh" . "src shell :noweb yes :eval never-export")
+     ("yaml" . "src yaml :noweb yes :eval no :tangle FILE.yaml")
+     ("config" . "src config :noweb yes :eval no")))
+ '(org-tags-column -40)
  '(package-selected-packages
-   '(kubernetes rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby csv-mode protobuf-mode glsl-mode powershell vterm-toggle vterm flycheck-golangci-lint go-guru go-eldoc go-mode jinja2-mode ansible-doc ansible toml-mode racer pos-tip cargo rust-mode 0blayout web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode haml-mode emmet-mode edit-indirect ssass-mode vue-html-mode shell-pop ace-jump-mode smeargle orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download magit-gitflow magit-popup htmlize gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit transient git-commit with-editor magit vue-mode mmm-mode markdown-toc markdown-mode gh-md yaml-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional cython-mode anaconda-mode pythonic theme-looper color-theme-solarized ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump popup f dash s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed async aggressive-indent adaptive-wrap ace-window ace-link avy))
+   '(ob-elixir flycheck-credo flycheck alchemist company elixir-mode ts unpackaged org-resolve-deps command-log-mode keycast ox-hugo jupyter systemd sql-indent sicp quelpa-use-package use-package-hydra quelpa gdscript-mode kubernetes rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby csv-mode protobuf-mode glsl-mode powershell vterm-toggle vterm flycheck-golangci-lint go-guru go-eldoc go-mode jinja2-mode ansible-doc ansible toml-mode racer pos-tip cargo rust-mode 0blayout web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode haml-mode emmet-mode edit-indirect ssass-mode vue-html-mode shell-pop ace-jump-mode smeargle orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download magit-gitflow magit-popup htmlize gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit transient git-commit with-editor magit vue-mode mmm-mode markdown-toc markdown-mode gh-md yaml-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional cython-mode anaconda-mode pythonic theme-looper color-theme-solarized ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump popup f dash s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed async aggressive-indent adaptive-wrap ace-window ace-link avy))
+ '(safe-local-variable-values
+   '((eval progn
+           (load-file "~/git/vendor/enigmacurry/literate-k3s/meta/org-meta.el")
+           (literate-k3s-init))
+     (eval progn
+           (org-babel-goto-named-src-block "k3s-org-emacs-load")
+           (org-babel-execute-src-block)
+           (outline-hide-sublevels 1))
+     (eval progn
+           (org-babel-goto-named-src-block "enable-export-on-save")
+           (org-babel-execute-src-block)
+           (outline-hide-sublevels 1))
+     (eval toggle-org-html-export-on-save)))
  '(shell-pop-autocd-to-working-dir nil)
  '(shell-pop-shell-type
    '("ansi-term" "*ansi-term*"
      (lambda nil
        (ansi-term shell-pop-term-shell))))
- '(shell-pop-window-size 100))
+ '(shell-pop-window-size 100)
+ '(vterm-shell "/bin/bash -l"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
