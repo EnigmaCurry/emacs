@@ -32,7 +32,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(typescript
+   '(erlang
+     typescript
      (c-c++ :variables c-c++-enable-clang-format-on-save t)
      nginx
      elixir
@@ -426,7 +427,14 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  (setq confirm-kill-emacs 'yes-or-no-p)
+  (defun ask-before-closing-frame ()
+    "Close only if y was pressed."
+    (interactive)
+    (if (y-or-n-p (format "Are you sure you want to close this frame? "))
+        (save-buffers-kill-terminal)
+      (message "Canceled frame close")))
+  (when (daemonp)
+    (global-set-key (kbd "C-x C-c") 'ask-before-closing-frame))
 
   (define-key evil-emacs-state-map (kbd "C-c g") 'magit-status)
   (define-key evil-emacs-state-map (kbd "C-c t") 'vterm-toggle)
@@ -478,6 +486,8 @@ you should place your code here."
   ;; https://github.com/AdamNiederer/vue-mode/issues/74#issuecomment-577338222
   (add-hook 'vue-mode-hook (lambda () (setq syntax-ppss-table nil)))
 
+
+  (define-key global-map (kbd "C-c m") 'compile)
 
   (setq backup-directory-alist
         `((".*" . ,temporary-file-directory)))
@@ -614,7 +624,9 @@ This function is called at the very end of Spacemacs initialization."
      (lambda nil
        (ansi-term shell-pop-term-shell))))
  '(shell-pop-window-size 100)
- '(smartparens-global-strict-mode t))
+ '(smartparens-global-strict-mode t)
+ '(sort-fold-case t)
+ '(vterm-shell "/bin/bash -l"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
