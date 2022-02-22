@@ -49,7 +49,7 @@ This function should only modify configuration layer settings."
      markdown
      yaml
      javascript
-     python
+     (python :variables python-backend 'anaconda)
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -79,7 +79,8 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(magit vue-mode js2-mode ace-window
                                             ace-jump-mode vterm vterm-toggle glsl-mode
                                             protobuf-mode kubernetes sicp lfe-mode
-                                            gdscript-mode jupyter quelpa use-package quelpa-use-package pyenv-mode
+                                            gdscript-mode jupyter quelpa use-package quelpa-use-package pyenv-modex
+                                            python-black
                                             (org-resolve-deps :location (recipe :fetcher github :repo "EnigmaCurry/org-resolve-deps")))
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -486,8 +487,13 @@ you should place your code here."
   ;; https://github.com/AdamNiederer/vue-mode/issues/74#issuecomment-577338222
   (add-hook 'vue-mode-hook (lambda () (setq syntax-ppss-table nil)))
 
-
   (define-key global-map (kbd "C-c m") 'compile)
+
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (python-black-on-save-mode)
+              ))
+
 
   (setq backup-directory-alist
         `((".*" . ,temporary-file-directory)))
@@ -588,13 +594,19 @@ This function is called at the very end of Spacemacs initialization."
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(auth-source-save-behavior nil)
+ '(browse-url-browser-function 'browse-url-firefox)
+ '(clang-format-executable "clang-format")
  '(clang-format-fallback-style "llvm")
  '(company-idle-delay 1.5)
+ '(compilation-always-kill t)
+ '(compilation-window-height 10)
  '(custom-enabled-themes '(wombat))
  '(custom-safe-themes
    '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(evil-want-Y-yank-to-eol nil)
  '(explicit-shell-file-name "/bin/bash")
+ '(flycheck-clang-include-path
+   '("/home/ryan/git/vendor/VCVRack/Rack/include" "/home/ryan/git/vendor/VCVRack/Rack/dep/include" "/home/ryan/git/vendor/VCVRack/Rack-SDK/include"))
  '(gofmt-command "goimports")
  '(hl-todo-keyword-faces
    '(("TODO" . "#dc752f")
@@ -613,10 +625,51 @@ This function is called at the very end of Spacemacs initialization."
      ("XXX+" . "#dc752f")
      ("\\?\\?\\?+" . "#dc752f")))
  '(js-indent-level 2)
+ '(keycast-insert-after 'mode-line-buffer-identification)
+ '(org-export-backends '(ascii html icalendar latex odt org))
+ '(org-file-apps
+   '((auto-mode . emacs)
+     ("\\.mm\\'" . default)
+     ("\\.x?html?\\'" . "firefox %s")
+     ("\\.pdf\\'" . default)))
+ '(org-fontify-done-headline nil)
+ '(org-fontify-todo-headline nil)
+ '(org-modules
+   '(ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus ol-info ol-irc ol-mhe ol-rmail org-tempo ol-w3m))
+ '(org-startup-truncated nil)
+ '(org-structure-template-alist
+   '(("a" . "export ascii")
+     ("c" . "center")
+     ("C" . "comment")
+     ("e" . "example")
+     ("E" . "export")
+     ("h" . "export html")
+     ("l" . "export latex")
+     ("q" . "quote")
+     ("s" . "src")
+     ("v" . "verse")
+     ("p" . "src jupyter-python :session emacs-jupyter :exports both :results raw drawer")
+     ("sh" . "src shell :noweb yes :eval never-export")
+     ("yaml" . "src yaml :noweb yes :eval no :tangle FILE.yaml")
+     ("config" . "src config :noweb yes :eval no")))
+ '(org-tags-column -40)
  '(package-selected-packages
-   '(helm-gtags helm helm-core ggtags d-mode counsel-gtags company-dcd flycheck-dmd-dub kubernetes rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby csv-mode protobuf-mode glsl-mode powershell vterm-toggle vterm flycheck-golangci-lint go-guru go-eldoc go-mode jinja2-mode ansible-doc ansible toml-mode racer pos-tip cargo rust-mode 0blayout web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode haml-mode emmet-mode edit-indirect ssass-mode vue-html-mode shell-pop ace-jump-mode smeargle orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download magit-gitflow magit-popup htmlize gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit transient git-commit with-editor magit vue-mode mmm-mode markdown-toc markdown-mode gh-md yaml-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional cython-mode anaconda-mode pythonic theme-looper color-theme-solarized ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump popup f dash s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed async aggressive-indent adaptive-wrap ace-window ace-link avy))
+   '(mpdel elmpd helm-gtags helm helm-core ggtags erlang dap-mode bui counsel-gtags ob-elixir flycheck-credo flycheck alchemist company elixir-mode ts unpackaged org-resolve-deps command-log-mode keycast ox-hugo jupyter systemd sql-indent sicp quelpa-use-package use-package-hydra quelpa gdscript-mode kubernetes rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby csv-mode protobuf-mode glsl-mode powershell vterm-toggle vterm flycheck-golangci-lint go-guru go-eldoc go-mode jinja2-mode ansible-doc ansible toml-mode racer pos-tip cargo rust-mode 0blayout web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode haml-mode emmet-mode edit-indirect ssass-mode vue-html-mode shell-pop ace-jump-mode smeargle orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download magit-gitflow magit-popup htmlize gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit transient git-commit with-editor magit vue-mode mmm-mode markdown-toc markdown-mode gh-md yaml-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional cython-mode anaconda-mode pythonic theme-looper color-theme-solarized ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump popup f dash s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed async aggressive-indent adaptive-wrap ace-window ace-link avy))
  '(pdf-view-midnight-colors '("#b2b2b2" . "#262626"))
  '(python-indent-offset 4)
+ '(safe-local-variable-values
+   '((eval progn
+           (load-file "~/git/vendor/enigmacurry/literate-k3s/meta/org-meta.el")
+           (literate-k3s-init))
+     (eval progn
+           (org-babel-goto-named-src-block "k3s-org-emacs-load")
+           (org-babel-execute-src-block)
+           (outline-hide-sublevels 1))
+     (eval progn
+           (org-babel-goto-named-src-block "enable-export-on-save")
+           (org-babel-execute-src-block)
+           (outline-hide-sublevels 1))
+     (eval toggle-org-html-export-on-save)))
  '(scheme-program-name "guile")
  '(shell-pop-autocd-to-working-dir nil)
  '(shell-pop-shell-type
@@ -625,7 +678,7 @@ This function is called at the very end of Spacemacs initialization."
        (ansi-term shell-pop-term-shell))))
  '(shell-pop-window-size 100)
  '(smartparens-global-strict-mode t)
- '(sort-fold-case t)
+ '(sort-fold-case t t)
  '(vterm-shell "/bin/bash -l"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
