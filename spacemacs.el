@@ -33,7 +33,7 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(erlang
-     typescript
+     (typescript :variables typescript-backend 'lsp)
      (c-c++ :variables c-c++-enable-clang-format-on-save t)
      nginx
      elixir
@@ -49,7 +49,14 @@ This function should only modify configuration layer settings."
      markdown
      yaml
      javascript
-     (python :variables python-backend 'anaconda)
+     (python :variables
+             python-poetry-activate t
+             python-backend 'lsp
+             python-lsp-server 'pylsp
+             python-formatter 'black
+             python-format-on-save t
+             python-sort-imports-on-save t
+             )
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -224,7 +231,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Default font or prioritized list of fonts.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 24
+                               :size 18
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -489,10 +496,10 @@ you should place your code here."
 
   (define-key global-map (kbd "C-c m") 'compile)
 
-  (add-hook 'python-mode-hook
-            (lambda ()
-              (python-black-on-save-mode)
-              ))
+  ;; (add-hook 'python-mode-hook
+  ;;           (lambda ()
+  ;;             (python-black-on-save-mode)
+  ;;             ))
 
 
   (setq backup-directory-alist
@@ -626,6 +633,11 @@ This function is called at the very end of Spacemacs initialization."
      ("\\?\\?\\?+" . "#dc752f")))
  '(js-indent-level 2)
  '(keycast-insert-after 'mode-line-buffer-identification)
+ '(lsp-pylsp-configuration-sources ["pycodestyle"])
+ '(lsp-pylsp-plugins-flake8-enabled nil)
+ '(lsp-pylsp-plugins-pycodestyle-enabled t)
+ '(lsp-pylsp-plugins-pycodestyle-ignore [])
+ '(lsp-pylsp-plugins-pycodestyle-select [])
  '(org-export-backends '(ascii html icalendar latex odt org))
  '(org-file-apps
    '((auto-mode . emacs)
@@ -685,5 +697,6 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t)
  '(markdown-code-face ((t (:inherit fixed-pitch\ \(\(t\ \(:family\ \"Ubuntu\ Mono\"\)\)\))))))
 )
