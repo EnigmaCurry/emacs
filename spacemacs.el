@@ -86,7 +86,9 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(magit vue-mode js2-mode ace-window
                                             ace-jump-mode vterm vterm-toggle glsl-mode
                                             protobuf-mode kubernetes sicp lfe-mode
-                                            gdscript-mode jupyter quelpa use-package quelpa-use-package pyenv-modex
+                                            gdscript-mode jupyter quelpa use-package
+                                            quelpa-use-package pyenv-modex
+                                            sqlformat
                                             python-black
                                             (org-resolve-deps :location (recipe :fetcher github :repo "EnigmaCurry/org-resolve-deps")))
    ;; A list of packages that cannot be updated.
@@ -509,6 +511,12 @@ you should place your code here."
   ;; ox-hugo blog
   ;(require 'ox-hugo)
   (add-hook 'org-mode-hook (lambda () (flyspell-mode)))
+
+  ;;SQL formatter:
+  (setq sqlformat-command 'pgformatter)
+  (setq sqlformat-args '("-s2" "-g"))
+  (add-hook 'sql-mode-hook 'sqlformat-on-save-mode)
+  (define-key sql-mode-map (kbd "C-c C-f") 'sqlformat)
 
   ;; additional things I don't want in git
   (if (file-exists-p "git/emacs/spacemacs-local.el")
