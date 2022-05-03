@@ -2,6 +2,8 @@
 
 ;; define GUI defaults early:
 (load-theme 'deeper-blue t)
+(set-face-attribute 'default nil :height 125)
+;; remove distractions:
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
