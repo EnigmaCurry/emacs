@@ -1,0 +1,12 @@
+(("ace-jump-mode" . "8351e2df4fbbeb2a4003f2fb39f46d33803f3dac")
+ ("compat" . "65cd985320536065beea311a2b40219ffea49146")
+ ("dash.el" . "7fd71338dce041b352f84e7939f6966f4d379459")
+ ("el-get" . "9353309744e4f8a7c9b1adf22ec99536fb2146b0")
+ ("emacsmirror-mirror" . "4f8608c90548a2d4a13f413f6fb2ab5338c267b4")
+ ("gnu-elpa-mirror" . "b1bbc62b5579362fbe2e0ec9918708a3449b1c7b")
+ ("magit" . "476383fc8fb0f6ea4c6fc29d7057a1b5b5f95bd8")
+ ("melpa" . "67bf75e1dee7c7d83e66234afb18104b844b1719")
+ ("straight.el" . "af5437f2afd00936c883124d6d3098721c2d306c")
+ ("transient" . "8c62d0d223e90f53b29c439ba2f86b6e721d8209")
+ ("with-editor" . "48996e3116dadee06c8c68b1a0fe6ad8fd5317e0"))
+:beta
