@@ -18,7 +18,7 @@
  ("epl" . "78ab7a85c08222cd15582a298a364774e3282ce6")
  ("f.el" . "b5cb884b3b4372a6f3d1d4428cf092ca1e5c8044")
  ("flycheck" . "55f25fd98abc145c0c464756504132c271f0f039")
- ("gnu-elpa-mirror" . "b1bbc62b5579362fbe2e0ec9918708a3449b1c7b")
+ ("gnu-elpa-mirror" . "027b726fee77a1376b2edd345e651d78a5b9951a")
  ("ht.el" . "c4c1be487d6ecb353d07881526db05d7fc90ea87")
  ("hydra" . "9e9e00cb240ea1903ffd36a54956b3902c379d29")
  ("iedit" . "27c61866b1b9b8d77629ac702e5f48e67dfe0d3b")

@@ -36,6 +36,34 @@ symlinked into the freshly created `~/.emacs.d` directory. The
 ([default.el](straight-versions/default.el)) versioned inside of git,
 so as to maintain exactly reproducible installs.
 
+## Upgrade
+
+From time to time, you should review the versions of your dependencies
+in your lockfile ([default.el](straight-versions/default.el)).
+
+To upgrade a single package, run `M-x straight-pull-package`
+
+To upgrade a single package and all of its dependencies, run `M-x
+straight-pull-package-and-deps`
+
+To upgrade *all* packages, run `M-x straight-pull-all`
+
+After you're done upgrading packages, add the new versions to the
+lockfile:
+
+```
+## Write new upgraded versions to the lockfile:
+M-x straight-freeeze-versions
+```
+
+If you maintain multiple installations, you will also need to run the
+following on each other machine after you `git pull`:
+
+```
+## Update the installed versions according to the lockfile
+M-x straight-thaw-versions
+```
+
 ## Credits and other useful links
 
 Some code samples taken from:
