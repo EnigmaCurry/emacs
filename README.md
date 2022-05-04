@@ -44,7 +44,13 @@ You can install the optional [ec](ec) script as an alias to control
 PATH=$PATH:/home/ryan/git/vendor/enigmacurry/emacs
 ```
 
+If you use dmenu with i3, you can add your PATH directly to the dmenu
+launcher keybinding:
 
+```
+# excerpt from ~/.config/i3/config
+bindsym $mod+d exec --no-startup-id env PATH=$PATH:$HOME/git/vendor/enigmacurry/emacs dmenu_run
+```
 
 ## Upgrade
 
