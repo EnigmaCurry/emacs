@@ -6,8 +6,11 @@ This is my new new simplified Emacs config based on
 
 ## Install
 
-The following script will clone this repository and symlink the elisp
-files into a new, empty `~/.emacs.d` directory:
+The following shell script will clone this repository and symlink the
+elisp files into a new, empty `~/.emacs.d` directory. You may want to
+fork this repository and claim this config as your own. If you do,
+simply update the `REMOTE` and `REPO` variables for your own forked
+version:
 
 ```
 REMOTE=git@github.com:EnigmaCurry/emacs.git
@@ -22,16 +25,25 @@ mkdir ~/.emacs.d/straight && ln -s ${REPO}/straight-versions ~/.emacs.d/straight
 )
 ```
 
-Treat your entire `~/.emacs.d` directory as ephemeral. All of your
-saved configuration should go here and saved in this repository
-(cloned to `~/git/vendor/enigmacurry/emacs`). The main emacs
-configuration,[init.el](init.el) and [early-init.el](early-init.el),
-are both symlinked into the new `~/.emacs.d` directory. The
-[straight-versions](straight-versions) directory is symlinked to
+You will treat your entire `~/.emacs.d` directory as ephemeral (ie.
+not a git repository). All of your saved configuration should go here
+instead, saved in this repository (cloned locally to
+`~/git/vendor/enigmacurry/emacs`). The main emacs configuration,
+[init.el](init.el) and [early-init.el](early-init.el), are both
+symlinked into the freshly created `~/.emacs.d` directory. The
+[straight-versions](straight-versions) directory is also symlinked to
 `~/.emacs.d/straight/versions`, which keeps your package lock file
-versioned inside of git, to maintain exactly reproducible installs.
+([default.el](straight-versions/default.el)) versioned inside of git,
+so as to maintain exactly reproducible installs.
 
-## Older emacs configs
+## Credits and other useful links
+
+Some code samples taken from:
+
+ * [susam/emfy](https://github.com/susam/emfy)
+ * [Emacs Configuration Generator](https://emacs.amodernist.com)
+
+## My older emacs configs
 
 Here's my old [spacemacs config
 branch](https://github.com/EnigmaCurry/emacs/tree/spacemacs)

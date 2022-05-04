@@ -1,7 +1,7 @@
 ;; early-init.el is loaded *before* the package system and GUI are initialized:
 
 ;; define GUI defaults early:
-(load-theme 'deeper-blue t)
+(load-theme 'modus-vivendi t)
 (set-face-attribute 'default nil :height 125)
 ;; remove distractions:
 (menu-bar-mode -1)

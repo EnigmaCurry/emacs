@@ -1,5 +1,9 @@
 ;; -*- coding: utf-8 -*-
-;; GUI defaults loaded in early-init.el
+;; EnigmaCurry's emacs config
+;; inspiration : https://github.com/susam/emfy
+;;               https://emacs.amodernist.com
+
+;; GUI defaults are loaded in early-init.el before init.el
 
 ;; Nice defaults
 (setq confirm-kill-emacs #'yes-or-no-p)
@@ -9,6 +13,12 @@
 (recentf-mode t)
 (electric-pair-mode t)
 (define-key global-map (kbd "M-o") 'browse-url-at-point)
+(setq-default show-trailing-whitespace t)
+(setq-default indicate-empty-lines t)
+(setq-default indicate-buffer-boundaries 'left)
+(setq-default sentence-end-double-space nil)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 
 ;; Store file backups in ~/.emacs.d/backup rather than being littered everywhere:
 ;; Reference: https://www.emacswiki.org/emacs/BackupDirectory
@@ -22,6 +32,10 @@
 ;; https://www.emacswiki.org/emacs/ForceBackups
 (defun force-backup-of-buffer () (setq buffer-backed-up nil))
 (add-hook 'before-save-hook 'force-backup-of-buffer)
+;; autosaves in separate directory
+(make-directory "~/.emacs.d/auto-save/" t)
+(setq auto-save-file-name-transforms
+  '((".*" "~/.emacs.d/auto-save/" t)))
 
 ;; Store automatic customisation options in ~/.emacs.d/custom.el
 (setq custom-file (locate-user-emacs-file "custom.el"))
@@ -59,7 +73,8 @@
 (use-package default-text-scale
   :init
   (define-key global-map (kbd "C-=") 'default-text-scale-increase)
-  (define-key global-map (kbd "C--") 'default-text-scale-decrease))
+  (define-key global-map (kbd "C--") 'default-text-scale-decrease)
+  (setq default-text-scale-amount 5))
 
 ;; Ivy counsel (list-completion) :: https://oremacs.com/swiper/#introduction
 (use-package counsel
@@ -155,3 +170,97 @@
 ;; ace-link (follow links in info docs) :: https://github.com/abo-abo/ace-link
 (use-package ace-link
   :init (ace-link-setup-default))
+
+;; jump between windows (rebinds `C-x o`) :: https://github.com/abo-abo/ace-window
+(use-package ace-window
+  :init
+  (setq aw-scope 'frame)
+  (global-set-key [remap other-window] 'ace-window))
+
+;; lispy LISP mode :: https://github.com/abo-abo/lispy
+(use-package lispy
+  :hook (emacs-lisp . (lambda (lispy-mode 1)))
+  :init
+  (defun conditionally-enable-lispy ()
+    (when (eq this-command 'eval-expression)
+      (lispy-mode 1)))
+  (add-hook 'minibuffer-setup-hook 'conditionally-enable-lispy))
+
+(use-package rainbow-delimiters
+  :init
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'ielm-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'lisp-interaction-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode))
+
+;; hydra (rapid fire mnemonic keybindings) :: https://github.com/abo-abo/hydra
+(use-package hydra
+  :init
+  (global-set-key (kbd "C-n")
+    (defhydra
+      hydra-move
+      (:body-pre (next-line))
+      "move"
+      ("n" next-line)
+      ("p" previous-line)
+      ("f" forward-char)
+      ("b" backward-char)
+      ("a" beginning-of-line)
+      ("e" move-end-of-line)
+      ("v" scroll-up-command)
+      ;; Converting M-v to V here by analogy.
+      ("V" scroll-down-command)
+      ("l" recenter-top-bottom)))
+  (defhydra
+    hydra-zoom
+    (global-map "<f2>")
+    "zoom"
+    ("=" default-text-scale-increase "in")
+    ("-" default-text-scale-decrease "out"))
+  (defhydra
+    hydra-buffer-menu
+    (:color pink :hint nil)
+    "
+^Mark^             ^Unmark^           ^Actions^          ^Search
+^^^^^^^^-----------------------------------------------------------------
+_m_: mark          _u_: unmark        _x_: execute       _R_: re-isearch
+_s_: save          _U_: unmark up     _b_: bury          _I_: isearch
+_d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
+_D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
+_~_: modified
+"
+    ("m" Buffer-menu-mark)
+    ("u" Buffer-menu-unmark)
+    ("U" Buffer-menu-backup-unmark)
+    ("d" Buffer-menu-delete)
+    ("D" Buffer-menu-delete-backwards)
+    ("s" Buffer-menu-save)
+    ("~" Buffer-menu-not-modified)
+    ("x" Buffer-menu-execute)
+    ("b" Buffer-menu-bury)
+    ("g" revert-buffer)
+    ("T" Buffer-menu-toggle-files-only)
+    ("O" Buffer-menu-multi-occur :color blue)
+    ("I" Buffer-menu-isearch-buffers :color blue)
+    ("R" Buffer-menu-isearch-buffers-regexp :color blue)
+    ("c" nil "cancel")
+    ("v" Buffer-menu-select "select" :color blue)
+    ("o" Buffer-menu-other-window "other-window" :color blue)
+    ("q" quit-window "quit" :color blue))
+
+  (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body))
+
+;; Load SSH / GPG keys from keychain agent
+(use-package keychain-environment
+  :straight
+  (keychain-environment
+    :type git
+    :files (:defaults "keychain-environment")
+    :host github
+    :repo "tarsius/keychain-environment")
+  :init (keychain-refresh-environment))
+
+;; Start server.
+(require 'server)
+(unless (server-running-p)
+  (server-start))
