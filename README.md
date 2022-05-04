@@ -36,6 +36,16 @@ symlinked into the freshly created `~/.emacs.d` directory. The
 ([default.el](straight-versions/default.el)) versioned inside of git,
 so as to maintain exactly reproducible installs.
 
+You can install the optional [ec](ec) script as an alias to control
+ `emacsclient` and start/connect to your emacs sever. Add the
+ directory to your `PATH` (`~/.bashrc`):
+
+```
+PATH=$PATH:/home/ryan/git/vendor/enigmacurry/emacs
+```
+
+
+
 ## Upgrade
 
 From time to time, you should review the versions of your dependencies
