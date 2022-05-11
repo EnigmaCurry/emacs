@@ -11,7 +11,6 @@
 (save-place-mode t)
 (savehist-mode t)
 (recentf-mode t)
-(electric-pair-mode t)
 (define-key global-map (kbd "M-o") 'browse-url-at-point)
 (setq-default show-trailing-whitespace t)
 (setq-default indicate-empty-lines t)
@@ -41,6 +40,16 @@
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (when (file-exists-p custom-file)
   (load custom-file))
+
+;; global electric-pair-mode
+(electric-pair-mode t)
+(defvar markdown-electric-pairs '((96 . 96) (?* . ?*))
+  "Electric pairs for markdown-mode.")
+(defun markdown-add-electric-pairs ()
+  (setq-local electric-pair-pairs
+    (append electric-pair-pairs markdown-electric-pairs))
+  (setq-local electric-pair-text-pairs electric-pair-pairs))
+(add-hook 'markdown-mode-hook 'markdown-add-electric-pairs)
 
 ;; Install the straight.el package manager:
 ;; (Emacs' own default package system is disabled in early-init.el)
@@ -193,62 +202,80 @@
   (add-hook 'lisp-interaction-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode))
 
-;; hydra (rapid fire mnemonic keybindings) :: https://github.com/abo-abo/hydra
-(use-package hydra
+(use-package paredit
   :init
-  (global-set-key (kbd "C-n")
-    (defhydra
-      hydra-move
-      (:body-pre (next-line))
-      "move"
-      ("n" next-line)
-      ("p" previous-line)
-      ("f" forward-char)
-      ("b" backward-char)
-      ("a" beginning-of-line)
-      ("e" move-end-of-line)
-      ("v" scroll-up-command)
-      ;; Converting M-v to V here by analogy.
-      ("V" scroll-down-command)
-      ("l" recenter-top-bottom)))
-  (defhydra
-    hydra-zoom
-    (global-map "<f2>")
-    "zoom"
-    ("=" default-text-scale-increase "in")
-    ("-" default-text-scale-decrease "out"))
-  (defhydra
-    hydra-buffer-menu
-    (:color pink :hint nil)
-    "
-^Mark^             ^Unmark^           ^Actions^          ^Search
-^^^^^^^^-----------------------------------------------------------------
-_m_: mark          _u_: unmark        _x_: execute       _R_: re-isearch
-_s_: save          _U_: unmark up     _b_: bury          _I_: isearch
-_d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
-_D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
-_~_: modified
-"
-    ("m" Buffer-menu-mark)
-    ("u" Buffer-menu-unmark)
-    ("U" Buffer-menu-backup-unmark)
-    ("d" Buffer-menu-delete)
-    ("D" Buffer-menu-delete-backwards)
-    ("s" Buffer-menu-save)
-    ("~" Buffer-menu-not-modified)
-    ("x" Buffer-menu-execute)
-    ("b" Buffer-menu-bury)
-    ("g" revert-buffer)
-    ("T" Buffer-menu-toggle-files-only)
-    ("O" Buffer-menu-multi-occur :color blue)
-    ("I" Buffer-menu-isearch-buffers :color blue)
-    ("R" Buffer-menu-isearch-buffers-regexp :color blue)
-    ("c" nil "cancel")
-    ("v" Buffer-menu-select "select" :color blue)
-    ("o" Buffer-menu-other-window "other-window" :color blue)
-    ("q" quit-window "quit" :color blue))
+  (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook
+    'enable-paredit-mode)
+  (add-hook 'ielm-mode-hook 'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook 'enable-paredit-mode)
+  (add-hook 'slime-repl-mode-hook 'enable-paredit-mode)
+  (defun override-slime-del-key ()
+    (define-key slime-repl-mode-map
+      (read-kbd-macro paredit-backward-delete-key)
+      nil))
+  (add-hook 'slime-repl-mode-hook 'override-slime-del-key))
+(use-package slime
+  :init (setq inferior-lisp-program "sbcl"))
 
-  (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body))
+
+;; hydra (rapid fire mnemonic keybindings) :: https://github.com/abo-abo/hydra
+;; (use-package hydra
+;;   :init
+;;   (global-set-key (kbd "C-n")
+;;     (defhydra
+;;       hydra-move
+;;       (:body-pre (next-line))
+;;       "move"
+;;       ("n" next-line)
+;;       ("p" previous-line)
+;;       ("f" forward-char)
+;;       ("b" backward-char)
+;;       ("a" beginning-of-line)
+;;       ("e" move-end-of-line)
+;;       ("v" scroll-up-command)
+;;       ;; Converting M-v to V here by analogy.
+;;       ("V" scroll-down-command)
+;;       ("l" recenter-top-bottom)))
+;;   (defhydra
+;;     hydra-zoom
+;;     (global-map "<f2>")
+;;     "zoom"
+;;     ("=" default-text-scale-increase "in")
+;;     ("-" default-text-scale-decrease "out"))
+;;   (defhydra
+;;     hydra-buffer-menu
+;;     (:color pink :hint nil)
+;;     "
+;; ^Mark^             ^Unmark^           ^Actions^          ^Search
+;; ^^^^^^^^-----------------------------------------------------------------
+;; _m_: mark          _u_: unmark        _x_: execute       _R_: re-isearch
+;; _s_: save          _U_: unmark up     _b_: bury          _I_: isearch
+;; _d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
+;; _D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
+;; _~_: modified
+;; "
+;;     ("m" Buffer-menu-mark)
+;;     ("u" Buffer-menu-unmark)
+;;     ("U" Buffer-menu-backup-unmark)
+;;     ("d" Buffer-menu-delete)
+;;     ("D" Buffer-menu-delete-backwards)
+;;     ("s" Buffer-menu-save)
+;;     ("~" Buffer-menu-not-modified)
+;;     ("x" Buffer-menu-execute)
+;;     ("b" Buffer-menu-bury)
+;;     ("g" revert-buffer)
+;;     ("T" Buffer-menu-toggle-files-only)
+;;     ("O" Buffer-menu-multi-occur :color blue)
+;;     ("I" Buffer-menu-isearch-buffers :color blue)
+;;     ("R" Buffer-menu-isearch-buffers-regexp :color blue)
+;;     ("c" nil "cancel")
+;;     ("v" Buffer-menu-select "select" :color blue)
+;;     ("o" Buffer-menu-other-window "other-window" :color blue)
+;;     ("q" quit-window "quit" :color blue))
+
+;;   (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body))
 
 ;; Load SSH / GPG keys from keychain agent
 (use-package keychain-environment
