@@ -18,6 +18,7 @@
 (setq-default sentence-end-double-space nil)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
+(put 'narrow-to-region 'disabled nil)
 
 ;; Store file backups in ~/.emacs.d/backup rather than being littered everywhere:
 ;; Reference: https://www.emacswiki.org/emacs/BackupDirectory
@@ -187,13 +188,13 @@
   (global-set-key [remap other-window] 'ace-window))
 
 ;; lispy LISP mode :: https://github.com/abo-abo/lispy
-(use-package lispy
-  :hook (emacs-lisp . (lambda (lispy-mode 1)))
-  :init
-  (defun conditionally-enable-lispy ()
-    (when (eq this-command 'eval-expression)
-      (lispy-mode 1)))
-  (add-hook 'minibuffer-setup-hook 'conditionally-enable-lispy))
+;; (use-package lispy
+;;   :hook (emacs-lisp . (lambda (lispy-mode 1)))
+;;   :init
+;;   (defun conditionally-enable-lispy ()
+;;     (when (eq this-command 'eval-expression)
+;;       (lispy-mode 1)))
+;;   (add-hook 'minibuffer-setup-hook 'conditionally-enable-lispy))
 
 (use-package rainbow-delimiters
   :init
@@ -306,8 +307,21 @@
 ;; yaml mode
 (use-package yaml-mode)
 
-;; Start server.
+;; prettier JS code formatter
+;; must manually install: prettier and prettier-plugin-svelte
+(use-package prettier-js
+  :straight
+  (prettier-js
+    :type git
+    :host github
+    :repo "prettier/prettier-emacs"
+    :build nil)
+  :init
+  (load "~/.emacs.d/straight/repos/prettier-emacs/prettier-js.el")
+  (add-hook 'js2-mode-hook 'prettier-js-mode)
+  (add-hook 'web-mode-hook 'prettier-js-mode))
 
+;; Start server
 (require 'server)
 (unless (server-running-p)
   (server-start))
