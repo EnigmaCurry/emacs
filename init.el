@@ -91,7 +91,8 @@
   :init
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
-  (setq ivy-use-selectable-prompt t))
+  (setq ivy-use-selectable-prompt t)
+  (define-key global-map (kbd "M-y") 'counsel-yank-pop))
 
 ;; Magit (git version control system) :: https://magit.vc/
 (use-package magit
