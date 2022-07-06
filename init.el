@@ -322,6 +322,21 @@
   (add-hook 'js2-mode-hook 'prettier-js-mode)
   (add-hook 'web-mode-hook 'prettier-js-mode))
 
+;(use-package eglot)
+
+;; Go
+;; must manually install: gopls
+(use-package go-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
+  (add-hook 'go-mode-hook #'lsp-deferred)
+  (defun lsp-go-install-save-hooks ()
+    (add-hook 'before-save-hook #'lsp-format-buffer t t)
+    (add-hook 'before-save-hook #'lsp-organize-imports t t))
+  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+  (lsp-register-custom-settings
+    '(("gopls.completeUnimported" t t) ("gopls.staticcheck" t t))))
+
 ;; Start server
 (require 'server)
 (unless (server-running-p)
