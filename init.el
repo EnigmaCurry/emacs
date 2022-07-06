@@ -290,20 +290,20 @@
   :init (keychain-refresh-environment))
 
 ;; GIMP script-fu mode
-(use-package gimp-mode
-  :straight
-  (gimp-mode
-    :type git
-    :host github
-    :repo "enigmacurry/gimpmode"
-    :build nil)
-  :init (load "~/.emacs.d/straight/repos/gimpmode/gimp-init.el")
-  ;; Uncomment following line to globally use `gimp-selector':
-  ;; (global-set-key "\C-cg" 'gimp-selector)
-  ;;Now you can run the GIMP with `M-x run-gimp'.
-  ;;Alternatively, connect to GIMP server with `M-x gimp-cl-connect'.
-  ;;  Type `M-x gimp-help' for help.
-  )
+;; (use-package gimp-mode
+;;   :straight
+;;   (gimp-mode
+;;     :type git
+;;     :host github
+;;     :repo "enigmacurry/gimpmode"
+;;     :build nil)
+;;   :init (load "~/.emacs.d/straight/repos/gimpmode/gimp-init.el")
+;;   ;; Uncomment following line to globally use `gimp-selector':
+;;   ;; (global-set-key "\C-cg" 'gimp-selector)
+;;   ;;Now you can run the GIMP with `M-x run-gimp'.
+;;   ;;Alternatively, connect to GIMP server with `M-x gimp-cl-connect'.
+;;   ;;  Type `M-x gimp-help' for help.
+;;   )
 
 ;; yaml mode
 (use-package yaml-mode)
