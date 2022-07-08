@@ -18,6 +18,7 @@
 (setq-default sentence-end-double-space nil)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
+(setq-default visible-bell t)
 (put 'narrow-to-region 'disabled nil)
 
 ;; Store file backups in ~/.emacs.d/backup rather than being littered everywhere:
