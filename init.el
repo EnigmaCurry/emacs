@@ -20,6 +20,9 @@
 (setq-default tab-width 4)
 (put 'narrow-to-region 'disabled nil)
 
+;; core keybindings
+(define-key global-map (kbd "C-;") 'comment-region) ; C-u prefix to uncomment
+
 ;; Store file backups in ~/.emacs.d/backup rather than being littered everywhere:
 ;; Reference: https://www.emacswiki.org/emacs/BackupDirectory
 (setq backup-by-copying t)
@@ -336,6 +339,10 @@
   (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
   (lsp-register-custom-settings
     '(("gopls.completeUnimported" t t) ("gopls.staticcheck" t t))))
+
+;; Rust
+;; must manually install rust, rust-analyzer
+(use-package rustic)
 
 ;; Start server
 (require 'server)
