@@ -342,8 +342,9 @@
     '(("gopls.completeUnimported" t t) ("gopls.staticcheck" t t))))
 
 ;; Rust
-;; must manually install rust, rust-analyzer
-(use-package rustic)
+;; must manually install rust, rust-analyzer, cargo-watch, wasm-pack, wasm-bindgen, cargo-generate
+(use-package rustic
+  :init (setq rustic-format-on-save t))
 
 ;; Start server
 (require 'server)
