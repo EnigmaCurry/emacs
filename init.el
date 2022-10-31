@@ -19,6 +19,7 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default visible-bell t)
+(column-number-mode)
 (put 'narrow-to-region 'disabled nil)
 
 ;; core keybindings
@@ -345,6 +346,49 @@
 ;; must manually install rust, rust-analyzer, cargo-watch, wasm-pack, wasm-bindgen, cargo-generate
 (use-package rustic
   :init (setq rustic-format-on-save t))
+
+;; C++
+;; must manually install ccls
+(use-package ccls
+  :init
+  ;; (setq-default indent-tabs-mode t)
+  ;; (setq-default tab-width 4) ; Assuming you want your tabs to be four spaces wide
+  ;; (defvaralias 'c-basic-offset 'tab-width)
+  :hook
+  ((c-mode c++-mode objc-mode cuda-mode)
+    .
+    (lambda () (require 'ccls) (lsp))))
+
+;; WebGPU .wgsl mode
+(use-package wgsl-mode
+  :straight
+  (wgsl-mode :type git :host github :repo "acowley/wgsl-mode"))
+
+;; (use-package edit-server
+;;   :ensure t
+;;   :commands edit-server-start
+;;   :init
+;;   (if after-init-time
+;;     (edit-serer-start)
+;;     (add-hook 'after-init-hook #'(lambda () (edit-server-start))))
+;;   :config
+;;   (setq edit-server-new-frame-alist
+;;     '
+;;     ((name . "Edit with Emacs FRAME")
+;;       (top . 200)
+;;       (left . 200)
+;;       (width . 80)
+;;       (height . 25)
+;;       (minibuffer . t)
+;;       (menu-bar-lines . t)
+;;       (window-system . x))))
+
+;; atomic-chrome
+;; (use-package atomic-chrome
+;;   :init
+;;   (require 'atomic-chrome)
+;;   (atomic-chrome-start-server))
+
 
 ;; Start server
 (require 'server)
