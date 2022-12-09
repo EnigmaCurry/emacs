@@ -389,6 +389,11 @@
 ;;   (require 'atomic-chrome)
 ;;   (atomic-chrome-start-server))
 
+(use-package sqlformat
+  :init
+  (setq sqlformat-command 'pgformatter)
+  (setq sqlformat-args '("-s2" "-g" "-u1"))
+  (add-hook 'sql-mode-hook 'sqlformat-on-save-mode))
 
 ;; Start server
 (require 'server)
