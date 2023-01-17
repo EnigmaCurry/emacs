@@ -118,15 +118,15 @@
   :config (which-key-mode))
 
 ;; Elisp autoformatter :: https://codeberg.org/ideasman42/emacs-elisp-autofmt
-(use-package elisp-autofmt
-  :commands (elisp-autofmt-save-hook-for-this-buffer)
-  :hook (emacs-lisp-mode . elisp-autofmt-save-hook-for-this-buffer)
-  :straight
-  (elisp-autofmt
-    :type git
-    :files (:defaults "elisp-autofmt")
-    :repo "https://codeberg.org/ideasman42/emacs-elisp-autofmt.git")
-  :init (setq default-buffer-file-coding-system 'utf-8-unix))
+;; (use-package elisp-autofmt
+;;   :commands (elisp-autofmt-save-hook-for-this-buffer)
+;;   :hook (emacs-lisp-mode . elisp-autofmt-save-hook-for-this-buffer)
+;;   :straight
+;;   (elisp-autofmt
+;;     :type git
+;;     :files (:defaults "elisp-autofmt")
+;;     :repo "https://codeberg.org/ideasman42/emacs-elisp-autofmt.git")
+;;   :init (setq default-buffer-file-coding-system 'utf-8-unix))
 
 ;; LSP mode :: https://emacs-lsp.github.io/lsp-mode/
 (use-package lsp-mode
@@ -149,22 +149,43 @@
 (use-package dap-mode)
 ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
-;; Poetry (Python environment manager) :: https://github.com/galaunay/poetry.el
-(use-package poetry
+(use-package lsp-pyright
+  :hook
+  (python-mode . (lambda ()
+                   (require 'lsp-pyright)
+                   (lsp-deferred))))
+;; Activate python virtualenv BEFORE opening a python buffer and/or starting pyright server:
+;; M-x pyvenv-activate     (~/.virtualenvs/XXX)
+(use-package pyvenv
+  :ensure t
   :init
-  (advice-add 'pyvenv-activate
-    :after
-    ;; lsp needs to be enabled *after* poetry activates
-    (lambda (&rest r) (lsp))
-    '((name . "poetry-after-workon-activate-lsp")))
-  (poetry-tracking-mode))
-
+  (setenv "WORKON_HOME" "~/.virtualenvs/")
+  :config
+  ;; (pyvenv-mode t)
+  ;; Set correct Python interpreter
+  (setq pyvenv-post-activate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python")))))
+  (setq pyvenv-post-deactivate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter "python3")))))
+(use-package python-mode
+  :hook
+  (python-mode . pyvenv-mode)
+  (python-mode . flycheck-mode)
+  (python-mode . company-mode)
+  ;(python-mode . yas-minor-mode)
+  (python-mode . python-black-on-save-mode)
+  :custom
+  ;; NOTE: Set these if Python 3 is called "python3" on your system!
+  (python-shell-interpreter "python3")
+  :config
+  )
 ;; Black (Python code formatter) :: https://github.com/wbolster/emacs-python-black
 ;; Note: this depends on black being installed in the project virtualenv as a dev dependency
 (use-package python-black
   :demand t
-  :after python
-  :hook (python-mode . python-black-on-save-mode))
+  :after python)
 
 ;; Web mode :: https://github.com/fxbois/web-mode
 (use-package web-mode
@@ -389,6 +410,33 @@
 ;;   (require 'atomic-chrome)
 ;;   (atomic-chrome-start-server))
 
+(use-package sqlformat
+  :init
+  (setq sqlformat-command 'pgformatter)
+  (setq sqlformat-args '("-s2" "-g" "-u1"))
+  (add-hook 'sql-mode-hook 'sqlformat-on-save-mode))
+
+(use-package dockerfile-mode)
+
+;; typescript
+(use-package tide
+  :init
+  (defun setup-tide-mode ()
+    (interactive)
+    (tide-setup)
+    (flycheck-mode +1)
+    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (eldoc-mode +1)
+    (tide-hl-identifier-mode +1)
+    ;; company is an optional dependency. You have to
+    ;; install it separately via package-install
+    ;; `M-x package-install [ret] company`
+    (company-mode +1))
+  ;; aligns annotation to the right hand side
+  (setq company-tooltip-align-annotations t)
+  ;; formats the buffer before saving
+  (add-hook 'before-save-hook 'tide-format-before-save)
+  (add-hook 'typescript-mode-hook #'setup-tide-mode))
 
 ;; Start server
 (require 'server)
