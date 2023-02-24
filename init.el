@@ -192,6 +192,7 @@
   :init
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.svelte\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode)))
 
 ;; Tailwind CSS :: https://github.com/merrickluo/lsp-tailwindcss
@@ -416,7 +417,18 @@
   (setq sqlformat-args '("-s2" "-g" "-u1"))
   (add-hook 'sql-mode-hook 'sqlformat-on-save-mode))
 
-(use-package dockerfile-mode)
+(use-package dockerfile-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+  (defun my-novel-setup ()
+    (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
+                             :height 1.5)
+    (setq-local show-trailing-whitespace nil)
+    )
+  (add-hook 'nov-mode-hook 'my-novel-setup)
+  )
+
+(use-package nov)
 
 ;; typescript
 (use-package tide
