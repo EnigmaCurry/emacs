@@ -201,7 +201,20 @@
 ;; vterm (terminal emulator) :: https://github.com/akermu/emacs-libvterm
 ;; Configure BASH to work with vterm: https://github.com/akermu/emacs-libvterm#vterm-clear-scrollback
 (use-package vterm
-  :init (define-key global-map (kbd "C-c t") 'vterm-toggle))
+  :init
+  (defun my-vterm-toggle (&optional args)
+    "Customized vterm-toggle wrapper- this fixes the universal argument (C-u) to always create a new terminal"
+    (interactive "P")
+    (if
+        (not (or (derived-mode-p 'vterm-mode)
+                 (and (vterm-toggle--get-window)
+                      vterm-toggle-hide-method)))
+        (if (equal current-prefix-arg '(4))
+            (vterm-toggle--new args)
+          (vterm-toggle args))
+      (vterm-toggle args)))
+  (define-key global-map (kbd "C-c t") 'my-vterm-toggle))
+
 ;; shell-pop for vterm :: https://github.com/jixiuf/vterm-toggle
 (use-package vterm-toggle)
 
