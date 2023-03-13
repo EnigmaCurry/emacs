@@ -417,7 +417,7 @@
   (setq sqlformat-args '("-s2" "-g" "-u1"))
   (add-hook 'sql-mode-hook 'sqlformat-on-save-mode))
 
-(use-package dockerfile-mode
+(use-package nov
   :init
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
   (defun my-novel-setup ()
@@ -428,7 +428,9 @@
   (add-hook 'nov-mode-hook 'my-novel-setup)
   )
 
-(use-package nov)
+;; Docker
+(use-package dockerfile-mode)
+(use-package docker-tramp)
 
 ;; typescript
 (use-package tide
@@ -450,7 +452,11 @@
   (add-hook 'before-save-hook 'tide-format-before-save)
   (add-hook 'typescript-mode-hook #'setup-tide-mode))
 
+(use-package nix-mode)
+
 ;; Start server
 (require 'server)
 (unless (server-running-p)
   (server-start))
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
