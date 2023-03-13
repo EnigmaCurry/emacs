@@ -257,7 +257,16 @@
     (define-key slime-repl-mode-map
       (read-kbd-macro paredit-backward-delete-key)
       nil))
-  (add-hook 'slime-repl-mode-hook 'override-slime-del-key))
+  (add-hook 'slime-repl-mode-hook 'override-slime-del-key)
+  (defun override-paredit-slurp-keys ()
+    ;; Rebind the slurp keys to so as not to shadow the regular right-word and left-word bindings:
+    (define-key paredit-mode-map (kbd "C-<right>") nil)
+    (define-key paredit-mode-map (kbd "C-<left>") nil)
+    (define-key paredit-mode-map (kbd "H-<right>") 'paredit-forward-barf-sexp)
+    (define-key paredit-mode-map (kbd "H-<left>") 'paredit-forward-slurp-sexp)
+    )
+  (add-hook 'paredit-mode-hook 'override-paredit-slurp-keys)
+)
 (use-package slime
   :init (setq inferior-lisp-program "sbcl"))
 
