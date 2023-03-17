@@ -201,7 +201,20 @@
 ;; vterm (terminal emulator) :: https://github.com/akermu/emacs-libvterm
 ;; Configure BASH to work with vterm: https://github.com/akermu/emacs-libvterm#vterm-clear-scrollback
 (use-package vterm
-  :init (define-key global-map (kbd "C-c t") 'vterm-toggle))
+  :init
+  (defun my-vterm-toggle (&optional args)
+    "Customized vterm-toggle wrapper- this fixes the universal argument (C-u) to always create a new terminal"
+    (interactive "P")
+    (if
+        (not (or (derived-mode-p 'vterm-mode)
+                 (and (vterm-toggle--get-window)
+                      vterm-toggle-hide-method)))
+        (if (equal current-prefix-arg '(4))
+            (vterm-toggle--new args)
+          (vterm-toggle args))
+      (vterm-toggle args)))
+  (define-key global-map (kbd "C-c t") 'my-vterm-toggle))
+
 ;; shell-pop for vterm :: https://github.com/jixiuf/vterm-toggle
 (use-package vterm-toggle)
 
@@ -244,7 +257,16 @@
     (define-key slime-repl-mode-map
       (read-kbd-macro paredit-backward-delete-key)
       nil))
-  (add-hook 'slime-repl-mode-hook 'override-slime-del-key))
+  (add-hook 'slime-repl-mode-hook 'override-slime-del-key)
+  (defun override-paredit-slurp-keys ()
+    ;; Rebind the slurp keys to so as not to shadow the regular right-word and left-word bindings:
+    (define-key paredit-mode-map (kbd "C-<right>") nil)
+    (define-key paredit-mode-map (kbd "C-<left>") nil)
+    (define-key paredit-mode-map (kbd "H-<right>") 'paredit-forward-barf-sexp)
+    (define-key paredit-mode-map (kbd "H-<left>") 'paredit-forward-slurp-sexp)
+    )
+  (add-hook 'paredit-mode-hook 'override-paredit-slurp-keys)
+)
 (use-package slime
   :init (setq inferior-lisp-program "sbcl"))
 
@@ -417,7 +439,7 @@
   (setq sqlformat-args '("-s2" "-g" "-u1"))
   (add-hook 'sql-mode-hook 'sqlformat-on-save-mode))
 
-(use-package dockerfile-mode
+(use-package nov
   :init
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
   (defun my-novel-setup ()
@@ -428,7 +450,9 @@
   (add-hook 'nov-mode-hook 'my-novel-setup)
   )
 
-(use-package nov)
+;; Docker
+(use-package dockerfile-mode)
+(use-package docker-tramp)
 
 ;; typescript
 (use-package tide
@@ -450,7 +474,11 @@
   (add-hook 'before-save-hook 'tide-format-before-save)
   (add-hook 'typescript-mode-hook #'setup-tide-mode))
 
+(use-package nix-mode)
+
 ;; Start server
 (require 'server)
 (unless (server-running-p)
   (server-start))
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
