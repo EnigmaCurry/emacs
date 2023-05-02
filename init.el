@@ -454,6 +454,20 @@
 (use-package dockerfile-mode)
 (use-package docker-tramp)
 
+;; Memes
+;; Requires fonts: yay -S ttf-ms-fonts
+(use-package meme
+  :straight
+  (meme :type git :host github :repo "larsmagne/meme"
+        :fork (:host github :repo "enigmacurry/emacs-meme" :branch "dev")
+        :files ("*"))
+  :init
+  (use-package imgur
+    :straight
+    (imgur :type git :host github :repo "larsmagne/imgur.el")
+    :ensure t)
+  )
+
 ;; typescript
 (use-package tide
   :init
