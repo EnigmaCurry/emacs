@@ -389,7 +389,10 @@
 ;; Rust
 ;; must manually install rust, rust-analyzer, cargo-watch, wasm-pack, wasm-bindgen, cargo-generate
 (use-package rustic
-  :init (setq rustic-format-on-save t))
+  :init
+  (setq rustic-format-on-save t)
+  (define-key rustic-mode-map (kbd "C-c M-.") 'lsp-rust-analyzer-open-external-docs)
+)
 
 ;; C++
 ;; must manually install ccls
