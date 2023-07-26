@@ -263,13 +263,22 @@
     (define-key paredit-mode-map (kbd "C-<right>") nil)
     (define-key paredit-mode-map (kbd "C-<left>") nil)
     (define-key paredit-mode-map (kbd "H-<right>") 'paredit-forward-barf-sexp)
-    (define-key paredit-mode-map (kbd "H-<left>") 'paredit-forward-slurp-sexp)
-    )
+    (define-key paredit-mode-map (kbd "H-<left>") 'paredit-forward-slurp-sexp))
   (add-hook 'paredit-mode-hook 'override-paredit-slurp-keys)
 )
 (use-package slime
   :init (setq inferior-lisp-program "sbcl"))
 
+
+;; Clojure / CIDER
+;;; install leiningen package
+(use-package cider)
+
+;; Lisp Flavoured Erlang (LFE)
+(use-package lfe-mode
+  :init
+  (dolist (func '(paredit-mode rainbow-delimiters-mode))
+  (add-hook 'lfe-mode-hook func)))
 
 ;; hydra (rapid fire mnemonic keybindings) :: https://github.com/abo-abo/hydra
 ;; (use-package hydra
