@@ -400,7 +400,9 @@
 (use-package rustic
   :init
   (setq rustic-format-on-save t)
-  (define-key rustic-mode-map (kbd "C-c M-.") 'lsp-rust-analyzer-open-external-docs)
+  (add-hook 'rustic-mode-hook
+            (lambda ()
+              (define-key rustic-mode-map (kbd "C-c M-.") 'lsp-rust-analyzer-open-external-docs)))
 )
 
 ;; C++
