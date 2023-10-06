@@ -22,6 +22,22 @@
 (column-number-mode)
 (put 'narrow-to-region 'disabled nil)
 
+;; unbind arrow keys and pgup/pgdwn to prevent bad habits and keep fingers on home row.
+(global-unset-key (kbd "<left>"))
+(global-unset-key (kbd "<right>"))
+(global-unset-key (kbd "<up>"))
+(global-unset-key (kbd "<down>"))
+(global-unset-key (kbd "<C-left>"))
+(global-unset-key (kbd "<C-right>"))
+(global-unset-key (kbd "<C-up>"))
+(global-unset-key (kbd "<C-down>"))
+(global-unset-key (kbd "<M-left>"))
+(global-unset-key (kbd "<M-right>"))
+(global-unset-key (kbd "<M-up>"))
+(global-unset-key (kbd "<M-down>"))
+(global-unset-key (kbd "<prior>"))
+(global-unset-key (kbd "<next>"))
+
 ;; core keybindings
 (define-key global-map (kbd "C-;") 'comment-region) ; C-u prefix to uncomment
 
