@@ -527,6 +527,8 @@
              :type git
              :host github
              :repo "godotengine/emacs-gdscript-mode"))
+(use-package gdshader-mode 
+  :straight (gdshader-mode :type git :host github :repo "bbbscarter/gdshader-mode"))
 
 ;; Start server
 (require 'server)
