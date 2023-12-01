@@ -19,6 +19,7 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default visible-bell t)
+(setq-default browse-url-browser-function 'browse-url-firefox)
 (column-number-mode)
 (put 'narrow-to-region 'disabled nil)
 
@@ -114,6 +115,44 @@
   (setq ivy-use-virtual-buffers t)
   (setq ivy-use-selectable-prompt t)
   (define-key global-map (kbd "M-y") 'counsel-yank-pop))
+
+;; hydra (rapid fire mnemonic keybindings) :: https://github.com/abo-abo/hydra
+(use-package hydra)
+
+;; Org
+(use-package org
+  :after hydra
+  :config
+  (setq org-directory "~/org")
+  (setq org-insert-mode-line-in-empty-file t)
+  (setq org-default-notes-file (concat org-directory "/notes.org"))
+  (setq org-file-apps
+        '((auto-mode . emacs)
+        ("\\.mm\\'" . default)
+        ("\\.x?html?\\'" . "/usr/bin/firefox %s")
+        ("\\.pdf\\'" . default)))
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file+headline "~/org/notes.org" "Tasks")
+           "* TODO %?\n  %i\n  %a")
+          ("j" "Journal" entry (file+olp+datetree "~/org/notes.org" "Journal")
+           "* %?\nEntered on %U\n  %i\n  %a")))
+  :init
+  ;; Hydra for commonly used org commands:
+  (defhydra hydra-org (global-map "C-c o")
+    "org"
+    ("l" org-store-link "store link")
+    ("a" org-agenda "agenda")
+    ("c" org-capture "capture")
+    ("m" org-info "read info manual")
+    ("e" org-export-dispatch "export")
+    ("p" org-preview-html-mode "toggle preview mode"))
+  )
+(use-package org-preview-html
+  :after org
+  )
+(use-package ox-hugo
+  :ensure t
+  :after ox)
 
 ;; Magit (git version control system) :: https://magit.vc/
 (use-package magit
@@ -296,63 +335,6 @@
   (dolist (func '(paredit-mode rainbow-delimiters-mode))
   (add-hook 'lfe-mode-hook func)))
 
-;; hydra (rapid fire mnemonic keybindings) :: https://github.com/abo-abo/hydra
-;; (use-package hydra
-;;   :init
-;;   (global-set-key (kbd "C-n")
-;;     (defhydra
-;;       hydra-move
-;;       (:body-pre (next-line))
-;;       "move"
-;;       ("n" next-line)
-;;       ("p" previous-line)
-;;       ("f" forward-char)
-;;       ("b" backward-char)
-;;       ("a" beginning-of-line)
-;;       ("e" move-end-of-line)
-;;       ("v" scroll-up-command)
-;;       ;; Converting M-v to V here by analogy.
-;;       ("V" scroll-down-command)
-;;       ("l" recenter-top-bottom)))
-;;   (defhydra
-;;     hydra-zoom
-;;     (global-map "<f2>")
-;;     "zoom"
-;;     ("=" default-text-scale-increase "in")
-;;     ("-" default-text-scale-decrease "out"))
-;;   (defhydra
-;;     hydra-buffer-menu
-;;     (:color pink :hint nil)
-;;     "
-;; ^Mark^             ^Unmark^           ^Actions^          ^Search
-;; ^^^^^^^^-----------------------------------------------------------------
-;; _m_: mark          _u_: unmark        _x_: execute       _R_: re-isearch
-;; _s_: save          _U_: unmark up     _b_: bury          _I_: isearch
-;; _d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
-;; _D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
-;; _~_: modified
-;; "
-;;     ("m" Buffer-menu-mark)
-;;     ("u" Buffer-menu-unmark)
-;;     ("U" Buffer-menu-backup-unmark)
-;;     ("d" Buffer-menu-delete)
-;;     ("D" Buffer-menu-delete-backwards)
-;;     ("s" Buffer-menu-save)
-;;     ("~" Buffer-menu-not-modified)
-;;     ("x" Buffer-menu-execute)
-;;     ("b" Buffer-menu-bury)
-;;     ("g" revert-buffer)
-;;     ("T" Buffer-menu-toggle-files-only)
-;;     ("O" Buffer-menu-multi-occur :color blue)
-;;     ("I" Buffer-menu-isearch-buffers :color blue)
-;;     ("R" Buffer-menu-isearch-buffers-regexp :color blue)
-;;     ("c" nil "cancel")
-;;     ("v" Buffer-menu-select "select" :color blue)
-;;     ("o" Buffer-menu-other-window "other-window" :color blue)
-;;     ("q" quit-window "quit" :color blue))
-
-;;   (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body))
-
 ;; Load SSH / GPG keys from keychain agent
 (use-package keychain-environment
   :straight
@@ -482,7 +464,7 @@
 
 ;; Docker
 (use-package dockerfile-mode)
-(use-package docker-tramp)
+;(use-package docker-tramp)
 
 ;; Memes
 ;; Requires fonts: yay -S ttf-ms-fonts
@@ -529,6 +511,14 @@
              :repo "godotengine/emacs-gdscript-mode"))
 (use-package gdshader-mode 
   :straight (gdshader-mode :type git :host github :repo "bbbscarter/gdshader-mode"))
+
+;; Eww browser
+(use-package eww
+  :init
+  (setq-default show-trailing-whitespace nil)
+)
+
+(use-package lorem-ipsum)
 
 ;; Start server
 (require 'server)

@@ -2,7 +2,7 @@
 
 ;; define GUI defaults early:
 (load-theme 'modus-vivendi t)
-(set-face-attribute 'default nil :height 160)
+(set-face-attribute 'default nil :height 109)
 ;; remove distractions:
 (menu-bar-mode -1)
 (tool-bar-mode -1)
