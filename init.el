@@ -41,7 +41,7 @@
 
 ;; core keybindings
 (define-key global-map (kbd "C-;") 'comment-region) ; C-u prefix to uncomment
-
+(define-key global-map (kbd "C-x B") 'buffer-menu)
 ;; Store file backups in ~/.emacs.d/backup rather than being littered everywhere:
 ;; Reference: https://www.emacswiki.org/emacs/BackupDirectory
 (setq backup-by-copying t)
@@ -521,6 +521,7 @@
 )
 
 (use-package lorem-ipsum)
+(use-package keycast)
 
 ;; Start server
 (require 'server)
