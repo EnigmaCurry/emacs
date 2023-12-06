@@ -22,6 +22,8 @@
 (setq-default browse-url-browser-function 'browse-url-firefox)
 (column-number-mode)
 (put 'narrow-to-region 'disabled nil)
+;; need this on fedora ::
+(setq-default native-comp-deferred-compilation-deny-list nil)
 
 ;; unbind arrow keys and pgup/pgdwn to prevent bad habits and keep fingers on home row.
 ;; (global-unset-key (kbd "<left>"))
