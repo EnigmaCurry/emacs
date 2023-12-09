@@ -34,29 +34,24 @@
 (setq-default visible-bell t)
 (column-number-mode)
 (put 'narrow-to-region 'disabled nil)
-(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
-;; need this on fedora ::
+;; need this on fedora (?) ::
 (setq-default native-comp-deferred-compilation-deny-list nil)
+
+;; Show a vertical line after 80 columns (programming modes only):
+(setq-default display-fill-column-indicator-column 80)
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+;; Show line numbers (programming modes only)
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)                          
 
 ;; choose your default web browser
 ;(setq-default browse-url-browser-function 'eww-browse-url)
 (setq-default browse-url-browser-function 'browse-url-firefox)
 
 ;; unbind arrow keys and pgup/pgdwn to prevent bad habits and keep fingers on home row.
-;; (global-unset-key (kbd "<left>"))
-;; (global-unset-key (kbd "<right>"))
-;; (global-unset-key (kbd "<up>"))
-;; (global-unset-key (kbd "<down>"))
-;; (global-unset-key (kbd "<C-left>"))
-;; (global-unset-key (kbd "<C-right>"))
-;; (global-unset-key (kbd "<C-up>"))
-;; (global-unset-key (kbd "<C-down>"))
-;; (global-unset-key (kbd "<M-left>"))
-;; (global-unset-key (kbd "<M-right>"))
-;; (global-unset-key (kbd "<M-up>"))
-;; (global-unset-key (kbd "<M-down>"))
-;; (global-unset-key (kbd "<prior>"))
-;; (global-unset-key (kbd "<next>"))
+;;; This is hardcore.
+;; (mapcar '(lambda (k) (global-unset-key (kbd k)))
+;;         '("<left>" "<right>" "<up>" "<down>" "<C-right>" "<C-up>" "<C-down>"
+;;           "<M-left>" "<M-right>" "<M-up>" "<M-down>" "<prior>" "<next>"))
 
 ;; Store file backups in ~/.emacs.d/backup rather than being littered everywhere:
 ;; Reference: https://www.emacswiki.org/emacs/BackupDirectory
