@@ -80,6 +80,47 @@ following on each other machine after you `git pull`:
 M-x straight-thaw-versions
 ```
 
+## Keyboard map
+
+My keyboard map assumes that you have extra modifier keys available on
+your keyboard that are not normally found on modern PC keyboards, but
+are easy to remap in software via xkb (see `man 7 xkeyboard-config`)
+
+You should have all these keys available:
+
+ * Left Control (usually remapped on Caps Lock, known as `C` in Emacs)
+ * Left Alt (Meta or Mod2, known as `M` in Emacs.)
+ * Right Alt (OG Alt, or Mod1, known as `A` in Emacs.)
+ * Windows (Super or Mod3; but this is reserved for sway, and not used
+   in this Emacs config, but it would be known as `S` in Emacs.)
+ * Hyper (usually remapped on the original Left Control key, which was
+   moved to Caps Lock, known as `H` in Emacs.).
+
+In Wayland, you can run `wev` to test your keyboard keys and which
+modifiers they map to. You can reference my own [sway
+config](https://github.com/enigmacurry/sway-home#keyboard-setup) for
+how I setup the xkb_file to perform the remap.
+
+(There is another key found on PC keyboards, called Menu. This is on
+the right side, somewhere near the Right Alt key. This is known as
+`<menu>` in Emacs. As far as I know, this key cannot be used as a
+modifier key, so it has to run a single command. This is normally
+mapped to `M-x`, or `execute-extended-command`, which prompts you to
+run any command by name. This is default Emacs functionality, and it
+has not been changed in this config.)
+
+Without            moving            to           the            [evil
+side](https://evil.readthedocs.io/en/latest/overview.html)  of  Emacs,
+I'm     interested      in     remapping     my      spacebar     with
+[interception-tools](https://gitlab.com/interception/linux/tools). You
+can                               use                              the
+[dual-function-keys](https://gitlab.com/interception/linux/plugins/dual-function-keys)
+plugin to remap the spacebar, as an extra control key. However, unlike
+xkb,  interception  tools  is  not directly  supported  in  userspace.
+interception-tools requires  root access,  and works  at a  much lower
+level than xkb, and  so I'm worried that I won't  be able to replicate
+the environment on all platforms.
+
 ## Credits and other useful links
 
 Some code samples taken from:

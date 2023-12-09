@@ -2,8 +2,16 @@
 ;; EnigmaCurry's emacs config
 ;; inspiration : https://github.com/susam/emfy
 ;;               https://emacs.amodernist.com
+;; elisp links: https://github.com/chrisdone/elisp-guide#readme
+;;              https://www.gnu.org/software/emacs/manual/html_node/eintr/index.html
+;;              https://www.gnu.org/software/emacs/manual/html_node/elisp/index.html
 
 ;; GUI defaults are loaded in early-init.el before init.el
+
+;; Debug options:
+;;; start Emacs with the `--debug-init` argument, to debug errors in init.el.
+;; Enter debugger anytime a message is logged containing regex "Example message to trace":
+;; (setq debug-on-message "Example message to trace")
 
 ;; Nice defaults
 (setq confirm-kill-emacs #'yes-or-no-p)
@@ -11,7 +19,6 @@
 (save-place-mode t)
 (savehist-mode t)
 (recentf-mode t)
-(define-key global-map (kbd "M-o") 'browse-url-at-point)
 (setq-default show-trailing-whitespace t)
 (setq-default indicate-empty-lines t)
 (setq-default indicate-buffer-boundaries 'left)
@@ -19,6 +26,7 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default visible-bell t)
+;(setq-default browse-url-browser-function 'eww-browse-url)
 (setq-default browse-url-browser-function 'browse-url-firefox)
 (column-number-mode)
 (put 'narrow-to-region 'disabled nil)
@@ -41,9 +49,6 @@
 ;; (global-unset-key (kbd "<prior>"))
 ;; (global-unset-key (kbd "<next>"))
 
-;; core keybindings
-(define-key global-map (kbd "C-;") 'comment-region) ; C-u prefix to uncomment
-(define-key global-map (kbd "C-x B") 'buffer-menu)
 ;; Store file backups in ~/.emacs.d/backup rather than being littered everywhere:
 ;; Reference: https://www.emacswiki.org/emacs/BackupDirectory
 (setq backup-by-copying t)
@@ -103,20 +108,48 @@
 ;; Make use-package use straight.el by default:
 (setq straight-use-package-by-default t)
 
+;; General keybinding manager
+;; https://github.com/noctuid/general.el#readme
+;; https://emacsnotes.wordpress.com/2022/10/30/use-xkb-to-setup-full-spectrum-of-modifiers-meta-alt-super-and-hyper-for-use-with-emacs/
+;; Two ways to show your bindings:
+;;; Describe *all* bindings for the current buffer: C-h b
+;;; Describe only the general bindings: C-h B
+;; The second way is nice because it only shows the ones defined here,
+;; or by way of the `:general` keyword in each use-package entry:
+(use-package general
+  :config
+  (general-define-key
+   "C-h B" 'general-describe-keybindings
+   "M-o" 'browse-url-at-point
+   "C-;" 'comment-region                ; C-u C-; to uncomment
+   "C-x B" 'buffer-menu
+   "C-'" 'ace-window)
+  )
+
 ;; Scale text sizes in all buffers :: https://github.com/purcell/default-text-scale
 (use-package default-text-scale
+  :general
+  ("C-=" 'default-text-scale-increase
+   "C--" 'default-text-scale-decrease)
   :init
-  (define-key global-map (kbd "C-=") 'default-text-scale-increase)
-  (define-key global-map (kbd "C--") 'default-text-scale-decrease)
   (setq default-text-scale-amount 5))
+
+;; Alternative M-x interface:
+;; https://github.com/DarwinAwardWinner/amx
+(use-package amx
+  :general
+  ("M-x" 'amx
+   "<menu>" 'amx)
+  )
 
 ;; Ivy counsel (list-completion) :: https://oremacs.com/swiper/#introduction
 (use-package counsel
+  :general
+  ("M-y" 'counsel-yank-pop)
   :init
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
-  (setq ivy-use-selectable-prompt t)
-  (define-key global-map (kbd "M-y") 'counsel-yank-pop))
+  (setq ivy-use-selectable-prompt t))
 
 ;; hydra (rapid fire mnemonic keybindings) :: https://github.com/abo-abo/hydra
 (use-package hydra)
@@ -152,20 +185,30 @@
 (use-package org-preview-html
   :after org
   )
+
 (use-package ox-hugo
+  :straight
+  (ox-hugo
+    :type git
+    :host github
+    :repo "enigmacurry/ox-mdbook"
+    :local-repo "~/git/vendor/enigmacurry/ox-mdbook")
   :ensure t
   :after ox)
 
 ;; Magit (git version control system) :: https://magit.vc/
 (use-package magit
-  :init (define-key global-map (kbd "C-c g") 'magit-status)
+  :general
+  ("C-c g" 'magit-status)
+  :config
   ;; open magit in a full frame always:
   (setq magit-display-buffer-function
     #'magit-display-buffer-fullframe-status-v1))
 
 ;; Avy (like ace-jump) :: https://github.com/abo-abo/avy
 (use-package avy
-  :init (define-key global-map (kbd "C-c s") 'avy-goto-word-1))
+  :general
+  ("C-c s" 'avy-goto-word-1))
 
 ;; Company (in-buffer completion dropdown) :: https://github.com/company-mode/company-mode
 (use-package company)
@@ -260,6 +303,8 @@
 (use-package vterm
   :custom
   (vterm-always-compile-module t)
+  :general
+  ("C-c t" 'my-vterm-toggle)
   :init
   (defun my-vterm-toggle (&optional args)
     "Customized vterm-toggle wrapper- this fixes the universal argument (C-u) to always create a new terminal"
@@ -271,8 +316,7 @@
         (if (equal current-prefix-arg '(4))
             (vterm-toggle--new args)
           (vterm-toggle args))
-      (vterm-toggle args)))
-  (define-key global-map (kbd "C-c t") 'my-vterm-toggle))
+      (vterm-toggle args))))
 
 ;; shell-pop for vterm :: https://github.com/jixiuf/vterm-toggle
 (use-package vterm-toggle)
@@ -524,6 +568,10 @@
 
 (use-package lorem-ipsum)
 (use-package keycast)
+
+(use-package ement
+  :straight
+  (ement :type git :host github :repo "alphapapa/ement.el"))
 
 ;; Start server
 (require 'server)
