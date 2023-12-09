@@ -156,14 +156,17 @@
    "H-B" 'buffer-menu "A-B" 'buffer-menu "C-x B" 'buffer-menu
    "H-o" 'browse-url
    "C-;" 'comment-region                ; C-u C-; to uncomment
-   "H-SPC" 'set-rectangular-region-anchor
+   )
 ;;; Define bindings for specific builtin (non use-package) modes:
    ;; Emacs Lisp mode bindings:
    (general-define-key
     :keymaps 'emacs-lisp-mode-map
     "A-e" 'eval-defun                   ;eval top-level form
-    ))
-  )
+    )
+   ;; Dired mode bindings:
+   (general-define-key
+    :keymaps 'dired-mode-map
+    "C-c C-q" 'dired-toggle-read-only))
 
 ;; Scale text sizes in all buffers :: https://github.com/purcell/default-text-scale
 (use-package default-text-scale
@@ -403,8 +406,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (setq aw-scope 'frame)
   (global-set-key [remap other-window] 'ace-window)
   :general
-  (general-define-key
-   "M-o" 'ace-window "A-o" 'ace-window "°" 'ace-window
+  ("M-o" 'ace-window "A-o" 'ace-window "°" 'ace-window
    ;"C-x o" '(lambda()(interactive) (message "Use M-o or A-o instead!"))
    ))
 
@@ -640,7 +642,13 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (gdshader-mode
    :type git :host github :repo "bbbscarter/gdshader-mode"))
 
-(use-package multiple-cursors)
+;; Multiple cursors
+;; https://emacsrocks.com/e13.html
+(use-package multiple-cursors
+  :general
+  ("H-SPC" 'set-rectangular-region-anchor)
+  ("H-n" 'mc/mark-next-like-this)
+  ("H-N" 'mc/mark-all-like-this))
 
 ;; Eww browser
 (use-package eww
