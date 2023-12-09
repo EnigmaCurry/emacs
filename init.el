@@ -9,9 +9,15 @@
 ;; GUI defaults are loaded in early-init.el before init.el
 
 ;; Debug options:
-;;; start Emacs with the `--debug-init` argument, to debug errors in init.el.
-;; Enter debugger anytime a message is logged containing regex "Example message to trace":
-;; (setq debug-on-message "Example message to trace")
+;;; Start Emacs with the `--debug-init` argument, to debug errors during startup.
+;;; Enter debugger on specific logger regex (see *Messages* buffer):
+;; (setq debug-on-message "Example log message to trace")
+;;; M-x toggle-debug-on-error
+;; (setq debug-on-error t)
+
+;; Profile startup time (minus early-init.el time) using profile-dotemacs.el:
+;;; curl -O https://raw.githubusercontent.com/emacsmirror/emacswiki.org/ed647e999fd4942d1c0bed02abe75bdf20f42baf/profile-dotemacs.el
+;;; emacs -Q -l .emacs.d/early-init.el -l profile-dotemacs.el --eval '(let ((profile-dotemacs-file "~/.emacs.d/init.el") (vc-follow-symlinks t)) (profile-dotemacs))'
 
 ;; Nice defaults
 (setq confirm-kill-emacs #'yes-or-no-p)
@@ -26,12 +32,15 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default visible-bell t)
-;(setq-default browse-url-browser-function 'eww-browse-url)
-(setq-default browse-url-browser-function 'browse-url-firefox)
 (column-number-mode)
 (put 'narrow-to-region 'disabled nil)
 ;; need this on fedora ::
 (setq-default native-comp-deferred-compilation-deny-list nil)
+
+;; choose your default web browser
+;(setq-default browse-url-browser-function 'eww-browse-url)
+(setq-default browse-url-browser-function 'browse-url-firefox)
+
 
 ;; unbind arrow keys and pgup/pgdwn to prevent bad habits and keep fingers on home row.
 ;; (global-unset-key (kbd "<left>"))
@@ -111,19 +120,22 @@
 ;; General keybinding manager
 ;; https://github.com/noctuid/general.el#readme
 ;; https://emacsnotes.wordpress.com/2022/10/30/use-xkb-to-setup-full-spectrum-of-modifiers-meta-alt-super-and-hyper-for-use-with-emacs/
-;; Two ways to show your bindings:
-;;; Describe *all* bindings for the current buffer: C-h b
-;;; Describe only the general bindings: C-h B
-;; The second way is nice because it only shows the ones defined here,
-;; or by way of the `:general` keyword in each use-package entry:
+;; Two ways to show the bindings for the current buffer:
+;;; Describe *all* bindings (including default bindings): C-h b
+;;; Describe only the general.el configured bindings: C-h B
 (use-package general
   :config
   (general-define-key
    "C-h B" 'general-describe-keybindings
-   "M-o" 'browse-url-at-point
+   "H-B" 'buffer-menu "A-B" 'buffer-menu "C-x B" 'buffer-menu
+   "H-o" 'browse-url
    "C-;" 'comment-region                ; C-u C-; to uncomment
-   "C-x B" 'buffer-menu
-   "C-'" 'ace-window)
+   ;;; Define bindings for specific builtin (non use-package) modes:
+   ;; Emacs Lisp mode bindings:
+   (general-define-key
+    :keymaps 'emacs-lisp-mode-map
+    "A-e" 'eval-defun                   ;eval top-level form
+    ))
   )
 
 ;; Scale text sizes in all buffers :: https://github.com/purcell/default-text-scale
@@ -142,10 +154,12 @@
    "<menu>" 'amx)
   )
 
-;; Ivy counsel (list-completion) :: https://oremacs.com/swiper/#introduction
+;; Ivy / counsel (list-completion) :: https://oremacs.com/swiper/#introduction
 (use-package counsel
   :general
-  ("M-y" 'counsel-yank-pop)
+  ("M-y" 'counsel-yank-pop
+   "A-b" 'ivy-switch-buffer
+   )
   :init
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
@@ -176,6 +190,7 @@
   (defhydra hydra-org (global-map "C-c o")
     "org"
     ("l" org-store-link "store link")
+    ("i" org-insert-link "insert link")
     ("a" org-agenda "agenda")
     ("c" org-capture "capture")
     ("m" org-info "read info manual")
@@ -325,11 +340,16 @@
 (use-package ace-link
   :init (ace-link-setup-default))
 
-;; jump between windows (rebinds `C-x o`) :: https://github.com/abo-abo/ace-window
+;; jump between windows :: https://github.com/abo-abo/ace-window
 (use-package ace-window
   :init
   (setq aw-scope 'frame)
-  (global-set-key [remap other-window] 'ace-window))
+  (global-set-key [remap other-window] 'ace-window)
+  :general
+  (general-define-key
+   "M-o" 'ace-window "A-o" 'ace-window "°" 'ace-window
+   ;"C-x o" '(lambda()(interactive) (message "Use M-o or A-o instead!"))
+   ))
 
 ;; lispy LISP mode :: https://github.com/abo-abo/lispy
 ;; (use-package lispy
