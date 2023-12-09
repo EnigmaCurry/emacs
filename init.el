@@ -117,6 +117,35 @@
 ;; Make use-package use straight.el by default:
 (setq straight-use-package-by-default t)
 
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+
+  ;;; Pick a theme:
+  (load-theme 'doom-acario-dark t)
+  ;(load-theme 'doom-ir-black t)
+  ;(load-theme 'doom-old-hope t)
+  ;(load-theme 'doom-rouge t)
+  ;(load-theme 'doom-1337 t)
+  ;(load-theme 'doom-tokyo-night t)
+  ;(load-theme 'doom-tomorrow-night t)
+  ;(load-theme 'doom-ayu-dark t)
+  ;(load-theme 'doom-challenger-deep t)
+  ;(load-theme 'doom-homage-black t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
 ;; General keybinding manager
 ;; https://github.com/noctuid/general.el#readme
 ;; https://emacsnotes.wordpress.com/2022/10/30/use-xkb-to-setup-full-spectrum-of-modifiers-meta-alt-super-and-hyper-for-use-with-emacs/
@@ -130,7 +159,7 @@
    "H-B" 'buffer-menu "A-B" 'buffer-menu "C-x B" 'buffer-menu
    "H-o" 'browse-url
    "C-;" 'comment-region                ; C-u C-; to uncomment
-   ;;; Define bindings for specific builtin (non use-package) modes:
+;;; Define bindings for specific builtin (non use-package) modes:
    ;; Emacs Lisp mode bindings:
    (general-define-key
     :keymaps 'emacs-lisp-mode-map
@@ -145,6 +174,18 @@
    "C--" 'default-text-scale-decrease)
   :init
   (setq default-text-scale-amount 5))
+
+;; Smart line mode
+;; https://github.com/Malabarba/smart-mode-line#readme
+(use-package smart-mode-line
+  :config
+  :init
+  (use-package smart-mode-line-powerline-theme
+    :config
+    (setq sml/theme 'powerline)
+    )
+  (sml/setup))
+
 
 ;; Alternative M-x interface:
 ;; https://github.com/DarwinAwardWinner/amx
