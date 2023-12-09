@@ -34,8 +34,11 @@
 (setq-default visible-bell t)
 (column-number-mode)
 (put 'narrow-to-region 'disabled nil)
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 ;; need this on fedora ::
 (setq-default native-comp-deferred-compilation-deny-list nil)
+
+
 
 ;; choose your default web browser
 ;(setq-default browse-url-browser-function 'eww-browse-url)
@@ -580,7 +583,8 @@
 (use-package meme
   :straight
   (meme :type git :host github :repo "larsmagne/meme"
-        :fork (:host github :repo "enigmacurry/emacs-meme" :branch "dev")
+        :fork
+        (:host github :repo "enigmacurry/emacs-meme" :branch "dev")
         :files ("*"))
   :init
   (use-package imgur
@@ -619,7 +623,9 @@
              :host github
              :repo "godotengine/emacs-gdscript-mode"))
 (use-package gdshader-mode 
-  :straight (gdshader-mode :type git :host github :repo "bbbscarter/gdshader-mode"))
+  :straight
+  (gdshader-mode
+   :type git :host github :repo "bbbscarter/gdshader-mode"))
 
 ;; Eww browser
 (use-package eww
