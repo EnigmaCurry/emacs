@@ -112,24 +112,26 @@
 ;; Make use-package use straight.el by default:
 (setq straight-use-package-by-default t)
 
+;; Doom themes
+;; https://github.com/doomemacs/themes/
 (use-package doom-themes
   :ensure t
   :config
   ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+  (setq doom-themes-enable-bold t ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
-  ;;; Pick a theme:
+;;; Pick a theme:
   (load-theme 'doom-acario-dark t)
-  ;(load-theme 'doom-ir-black t)
-  ;(load-theme 'doom-old-hope t)
-  ;(load-theme 'doom-rouge t)
-  ;(load-theme 'doom-1337 t)
-  ;(load-theme 'doom-tokyo-night t)
-  ;(load-theme 'doom-tomorrow-night t)
-  ;(load-theme 'doom-ayu-dark t)
-  ;(load-theme 'doom-challenger-deep t)
-  ;(load-theme 'doom-homage-black t)
+  ;;(load-theme 'doom-ir-black t)
+  ;;(load-theme 'doom-old-hope t)
+  ;;(load-theme 'doom-rouge t)
+  ;;(load-theme 'doom-1337 t)
+  ;;(load-theme 'doom-tokyo-night t)
+  ;;(load-theme 'doom-tomorrow-night t)
+  ;;(load-theme 'doom-ayu-dark t)
+  ;;(load-theme 'doom-challenger-deep t)
+  ;;(load-theme 'doom-homage-black t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)

@@ -1,7 +1,7 @@
 ;; early-init.el is loaded *before* the package system and GUI are initialized:
 
 ;; define GUI defaults early:
-(load-theme 'modus-vivendi t)
+(load-theme 'modus-vivendi t) ; init.el will override this with doom theme
 (set-face-attribute 'default nil :height 181)
 ;; remove distractions:
 (menu-bar-mode -1)
