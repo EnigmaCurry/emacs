@@ -156,6 +156,7 @@
    "H-B" 'buffer-menu "A-B" 'buffer-menu "C-x B" 'buffer-menu
    "H-o" 'browse-url
    "C-;" 'comment-region                ; C-u C-; to uncomment
+   "H-SPC" 'set-rectangular-region-anchor
 ;;; Define bindings for specific builtin (non use-package) modes:
    ;; Emacs Lisp mode bindings:
    (general-define-key
@@ -639,11 +640,13 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (gdshader-mode
    :type git :host github :repo "bbbscarter/gdshader-mode"))
 
+(use-package multiple-cursors)
+
 ;; Eww browser
 (use-package eww
   :init
   (setq-default show-trailing-whitespace nil)
-)
+  )
 
 (use-package lorem-ipsum)
 (use-package keycast)
