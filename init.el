@@ -38,12 +38,9 @@
 ;; need this on fedora ::
 (setq-default native-comp-deferred-compilation-deny-list nil)
 
-
-
 ;; choose your default web browser
 ;(setq-default browse-url-browser-function 'eww-browse-url)
 (setq-default browse-url-browser-function 'browse-url-firefox)
-
 
 ;; unbind arrow keys and pgup/pgdwn to prevent bad habits and keep fingers on home row.
 ;; (global-unset-key (kbd "<left>"))
@@ -231,15 +228,33 @@
            "* %?\nEntered on %U\n  %i\n  %a")))
   :init
   ;; Hydra for commonly used org commands:
-  (defhydra hydra-org (global-map "C-c o")
+  (defhydra hydra-org (global-map "C-c o" :exit t)
     "org"
-    ("l" org-store-link "store link")
+    ("l" org-store-link "store link" )
     ("i" org-insert-link "insert link")
     ("a" org-agenda "agenda")
     ("c" org-capture "capture")
     ("m" org-info "read info manual")
     ("e" org-export-dispatch "export")
-    ("p" org-preview-html-mode "toggle preview mode"))
+    ("p" org-preview-html-mode "toggle preview mode")
+    ("s" org-insert-source-code-block "insert source code block"))
+
+  ;; https://emacs.stackexchange.com/a/70606 thanks Chris!
+  (defun org-insert-source-code-block(&optional language file)
+    "Insert source code block for LANGUAGE.  Optionally pull in FILE contents.
+Will prompt for LANGUAGE when called interactively.
+With a `\\[universal-argument]' prefix, prompts for FILE.
+The `:tangle FILE` header argument will be added when pulling in file contents."
+    (interactive)
+    (let ((col (current-column))
+          (lang (or language (read-from-minibuffer "Source block language: ") ))
+          (file (if current-prefix-arg (read-file-name "Enter file name: ") nil)))
+      (insert
+       (format "#+begin_src %s%s" lang (if file (concat " :tangle " file) "")))
+      (newline)(newline)
+      (move-to-column col t)(insert "#+end_src")(newline)
+      (forward-line -2)(move-to-column col t)
+      (if file (insert-file-contents file))))
   )
 (use-package org-preview-html
   :after org
