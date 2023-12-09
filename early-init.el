@@ -1,8 +1,15 @@
 ;; early-init.el is loaded *before* the package system and GUI are initialized:
 
-;; define GUI defaults early:
-(load-theme 'modus-vivendi t) ; init.el will override this with doom theme
-(set-face-attribute 'default nil :height 181)
+;; Set a default theme - but this will be overridden in init.el by doom theme:
+(load-theme 'modus-vivendi t)
+
+;; Set default font size for my different machines based on hashed hostname:
+(pcase
+    (substring (base64-encode-string (secure-hash 'sha256 (system-name))) 0 10)
+  ("ZWMzMTY4Mm" (set-face-attribute 'default nil :height 113))
+  ("MmRlMDJlNz" (set-face-attribute 'default nil :height 181))
+  (t (set-face-attribute 'default nil :height 100)))
+
 ;; remove distractions:
 (menu-bar-mode -1)
 (tool-bar-mode -1)
