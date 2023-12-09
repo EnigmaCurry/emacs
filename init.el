@@ -85,6 +85,9 @@
   (setq-local electric-pair-text-pairs electric-pair-pairs))
 (add-hook 'markdown-mode-hook 'markdown-add-electric-pairs)
 
+;; Switch between two most recent buffers:
+(fset 'quick-switch-buffer [?\C-x ?b return])
+
 ;; Install the straight.el package manager:
 ;; (Emacs' own default package system is disabled in early-init.el)
 ;; Reference: https://github.com/raxod502/straight.el#readme
@@ -153,6 +156,7 @@
   :config
   (general-define-key
    "C-h B" 'general-describe-keybindings
+   "H-b" 'quick-switch-buffer
    "H-B" 'buffer-menu "A-B" 'buffer-menu "C-x B" 'buffer-menu
    "H-o" 'browse-url
    "C-;" 'comment-region                ; C-u C-; to uncomment
