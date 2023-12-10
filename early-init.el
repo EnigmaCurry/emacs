@@ -7,8 +7,8 @@
 (pcase
     (substring (base64-encode-string (secure-hash 'sha256 (system-name))) 0 10)
   ("ZWMzMTY4Mm" (set-face-attribute 'default nil :height 113))
-  ("MmRlMDJlNz" (set-face-attribute 'default nil :height 181))
-  (t (set-face-attribute 'default nil :height 100)))
+  ("YzRlMTRjNT" (set-face-attribute 'default nil :height 181))
+  (_ (set-face-attribute 'default nil :height 100)))
 
 ;; remove distractions:
 (menu-bar-mode -1)

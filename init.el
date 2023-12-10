@@ -2,6 +2,8 @@
 ;; EnigmaCurry's emacs config
 ;; inspiration : https://github.com/susam/emfy
 ;;               https://emacs.amodernist.com
+;;               https://emacsrocks.com/
+;;               http://whattheemacsd.com/
 ;; elisp links: https://github.com/chrisdone/elisp-guide#readme
 ;;              https://www.gnu.org/software/emacs/manual/html_node/eintr/index.html
 ;;              https://www.gnu.org/software/emacs/manual/html_node/elisp/index.html
@@ -49,7 +51,7 @@
 
 ;; unbind arrow keys and pgup/pgdwn to prevent bad habits and keep fingers on home row.
 ;;; This is hardcore.
-;; (mapcar '(lambda (k) (global-unset-key (kbd k)))
+;; (mapcar #'(lambda (k) (global-unset-key (kbd k)))
 ;;         '("<left>" "<right>" "<up>" "<down>" "<C-right>" "<C-up>" "<C-down>"
 ;;           "<M-left>" "<M-right>" "<M-up>" "<M-down>" "<prior>" "<next>"))
 
@@ -87,6 +89,11 @@
 
 ;; Switch between two most recent buffers:
 (fset 'quick-switch-buffer [?\C-x ?b return])
+
+;; Retain buffer cursor positions across Emacs sessions: 
+(require 'saveplace)
+(setq-default save-place t)
+(setq save-place-file (expand-file-name "places" user-emacs-directory))
 
 ;; Install the straight.el package manager:
 ;; (Emacs' own default package system is disabled in early-init.el)
@@ -154,6 +161,7 @@
 ;;; Describe only the general.el configured bindings: C-h B
 (use-package general
   :config
+  ;;; Custom global bindings:
   (general-define-key
    "C-h B" 'general-describe-keybindings
    "H-b" 'quick-switch-buffer
@@ -161,12 +169,16 @@
    "H-o" 'browse-url
    "C-;" 'comment-region                ; C-u C-; to uncomment
    )
+  ;;; Default keybindings you want included in general-describe-keybindings:
+  ;;; Its useful to duplicate these simply as a way of documentation:
+  (general-define-key
+   "M-SPC" 'cycle-spacing)
 ;;; Define bindings for specific builtin (non use-package) modes:
-   ;; Emacs Lisp mode bindings:
-   (general-define-key
-    :keymaps 'emacs-lisp-mode-map
-    "A-e" 'eval-defun                   ;eval top-level form
-    )
+  ;; Emacs Lisp mode bindings:
+  (general-define-key
+   :keymaps 'emacs-lisp-mode-map
+   "A-e" 'eval-defun                    ;eval top-level form
+   )
    ;; Dired mode bindings:
    (general-define-key
     :keymaps 'dired-mode-map
@@ -182,16 +194,21 @@
 
 ;; Smart line mode
 ;; https://github.com/Malabarba/smart-mode-line#readme
-(use-package smart-mode-line
-  :config
-  :init
-  ;; (use-package smart-mode-line-powerline-theme
-  ;;   :config
-  ;;   (setq sml/theme 'powerline)
-  ;;   )
-  ;; (sml/setup)
-  )
+;; (use-package smart-mode-line
+;;   :config
+;;   :init
+;;   (use-package smart-mode-line-powerline-theme
+;;     :config
+;;     (setq sml/theme 'powerline)
+;;     )
+;;   (sml/setup)
+;;   )
 
+;; Hide selected minor modes from the modeline:
+(use-package diminish
+  :config
+  (mapcar #'(lambda (m) (diminish m) )
+          '(which-key-mode eldoc-mode ivy-mode paredit-mode)))
 
 ;; Alternative M-x interface:
 ;; https://github.com/DarwinAwardWinner/amx
@@ -215,6 +232,25 @@
 ;; hydra (rapid fire mnemonic keybindings) :: https://github.com/abo-abo/hydra
 (use-package hydra)
 
+;; yasnippet templates
+;; https://github.com/joaotavora/yasnippet
+;; docs: https://joaotavora.github.io/yasnippet/
+;; M-x yas-describe-tables to show the loaded snippets per mode
+;; Put your snippets in ~/.emacs.d/snippets
+(use-package yasnippet
+  :init
+  ;; Install a big snippet library:
+  ;; https://github.com/AndreaCrotti/yasnippet-snippets
+  (use-package yasnippet-snippets)
+  ;;; You could enable yas globally:
+  ;; (yas-global-mode 1)
+  ;;; You could enable it just for all programming modes:
+  ;; (yas-reload-all)
+  ;; (add-hook 'prog-mode-hook #'yas-minor-mode)
+  ;;; Better to enable yas-minor-mode per mode you want it for, via use-package.
+  (add-hook 'emacs-lisp-mode-hook #'yas-minor-mode)
+  )
+
 ;; Org
 (use-package org
   :after hydra
@@ -224,9 +260,9 @@
   (setq org-default-notes-file (concat org-directory "/notes.org"))
   (setq org-file-apps
         '((auto-mode . emacs)
-        ("\\.mm\\'" . default)
-        ("\\.x?html?\\'" . "/usr/bin/firefox %s")
-        ("\\.pdf\\'" . default)))
+          ("\\.mm\\'" . default)
+          ("\\.x?html?\\'" . "/usr/bin/firefox %s")
+          ("\\.pdf\\'" . default)))
   (setq org-capture-templates
         '(("t" "Todo" entry (file+headline "~/org/notes.org" "Tasks")
            "* TODO %?\n  %i\n  %a")
@@ -412,7 +448,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (global-set-key [remap other-window] 'ace-window)
   :general
   ("M-o" 'ace-window "A-o" 'ace-window "°" 'ace-window
-   ;"C-x o" '(lambda()(interactive) (message "Use M-o or A-o instead!"))
+   ;"C-x o" #'(lambda()(interactive) (message "Use M-o or A-o instead!"))
    ))
 
 ;; lispy LISP mode :: https://github.com/abo-abo/lispy
@@ -661,12 +697,25 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (setq-default show-trailing-whitespace nil)
   )
 
+;; Insert placeholder text
 (use-package lorem-ipsum)
+
+;; Show keys in the modeline as they are pressed
+;; disabled by default, M-x keycast-mode to start
 (use-package keycast)
 
+;; Matrix
 (use-package ement
   :straight
   (ement :type git :host github :repo "alphapapa/ement.el"))
+
+;; Put your local config into ~/.emacs.d/local/*.el
+;; By default, it won't be saved in version control.
+;; http://whattheemacsd.com/init.el-06.html
+(let ((local-include-dir (concat user-emacs-directory "local" )))
+  (if (file-exists-p local-include-dir)
+      (mapc 'load (directory-files local-include-dir nil "^[^#].*el$"))
+    (mkdir local-include-dir)))
 
 ;; Start server
 (require 'server)

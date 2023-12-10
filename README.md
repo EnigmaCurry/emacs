@@ -22,19 +22,25 @@ test -d ~/.emacs.d && (echo "~/.emacs.d already exists. Aborting install." && ex
 test -d ${REPO} || git clone -b ${BRANCH} ${REMOTE} ${REPO}
 mkdir ~/.emacs.d && ls -1 ${REPO}/*.el | xargs -iXX ln -s XX ~/.emacs.d
 mkdir ~/.emacs.d/straight && ln -s ${REPO}/straight-versions ~/.emacs.d/straight/versions
+ln -s ${REPO}/snippets ~/.emacs.d/snippets
 )
 ```
 
 You will treat your entire `~/.emacs.d` directory as ephemeral (ie.
 not a git repository). All of your saved configuration should go here
 instead, saved in this repository (cloned locally to
-`~/git/vendor/enigmacurry/emacs`). The main emacs configuration,
-[init.el](init.el) and [early-init.el](early-init.el), are both
-symlinked into the freshly created `~/.emacs.d` directory. The
-[straight-versions](straight-versions) directory is also symlinked to
+`~/git/vendor/enigmacurry/emacs`). 
+
+ * The main emacs configuration, [init.el](init.el) and
+[early-init.el](early-init.el), are both symlinked into the freshly
+created `~/.emacs.d` directory. 
+ * The [straight-versions](straight-versions) directory is also symlinked to
 `~/.emacs.d/straight/versions`, which keeps your package lock file
 ([default.el](straight-versions/default.el)) versioned inside of git,
 so as to maintain exactly reproducible installs.
+ * [yasnippet](https://github.com/joaotavora/yasnippet) templates are
+stored in the [snippets](./snippets) directory, and symlinked as
+`~/.emacs.d/snippets`.
 
 You can install the optional [ec](ec) script as an alias to control
  `emacsclient` and start/connect to your emacs sever. Add the
