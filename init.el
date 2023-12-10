@@ -206,9 +206,12 @@
 
 ;; Hide selected minor modes from the modeline:
 (use-package diminish
-  :config
-  (mapcar #'(lambda (m) (diminish m) )
-          '(which-key-mode eldoc-mode ivy-mode paredit-mode)))
+  :init
+  (mapcar #'(lambda (mode)
+              (add-hook mode #'(lambda ()
+                (mapcar #'(lambda (m) (diminish m) )
+                        '(which-key-mode eldoc-mode ivy-mode paredit-mode)))))
+          '(text-mode-hook prog-mode-hook special-mode-hook)))
 
 ;; Alternative M-x interface:
 ;; https://github.com/DarwinAwardWinner/amx
@@ -254,6 +257,7 @@
 ;; Org
 (use-package org
   :after hydra
+  :hook (org-mode . yas-minor-mode)
   :config
   (setq org-directory "~/org")
   (setq org-insert-mode-line-in-empty-file t)
@@ -390,7 +394,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (python-mode . pyvenv-mode)
   (python-mode . flycheck-mode)
   (python-mode . company-mode)
-  ;(python-mode . yas-minor-mode)
+  (python-mode . yas-minor-mode)
   (python-mode . python-black-on-save-mode)
   :custom
   ;; NOTE: Set these if Python 3 is called "python3" on your system!
@@ -403,8 +407,12 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   :demand t
   :after python)
 
+;; Icons https://github.com/domtronn/all-the-icons.el
+(use-package all-the-icons)
+
 ;; Web mode :: https://github.com/fxbois/web-mode
 (use-package web-mode
+  :hook (web-mode . yas-minor-mode)
   :init
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.svelte\\'" . web-mode))
