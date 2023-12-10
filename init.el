@@ -507,6 +507,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 
 ;; Lisp Flavoured Erlang (LFE)
 (use-package lfe-mode
+  :hook (lfe-mode . yas-minor-mode)
   :init
   (dolist (func '(paredit-mode rainbow-delimiters-mode))
   (add-hook 'lfe-mode-hook func)))
@@ -559,6 +560,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 ;; Go
 ;; must manually install: gopls
 (use-package go-mode
+  :hook (go-mode . yas-minor-mode)
   :init
   (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
   (add-hook 'go-mode-hook #'lsp-deferred)
@@ -572,6 +574,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 ;; Rust
 ;; must manually install rust, rust-analyzer, cargo-watch, wasm-pack, wasm-bindgen, cargo-generate
 (use-package rustic
+  :hook (rustic-mode . yas-minor-mode)
   :init
   (setq rustic-format-on-save t)
   (add-hook 'rustic-mode-hook
@@ -587,12 +590,14 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   ;; (setq-default tab-width 4) ; Assuming you want your tabs to be four spaces wide
   ;; (defvaralias 'c-basic-offset 'tab-width)
   :hook
+  ((c-mode c++-mode objc-mode cuda-mode) . yas-minor-mode)
   ((c-mode c++-mode objc-mode cuda-mode)
     .
     (lambda () (require 'ccls) (lsp))))
 
 ;; WebGPU .wgsl mode
 (use-package wgsl-mode
+  :hook (wgsl-mode . yas-minor-mode)
   :straight
   (wgsl-mode :type git :host github :repo "acowley/wgsl-mode"))
 
@@ -659,6 +664,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 
 ;; typescript
 (use-package tide
+  :hook (tide-mode . yas-minor-mode)
   :init
   (defun setup-tide-mode ()
     (interactive)
@@ -677,16 +683,22 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (add-hook 'before-save-hook 'tide-format-before-save)
   (add-hook 'typescript-mode-hook #'setup-tide-mode))
 
-(use-package nix-mode)
+(use-package nix-mode
+    :hook (nix-mode . yas-minor-mode)
+)
 
 ;; Godot
 (use-package gdscript-mode
-  :hook (gdscript-mode . eglot-ensure)
+  :hook
+  (gdscript-mode . eglot-ensure)
+  (gdscript-mode . yas-minor-mode)
   :straight (gdscript-mode
              :type git
              :host github
              :repo "godotengine/emacs-gdscript-mode"))
 (use-package gdshader-mode 
+  :hook
+  (gdshader-mode . yas-minor-mode)
   :straight
   (gdshader-mode
    :type git :host github :repo "bbbscarter/gdshader-mode"))
