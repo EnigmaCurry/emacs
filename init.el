@@ -168,6 +168,7 @@
    "H-B" 'buffer-menu "A-B" 'buffer-menu "C-x B" 'buffer-menu
    "H-o" 'browse-url
    "C-;" 'comment-region                ; C-u C-; to uncomment
+   "H-<down-mouse-1>" 'mouse-drag-region-rectangle
    )
   ;;; Default keybindings you want included in general-describe-keybindings:
   ;;; Its useful to duplicate these simply as a way of documentation:
@@ -729,16 +730,17 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 (when (string= (getenv "ENIGMACURRY_EMACS_DEV") "true")
   (message "Loading EnigmaCurry's DEV code ...")
   
-  (use-package ox-hugo
+  (use-package ox-mdbook
     :straight
-    (ox-hugo
+    (ox-mdbook
      :type git
      :host github
      :repo "enigmacurry/ox-mdbook"
      :local-repo "~/git/vendor/enigmacurry/ox-mdbook")
     :ensure t
-    :after ox)
-  )
+    :after ox
+    :init
+    ))
 
 ;; Put your machine local config into ~/.emacs.d/local/*.el
 ;; By default, this is private to the machine, not shared in version control.
