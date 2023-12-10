@@ -172,7 +172,9 @@
   ;;; Default keybindings you want included in general-describe-keybindings:
   ;;; Its useful to duplicate these simply as a way of documentation:
   (general-define-key
-   "M-SPC" 'cycle-spacing)
+   "M-SPC" 'cycle-spacing ; If you document it, you will use it.
+   "M-h" 'mark-paragraph  ; C-h B is like your personal cheat sheet.
+   )
 ;;; Define bindings for specific builtin (non use-package) modes:
   ;; Emacs Lisp mode bindings:
   (general-define-key
@@ -305,16 +307,6 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 (use-package org-preview-html
   :after org
   )
-
-(use-package ox-hugo
-  :straight
-  (ox-hugo
-    :type git
-    :host github
-    :repo "enigmacurry/ox-mdbook"
-    :local-repo "~/git/vendor/enigmacurry/ox-mdbook")
-  :ensure t
-  :after ox)
 
 ;; Magit (git version control system) :: https://magit.vc/
 (use-package magit
@@ -478,8 +470,9 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 (use-package paredit
   :init
   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-  (add-hook 'eval-expression-minibuffer-setup-hook
-    'enable-paredit-mode)
+  ;;; Disable paredit in the Eval minibuffer, otherwise you can't press Enter?
+  ;; (add-hook 'eval-expression-minibuffer-setup-hook
+  ;;   'enable-paredit-mode)
   (add-hook 'ielm-mode-hook 'enable-paredit-mode)
   (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
   (add-hook 'lisp-mode-hook 'enable-paredit-mode)
@@ -496,7 +489,9 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
     (define-key paredit-mode-map (kbd "H-<right>") 'paredit-forward-barf-sexp)
     (define-key paredit-mode-map (kbd "H-<left>") 'paredit-forward-slurp-sexp))
   (add-hook 'paredit-mode-hook 'override-paredit-slurp-keys)
-)
+  )
+
+
 (use-package slime
   :init (setq inferior-lisp-program "sbcl"))
 
@@ -729,8 +724,24 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   :straight
   (ement :type git :host github :repo "alphapapa/ement.el"))
 
-;; Put your local config into ~/.emacs.d/local/*.el
-;; By default, it won't be saved in version control.
+;; EnigmaCurry in-development code:
+;;; Enabled only if you set the env var ENIGMACURRY_EMACS_DEV=true
+(when (string= (getenv "ENIGMACURRY_EMACS_DEV") "true")
+  (message "Loading EnigmaCurry's DEV code ...")
+  
+  (use-package ox-hugo
+    :straight
+    (ox-hugo
+     :type git
+     :host github
+     :repo "enigmacurry/ox-mdbook"
+     :local-repo "~/git/vendor/enigmacurry/ox-mdbook")
+    :ensure t
+    :after ox)
+  )
+
+;; Put your machine local config into ~/.emacs.d/local/*.el
+;; By default, this is private to the machine, not shared in version control.
 ;; http://whattheemacsd.com/init.el-06.html
 (let ((local-include-dir (concat user-emacs-directory "local" )))
   (if (file-exists-p local-include-dir)
