@@ -758,7 +758,8 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 ;; http://whattheemacsd.com/init.el-06.html
 (let ((local-include-dir (concat user-emacs-directory "local" )))
   (if (file-exists-p local-include-dir)
-      (mapc 'load (directory-files local-include-dir nil "^[^#].*el$"))
+      (let ((files (directory-files local-include-dir t "^[^#].*el$")))
+        (mapc 'load files))
     (mkdir local-include-dir)))
 
 ;; Start server
