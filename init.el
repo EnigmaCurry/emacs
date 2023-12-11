@@ -736,6 +736,14 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   :straight
   (ement :type git :host github :repo "alphapapa/ement.el"))
 
+;; Mastodon
+;; https://codeberg.org/martianh/mastodon.el
+;;; Create an elisp file in the ~/.emacs.d/local directory to create local config:
+;;;    (setq mastodon-instance-url "https://social.instance.org"
+;;;          mastodon-active-user "example_user")
+;;; Then run M-x mastodon to finish the account authorization process.
+(use-package mastodon)
+
 ;; EnigmaCurry in-development code:
 ;;; Enabled only if you set the env var ENIGMACURRY_EMACS_DEV=true
 (when (string= (getenv "ENIGMACURRY_EMACS_DEV") "true")
