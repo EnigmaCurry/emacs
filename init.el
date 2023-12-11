@@ -332,7 +332,9 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 ;; Avy (like ace-jump) :: https://github.com/abo-abo/avy
 (use-package avy
   :general
-  ("C-c s" 'avy-goto-word-1))
+  ("A-s" 'avy-goto-word-1)
+  ("C-c s" 'avy-goto-char)
+  ("C-c S" 'avy-goto-word-1))
 
 ;; Company (in-buffer completion dropdown) :: https://github.com/company-mode/company-mode
 (use-package company)
