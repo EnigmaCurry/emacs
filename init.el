@@ -154,14 +154,23 @@
   (doom-themes-org-config))
 
 ;; General keybinding manager
-;; https://github.com/noctuid/general.el#readme
-;; https://emacsnotes.wordpress.com/2022/10/30/use-xkb-to-setup-full-spectrum-of-modifiers-meta-alt-super-and-hyper-for-use-with-emacs/
-;; Two ways to show the bindings for the current buffer:
+;;    https://github.com/noctuid/general.el#readme
+;; This keymap set is for an extended PC keyboard with extra modifiers
+;; I map it with xkb which works on Xorg (i3) and Wayland (Sway):
+;;    https://github.com/enigmacurry/sway-home#keyboard-setup
+;; ;; C Control (PC Caps Lock or PC Right Control)
+;; ;; M Meta [Mod2] (PC Alt)
+;; ;; S Super [Mod3] (PC Windows)
+;; ;; A Alt [Mod1] (PC Right Alt)
+;; ;; H Hyper [Mod4] (PC Left Control)
+;; Also see https://emacsnotes.wordpress.com/2022/10/30/use-xkb-to-setup-full-spectrum-of-modifiers-meta-alt-super-and-hyper-for-use-with-emacs/
+;;
+;; Theres's two ways to show the bindings for the current buffer:
 ;;; Describe *all* bindings (including default bindings): C-h b
 ;;; Describe only the general.el configured bindings: C-h B
 (use-package general
   :config
-  ;;; Custom global bindings:
+;;; Custom global bindings:
   (general-define-key
    "C-h B" 'general-describe-keybindings
    "H-b" 'quick-switch-buffer
@@ -170,22 +179,24 @@
    "C-;" 'comment-region                ; C-u C-; to uncomment
    "H-<down-mouse-1>" 'mouse-drag-region-rectangle
    )
-  ;;; Default keybindings you want included in general-describe-keybindings:
-  ;;; Its useful to duplicate these simply as a way of documentation:
+;;; Emacs default keybindings you want included in general-describe-keybindings:
+;;; Its useful to duplicate these simply as a way of documentation:
   (general-define-key
-   "M-SPC" 'cycle-spacing ; If you document it, you will use it.
-   "M-h" 'mark-paragraph  ; C-h B is like your personal cheat sheet.
+   "M-SPC" 'cycle-spacing   ; If you document it, you will use it.
+   "M-h" 'mark-paragraph    ; C-h B is like your personal cheat sheet.
+   "C-h b" 'describe-bindings
    )
 ;;; Define bindings for specific builtin (non use-package) modes:
   ;; Emacs Lisp mode bindings:
   (general-define-key
    :keymaps 'emacs-lisp-mode-map
    "A-e" 'eval-defun                    ;eval top-level form
+   "M-;" 'paredit-comment-dwim
    )
-   ;; Dired mode bindings:
-   (general-define-key
-    :keymaps 'dired-mode-map
-    "C-c C-q" 'dired-toggle-read-only))
+  ;; Dired mode bindings:
+  (general-define-key
+   :keymaps 'dired-mode-map
+   "C-c C-q" 'dired-toggle-read-only))
 
 ;; Scale text sizes in all buffers :: https://github.com/purcell/default-text-scale
 (use-package default-text-scale
