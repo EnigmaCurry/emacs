@@ -481,10 +481,19 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (add-hook 'lisp-interaction-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode))
 
+;; paredit
+;; https://paredit.org/
+;; http://danmidwood.com/content/2014/11/21/animated-paredit.html
 (use-package paredit
+  :general
+  (:keymaps 'paredit-mode-map
+            "C-<right>" nil
+            "C-<left>" nil
+            "H-<right>" 'paredit-forward-barf-sexp
+            "H-<left>" 'paredit-forward-slurp-sexp)
   :init
   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-  ;;; Disable paredit in the Eval minibuffer, otherwise you can't press Enter?
+;;; Disable paredit in the Eval minibuffer, otherwise you can't press Enter?
   ;; (add-hook 'eval-expression-minibuffer-setup-hook
   ;;   'enable-paredit-mode)
   (add-hook 'ielm-mode-hook 'enable-paredit-mode)
@@ -493,17 +502,9 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (add-hook 'slime-repl-mode-hook 'enable-paredit-mode)
   (defun override-slime-del-key ()
     (define-key slime-repl-mode-map
-      (read-kbd-macro paredit-backward-delete-key)
-      nil))
-  (add-hook 'slime-repl-mode-hook 'override-slime-del-key)
-  (defun override-paredit-slurp-keys ()
-    ;; Rebind the slurp keys to so as not to shadow the regular right-word and left-word bindings:
-    (define-key paredit-mode-map (kbd "C-<right>") nil)
-    (define-key paredit-mode-map (kbd "C-<left>") nil)
-    (define-key paredit-mode-map (kbd "H-<right>") 'paredit-forward-barf-sexp)
-    (define-key paredit-mode-map (kbd "H-<left>") 'paredit-forward-slurp-sexp))
-  (add-hook 'paredit-mode-hook 'override-paredit-slurp-keys)
-  )
+                (read-kbd-macro paredit-backward-delete-key)
+                nil))
+  (add-hook 'slime-repl-mode-hook 'override-slime-del-key))
 
 
 (use-package slime
