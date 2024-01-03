@@ -319,6 +319,9 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 (use-package org-preview-html
   :after org
   )
+(use-package ox-hugo
+  :after org
+  )
 
 ;; Magit (git version control system) :: https://magit.vc/
 (use-package magit
