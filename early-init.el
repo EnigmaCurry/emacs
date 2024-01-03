@@ -11,7 +11,7 @@
   (_ (set-face-attribute 'default nil :height 100)))
 
 ;; remove distractions:
-(menu-bar-mode -1)
+(menu-bar-mode -1)  ;Press F10 to bring up menu
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (setq inhibit-startup-screen t)

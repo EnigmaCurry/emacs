@@ -750,6 +750,10 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 ;;; Then run M-x mastodon to finish the account authorization process.
 (use-package mastodon)
 
+;; Guile Scheme
+;; https://www.nongnu.org/geiser/
+(use-package geiser-guile)
+
 ;; EnigmaCurry in-development code:
 ;;; Enabled only if you set the env var ENIGMACURRY_EMACS_DEV=true
 (when (string= (getenv "ENIGMACURRY_EMACS_DEV") "true")
