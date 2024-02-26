@@ -159,10 +159,9 @@
 ;; I map it with xkb which works on Xorg (i3) and Wayland (Sway):
 ;;    https://github.com/enigmacurry/sway-home#keyboard-setup
 ;; ;; C Control (PC Caps Lock or PC Right Control)
-;; ;; M Meta [Mod2] (PC Alt)
-;; ;; S Super [Mod3] (PC Windows)
-;; ;; A Alt [Mod1] (PC Right Alt)
-;; ;; H Hyper [Mod4] (PC Left Control)
+;; ;; M Meta [Mod1] (PC Left Alt and/or PC Right Alt)
+;; ;; s Super [Mod4] (PC Left Control) - note that xkb maps this as Hyper_L, but emacs 29 recognizes this as Super for whatever reason.
+
 ;; Also see https://emacsnotes.wordpress.com/2022/10/30/use-xkb-to-setup-full-spectrum-of-modifiers-meta-alt-super-and-hyper-for-use-with-emacs/
 ;;
 ;; Theres's two ways to show the bindings for the current buffer:
@@ -173,11 +172,11 @@
 ;;; Custom global bindings:
   (general-define-key
    "C-h B" 'general-describe-keybindings
-   "H-b" 'quick-switch-buffer
-   "H-B" 'buffer-menu "A-B" 'buffer-menu "C-x B" 'buffer-menu
-   "H-o" 'browse-url
+   "s-b" 'quick-switch-buffer
+   "s-B" 'buffer-menu "C-x B" 'buffer-menu
+   "s-o" 'browse-url
    "C-;" 'comment-region                ; C-u C-; to uncomment
-   "H-<down-mouse-1>" 'mouse-drag-region-rectangle
+   "s-<down-mouse-1>" 'mouse-drag-region-rectangle
    )
 ;;; Emacs default keybindings you want included in general-describe-keybindings:
 ;;; Its useful to duplicate these simply as a way of documentation:
@@ -190,7 +189,7 @@
   ;; Emacs Lisp mode bindings:
   (general-define-key
    :keymaps 'emacs-lisp-mode-map
-   "A-e" 'eval-defun                    ;eval top-level form
+   "s-e" 'eval-defun                    ;eval top-level form
    "M-;" 'paredit-comment-dwim
    )
   ;; Dired mode bindings:
@@ -239,7 +238,7 @@
 (use-package counsel
   :general
   ("M-y" 'counsel-yank-pop
-   "A-b" 'ivy-switch-buffer
+   "s-b" 'ivy-switch-buffer
    )
   :init
   (ivy-mode 1)
@@ -254,24 +253,24 @@
 ;; docs: https://joaotavora.github.io/yasnippet/
 ;; M-x yas-describe-tables to show the loaded snippets per mode
 ;; Put your snippets in ~/.emacs.d/snippets
-(use-package yasnippet
-  :init
-  ;; Install a big snippet library:
-  ;; https://github.com/AndreaCrotti/yasnippet-snippets
-  (use-package yasnippet-snippets)
-  ;;; You could enable yas globally:
-  ;; (yas-global-mode 1)
-  ;;; You could enable it just for all programming modes:
-  ;; (yas-reload-all)
-  ;; (add-hook 'prog-mode-hook #'yas-minor-mode)
-  ;;; Better to enable yas-minor-mode per mode you want it for, via use-package.
-  (add-hook 'emacs-lisp-mode-hook #'yas-minor-mode)
-  )
+;; (use-package yasnippet
+;;   :init
+;;   ;; Install a big snippet library:
+;;   ;; https://github.com/AndreaCrotti/yasnippet-snippets
+;;   (use-package yasnippet-snippets)
+;;   ;;; You could enable yas globally:
+;;   ;; (yas-global-mode 1)
+;;   ;;; You could enable it just for all programming modes:
+;;   ;; (yas-reload-all)
+;;   ;; (add-hook 'prog-mode-hook #'yas-minor-mode)
+;;   ;;; Better to enable yas-minor-mode per mode you want it for, via use-package.
+;;   (add-hook 'emacs-lisp-mode-hook #'yas-minor-mode)
+;;   )
 
 ;; Org
 (use-package org
   :after hydra
-  :hook (org-mode . yas-minor-mode)
+;  :hook (org-mode . yas-minor-mode)
   :config
   (setq org-directory "~/org")
   (setq org-insert-mode-line-in-empty-file t)
@@ -335,7 +334,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 ;; Avy (like ace-jump) :: https://github.com/abo-abo/avy
 (use-package avy
   :general
-  ("A-s" 'avy-goto-word-1)
+  ("s-s" 'avy-goto-word-1)
   ("C-c s" 'avy-goto-char)
   ("C-c S" 'avy-goto-word-1))
 
@@ -403,7 +402,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (python-mode . pyvenv-mode)
   (python-mode . flycheck-mode)
   (python-mode . company-mode)
-  (python-mode . yas-minor-mode)
+;  (python-mode . yas-minor-mode)
   (python-mode . python-black-on-save-mode)
   :custom
   ;; NOTE: Set these if Python 3 is called "python3" on your system!
@@ -421,7 +420,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 
 ;; Web mode :: https://github.com/fxbois/web-mode
 (use-package web-mode
-  :hook (web-mode . yas-minor-mode)
+;  :hook (web-mode . yas-minor-mode)
   :init
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.svelte\\'" . web-mode))
@@ -464,8 +463,8 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (setq aw-scope 'frame)
   (global-set-key [remap other-window] 'ace-window)
   :general
-  ("M-o" 'ace-window "A-o" 'ace-window "°" 'ace-window
-   ;"C-x o" #'(lambda()(interactive) (message "Use M-o or A-o instead!"))
+  ("M-o" 'ace-window "s-o" 'ace-window "°" 'ace-window
+   ;"C-x o" #'(lambda()(interactive) (message "Use M-o or s-o instead!"))
    ))
 
 ;; lispy LISP mode :: https://github.com/abo-abo/lispy
@@ -492,8 +491,8 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (:keymaps 'paredit-mode-map
             "C-<right>" nil
             "C-<left>" nil
-            "H-<right>" 'paredit-forward-barf-sexp
-            "H-<left>" 'paredit-forward-slurp-sexp)
+            "s-<right>" 'paredit-forward-barf-sexp
+            "s-<left>" 'paredit-forward-slurp-sexp)
   :init
   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
 ;;; Disable paredit in the Eval minibuffer, otherwise you can't press Enter?
@@ -520,7 +519,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 
 ;; Lisp Flavoured Erlang (LFE)
 (use-package lfe-mode
-  :hook (lfe-mode . yas-minor-mode)
+;  :hook (lfe-mode . yas-minor-mode)
   :init
   (dolist (func '(paredit-mode rainbow-delimiters-mode))
   (add-hook 'lfe-mode-hook func)))
@@ -573,7 +572,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 ;; Go
 ;; must manually install: gopls
 (use-package go-mode
-  :hook (go-mode . yas-minor-mode)
+;  :hook (go-mode . yas-minor-mode)
   :init
   (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
   (add-hook 'go-mode-hook #'lsp-deferred)
@@ -587,7 +586,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 ;; Rust
 ;; must manually install rust, rust-analyzer, cargo-watch, wasm-pack, wasm-bindgen, cargo-generate
 (use-package rustic
-  :hook (rustic-mode . yas-minor-mode)
+;  :hook (rustic-mode . yas-minor-mode)
   :init
   (setq rustic-format-on-save t)
   (add-hook 'rustic-mode-hook
@@ -610,7 +609,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 
 ;; WebGPU .wgsl mode
 (use-package wgsl-mode
-  :hook (wgsl-mode . yas-minor-mode)
+;  :hook (wgsl-mode . yas-minor-mode)
   :straight
   (wgsl-mode :type git :host github :repo "acowley/wgsl-mode"))
 
@@ -677,7 +676,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 
 ;; typescript
 (use-package tide
-  :hook (tide-mode . yas-minor-mode)
+;  :hook (tide-mode . yas-minor-mode)
   :init
   (defun setup-tide-mode ()
     (interactive)
@@ -697,21 +696,21 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (add-hook 'typescript-mode-hook #'setup-tide-mode))
 
 (use-package nix-mode
-    :hook (nix-mode . yas-minor-mode)
+;    :hook (nix-mode . yas-minor-mode)
 )
 
 ;; Godot
 (use-package gdscript-mode
   :hook
   (gdscript-mode . eglot-ensure)
-  (gdscript-mode . yas-minor-mode)
+;  (gdscript-mode . yas-minor-mode)
   :straight (gdscript-mode
              :type git
              :host github
              :repo "godotengine/emacs-gdscript-mode"))
 (use-package gdshader-mode 
   :hook
-  (gdshader-mode . yas-minor-mode)
+;  (gdshader-mode . yas-minor-mode)
   :straight
   (gdshader-mode
    :type git :host github :repo "bbbscarter/gdshader-mode"))
@@ -720,9 +719,9 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 ;; https://emacsrocks.com/e13.html
 (use-package multiple-cursors
   :general
-  ("H-SPC" 'set-rectangular-region-anchor)
-  ("H-n" 'mc/mark-next-like-this)
-  ("H-N" 'mc/mark-all-like-this))
+  ("s-SPC" 'set-rectangular-region-anchor)
+  ("s-n" 'mc/mark-next-like-this)
+  ("s-N" 'mc/mark-all-like-this))
 
 ;; Eww browser
 (use-package eww
@@ -753,6 +752,11 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 ;; Guile Scheme
 ;; https://www.nongnu.org/geiser/
 (use-package geiser-guile)
+
+;; Javascript
+(use-package js2-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
 ;; EnigmaCurry in-development code:
 ;;; Enabled only if you set the env var ENIGMACURRY_EMACS_DEV=true
