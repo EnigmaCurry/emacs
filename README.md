@@ -92,15 +92,37 @@ My keyboard map assumes that you have extra modifier keys available on
 your keyboard that are not normally found on modern PC keyboards, but
 are easy to remap in software via xkb (see `man 7 xkeyboard-config`)
 
-You should have all these keys available:
+ * Left Control key (This is mapped onto my Caps Lock key; known as `C` in
+   Emacs)
+ * Left and/or Right Alt key (Meta or Mod1; known as `M` in Emacs.)
+ * Super ("Windows") key (Super or Mod3; but this is reserved for Sway
+   (window manager), and this key is ignored by Emacs and all other
+   applications.)
+ * Hyper key (This is mapped onto my original bottom Left Control key,
+   [freed up by moving Control to Caps Lock]; **NB:** Emacs 29 now
+   recognizes Hyper_L as `s` (super), and no longer as `H` (hyper),
+   but xkb and wayland still consider this hyper.)
+ * Menu key (Menu; known as `<menu>` in Emacs. It cannot be used as a
+   leader key, but it works by itself as a command. Bound to `M-x`.)
 
- * Left Control (usually remapped on Caps Lock, known as `C` in Emacs)
- * Left Alt (Meta or Mod2, known as `M` in Emacs.)
- * Right Alt (OG Alt, or Mod1, known as `A` in Emacs.)
- * Windows (Super or Mod3; but this is reserved for sway, and not used
-   in this Emacs config, but it would be known as `S` in Emacs.)
- * Hyper (usually remapped on the original Left Control key, which was
-   moved to Caps Lock, known as `H` in Emacs.).
+![Keybinding Diagram](bindings.png "Keybinding Diagram")[^1]
+
+Emacs 29 broke my old keymap. I used to have one more key, the "OG"
+Right Alt key, but with Emacs 29 this had to be sacrificed. These
+notes are for historical purposes only:
+
+ * Right Alt (OG Alt, or Mod1, known as `A` in Emacs.). **Changed in
+   Emacs 29**: OG Alt `A` no longer works, Alt (Mod1) is always
+   recognized as Meta. Mod2 no longer functions at all in Emacs 29
+   (unrecognized)?!
+ * Left Alt used to be Meta_L on Mod2, but ever since Emacs 29, it no
+   longer recognizes Mod2, so it had to be remapped back to Mod1.
+ * Hyper is now recognized as Super in Emacs 29?! Mod4, which is my
+   Hyper key, is actually recognized as `s` (super) in Emacs 29, which is the
+   Super key. That's OK in my case, because my actual Super key is not
+   sent to Emacs, it is reserved for Sway. Emacs is confused, but it
+   doesn't conflict with anything else. All the keybindings that used
+   to be mapped to `H` (hyper) are now remapped as `s` (super).
 
 In Wayland, you can run `wev` to test your keyboard keys and which
 modifiers they map to. You can reference my own [sway
@@ -110,10 +132,10 @@ how I setup the xkb_file to perform the remap.
 (There is another key found on PC keyboards, called Menu. This is on
 the right side, somewhere near the Right Alt key. This is known as
 `<menu>` in Emacs. As far as I know, this key cannot be used as a
-modifier key, so it has to run a single command. This is normally
-mapped to `M-x`, or `execute-extended-command`, which prompts you to
-run any command by name. This is default Emacs functionality, and it
-has not been changed in this config.)
+modifier key, so it has to run a single command. The default emacs
+binding is to `M-x`, or `execute-extended-command`, which prompts you
+to run any command by name, but this config swaps it to
+[amx](https://github.com/DarwinAwardWinner/amx)).
 
 Without            moving            to           the            [evil
 side](https://evil.readthedocs.io/en/latest/overview.html)  of  Emacs,
@@ -127,13 +149,6 @@ interception-tools requires  root access,  and works  at a  much lower
 level than xkb, and  so I'm worried that I won't  be able to replicate
 the environment on all platforms.
 
-## Credits and other useful links
-
-Some code samples taken from:
-
- * [susam/emfy](https://github.com/susam/emfy)
- * [Emacs Configuration Generator](https://emacs.amodernist.com)
-
 ## My older emacs configs
 
 Here's my old [spacemacs config
@@ -145,3 +160,12 @@ branch](https://github.com/EnigmaCurry/emacs/blob/literate/config.org)
 If you want to see my old old old config from the late 2000s, see the
 [ancient-history
 branch](https://github.com/EnigmaCurry/emacs/tree/ancient-history)
+
+## Credits and other useful links
+
+Some code samples taken from:
+
+ * [susam/emfy](https://github.com/susam/emfy)
+ * [Emacs Configuration Generator](https://emacs.amodernist.com)
+
+[^1]: "ANSI Keyboard Layout Diagram" used by permission [CC-BY-SA Rumudiez](https://commons.wikimedia.org/wiki/File:ANSI_Keyboard_Layout_Diagram_with_Form_Factor.svg)
