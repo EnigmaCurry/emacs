@@ -362,9 +362,15 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   (setq lsp-keymap-prefix "C-c l")
   (setq lsp-modeline-diagnostics-scope :workspace)
+  ;;; extra verbose logging of lsp json messages:
+  ;;(setq lsp-log-io t)
   :hook
-  ((web-mode . lsp) (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
+  ((web-mode . lsp)
+   (lsp-mode . lsp-enable-which-key-integration)
+   (python-mode . lsp-deferred))
+  :commands lsp
+  :config
+  )
 (use-package lsp-ui
   :commands lsp-ui-mode)
 (use-package lsp-ivy
@@ -377,43 +383,48 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 (use-package dap-mode)
 ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
-(use-package lsp-pyright
-  :hook
-  (python-mode . (lambda ()
-                   (require 'lsp-pyright)
-                   (lsp-deferred))))
-;; Activate python virtualenv BEFORE opening a python buffer and/or starting pyright server:
-;; M-x pyvenv-activate     (~/.virtualenvs/XXX)
-(use-package pyvenv
-  :ensure t
-  :init
-  (setenv "WORKON_HOME" "~/.virtualenvs/")
-  :config
-  ;; (pyvenv-mode t)
-  ;; Set correct Python interpreter
-  (setq pyvenv-post-activate-hooks
-        (list (lambda ()
-                (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python")))))
-  (setq pyvenv-post-deactivate-hooks
-        (list (lambda ()
-                (setq python-shell-interpreter "python3")))))
 (use-package python-mode
+  :general
+  ("s-a" 'lsp-execute-code-action)
   :hook
   (python-mode . pyvenv-mode)
   (python-mode . flycheck-mode)
   (python-mode . company-mode)
-;  (python-mode . yas-minor-mode)
   (python-mode . python-black-on-save-mode)
   :custom
-  ;; NOTE: Set these if Python 3 is called "python3" on your system!
   (python-shell-interpreter "python3")
   :config
+  ;; Activate python virtualenv BEFORE opening a python buffer and/or starting pyright server:
+  ;; M-x pyvenv-activate     (~/.virtualenvs/XXX)
+  (use-package pyvenv
+    :ensure t
+    :init
+    (setenv "WORKON_HOME" "~/.virtualenvs/")
+    :config
+    ;; (pyvenv-mode t)
+    ;; Set correct Python interpreter
+    (setq pyvenv-post-activate-hooks
+          (list (lambda ()
+                  (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python")))))
+    (setq pyvenv-post-deactivate-hooks
+          (list (lambda ()
+                  (setq python-shell-interpreter "python3")))))
+  ;; Black (Python code formatter) :: https://github.com/wbolster/emacs-python-black
+  ;; Note: this depends on black being installed in the project virtualenv as a dev dependency
+  (use-package python-black
+    :demand t
+    :after python)
+  ;; Python dev dependencies need to be installed in your project's virtualenv:
+  ;; ruff
+  ;; ruff-lsp
+  ;; black
+  ;;; Add the following to a .dir-locals.el to activate virtualenv automatically:
+  ;; ((python-mode . ((eval . (let ((project-root (locate-dominating-file
+  ;;                              (or (buffer-file-name) default-directory)
+  ;;                                ".dir-locals.el")))
+  ;;               (pyvenv-activate (expand-file-name "virtualenv" project-root)))))))
   )
-;; Black (Python code formatter) :: https://github.com/wbolster/emacs-python-black
-;; Note: this depends on black being installed in the project virtualenv as a dev dependency
-(use-package python-black
-  :demand t
-  :after python)
+
 
 ;; Icons https://github.com/domtronn/all-the-icons.el
 (use-package all-the-icons)
@@ -709,7 +720,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
              :host github
              :repo "godotengine/emacs-gdscript-mode"))
 (use-package gdshader-mode 
-  :hook
+;  :hook
 ;  (gdshader-mode . yas-minor-mode)
   :straight
   (gdshader-mode
