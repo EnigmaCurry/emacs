@@ -769,23 +769,6 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   :init
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
-;; EnigmaCurry in-development code:
-;;; Enabled only if you set the env var ENIGMACURRY_EMACS_DEV=true
-(when (string= (getenv "ENIGMACURRY_EMACS_DEV") "true")
-  (message "Loading EnigmaCurry's DEV code ...")
-  
-  (use-package ox-mdbook
-    :straight
-    (ox-mdbook
-     :type git
-     :host github
-     :repo "enigmacurry/ox-mdbook"
-     :local-repo "~/git/vendor/enigmacurry/ox-mdbook")
-    :ensure t
-    :after ox
-    :init
-    ))
-
 ;; Put your machine local config into ~/.emacs.d/local/*.el
 ;; By default, this is private to the machine, not shared in version control.
 ;; http://whattheemacsd.com/init.el-06.html
