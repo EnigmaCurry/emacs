@@ -275,6 +275,7 @@
   (setq org-directory "~/org")
   (setq org-insert-mode-line-in-empty-file t)
   (setq org-default-notes-file (concat org-directory "/notes.org"))
+  (setq org-startup-folded t)
   (setq org-file-apps
         '((auto-mode . emacs)
           ("\\.mm\\'" . default)
@@ -320,6 +321,18 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   )
 (use-package ox-hugo
   :after org
+  :config
+  (setq org-hugo-special-block-type-properties
+        '(("audio" :raw t)
+          ("katex" :raw t)
+          ("mark" :trim-pre t :trim-post t)
+          ("tikzjax" :raw t)
+          ("video" :raw t)
+          ("run" :raw t)
+          ("stdout" :raw t)
+          ("edit" :raw t)
+          ("env" :raw t)
+          ("math" :raw t)))
   )
 
 ;; Magit (git version control system) :: https://magit.vc/
