@@ -271,6 +271,9 @@
 (use-package org
   :after hydra
 ;  :hook (org-mode . yas-minor-mode)
+  :general
+  ("s-<up>" 'org-previous-visible-heading)
+  ("s-<down>" 'org-next-visible-heading)
   :config
   (setq org-directory "~/org")
   (setq org-insert-mode-line-in-empty-file t)
