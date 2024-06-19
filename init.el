@@ -616,6 +616,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 ;  :hook (rustic-mode . yas-minor-mode)
   :init
   (setq rustic-format-on-save t)
+  (add-to-list 'exec-path "~/.cargo/bin")
   (add-hook 'rustic-mode-hook
             (lambda ()
               (define-key rustic-mode-map (kbd "C-c M-.") 'lsp-rust-analyzer-open-external-docs)))
