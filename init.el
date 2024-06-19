@@ -795,6 +795,9 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
         (mapc 'load files))
     (mkdir local-include-dir)))
 
+;; just-mode
+(use-package just-mode)
+
 ;; Start server
 (require 'server)
 (unless (server-running-p)
