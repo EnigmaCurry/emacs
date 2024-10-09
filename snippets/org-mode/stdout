@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Stdout block
+# key: stdout
+# --
+#+begin_stdout
+$0
+#+end_stdout
