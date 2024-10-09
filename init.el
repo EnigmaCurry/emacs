@@ -253,24 +253,35 @@
 ;; docs: https://joaotavora.github.io/yasnippet/
 ;; M-x yas-describe-tables to show the loaded snippets per mode
 ;; Put your snippets in ~/.emacs.d/snippets
-;; (use-package yasnippet
-;;   :init
-;;   ;; Install a big snippet library:
-;;   ;; https://github.com/AndreaCrotti/yasnippet-snippets
-;;   (use-package yasnippet-snippets)
-;;   ;;; You could enable yas globally:
-;;   ;; (yas-global-mode 1)
-;;   ;;; You could enable it just for all programming modes:
-;;   ;; (yas-reload-all)
-;;   ;; (add-hook 'prog-mode-hook #'yas-minor-mode)
-;;   ;;; Better to enable yas-minor-mode per mode you want it for, via use-package.
-;;   (add-hook 'emacs-lisp-mode-hook #'yas-minor-mode)
-;;   )
+(use-package yasnippet
+  :init
+  ;; Install a big snippet library:
+  ;; https://github.com/AndreaCrotti/yasnippet-snippets
+  ;;(use-package yasnippet-snippets)
+  ;; Enable yasnippet explicitly for each mode you want:
+  :hook
+  (org-mode . yas-minor-mode)
+  (emacs-lisp-mode . yas-minor-mode)
+  :config
+  ;; Function to handle yasnippet expansion in org-mode
+  (defun yas/org-mode-expansion ()
+    "Expand yasnippet or jump to next field in Org-mode."
+    (interactive)
+    (if (yas-minor-mode)
+        (let ((yas/fallback-behavior 'return-nil))
+          (unless (yas-expand)
+            (org-cycle)))
+      (org-cycle)))
+
+  ;; Bind TAB to the custom yas/org-mode-expansion function after org-mode is loaded
+  (with-eval-after-load 'org
+    (define-key org-mode-map (kbd "TAB") 'yas/org-mode-expansion))
+  (yas-reload-all)
+)
 
 ;; Org
 (use-package org
   :after hydra
-;  :hook (org-mode . yas-minor-mode)
   :general
   ("s-<up>" 'org-previous-visible-heading)
   ("s-<down>" 'org-next-visible-heading)
@@ -293,7 +304,7 @@
   ;; Hydra for commonly used org commands:
   (defhydra hydra-org (global-map "C-c o" :exit t)
     "org"
-    ("l" org-store-link "store link" )
+    ("l" org-store-link "store link")
     ("i" org-insert-link "insert link")
     ("a" org-agenda "agenda")
     ("c" org-capture "capture")
@@ -303,14 +314,14 @@
     ("s" org-insert-source-code-block "insert source code block"))
 
   ;; https://emacs.stackexchange.com/a/70606 thanks Chris!
-  (defun org-insert-source-code-block(&optional language file)
-    "Insert source code block for LANGUAGE.  Optionally pull in FILE contents.
+  (defun org-insert-source-code-block (&optional language file)
+    "Insert source code block for LANGUAGE. Optionally pull in FILE contents.
 Will prompt for LANGUAGE when called interactively.
 With a `\\[universal-argument]' prefix, prompts for FILE.
 The `:tangle FILE` header argument will be added when pulling in file contents."
     (interactive)
     (let ((col (current-column))
-          (lang (or language (read-from-minibuffer "Source block language: ") ))
+          (lang (or language (read-from-minibuffer "Source block language: ")))
           (file (if current-prefix-arg (read-file-name "Enter file name: ") nil)))
       (insert
        (format "#+begin_src %s%s" lang (if file (concat " :tangle " file) "")))
@@ -318,10 +329,12 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
       (move-to-column col t)(insert "#+end_src")(newline)
       (forward-line -2)(move-to-column col t)
       (if file (insert-file-contents file))))
-  )
+)
+
 (use-package org-preview-html
   :after org
-  )
+)
+
 (use-package ox-hugo
   :after org
   :config
@@ -336,7 +349,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
           ("edit" :raw t)
           ("env" :raw t)
           ("math" :raw t)))
-  )
+)
 
 ;; Magit (git version control system) :: https://magit.vc/
 (use-package magit
@@ -616,6 +629,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 ;  :hook (rustic-mode . yas-minor-mode)
   :init
   (setq rustic-format-on-save t)
+  (setq rustic-rustfmt-args "--edition 2021")
   (add-to-list 'exec-path "~/.cargo/bin")
   (add-hook 'rustic-mode-hook
             (lambda ()

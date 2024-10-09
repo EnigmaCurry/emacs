@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Warning notice
+# key: warn
+# --
+#+attr_shortcode: :style warning :title Warning
+#+begin_notice
+$0
+#+end_notice

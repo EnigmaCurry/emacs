@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Run block on your workstation
+# key: run
+# --
+#+begin_run
+$0
+#+end_run

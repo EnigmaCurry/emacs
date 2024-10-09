@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Tip notice
+# key: tip
+# --
+#+attr_shortcode: :style tip :title Tip
+#+begin_notice
+$0
+#+end_notice

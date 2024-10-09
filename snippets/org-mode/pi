@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: run block on the Rasbperry Pi
+# key: pi
+# --
+#+attr_shortcode: :style secondary :title Run this on your Raspberry Pi
+#+begin_run
+$0
+#+end_run
