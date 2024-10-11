@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Info block
+# key: info
+# --
+#+attr_shortcode: :style primary :title Info
+#+begin_notice
+$0
+#+end_notice

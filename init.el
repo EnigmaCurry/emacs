@@ -36,7 +36,9 @@
 (setq-default visible-bell t)
 (column-number-mode)
 (put 'narrow-to-region 'disabled nil)
-;; need this on fedora (?) ::
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+;; Enable native compilation for all elisp files:
 (setq-default native-comp-deferred-compilation-deny-list nil)
 
 ;; Show a vertical line after 80 columns (programming modes only):
@@ -812,9 +814,23 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 ;; just-mode
 (use-package just-mode)
 
+;; Image mode (built-in)
+(use-package image-mode
+  :ensure nil  ;; `image-mode` is built-in, so no need to install it
+  :hook (image-mode . my-setup-image-mode-keybinding)
+  :config
+  (defun my-image-mode-server-edit-or-quit ()
+    "Call `server-edit' if called by emacsclient, otherwise `quit-window'."
+    (interactive)
+    (if server-buffer-clients
+        (server-edit)
+      (quit-window)))
+  (defun my-setup-image-mode-keybinding ()
+    "Set up `q' keybinding for image mode."
+    (local-set-key (kbd "q") 'my-image-mode-server-edit-or-quit)))
+
+
 ;; Start server
 (require 'server)
 (unless (server-running-p)
   (server-start))
-(put 'downcase-region 'disabled nil)
-(put 'upcase-region 'disabled nil)
