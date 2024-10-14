@@ -479,8 +479,9 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (vterm-always-compile-module t)
   :general
   ("C-c t" 'my-vterm-toggle)
-  :init
+  :config
   (define-key vterm-mode-map (kbd "<f5>") nil)
+  :init
   (defun my-vterm-toggle (&optional args)
     "Customized vterm-toggle wrapper- this fixes the universal argument (C-u) to always create a new terminal"
     (interactive "P")
