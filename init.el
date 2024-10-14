@@ -480,6 +480,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   :general
   ("C-c t" 'my-vterm-toggle)
   :init
+  (define-key vterm-mode-map (kbd "<f5>") nil)
   (defun my-vterm-toggle (&optional args)
     "Customized vterm-toggle wrapper- this fixes the universal argument (C-u) to always create a new terminal"
     (interactive "P")
@@ -828,6 +829,27 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
   (defun my-setup-image-mode-keybinding ()
     "Set up `q' keybinding for image mode."
     (local-set-key (kbd "q") 'my-image-mode-server-edit-or-quit)))
+
+;; whisper speech recoghnition (TTS)
+(use-package whisper
+  :general
+  ("<f5>" 'whisper-run)
+  :straight (whisper :type git :host github :repo "natrys/whisper.el")
+  :bind ("C-H-r" . whisper-run)
+  :config
+  (setq whisper-install-directory (expand-file-name "~/git/vendor/ggerganov")
+        whisper-model "base"
+        whisper-language "en"
+        whisper-translate nil
+        whisper-use-threads (/ (num-processors) 2)))
+
+;; ChatGPT
+(use-package chatgpt-shell
+  :straight (:host github :repo "xenodium/chatgpt-shell")
+  :config
+  ;; Don't set the API key here, do it via M-x customize-variable:
+  ;;(setq chatgpt-shell-openai-key "your_openai_api_key_here")
+  )
 
 
 ;; Start server
