@@ -289,6 +289,7 @@
   ("s-<down>" 'org-next-visible-heading)
   :config
   (setq org-directory "~/org")
+  (setq org-export-allow-bind-keywords t)
   (setq org-insert-mode-line-in-empty-file t)
   (setq org-default-notes-file (concat org-directory "/notes.org"))
   (setq org-startup-folded t)
@@ -302,6 +303,31 @@
            "* TODO %?\n  %i\n  %a")
           ("j" "Journal" entry (file+olp+datetree "~/org/notes.org" "Journal")
            "* %?\nEntered on %U\n  %i\n  %a")))
+  ;; ditaa diagrams:
+  ;; Required: install ditaa package
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((ditaa . t)))
+  (defun my/org-babel-execute:ditaa (body params)
+    "Execute BODY of Ditaa code with org-babel according to PARAMS using a custom Java command."
+    (let* ((out-file (or (cdr (assq :file params))
+                         (error "Ditaa code block requires :file header argument")))
+           (cmdline (cdr (assq :cmdline params)))
+           (java (cdr (assq :java params)))
+           (in-file (org-babel-temp-file "ditaa-"))
+           (eps (cdr (assq :eps params)))
+           (eps-file (when eps
+                       (org-babel-process-file-name (concat in-file ".eps"))))
+           (cmd (concat "java -cp /usr/share/java/commons-cli.jar:/usr/share/java/ditaa.jar "
+                        "org.stathissideris.ascii2image.core.CommandLineConverter "
+                        cmdline " "
+                        (org-babel-process-file-name in-file) " "
+                        (org-babel-process-file-name out-file))))
+      (with-temp-file in-file (insert body))
+      (message cmd) (shell-command cmd)
+      nil)) ;; signal that output has already been written to file
+
+  (advice-add 'org-babel-execute:ditaa :override #'my/org-babel-execute:ditaa)
   :init
   ;; Hydra for commonly used org commands:
   (defhydra hydra-org (global-map "C-c o" :exit t)
