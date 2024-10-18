@@ -374,6 +374,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
           ("video" :raw t)
           ("run" :raw t)
           ("stdout" :raw t)
+          ("mermaid" :raw t)
           ("edit" :raw t)
           ("env" :raw t)
           ("math" :raw t)))
@@ -925,6 +926,13 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
   ;; Don't set the API key here, do it via M-x customize-variable:
   ;;(setq chatgpt-shell-openai-key "your_openai_api_key_here")
   )
+
+;; PDF tools
+(use-package pdf-tools
+  :ensure t
+  :config
+  (pdf-tools-install))
+
 
 ;; Start server
 (require 'server)
