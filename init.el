@@ -933,6 +933,8 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
   :config
   (pdf-tools-install))
 
+;; w3m
+(use-package w3m)
 
 ;; Start server
 (require 'server)
