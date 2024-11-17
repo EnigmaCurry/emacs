@@ -868,7 +868,7 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 ;;;    (setq mastodon-instance-url "https://social.instance.org"
 ;;;          mastodon-active-user "example_user")
 ;;; Then run M-x mastodon to finish the account authorization process.
-(use-package mastodon)
+;(use-package mastodon)
 
 ;; Guile Scheme
 ;; https://www.nongnu.org/geiser/
@@ -969,18 +969,18 @@ If called with a prefix argument (STOP), print the message 'foo'."
 
 
 ;; ChatGPT
-(use-package chatgpt-shell
-  :straight (:host github :repo "xenodium/chatgpt-shell")
-  :config
-  ;; Don't set the API key here, do it via M-x customize-variable:
-  ;;(setq chatgpt-shell-openai-key "your_openai_api_key_here")
-  )
+;; (use-package chatgpt-shell
+;;   :straight (:host github :repo "xenodium/chatgpt-shell")
+;;   :config
+;;   ;; Don't set the API key here, do it via M-x customize-variable:
+;;   ;;(setq chatgpt-shell-openai-key "your_openai_api_key_here")
+;;   )
 
 ;; PDF tools
-(use-package pdf-tools
-  :ensure t
-  :config
-  (pdf-tools-install))
+;; (use-package pdf-tools
+;;   :ensure t
+;;   :config
+;;   (pdf-tools-install))
 
 ;; w3m
 (use-package w3m)
