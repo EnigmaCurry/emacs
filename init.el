@@ -1,4 +1,4 @@
-;; -*- coding: utf-8 -*-
+ ;; -*- coding: utf-8 -*-
 ;; EnigmaCurry's emacs config
 ;; inspiration : https://github.com/susam/emfy
 ;;               https://emacs.amodernist.com
@@ -906,7 +906,7 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
     "Set up `q' keybinding for image mode."
     (local-set-key (kbd "q") 'my-image-mode-server-edit-or-quit)))
 
-;; whisper speech recoghnition (TTS)
+;; whisper speech recoghnition (speech to text)
 (use-package whisper
   :general
   ("<f5>" 'whisper-run)
@@ -918,6 +918,55 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
         whisper-language "en"
         whisper-translate nil
         whisper-use-threads (/ (num-processors) 2)))
+
+;; piper speech synthesis (text to speech)
+;; piper script here: https://github.com/EnigmaCurry/sway-home/blob/master/config/bash/tts.sh
+;; (use-package my-piper
+;;   :straight nil
+;;   :defer t
+;;   :general
+;;   ("M-<f5>" 'say-buffer-from-point)
+;;   :config
+;;   (defun say-buffer-from-point ()
+;;     "Send the text from the current point to the end of the buffer to the 'say' command."
+;;     (interactive)
+;;     (let ((text (buffer-substring-no-properties (point) (point-max))))
+;;       (with-temp-buffer
+;;         (insert text)
+;;         (call-process-region (point-min) (point-max) "bash" nil 0 nil "/home/ryan/.config/bash/tts.sh" "say")))))
+
+(use-package my-piper
+  :straight nil
+  :defer t
+  :general
+  ("M-<f5>" 'say-buffer-from-point)
+  :config
+  (defun say-buffer-from-point (&optional stop)
+    "Send the text from the current point to the end of the buffer to the 'say' command.
+If called with a prefix argument (STOP), print the message 'foo'."
+    (interactive "P")
+    (if stop
+        (message "foo")
+      (let ((text (buffer-substring-no-properties (point) (point-max))))
+        (with-temp-buffer
+          (insert text)
+          (call-process-region (point-min) (point-max) "bash" nil 0 nil "/home/ryan/.config/bash/tts.sh" "say"))))))
+
+
+(use-package my-piper
+  :straight nil
+  :defer t
+  :general
+  ("M-<f5>" 'say-buffer-from-point)
+  :config
+  (defun say-buffer-from-point ()
+    "Send the text from the current point to the end of the buffer to the 'say' command."
+    (interactive)
+    (let ((text (buffer-substring-no-properties (point) (point-max))))
+      (with-temp-buffer
+        (insert text)
+        (call-process-region (point-min) (point-max) "bash" nil 0 nil "/home/ryan/.config/bash/tts.sh" "say")))))
+
 
 ;; ChatGPT
 (use-package chatgpt-shell
@@ -936,7 +985,12 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 ;; w3m
 (use-package w3m)
 
+(use-package nftables-mode)
+
+(use-package keycast)
+
 ;; Start server
 (require 'server)
 (unless (server-running-p)
   (server-start))
+
