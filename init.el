@@ -759,6 +759,8 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 ;;   (require 'atomic-chrome)
 ;;   (atomic-chrome-start-server))
 
+;; sqlformat require pg_format tool
+;; https://github.com/darold/pgFormatter
 (use-package sqlformat
   :init
   (setq sqlformat-command 'pgformatter)
