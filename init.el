@@ -759,6 +759,8 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 ;;   (require 'atomic-chrome)
 ;;   (atomic-chrome-start-server))
 
+;; sqlformat require pg_format tool
+;; https://github.com/darold/pgFormatter
 (use-package sqlformat
   :init
   (setq sqlformat-command 'pgformatter)
@@ -868,7 +870,7 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 ;;;    (setq mastodon-instance-url "https://social.instance.org"
 ;;;          mastodon-active-user "example_user")
 ;;; Then run M-x mastodon to finish the account authorization process.
-(use-package mastodon)
+;(use-package mastodon)
 
 ;; Guile Scheme
 ;; https://www.nongnu.org/geiser/
@@ -972,10 +974,10 @@ If called with a prefix argument (STOP), print the message 'foo'."
   ("C-c C-g" 'gptel-menu))
 
 ;; PDF tools
-(use-package pdf-tools
-  :ensure t
-  :config
-  (pdf-tools-install))
+;; (use-package pdf-tools
+;;   :ensure t
+;;   :config
+;;   (pdf-tools-install))
 
 ;; w3m
 (use-package w3m)
