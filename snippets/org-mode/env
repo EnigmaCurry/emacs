@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Set these environment variables
+# key: env
+# --
+#+begin_env
+$0
+#+end_env

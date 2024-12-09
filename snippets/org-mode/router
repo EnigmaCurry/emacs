@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: run block on the Router VM
+# key: router
+# --
+#+attr_shortcode: :style secondary :title Run this on the Router VM
+#+begin_run
+$0
+#+end_run
