@@ -971,7 +971,25 @@ If called with a prefix argument (STOP), print the message 'foo'."
 
 (use-package gptel
   :general
-  ("C-c C-g" 'gptel-menu))
+  ("C-c C-g" 'gptel-menu)
+  :config
+  (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+  :init
+  ;; LM-studio offers an OpenAI compatible API
+  (setq
+   gptel-model   'test
+   gptel-backend (gptel-make-openai "lm-studio"
+                   :stream t
+                   :protocol "http"
+                   :host "localhost:1234"
+                   :models '(test)))
+  )
+
+(use-package elysium
+  :custom
+  (elysium-window-size 0.33)
+  (elysium-window-style 'vertical))
 
 ;; PDF tools
 ;; (use-package pdf-tools
