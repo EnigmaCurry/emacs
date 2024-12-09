@@ -967,14 +967,9 @@ If called with a prefix argument (STOP), print the message 'foo'."
         (insert text)
         (call-process-region (point-min) (point-max) "bash" nil 0 nil "/home/ryan/.config/bash/tts.sh" "say")))))
 
-
-;; ChatGPT
-(use-package chatgpt-shell
-  :straight (:host github :repo "xenodium/chatgpt-shell")
-  :config
-  ;; Don't set the API key here, do it via M-x customize-variable:
-  ;;(setq chatgpt-shell-openai-key "your_openai_api_key_here")
-  )
+(use-package gptel
+  :general
+  ("C-c C-g" 'gptel-menu))
 
 ;; PDF tools
 (use-package pdf-tools
