@@ -34,6 +34,7 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default visible-bell t)
+(setq-default dired-listing-switches "-al --group-directories-first")
 (column-number-mode)
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
@@ -303,6 +304,7 @@
            "* TODO %?\n  %i\n  %a")
           ("j" "Journal" entry (file+olp+datetree "~/org/notes.org" "Journal")
            "* %?\nEntered on %U\n  %i\n  %a")))
+  (add-hook 'org-mode-hook 'visual-line-mode)
   ;; ditaa diagrams:
   ;; Required: install ditaa package
   (org-babel-do-load-languages
@@ -332,6 +334,7 @@
   ;; Hydra for commonly used org commands:
   (defhydra hydra-org (global-map "C-c o" :exit t)
     "org"
+    ("o" open-org-file)
     ("l" org-store-link "store link")
     ("i" org-insert-link "insert link")
     ("a" org-agenda "agenda")
@@ -357,7 +360,12 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
       (move-to-column col t)(insert "#+end_src")(newline)
       (forward-line -2)(move-to-column col t)
       (if file (insert-file-contents file))))
-)
+  (defun open-org-file ()
+    "Open a new Org file with the format ~/Org/YYYY-MM-DD-hh:mm:ss.org."
+    (interactive)
+    (let ((filename (format "~/Org/%s.org" (format-time-string "%Y-%m-%d-%H-%M-%S"))))
+      (find-file filename)))
+  )
 
 (use-package org-preview-html
   :after org
@@ -919,6 +927,7 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
         whisper-model "base"
         whisper-language "en"
         whisper-translate nil
+        whisper-return-cursor-to-start nil
         whisper-use-threads (/ (num-processors) 2)))
 
 ;; piper speech synthesis (text to speech)
@@ -972,6 +981,8 @@ If called with a prefix argument (STOP), print the message 'foo'."
 (use-package gptel
   :general
   ("C-c C-g" 'gptel-menu)
+  (:keymaps 'gptel-mode-map
+            "C-c C-c" 'gptel-send)
   :config
   (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
@@ -988,8 +999,8 @@ If called with a prefix argument (STOP), print the message 'foo'."
 
 (use-package elysium
   :custom
-  (elysium-window-size 0.33)
-  (elysium-window-style 'vertical))
+  (elysium-window-size 0.5)
+  (elysium-window-style 'horizontal))
 
 ;; PDF tools
 ;; (use-package pdf-tools
@@ -1003,6 +1014,14 @@ If called with a prefix argument (STOP), print the message 'foo'."
 (use-package nftables-mode)
 
 (use-package keycast)
+
+(use-package kotlin-mode
+  :ensure t
+  :hook (kotlin-mode . lsp))
+
+(use-package jinja2-mode
+  :mode ("\\.jinja\\'" "\\.j2\\'" "\\.jinja2\\'")
+  :straight t)
 
 ;; Start server
 (require 'server)
