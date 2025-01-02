@@ -289,7 +289,7 @@
   ("s-<up>" 'org-previous-visible-heading)
   ("s-<down>" 'org-next-visible-heading)
   :config
-  (setq org-directory "~/org")
+  (setq org-directory "~/git/vendor/enigmacurry/org/notes")
   (setq org-export-allow-bind-keywords t)
   (setq org-insert-mode-line-in-empty-file t)
   (setq org-default-notes-file (concat org-directory "/notes.org"))
@@ -361,15 +361,31 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
       (forward-line -2)(move-to-column col t)
       (if file (insert-file-contents file))))
   (defun open-org-file ()
-    "Open a new Org file with the format ~/Org/YYYY-MM-DD-hh:mm:ss.org."
+    "Open a new Org file with the default book.rymcg.tech notes template"
     (interactive)
-    (let ((filename (format "~/Org/%s.org" (format-time-string "%Y-%m-%d-%H-%M-%S"))))
-      (find-file filename)))
+    (let* ((formatted-date (format-time-string "%Y-%m-%d"))
+           (user-title (read-string "Title for new note: "))
+           (safe-title (replace-regexp-in-string " " "-" (downcase user-title)))
+           (slug (concat formatted-date "-" safe-title))
+           (full-title (concat formatted-date " " user-title))
+           (template-path (expand-file-name "_template/note.o.txt" org-directory))
+           (filename (format "%s/%s-%s.org" (file-name-as-directory org-directory)
+                             (format-time-string "%Y-%m-%d-%H-%M-%S") safe-title))
+           (section (read-string "Section: " formatted-date))
+           (title-section (mapconcat #'capitalize (split-string section " ") " ")))
+      (find-file filename)
+      (when (zerop (buffer-size))
+        (if (file-exists-p template-path)
+            (let ((template-content (with-temp-buffer
+                                      (insert-file-contents template-path)
+                                      (buffer-string))))
+              (insert (replace-regexp-in-string "{{title}}" user-title (replace-regexp-in-string "{{section}}" section (replace-regexp-in-string "{{safe-title}}" safe-title (replace-regexp-in-string "{{title-section}}" title-section template-content))))))
+          (message "Template file not found: %s" template-path)))))
   )
 
-(use-package org-preview-html
-  :after org
-)
+  (use-package org-preview-html
+    :after org
+    )
 
 (use-package ox-hugo
   :after org
@@ -436,6 +452,8 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
               (message "Adding before-save-hook for ox-hugo...")
               (add-hook 'before-save-hook 'my-ox-hugo-update-weight-in-filename nil 'local))))
 
+(use-package ox-gfm)
+
 ;; Magit (git version control system) :: https://magit.vc/
 (use-package magit
   :general
@@ -443,7 +461,7 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
   :config
   ;; open magit in a full frame always:
   (setq magit-display-buffer-function
-    #'magit-display-buffer-fullframe-status-v1))
+        #'magit-display-buffer-fullframe-status-v1))
 
 ;; Avy (like ace-jump) :: https://github.com/abo-abo/avy
 (use-package avy
@@ -1021,7 +1039,9 @@ If called with a prefix argument (STOP), print the message 'foo'."
 
 (use-package jinja2-mode
   :mode ("\\.jinja\\'" "\\.j2\\'" "\\.jinja2\\'")
-  :straight t)
+  :straight t
+  :bind (:map jinja2-mode-map
+              ("C-c t" . nil)))
 
 ;; Start server
 (require 'server)
