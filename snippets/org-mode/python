@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Python
+# key: python
+# --
+#+begin_src python :results output :exports true :wrap stdout :linenos true
+$0
+#+end_src

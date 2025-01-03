@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Rust
+# key: rust
+# --
+#+begin_src rust :exports true :wrap stdout :linenos true
+$0
+#+end_src

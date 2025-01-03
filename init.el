@@ -305,11 +305,9 @@
           ("j" "Journal" entry (file+olp+datetree "~/org/notes.org" "Journal")
            "* %?\nEntered on %U\n  %i\n  %a")))
   (add-hook 'org-mode-hook 'visual-line-mode)
-  ;; ditaa diagrams:
-  ;; Required: install ditaa package
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((ditaa . t)))
+   '((python . t) (ditaa . t)))
   (defun my/org-babel-execute:ditaa (body params)
     "Execute BODY of Ditaa code with org-babel according to PARAMS using a custom Java command."
     (let* ((out-file (or (cdr (assq :file params))
