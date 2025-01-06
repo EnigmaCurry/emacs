@@ -289,7 +289,8 @@
   ("s-<up>" 'org-previous-visible-heading)
   ("s-<down>" 'org-next-visible-heading)
   :config
-  (setq org-directory "~/git/vendor/enigmacurry/org/notes")
+  (setq org-directory (expand-file-name "~/git/vendor/enigmacurry/org"))
+  (setenv "ORG_DIR" org-directory)
   (setq org-export-allow-bind-keywords t)
   (setq org-insert-mode-line-in-empty-file t)
   (setq org-default-notes-file (concat org-directory "/notes.org"))
@@ -307,7 +308,7 @@
   (add-hook 'org-mode-hook 'visual-line-mode)
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((python . t) (ditaa . t)))
+   '((python . t) (shell . t) (ditaa . t)))
   (defun my/org-babel-execute:ditaa (body params)
     "Execute BODY of Ditaa code with org-babel according to PARAMS using a custom Java command."
     (let* ((out-file (or (cdr (assq :file params))
@@ -328,6 +329,12 @@
       nil)) ;; signal that output has already been written to file
 
   (advice-add 'org-babel-execute:ditaa :override #'my/org-babel-execute:ditaa)
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (org-link-preview-region nil nil (point-min) (point-max))))
+  (advice-add 'rustic-babel-run-update-result-block :after
+              (lambda (&rest _)
+                (org-link-preview-refresh)))
   :init
   ;; Hydra for commonly used org commands:
   (defhydra hydra-org (global-map "C-c o" :exit t)
@@ -366,8 +373,8 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
            (safe-title (replace-regexp-in-string " " "-" (downcase user-title)))
            (slug (concat formatted-date "-" safe-title))
            (full-title (concat formatted-date " " user-title))
-           (template-path (expand-file-name "_template/note.o.txt" org-directory))
-           (filename (format "%s/%s-%s.org" (file-name-as-directory org-directory)
+           (template-path (expand-file-name "_template/note.o.txt" (concat org-directory "/notes")))
+           (filename (format "%s/%s-%s.org" (file-name-as-directory (concat org-directory "/notes"))
                              (format-time-string "%Y-%m-%d-%H-%M-%S") safe-title))
            (section (read-string "Section: " formatted-date))
            (title-section (mapconcat #'capitalize (split-string section " ") " ")))
@@ -379,6 +386,28 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
                                       (buffer-string))))
               (insert (replace-regexp-in-string "{{title}}" user-title (replace-regexp-in-string "{{section}}" section (replace-regexp-in-string "{{safe-title}}" safe-title (replace-regexp-in-string "{{title-section}}" title-section template-content))))))
           (message "Template file not found: %s" template-path)))))
+
+  (defun my/org-babel-structural-path ()
+    "Generate a structural path to the current Org Babel block."
+    (let* ((path (org-get-outline-path t)) ;; Get the outline path
+           (block-number (my/org-babel-src-block-number)))
+      (concat (string-join path "/")
+              (if block-number (format "/block-%d" block-number) ""))))
+
+  (defun my/org-babel-src-block-number ()
+    "Count the number of source blocks in the current subtree up to the current block."
+    (let ((count 0)
+          (found nil))
+      (save-excursion
+        (org-back-to-heading t) ;; Go to the current heading
+        (while (and (not found) ;; Stop if we find the current block
+                    (re-search-forward org-babel-src-block-regexp (save-excursion (org-end-of-subtree t)) t))
+          (setq count (1+ count))
+          (when (org-in-src-block-p)
+            (setq found t))))
+      count))
+
+  
   )
 
   (use-package org-preview-html
@@ -401,54 +430,56 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
           ("env" :raw t)
           ("math" :raw t)))
 
-(defun my-ox-hugo-update-weight-in-filename ()
-  "Automatically update EXPORT_FILE_NAME to include the latest EXPORT_HUGO_WEIGHT or inherited parent weight.
+  (defun my-ox-hugo-update-weight-in-filename ()
+    "Automatically update EXPORT_FILE_NAME to include the latest EXPORT_HUGO_WEIGHT or inherited parent weight.
 The slug is set as EXPORT_HUGO_SLUG, and if it doesn't exist, it is derived from the non-weighted filename.
 Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if it exists. Format weights with six-digit padding."
-  (interactive)
-  (message "Running my-ox-hugo-update-weight-in-filename...")
-  (save-excursion
-    (goto-char (point-min))
-    (while (re-search-forward "^[*]+ " nil t)
-      (when (org-entry-get nil "EXPORT_FILE_NAME")
-        (let* ((weight (org-entry-get nil "EXPORT_HUGO_WEIGHT"))
-               (filename (org-entry-get nil "EXPORT_FILE_NAME"))
-               (slug (org-entry-get nil "EXPORT_HUGO_SLUG")))
-          ;; Traverse upwards to find a parent's weight if no weight is present
-          (unless weight
-            (save-excursion
-              (while (and (not weight) (org-up-heading-safe))
-                (setq weight (org-entry-get nil "EXPORT_HUGO_WEIGHT")))))
-          (if (string-match-p "^\\([0-9]+-\\)?_index$" filename)
-              ;; Special handling for '_index': ensure both filename and slug are always '_index'
-              (progn
-                (message "Ensuring '_index' for entry with heading: %s" (org-get-heading t t t t))
-                (org-set-property "EXPORT_FILE_NAME" "_index")
-                (org-set-property "EXPORT_HUGO_SLUG" "_index"))
-            ;; Otherwise, process entries normally
-            (message "Processing entry with heading: %s" (org-get-heading t t t t))
-            ;; If EXPORT_FILE_NAME is missing, initialize it to a default value
-            (unless filename
-              (setq filename (org-get-heading t t t t)))
-            ;; Remove any existing weight prefix from the filename to get the updated version
-            (let ((updated-filename (replace-regexp-in-string "^[0-9]+-" "" filename)))
-              ;; If the slug is not set, use the non-weighted filename to create it
-              (unless slug
-                (setq slug updated-filename)
-                (org-set-property "EXPORT_HUGO_SLUG" slug))
-              ;; If weight exists (either from current or inherited from parent), update the filename
-              (if weight
-                  (let ((formatted-weight (format "%06d" (string-to-number weight))))
-                    ;; If the slug is '_index', do not prefix it with the weight
-                    (if (string= slug "_index")
-                        (org-set-property "EXPORT_FILE_NAME" "_index")
-                      (org-set-property "EXPORT_FILE_NAME" (concat formatted-weight "-" slug))))
-                ;; If weight does not exist, just use the slug as the filename
-                (org-set-property "EXPORT_FILE_NAME" slug)))))))))
+    (interactive)
+    (message "Running my-ox-hugo-update-weight-in-filename...")
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward "^[*]+ " nil t)
+        (when (org-entry-get nil "EXPORT_FILE_NAME")
+          (let* ((weight (org-entry-get nil "EXPORT_HUGO_WEIGHT"))
+                 (filename (org-entry-get nil "EXPORT_FILE_NAME"))
+                 (slug (org-entry-get nil "EXPORT_HUGO_SLUG")))
+            ;; Traverse upwards to find a parent's weight if no weight is present
+            (unless weight
+              (save-excursion
+                (while (and (not weight) (org-up-heading-safe))
+                  (setq weight (org-entry-get nil "EXPORT_HUGO_WEIGHT")))))
+            (if (string-match-p "^\\([0-9]+-\\)?_index$" filename)
+                ;; Special handling for '_index': ensure both filename and slug are always '_index'
+                (progn
+                  (message "Ensuring '_index' for entry with heading: %s" (org-get-heading t t t t))
+                  (org-set-property "EXPORT_FILE_NAME" "_index")
+                  (org-set-property "EXPORT_HUGO_SLUG" "_index"))
+              ;; Otherwise, process entries normally
+              (message "Processing entry with heading: %s" (org-get-heading t t t t))
+              ;; If EXPORT_FILE_NAME is missing, initialize it to a default value
+              (unless filename
+                (setq filename (org-get-heading t t t t)))
+              ;; Remove any existing weight prefix from the filename to get the updated version
+              (let ((updated-filename (replace-regexp-in-string "^[0-9]+-" "" filename)))
+                ;; If the slug is not set, use the non-weighted filename to create it
+                (unless slug
+                  (setq slug updated-filename)
+                  (org-set-property "EXPORT_HUGO_SLUG" slug))
+                ;; If weight exists (either from current or inherited from parent), update the filename
+                (if weight
+                    (let ((formatted-weight (format "%06d" (string-to-number weight))))
+                      ;; If the slug is '_index', do not prefix it with the weight
+                      (if (string= slug "_index")
+                          (org-set-property "EXPORT_FILE_NAME" "_index")
+                        (org-set-property "EXPORT_FILE_NAME" (concat formatted-weight "-" slug))))
+                  ;; If weight does not exist, just use the slug as the filename
+                  (org-set-property "EXPORT_FILE_NAME" slug)))))))))
   (add-hook 'org-mode-hook
             (lambda ()
               (message "Adding before-save-hook for ox-hugo...")
-              (add-hook 'before-save-hook 'my-ox-hugo-update-weight-in-filename nil 'local))))
+              (add-hook 'before-save-hook 'my-ox-hugo-update-weight-in-filename nil 'local)))
+  (setenv "OX_HUGO_STATIC" (concat org-directory "/hugo/static"))
+  )
 
 (use-package ox-gfm)
 
