@@ -15,7 +15,7 @@
 ;;; Enter debugger on specific logger regex (see *Messages* buffer):
 ;; (setq debug-on-message "Example log message to trace")
 ;;; M-x toggle-debug-on-error
-;; (setq debug-on-error t)
+(setq debug-on-error t)
 
 ;; Profile startup time (minus early-init.el time) using profile-dotemacs.el:
 ;;; curl -O https://raw.githubusercontent.com/emacsmirror/emacswiki.org/ed647e999fd4942d1c0bed02abe75bdf20f42baf/profile-dotemacs.el
