@@ -2,6 +2,6 @@
 # name: Emacs Lisp
 # key: elisp
 # --
-#+begin_src elisp :exports true :wrap stdout :linenos true
+#+begin_src elisp :exports true :linenos true
 $0
 #+end_src
