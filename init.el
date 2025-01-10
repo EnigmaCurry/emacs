@@ -137,10 +137,10 @@
   doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
  ;;; Pick a theme:
- ;;(load-theme 'doom-acario-dark t)
+ (load-theme 'doom-acario-dark t)
  ;;(load-theme 'doom-ir-black t)
  ;;(load-theme 'doom-old-hope t)
- (load-theme 'doom-rouge t)
+ ;;(load-theme 'doom-rouge t)
  ;;(load-theme 'doom-1337 t)
  ;;(load-theme 'doom-tokyo-night t)
  ;;(load-theme 'doom-tomorrow-night t)
@@ -157,6 +157,9 @@
  (doom-themes-treemacs-config)
  ;; Corrects (and improves) org-mode's native fontification.
  (doom-themes-org-config))
+
+;;solaire-mode modifies the background of virtual (non-file) buffers
+(use-package solaire-mode :init (solaire-global-mode +1))
 
 ;; General keybinding manager
 ;;    https://github.com/noctuid/general.el#readme
