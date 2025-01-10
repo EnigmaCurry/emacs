@@ -47,7 +47,7 @@
 (setq-default display-fill-column-indicator-column 80)
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 ;; Show line numbers (programming modes only)
-(add-hook 'prog-mode-hook #'display-line-numbers-mode)                          
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
 ;; choose your default web browser
 ;(setq-default browse-url-browser-function 'eww-browse-url)
@@ -69,12 +69,13 @@
 (setq version-control t)
 (setq vc-make-backup-files t)
 ;; https://www.emacswiki.org/emacs/ForceBackups
-(defun force-backup-of-buffer () (setq buffer-backed-up nil))
+(defun force-backup-of-buffer ()
+  (setq buffer-backed-up nil))
 (add-hook 'before-save-hook 'force-backup-of-buffer)
 ;; autosaves in separate directory
 (make-directory "~/.emacs.d/auto-save/" t)
 (setq auto-save-file-name-transforms
-  '((".*" "~/.emacs.d/auto-save/" t)))
+      '((".*" "~/.emacs.d/auto-save/" t)))
 
 ;; Store automatic customisation options in ~/.emacs.d/custom.el
 (setq custom-file (locate-user-emacs-file "custom.el"))
@@ -87,7 +88,7 @@
   "Electric pairs for markdown-mode.")
 (defun markdown-add-electric-pairs ()
   (setq-local electric-pair-pairs
-    (append electric-pair-pairs markdown-electric-pairs))
+              (append electric-pair-pairs markdown-electric-pairs))
   (setq-local electric-pair-text-pairs electric-pair-pairs))
 (add-hook 'markdown-mode-hook 'markdown-add-electric-pairs)
 
@@ -97,26 +98,24 @@
 ;; Retain buffer cursor positions across Emacs sessions: 
 (require 'saveplace)
 (setq-default save-place t)
-(setq save-place-file (expand-file-name "places" user-emacs-directory))
+(setq save-place-file
+      (expand-file-name "places" user-emacs-directory))
 
 ;; Install the straight.el package manager:
 ;; (Emacs' own default package system is disabled in early-init.el)
 ;; Reference: https://github.com/raxod502/straight.el#readme
 ;;            https://jeffkreeftmeijer.com/emacs-straight-use-package/
 (defvar bootstrap-version)
-(let
-  (
-    (bootstrap-file
-      (expand-file-name
-        "straight/repos/straight.el/bootstrap.el"
-        user-emacs-directory))
-    (bootstrap-version 5))
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el"
+                         user-emacs-directory))
+      (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
-      (url-retrieve-synchronously
-        "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-        'silent
-        'inhibit-cookies)
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent
+         'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
@@ -128,34 +127,36 @@
 
 ;; Doom themes
 ;; https://github.com/doomemacs/themes/
-(use-package doom-themes
-  :ensure t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+(use-package
+ doom-themes
+ :ensure t
+ :config
+ ;; Global settings (defaults)
+ (setq
+  doom-themes-enable-bold t ; if nil, bold is universally disabled
+  doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
-;;; Pick a theme:
-  ;;(load-theme 'doom-acario-dark t)
-  ;;(load-theme 'doom-ir-black t)
-  ;;(load-theme 'doom-old-hope t)
-  (load-theme 'doom-rouge t)
-  ;;(load-theme 'doom-1337 t)
-  ;;(load-theme 'doom-tokyo-night t)
-  ;;(load-theme 'doom-tomorrow-night t)
-  ;;(load-theme 'doom-ayu-dark t)
-  ;;(load-theme 'doom-challenger-deep t)
-  ;;(load-theme 'doom-homage-black t)
+ ;;; Pick a theme:
+ ;;(load-theme 'doom-acario-dark t)
+ ;;(load-theme 'doom-ir-black t)
+ ;;(load-theme 'doom-old-hope t)
+ (load-theme 'doom-rouge t)
+ ;;(load-theme 'doom-1337 t)
+ ;;(load-theme 'doom-tokyo-night t)
+ ;;(load-theme 'doom-tomorrow-night t)
+ ;;(load-theme 'doom-ayu-dark t)
+ ;;(load-theme 'doom-challenger-deep t)
+ ;;(load-theme 'doom-homage-black t)
 
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+ ;; Enable flashing mode-line on errors
+ (doom-themes-visual-bell-config)
+ ;; Enable custom neotree theme (all-the-icons must be installed!)
+ (doom-themes-neotree-config)
+ ;; or for treemacs users
+ (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+ (doom-themes-treemacs-config)
+ ;; Corrects (and improves) org-mode's native fontification.
+ (doom-themes-org-config))
 
 ;; General keybinding manager
 ;;    https://github.com/noctuid/general.el#readme
@@ -204,12 +205,14 @@
    "C-c C-q" 'dired-toggle-read-only))
 
 ;; Scale text sizes in all buffers :: https://github.com/purcell/default-text-scale
-(use-package default-text-scale
-  :general
-  ("C-=" 'default-text-scale-increase
-   "C--" 'default-text-scale-decrease)
-  :init
-  (setq default-text-scale-amount 5))
+(use-package
+ default-text-scale
+ :general
+ ("C-="
+  'default-text-scale-increase
+  "C--"
+  'default-text-scale-decrease)
+ :init (setq default-text-scale-amount 5))
 
 ;; Smart line mode
 ;; https://github.com/Malabarba/smart-mode-line#readme
@@ -224,21 +227,22 @@
 ;;   )
 
 ;; Hide selected minor modes from the modeline:
-(use-package diminish
-  :init
-  (mapcar #'(lambda (mode)
-              (add-hook mode #'(lambda ()
-                (mapcar #'(lambda (m) (diminish m) )
-                        '(which-key-mode eldoc-mode ivy-mode paredit-mode)))))
-          '(text-mode-hook prog-mode-hook special-mode-hook)))
+(use-package
+ diminish
+ :init
+ (mapcar
+  #'(lambda (mode)
+      (add-hook
+       mode
+       #'(lambda ()
+           (mapcar
+            #'(lambda (m) (diminish m))
+            '(which-key-mode eldoc-mode ivy-mode paredit-mode)))))
+  '(text-mode-hook prog-mode-hook special-mode-hook)))
 
 ;; Alternative M-x interface:
 ;; https://github.com/DarwinAwardWinner/amx
-(use-package amx
-  :general
-  ("M-x" 'amx
-   "<menu>" 'amx)
-  )
+(use-package amx :general ("M-x" 'amx "<menu>" 'amx))
 
 ;; Ivy / counsel (list-completion) :: https://oremacs.com/swiper/#introduction
 (use-package counsel
@@ -257,31 +261,29 @@
 ;; docs: https://joaotavora.github.io/yasnippet/
 ;; M-x yas-describe-tables to show the loaded snippets per mode
 ;; Put your snippets in ~/.emacs.d/snippets
-(use-package yasnippet
-  :init
-  ;; Install a big snippet library:
-  ;; https://github.com/AndreaCrotti/yasnippet-snippets
-  ;;(use-package yasnippet-snippets)
-  ;; Enable yasnippet explicitly for each mode you want:
-  :hook
-  (org-mode . yas-minor-mode)
-  (emacs-lisp-mode . yas-minor-mode)
-  :config
-  ;; Function to handle yasnippet expansion in org-mode
-  (defun yas/org-mode-expansion ()
-    "Expand yasnippet or jump to next field in Org-mode."
-    (interactive)
-    (if (yas-minor-mode)
-        (let ((yas/fallback-behavior 'return-nil))
-          (unless (yas-expand)
-            (org-cycle)))
-      (org-cycle)))
+(use-package
+ yasnippet
+ :init
+ ;; Install a big snippet library:
+ ;; https://github.com/AndreaCrotti/yasnippet-snippets
+ ;;(use-package yasnippet-snippets)
+ ;; Enable yasnippet explicitly for each mode you want:
+ :hook (org-mode . yas-minor-mode) (emacs-lisp-mode . yas-minor-mode)
+ :config
+ ;; Function to handle yasnippet expansion in org-mode
+ (defun yas/org-mode-expansion ()
+   "Expand yasnippet or jump to next field in Org-mode."
+   (interactive)
+   (if (yas-minor-mode)
+       (let ((yas/fallback-behavior 'return-nil))
+         (unless (yas-expand)
+           (org-cycle)))
+     (org-cycle)))
 
-  ;; Bind TAB to the custom yas/org-mode-expansion function after org-mode is loaded
-  (with-eval-after-load 'org
-    (define-key org-mode-map (kbd "TAB") 'yas/org-mode-expansion))
-  (yas-reload-all)
-)
+ ;; Bind TAB to the custom yas/org-mode-expansion function after org-mode is loaded
+ (with-eval-after-load 'org
+   (define-key org-mode-map (kbd "TAB") 'yas/org-mode-expansion))
+ (yas-reload-all))
 
 ;; Org
 (use-package org
@@ -357,50 +359,86 @@
     ("p" org-preview-html-mode "toggle preview mode")
     ("s" org-insert-source-code-block "insert source code block"))
 
-  ;; https://emacs.stackexchange.com/a/70606 thanks Chris!
-  (defun org-insert-source-code-block (&optional language file)
-    "Insert source code block for LANGUAGE. Optionally pull in FILE contents.
+ ;; https://emacs.stackexchange.com/a/70606 thanks Chris!
+ (defun org-insert-source-code-block (&optional language file)
+   "Insert source code block for LANGUAGE. Optionally pull in FILE contents.
 Will prompt for LANGUAGE when called interactively.
 With a `\\[universal-argument]' prefix, prompts for FILE.
 The `:tangle FILE` header argument will be added when pulling in file contents."
-    (interactive)
-    (let ((col (current-column))
-          (lang (or language (read-from-minibuffer "Source block language: ")))
-          (file (if current-prefix-arg (read-file-name "Enter file name: ") nil)))
-      (insert
-       (format "#+begin_src %s%s" lang (if file (concat " :tangle " file) "")))
-      (newline)(newline)
-      (move-to-column col t)(insert "#+end_src")(newline)
-      (forward-line -2)(move-to-column col t)
-      (if file (insert-file-contents file))))
-  (defun open-org-file ()
-    "Open a new Org file with the default book.rymcg.tech notes template"
-    (interactive)
-    (let* ((formatted-date (format-time-string "%Y-%m-%d"))
-           (user-title (read-string "Title for new note: "))
-           (safe-title (replace-regexp-in-string " " "-" (downcase user-title)))
-           (slug (concat formatted-date "-" safe-title))
-           (full-title (concat formatted-date " " user-title))
-           (template-path (expand-file-name "_template/note.o.txt" (concat org-directory "/notes")))
-           (filename (format "%s/%s-%s.org" (file-name-as-directory (concat org-directory "/notes"))
-                             (format-time-string "%Y-%m-%d-%H-%M-%S") safe-title))
-           (section (read-string "Section: " formatted-date))
-           (title-section (mapconcat #'capitalize (split-string section " ") " ")))
-      (find-file filename)
-      (when (zerop (buffer-size))
-        (if (file-exists-p template-path)
-            (let ((template-content (with-temp-buffer
-                                      (insert-file-contents template-path)
-                                      (buffer-string))))
-              (insert (replace-regexp-in-string "{{title}}" user-title (replace-regexp-in-string "{{section}}" section (replace-regexp-in-string "{{safe-title}}" safe-title (replace-regexp-in-string "{{title-section}}" title-section template-content))))))
-          (message "Template file not found: %s" template-path)))))
+   (interactive)
+   (let ((col (current-column))
+         (lang
+          (or language
+              (read-from-minibuffer "Source block language: ")))
+         (file
+          (if current-prefix-arg
+              (read-file-name "Enter file name: ")
+            nil)))
+     (insert
+      (format "#+begin_src %s%s"
+              lang
+              (if file
+                  (concat " :tangle " file)
+                "")))
+     (newline)
+     (newline)
+     (move-to-column col t)
+     (insert "#+end_src")
+     (newline)
+     (forward-line -2)
+     (move-to-column col t)
+     (if file
+         (insert-file-contents file))))
+ (defun open-org-file ()
+   "Open a new Org file with the default book.rymcg.tech notes template"
+   (interactive)
+   (let* ((formatted-date (format-time-string "%Y-%m-%d"))
+          (user-title (read-string "Title for new note: "))
+          (safe-title
+           (replace-regexp-in-string " " "-" (downcase user-title)))
+          (slug (concat formatted-date "-" safe-title))
+          (full-title (concat formatted-date " " user-title))
+          (template-path
+           (expand-file-name "_template/note.o.txt"
+                             (concat org-directory "/notes")))
+          (filename
+           (format "%s/%s-%s.org"
+                   (file-name-as-directory
+                    (concat org-directory "/notes"))
+                   (format-time-string "%Y-%m-%d-%H-%M-%S")
+                   safe-title))
+          (section (read-string "Section: " formatted-date))
+          (title-section
+           (mapconcat #'capitalize (split-string section " ") " ")))
+     (find-file filename)
+     (when (zerop (buffer-size))
+       (if (file-exists-p template-path)
+           (let ((template-content
+                  (with-temp-buffer
+                    (insert-file-contents template-path)
+                    (buffer-string))))
+             (insert
+              (replace-regexp-in-string
+               "{{title}}" user-title
+               (replace-regexp-in-string
+                "{{section}}" section
+                (replace-regexp-in-string
+                 "{{safe-title}}" safe-title
+                 (replace-regexp-in-string
+                  "{{title-section}}"
+                  title-section
+                  template-content))))))
+         (message "Template file not found: %s" template-path)))))
 
-  (defun my/org-babel-structural-path ()
-    "Generate a structural path to the current Org Babel block."
-    (let* ((path (org-get-outline-path t)) ;; Get the outline path
-           (block-number (my/org-babel-src-block-number)))
-      (concat (string-join path "/")
-              (if block-number (format "/block-%d" block-number) ""))))
+ (defun my/org-babel-structural-path ()
+   "Generate a structural path to the current Org Babel block."
+   (let* ((path (org-get-outline-path t)) ;; Get the outline path
+          (block-number (my/org-babel-src-block-number)))
+     (concat
+      (string-join path "/")
+      (if block-number
+          (format "/block-%d" block-number)
+        ""))))
 
   (defun my/org-babel-src-block-number ()
     "Count the number of source blocks in the current subtree up to the current block."
@@ -441,204 +479,205 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
 
   (defun my-ox-hugo-update-weight-in-filename ()
     "Automatically update EXPORT_FILE_NAME to include the latest EXPORT_HUGO_WEIGHT or inherited parent weight.
+
 The slug is set as EXPORT_HUGO_SLUG, and if it doesn't exist, it is derived from the non-weighted filename.
 Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if it exists. Format weights with six-digit padding."
-    (interactive)
-    (message "Running my-ox-hugo-update-weight-in-filename...")
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward "^[*]+ " nil t)
-        (when (org-entry-get nil "EXPORT_FILE_NAME")
-          (let* ((weight (org-entry-get nil "EXPORT_HUGO_WEIGHT"))
-                 (filename (org-entry-get nil "EXPORT_FILE_NAME"))
-                 (slug (org-entry-get nil "EXPORT_HUGO_SLUG")))
-            ;; Traverse upwards to find a parent's weight if no weight is present
-            (unless weight
-              (save-excursion
-                (while (and (not weight) (org-up-heading-safe))
-                  (setq weight (org-entry-get nil "EXPORT_HUGO_WEIGHT")))))
-            (if (string-match-p "^\\([0-9]+-\\)?_index$" filename)
-                ;; Special handling for '_index': ensure both filename and slug are always '_index'
-                (progn
-                  (message "Ensuring '_index' for entry with heading: %s" (org-get-heading t t t t))
-                  (org-set-property "EXPORT_FILE_NAME" "_index")
-                  (org-set-property "EXPORT_HUGO_SLUG" "_index"))
-              ;; Otherwise, process entries normally
-              (message "Processing entry with heading: %s" (org-get-heading t t t t))
-              ;; If EXPORT_FILE_NAME is missing, initialize it to a default value
-              (unless filename
-                (setq filename (org-get-heading t t t t)))
-              ;; Remove any existing weight prefix from the filename to get the updated version
-              (let ((updated-filename (replace-regexp-in-string "^[0-9]+-" "" filename)))
-                ;; If the slug is not set, use the non-weighted filename to create it
-                (unless slug
-                  (setq slug updated-filename)
-                  (org-set-property "EXPORT_HUGO_SLUG" slug))
-                ;; If weight exists (either from current or inherited from parent), update the filename
-                (if weight
-                    (let ((formatted-weight (format "%06d" (string-to-number weight))))
-                      ;; If the slug is '_index', do not prefix it with the weight
-                      (if (string= slug "_index")
-                          (org-set-property "EXPORT_FILE_NAME" "_index")
-                        (org-set-property "EXPORT_FILE_NAME" (concat formatted-weight "-" slug))))
-                  ;; If weight does not exist, just use the slug as the filename
-                  (org-set-property "EXPORT_FILE_NAME" slug)))))))))
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (message "Adding before-save-hook for ox-hugo...")
-              (add-hook 'before-save-hook 'my-ox-hugo-update-weight-in-filename nil 'local)))
-  (setenv "OX_HUGO_STATIC" (concat org-directory "/hugo/static"))
-  )
+   (interactive)
+   (message "Running my-ox-hugo-update-weight-in-filename...")
+   (save-excursion
+     (goto-char (point-min))
+     (while (re-search-forward "^[*]+ " nil t)
+       (when (org-entry-get nil "EXPORT_FILE_NAME")
+         (let* ((weight (org-entry-get nil "EXPORT_HUGO_WEIGHT"))
+                (filename (org-entry-get nil "EXPORT_FILE_NAME"))
+                (slug (org-entry-get nil "EXPORT_HUGO_SLUG")))
+           ;; Traverse upwards to find a parent's weight if no weight is present
+           (unless weight
+             (save-excursion
+               (while (and (not weight) (org-up-heading-safe))
+                 (setq weight
+                       (org-entry-get nil "EXPORT_HUGO_WEIGHT")))))
+           (if (string-match-p "^\\([0-9]+-\\)?_index$" filename)
+               ;; Special handling for '_index': ensure both filename and slug are always '_index'
+               (progn
+                 (message
+                  "Ensuring '_index' for entry with heading: %s"
+                  (org-get-heading t t t t))
+                 (org-set-property "EXPORT_FILE_NAME" "_index")
+                 (org-set-property "EXPORT_HUGO_SLUG" "_index"))
+             ;; Otherwise, process entries normally
+             (message "Processing entry with heading: %s"
+                      (org-get-heading t t t t))
+             ;; If EXPORT_FILE_NAME is missing, initialize it to a default value
+             (unless filename
+               (setq filename (org-get-heading t t t t)))
+             ;; Remove any existing weight prefix from the filename to get the updated version
+             (let ((updated-filename
+                    (replace-regexp-in-string
+                     "^[0-9]+-" "" filename)))
+               ;; If the slug is not set, use the non-weighted filename to create it
+               (unless slug
+                 (setq slug updated-filename)
+                 (org-set-property "EXPORT_HUGO_SLUG" slug))
+               ;; If weight exists (either from current or inherited from parent), update the filename
+               (if weight
+                   (let ((formatted-weight
+                          (format "%06d" (string-to-number weight))))
+                     ;; If the slug is '_index', do not prefix it with the weight
+                     (if (string= slug "_index")
+                         (org-set-property
+                          "EXPORT_FILE_NAME" "_index")
+                       (org-set-property
+                        "EXPORT_FILE_NAME"
+                        (concat formatted-weight "-" slug))))
+                 ;; If weight does not exist, just use the slug as the filename
+                 (org-set-property "EXPORT_FILE_NAME" slug)))))))))
+ (add-hook
+  'org-mode-hook
+  (lambda ()
+    (message "Adding before-save-hook for ox-hugo...")
+    (add-hook 'before-save-hook 'my-ox-hugo-update-weight-in-filename
+              nil
+              'local)))
+ (setenv "OX_HUGO_STATIC" (concat org-directory "/hugo/static")))
 
 (use-package ox-gfm)
 
 ;; Magit (git version control system) :: https://magit.vc/
-(use-package magit
-  :general
-  ("C-c g" 'magit-status)
-  :config
-  ;; open magit in a full frame always:
-  (setq magit-display-buffer-function
-        #'magit-display-buffer-fullframe-status-v1))
+(use-package
+ magit
+ :general ("C-c g" 'magit-status)
+ :config
+ ;; open magit in a full frame always:
+ (setq magit-display-buffer-function
+       #'magit-display-buffer-fullframe-status-v1))
 
 ;; Avy (like ace-jump) :: https://github.com/abo-abo/avy
-(use-package avy
-  :general
-  ("s-s" 'avy-goto-word-1)
-  ("C-c s" 'avy-goto-char)
-  ("C-c S" 'avy-goto-word-1))
+(use-package
+ avy
+ :general
+ ("s-s" 'avy-goto-word-1)
+ ("C-c s" 'avy-goto-char)
+ ("C-c S" 'avy-goto-word-1))
 
 ;; Company (in-buffer completion dropdown) :: https://github.com/company-mode/company-mode
 (use-package company)
 
 ;; which-key (shows keyboard shortcut completions) :: https://github.com/justbur/emacs-which-key
-(use-package which-key
-  :config (which-key-mode))
+(use-package which-key :config (which-key-mode))
 
 ;; Elisp autoformatter :: https://codeberg.org/ideasman42/emacs-elisp-autofmt
-;; (use-package elisp-autofmt
-;;   :commands (elisp-autofmt-save-hook-for-this-buffer)
-;;   :hook (emacs-lisp-mode . elisp-autofmt-save-hook-for-this-buffer)
-;;   :straight
-;;   (elisp-autofmt
-;;     :type git
-;;     :files (:defaults "elisp-autofmt")
-;;     :repo "https://codeberg.org/ideasman42/emacs-elisp-autofmt.git")
-;;   :init (setq default-buffer-file-coding-system 'utf-8-unix))
+(use-package
+ elisp-autofmt
+ :commands (elisp-autofmt-mode elisp-autofmt-buffer)
+ :hook (emacs-lisp-mode . elisp-autofmt-mode))
 
 ;; LSP mode :: https://emacs-lsp.github.io/lsp-mode/
-(use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  (setq lsp-modeline-diagnostics-scope :workspace)
-  ;;; extra verbose logging of lsp json messages:
-  ;;(setq lsp-log-io t)
-  :hook
-  ((web-mode . lsp)
-   (lsp-mode . lsp-enable-which-key-integration)
-   (python-mode . lsp-deferred))
-  :commands lsp
-  :config
-  )
-(use-package lsp-ui
-  :commands lsp-ui-mode)
-(use-package lsp-ivy
-  :commands lsp-ivy-workspace-symbol)
-(use-package lsp-treemacs
-  :commands lsp-treemacs-errors-list)
+(use-package
+ lsp-mode
+ :init
+ ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+ (setq lsp-keymap-prefix "C-c l")
+ (setq lsp-modeline-diagnostics-scope :workspace)
+ ;;; extra verbose logging of lsp json messages:
+ ;;(setq lsp-log-io t)
+ :hook
+ ((web-mode . lsp)
+  (lsp-mode . lsp-enable-which-key-integration)
+  (python-mode . lsp-deferred))
+ :commands lsp
+ :config)
+(use-package lsp-ui :commands lsp-ui-mode)
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 (use-package flycheck)
 
 ;; LSP debuggers
 (use-package dap-mode)
 ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
-(use-package python-mode
-  :general
-  ("s-a" 'lsp-execute-code-action)
-  :hook
-  (python-mode . pyvenv-mode)
-  (python-mode . flycheck-mode)
-  (python-mode . company-mode)
-  (python-mode . python-black-on-save-mode)
-  :custom
-  (python-shell-interpreter "python3")
+(use-package
+ python-mode
+ :general ("s-a" 'lsp-execute-code-action)
+ :hook
+ (python-mode . pyvenv-mode)
+ (python-mode . flycheck-mode)
+ (python-mode . company-mode)
+ (python-mode . python-black-on-save-mode)
+ :custom (python-shell-interpreter "python3")
+ :config
+ ;; Activate python virtualenv BEFORE opening a python buffer and/or starting pyright server:
+ ;; M-x pyvenv-activate     (~/.virtualenvs/XXX)
+ (use-package
+  pyvenv
+  :ensure t
+  :init (setenv "WORKON_HOME" "~/.virtualenvs/")
   :config
-  ;; Activate python virtualenv BEFORE opening a python buffer and/or starting pyright server:
-  ;; M-x pyvenv-activate     (~/.virtualenvs/XXX)
-  (use-package pyvenv
-    :ensure t
-    :init
-    (setenv "WORKON_HOME" "~/.virtualenvs/")
-    :config
-    ;; (pyvenv-mode t)
-    ;; Set correct Python interpreter
-    (setq pyvenv-post-activate-hooks
-          (list (lambda ()
-                  (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python")))))
-    (setq pyvenv-post-deactivate-hooks
-          (list (lambda ()
-                  (setq python-shell-interpreter "python3")))))
-  ;; Black (Python code formatter) :: https://github.com/wbolster/emacs-python-black
-  ;; Note: this depends on black being installed in the project virtualenv as a dev dependency
-  (use-package python-black
-    :demand t
-    :after python)
-  ;; Python dev dependencies need to be installed in your project's virtualenv:
-  ;; ruff
-  ;; ruff-lsp
-  ;; black
-  ;;; Add the following to a .dir-locals.el to activate virtualenv automatically:
-  ;; ((python-mode . ((eval . (let ((project-root (locate-dominating-file
-  ;;                              (or (buffer-file-name) default-directory)
-  ;;                                ".dir-locals.el")))
-  ;;               (pyvenv-activate (expand-file-name "virtualenv" project-root)))))))
-  )
+  ;; (pyvenv-mode t)
+  ;; Set correct Python interpreter
+  (setq pyvenv-post-activate-hooks
+        (list
+         (lambda ()
+           (setq python-shell-interpreter
+                 (concat pyvenv-virtual-env "bin/python")))))
+  (setq pyvenv-post-deactivate-hooks
+        (list (lambda () (setq python-shell-interpreter "python3")))))
+ ;; Black (Python code formatter) :: https://github.com/wbolster/emacs-python-black
+ ;; Note: this depends on black being installed in the project virtualenv as a dev dependency
+ (use-package python-black :demand t :after python)
+ ;; Python dev dependencies need to be installed in your project's virtualenv:
+ ;; ruff
+ ;; ruff-lsp
+ ;; black
+ ;;; Add the following to a .dir-locals.el to activate virtualenv automatically:
+ ;; ((python-mode . ((eval . (let ((project-root (locate-dominating-file
+ ;;                              (or (buffer-file-name) default-directory)
+ ;;                                ".dir-locals.el")))
+ ;;               (pyvenv-activate (expand-file-name "virtualenv" project-root)))))))
+ )
 
 
 ;; Icons https://github.com/domtronn/all-the-icons.el
 (use-package all-the-icons)
 
 ;; Web mode :: https://github.com/fxbois/web-mode
-(use-package web-mode
-;  :hook (web-mode . yas-minor-mode)
-  :init
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.svelte\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode)))
+(use-package
+ web-mode
+ ;  :hook (web-mode . yas-minor-mode)
+ :init
+ (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+ (add-to-list 'auto-mode-alist '("\\.svelte\\'" . web-mode))
+ (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+ (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode)))
 
 ;; Tailwind CSS :: https://github.com/merrickluo/lsp-tailwindcss
 (use-package lsp-tailwindcss)
 
 ;; vterm (terminal emulator) :: https://github.com/akermu/emacs-libvterm
 ;; Configure BASH to work with vterm: https://github.com/akermu/emacs-libvterm#vterm-clear-scrollback
-(use-package vterm
-  :custom
-  (vterm-always-compile-module t)
-  :general
-  ("C-c t" 'my-vterm-toggle)
-  :config
-  (define-key vterm-mode-map (kbd "<f5>") nil)
-  :init
-  (defun my-vterm-toggle (&optional args)
-    "Customized vterm-toggle wrapper- this fixes the universal argument (C-u) to always create a new terminal"
-    (interactive "P")
-    (if
-        (not (or (derived-mode-p 'vterm-mode)
-                 (and (vterm-toggle--get-window)
-                      vterm-toggle-hide-method)))
-        (if (equal current-prefix-arg '(4))
-            (vterm-toggle--new args)
-          (vterm-toggle args))
-      (vterm-toggle args))))
+(use-package
+ vterm
+ :custom (vterm-always-compile-module t)
+ :general ("C-c t" 'my-vterm-toggle)
+ :config (define-key vterm-mode-map (kbd "<f5>") nil)
+ :init
+ (defun my-vterm-toggle (&optional args)
+   "Customized vterm-toggle wrapper- this fixes the universal argument (C-u) to always create a new terminal"
+   (interactive "P")
+   (if (not
+        (or (derived-mode-p 'vterm-mode)
+            (and (vterm-toggle--get-window)
+                 vterm-toggle-hide-method)))
+       (if (equal current-prefix-arg '(4))
+           (vterm-toggle--new args)
+         (vterm-toggle args))
+     (vterm-toggle args))))
 
 ;; shell-pop for vterm :: https://github.com/jixiuf/vterm-toggle
 (use-package vterm-toggle)
 
 ;; ace-link (follow links in info docs) :: https://github.com/abo-abo/ace-link
-(use-package ace-link
-  :init (ace-link-setup-default))
+(use-package ace-link :init (ace-link-setup-default))
 
 ;; jump between windows :: https://github.com/abo-abo/ace-window
 (use-package ace-window
@@ -659,41 +698,47 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 ;;       (lispy-mode 1)))
 ;;   (add-hook 'minibuffer-setup-hook 'conditionally-enable-lispy))
 
-(use-package rainbow-delimiters
-  :init
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'ielm-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'lisp-interaction-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode))
+(use-package
+ rainbow-delimiters
+ :init
+ (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+ (add-hook 'ielm-mode-hook 'rainbow-delimiters-mode)
+ (add-hook 'lisp-interaction-mode-hook 'rainbow-delimiters-mode)
+ (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode))
 
 ;; paredit
 ;; https://paredit.org/
 ;; http://danmidwood.com/content/2014/11/21/animated-paredit.html
-(use-package paredit
-  :general
-  (:keymaps 'paredit-mode-map
-            "C-<right>" nil
-            "C-<left>" nil
-            "s-<right>" 'paredit-forward-barf-sexp
-            "s-<left>" 'paredit-forward-slurp-sexp)
-  :init
-  (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-;;; Disable paredit in the Eval minibuffer, otherwise you can't press Enter?
-  ;; (add-hook 'eval-expression-minibuffer-setup-hook
-  ;;   'enable-paredit-mode)
-  (add-hook 'ielm-mode-hook 'enable-paredit-mode)
-  (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
-  (add-hook 'lisp-mode-hook 'enable-paredit-mode)
-  (add-hook 'slime-repl-mode-hook 'enable-paredit-mode)
-  (defun override-slime-del-key ()
-    (define-key slime-repl-mode-map
-                (read-kbd-macro paredit-backward-delete-key)
-                nil))
-  (add-hook 'slime-repl-mode-hook 'override-slime-del-key))
+(use-package
+ paredit
+ :general
+ (:keymaps
+  'paredit-mode-map
+  "C-<right>"
+  nil
+  "C-<left>"
+  nil
+  "s-<right>"
+  'paredit-forward-barf-sexp
+  "s-<left>"
+  'paredit-forward-slurp-sexp)
+ :init (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+ ;;; Disable paredit in the Eval minibuffer, otherwise you can't press Enter?
+ ;; (add-hook 'eval-expression-minibuffer-setup-hook
+ ;;   'enable-paredit-mode)
+ (add-hook 'ielm-mode-hook 'enable-paredit-mode)
+ (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+ (add-hook 'lisp-mode-hook 'enable-paredit-mode)
+ (add-hook 'slime-repl-mode-hook 'enable-paredit-mode)
+ (defun override-slime-del-key ()
+   (define-key
+    slime-repl-mode-map
+    (read-kbd-macro paredit-backward-delete-key)
+    nil))
+ (add-hook 'slime-repl-mode-hook 'override-slime-del-key))
 
 
-(use-package slime
-  :init (setq inferior-lisp-program "sbcl"))
+(use-package slime :init (setq inferior-lisp-program "sbcl"))
 
 
 ;; Clojure / CIDER
@@ -701,21 +746,23 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 (use-package cider)
 
 ;; Lisp Flavoured Erlang (LFE)
-(use-package lfe-mode
-;  :hook (lfe-mode . yas-minor-mode)
-  :init
-  (dolist (func '(paredit-mode rainbow-delimiters-mode))
-  (add-hook 'lfe-mode-hook func)))
+(use-package
+ lfe-mode
+ ;  :hook (lfe-mode . yas-minor-mode)
+ :init
+ (dolist (func '(paredit-mode rainbow-delimiters-mode))
+   (add-hook 'lfe-mode-hook func)))
 
 ;; Load SSH / GPG keys from keychain agent
-(use-package keychain-environment
-  :straight
-  (keychain-environment
-    :type git
-    :files (:defaults "keychain-environment")
-    :host github
-    :repo "tarsius/keychain-environment")
-  :init (keychain-refresh-environment))
+(use-package
+ keychain-environment
+ :straight
+ (keychain-environment
+  :type git
+  :files (:defaults "keychain-environment")
+  :host github
+  :repo "tarsius/keychain-environment")
+ :init (keychain-refresh-environment))
 
 ;; GIMP script-fu mode
 ;; (use-package gimp-mode
@@ -738,65 +785,74 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 
 ;; prettier JS code formatter
 ;; must manually install: prettier and prettier-plugin-svelte
-(use-package prettier-js
-  :straight
-  (prettier-js
-    :type git
-    :host github
-    :repo "prettier/prettier-emacs"
-    :build nil)
-  :init
-  (load "~/.emacs.d/straight/repos/prettier-emacs/prettier-js.el")
-  (add-hook 'js2-mode-hook 'prettier-js-mode)
-  (add-hook 'web-mode-hook 'prettier-js-mode))
+(use-package
+ prettier-js
+ :straight
+ (prettier-js
+  :type git
+  :host github
+  :repo "prettier/prettier-emacs"
+  :build nil)
+ :init
+ (load "~/.emacs.d/straight/repos/prettier-emacs/prettier-js.el")
+ (add-hook 'js2-mode-hook 'prettier-js-mode)
+ (add-hook 'web-mode-hook 'prettier-js-mode))
 
 ;(use-package eglot)
 
 ;; Go
 ;; must manually install: gopls
-(use-package go-mode
-;  :hook (go-mode . yas-minor-mode)
-  :init
-  (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
-  (add-hook 'go-mode-hook #'lsp-deferred)
-  (defun lsp-go-install-save-hooks ()
-    (add-hook 'before-save-hook #'lsp-format-buffer t t)
-    (add-hook 'before-save-hook #'lsp-organize-imports t t))
-  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
-  (lsp-register-custom-settings
-    '(("gopls.completeUnimported" t t) ("gopls.staticcheck" t t))))
+(use-package
+ go-mode
+ ;  :hook (go-mode . yas-minor-mode)
+ :init
+ (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
+ (add-hook 'go-mode-hook #'lsp-deferred)
+ (defun lsp-go-install-save-hooks ()
+   (add-hook 'before-save-hook #'lsp-format-buffer t t)
+   (add-hook 'before-save-hook #'lsp-organize-imports t t))
+ (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+ (lsp-register-custom-settings
+  '(("gopls.completeUnimported" t t) ("gopls.staticcheck" t t))))
 
 ;; Rust
 ;; must manually install rust, rust-analyzer, cargo-watch, wasm-pack, wasm-bindgen, cargo-generate
-(use-package rustic
-;  :hook (rustic-mode . yas-minor-mode)
-  :init
-  (setq rustic-format-on-save t)
-  (setq rustic-rustfmt-args "--edition 2021")
-  (add-to-list 'exec-path "~/.cargo/bin")
-  (add-hook 'rustic-mode-hook
-            (lambda ()
-              (define-key rustic-mode-map (kbd "C-c M-.") 'lsp-rust-analyzer-open-external-docs)))
-)
+(use-package
+ rustic
+ ;  :hook (rustic-mode . yas-minor-mode)
+ :init
+ (setq rustic-format-on-save t)
+ (setq rustic-rustfmt-args "--edition 2021")
+ (add-to-list 'exec-path "~/.cargo/bin")
+ (add-hook
+  'rustic-mode-hook
+  (lambda ()
+    (define-key
+     rustic-mode-map
+     (kbd "C-c M-.")
+     'lsp-rust-analyzer-open-external-docs))))
 
 ;; C++
 ;; must manually install ccls
-(use-package ccls
-  :init
-  ;; (setq-default indent-tabs-mode t)
-  ;; (setq-default tab-width 4) ; Assuming you want your tabs to be four spaces wide
-  ;; (defvaralias 'c-basic-offset 'tab-width)
-  :hook
-  ((c-mode c++-mode objc-mode cuda-mode) . yas-minor-mode)
-  ((c-mode c++-mode objc-mode cuda-mode)
-    .
-    (lambda () (require 'ccls) (lsp))))
+(use-package
+ ccls
+ :init
+ ;; (setq-default indent-tabs-mode t)
+ ;; (setq-default tab-width 4) ; Assuming you want your tabs to be four spaces wide
+ ;; (defvaralias 'c-basic-offset 'tab-width)
+ :hook
+ ((c-mode c++-mode objc-mode cuda-mode) . yas-minor-mode)
+ ((c-mode c++-mode objc-mode cuda-mode)
+  .
+  (lambda ()
+    (require 'ccls)
+    (lsp))))
 
 ;; WebGPU .wgsl mode
-(use-package wgsl-mode
-;  :hook (wgsl-mode . yas-minor-mode)
-  :straight
-  (wgsl-mode :type git :host github :repo "acowley/wgsl-mode"))
+(use-package
+ wgsl-mode
+ ;  :hook (wgsl-mode . yas-minor-mode)
+ :straight (wgsl-mode :type git :host github :repo "acowley/wgsl-mode"))
 
 ;; (use-package edit-server
 ;;   :ensure t
@@ -825,22 +881,23 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 
 ;; sqlformat require pg_format tool
 ;; https://github.com/darold/pgFormatter
-(use-package sqlformat
-  :init
-  (setq sqlformat-command 'pgformatter)
-  (setq sqlformat-args '("-s2" "-g" "-u1"))
-  (add-hook 'sql-mode-hook 'sqlformat-on-save-mode))
+(use-package
+ sqlformat
+ :init
+ (setq sqlformat-command 'pgformatter)
+ (setq sqlformat-args '("-s2" "-g" "-u1"))
+ (add-hook 'sql-mode-hook 'sqlformat-on-save-mode))
 
-(use-package nov
-  :init
-  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
-  (defun my-novel-setup ()
-    (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
-                             :height 1.5)
-    (setq-local show-trailing-whitespace nil)
-    )
-  (add-hook 'nov-mode-hook 'my-novel-setup)
-  )
+(use-package
+ nov
+ :init (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+ (defun my-novel-setup ()
+   (face-remap-add-relative
+    'variable-pitch
+    :family "Liberation Serif"
+    :height 1.5)
+   (setq-local show-trailing-whitespace nil))
+ (add-hook 'nov-mode-hook 'my-novel-setup))
 
 ;; Docker
 (use-package dockerfile-mode)
@@ -848,73 +905,81 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 
 ;; Memes
 ;; Requires fonts: yay -S ttf-ms-fonts
-(use-package meme
+(use-package
+ meme
+ :straight
+ (meme
+  :type git
+  :host github
+  :repo "larsmagne/meme"
+  :fork
+  (:host github :repo "enigmacurry/emacs-meme" :branch "dev")
+  :files ("*"))
+ :init
+ (use-package
+  imgur
   :straight
-  (meme :type git :host github :repo "larsmagne/meme"
-        :fork
-        (:host github :repo "enigmacurry/emacs-meme" :branch "dev")
-        :files ("*"))
-  :init
-  (use-package imgur
-    :straight
-    (imgur :type git :host github :repo "larsmagne/imgur.el")
-    :ensure t)
-  )
+  (imgur :type git :host github :repo "larsmagne/imgur.el")
+  :ensure t))
 
 ;; typescript
-(use-package tide
-;  :hook (tide-mode . yas-minor-mode)
-  :init
-  (defun setup-tide-mode ()
-    (interactive)
-    (tide-setup)
-    (flycheck-mode +1)
-    (setq flycheck-check-syntax-automatically '(save mode-enabled))
-    (eldoc-mode +1)
-    (tide-hl-identifier-mode +1)
-    ;; company is an optional dependency. You have to
-    ;; install it separately via package-install
-    ;; `M-x package-install [ret] company`
-    (company-mode +1))
-  ;; aligns annotation to the right hand side
-  (setq company-tooltip-align-annotations t)
-  ;; formats the buffer before saving
-  (add-hook 'before-save-hook 'tide-format-before-save)
-  (add-hook 'typescript-mode-hook #'setup-tide-mode))
+(use-package
+ tide
+ ;  :hook (tide-mode . yas-minor-mode)
+ :init
+ (defun setup-tide-mode ()
+   (interactive)
+   (tide-setup)
+   (flycheck-mode +1)
+   (setq flycheck-check-syntax-automatically '(save mode-enabled))
+   (eldoc-mode +1)
+   (tide-hl-identifier-mode +1)
+   ;; company is an optional dependency. You have to
+   ;; install it separately via package-install
+   ;; `M-x package-install [ret] company`
+   (company-mode +1))
+ ;; aligns annotation to the right hand side
+ (setq company-tooltip-align-annotations t)
+ ;; formats the buffer before saving
+ (add-hook 'before-save-hook 'tide-format-before-save)
+ (add-hook 'typescript-mode-hook #'setup-tide-mode))
 
-(use-package nix-mode
-;    :hook (nix-mode . yas-minor-mode)
-)
+(use-package
+ nix-mode
+ ;    :hook (nix-mode . yas-minor-mode)
+ )
 
 ;; Godot
-(use-package gdscript-mode
-  :hook
-  (gdscript-mode . eglot-ensure)
-;  (gdscript-mode . yas-minor-mode)
-  :straight (gdscript-mode
-             :type git
-             :host github
-             :repo "godotengine/emacs-gdscript-mode"))
-(use-package gdshader-mode 
-;  :hook
-;  (gdshader-mode . yas-minor-mode)
-  :straight
-  (gdshader-mode
-   :type git :host github :repo "bbbscarter/gdshader-mode"))
+(use-package
+ gdscript-mode
+ :hook (gdscript-mode . eglot-ensure)
+ ;  (gdscript-mode . yas-minor-mode)
+ :straight
+ (gdscript-mode
+  :type git
+  :host github
+  :repo "godotengine/emacs-gdscript-mode"))
+(use-package
+ gdshader-mode
+ ;  :hook
+ ;  (gdshader-mode . yas-minor-mode)
+ :straight
+ (gdshader-mode
+  :type git
+  :host github
+  :repo "bbbscarter/gdshader-mode"))
 
 ;; Multiple cursors
 ;; https://emacsrocks.com/e13.html
-(use-package multiple-cursors
-  :general
-  ("s-SPC" 'set-rectangular-region-anchor)
-  ("s-n" 'mc/mark-next-like-this)
-  ("s-N" 'mc/mark-all-like-this))
+(use-package
+ multiple-cursors
+ :general
+ ("s-SPC" 'set-rectangular-region-anchor)
+ ("s-n" 'mc/mark-next-like-this)
+ ("s-N" 'mc/mark-all-like-this))
 
 ;; Eww browser
-(use-package eww
-  :init
-  (setq-default show-trailing-whitespace nil)
-  )
+(use-package eww :init (setq-default show-trailing-whitespace nil))
 
 ;; Insert placeholder text
 (use-package lorem-ipsum)
@@ -924,9 +989,10 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 (use-package keycast)
 
 ;; Matrix
-(use-package ement
-  :straight
-  (ement :type git :host github :repo "alphapapa/ement.el"))
+(use-package
+ ement
+ :straight
+ (ement :type git :host github :repo "alphapapa/ement.el"))
 
 ;; Mastodon
 ;; https://codeberg.org/martianh/mastodon.el
@@ -945,16 +1011,17 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 (use-package sicp)
 
 ;; Javascript
-(use-package js2-mode
-  :init
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+(use-package
+ js2-mode
+ :init (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
 ;; Put your machine local config into ~/.emacs.d/local/*.el
 ;; By default, this is private to the machine, not shared in version control.
 ;; http://whattheemacsd.com/init.el-06.html
-(let ((local-include-dir (concat user-emacs-directory "local" )))
+(let ((local-include-dir (concat user-emacs-directory "local")))
   (if (file-exists-p local-include-dir)
-      (let ((files (directory-files local-include-dir t "^[^#].*el$")))
+      (let ((files
+             (directory-files local-include-dir t "^[^#].*el$")))
         (mapc 'load files))
     (mkdir local-include-dir)))
 
@@ -962,33 +1029,36 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 (use-package just-mode)
 
 ;; Image mode (built-in)
-(use-package image-mode
-  :ensure nil  ;; `image-mode` is built-in, so no need to install it
-  :hook (image-mode . my-setup-image-mode-keybinding)
-  :config
-  (defun my-image-mode-server-edit-or-quit ()
-    "Call `server-edit' if called by emacsclient, otherwise `quit-window'."
-    (interactive)
-    (if server-buffer-clients
-        (server-edit)
-      (quit-window)))
-  (defun my-setup-image-mode-keybinding ()
-    "Set up `q' keybinding for image mode."
-    (local-set-key (kbd "q") 'my-image-mode-server-edit-or-quit)))
+(use-package
+ image-mode
+ :ensure nil ;; `image-mode` is built-in, so no need to install it
+ :hook (image-mode . my-setup-image-mode-keybinding)
+ :config
+ (defun my-image-mode-server-edit-or-quit ()
+   "Call `server-edit' if called by emacsclient, otherwise `quit-window'."
+   (interactive)
+   (if server-buffer-clients
+       (server-edit)
+     (quit-window)))
+ (defun my-setup-image-mode-keybinding ()
+   "Set up `q' keybinding for image mode."
+   (local-set-key (kbd "q") 'my-image-mode-server-edit-or-quit)))
 
 ;; whisper speech recoghnition (speech to text)
-(use-package whisper
-  :general
-  ("<f5>" 'whisper-run)
-  :straight (whisper :type git :host github :repo "natrys/whisper.el")
-  :bind ("C-H-r" . whisper-run)
-  :config
-  (setq whisper-install-directory (expand-file-name "~/git/vendor/ggerganov")
-        whisper-model "base"
-        whisper-language "en"
-        whisper-translate nil
-        whisper-return-cursor-to-start nil
-        whisper-use-threads (/ (num-processors) 2)))
+(use-package
+ whisper
+ :general ("<f5>" 'whisper-run)
+ :straight (whisper :type git :host github :repo "natrys/whisper.el")
+ :bind ("C-H-r" . whisper-run)
+ :config
+ (setq
+  whisper-install-directory
+  (expand-file-name "~/git/vendor/ggerganov")
+  whisper-model "base"
+  whisper-language "en"
+  whisper-translate nil
+  whisper-return-cursor-to-start nil
+  whisper-use-threads (/ (num-processors) 2)))
 
 ;; piper speech synthesis (text to speech)
 ;; piper script here: https://github.com/EnigmaCurry/sway-home/blob/master/config/bash/tts.sh
@@ -1006,61 +1076,72 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 ;;         (insert text)
 ;;         (call-process-region (point-min) (point-max) "bash" nil 0 nil "/home/ryan/.config/bash/tts.sh" "say")))))
 
-(use-package my-piper
-  :straight nil
-  :defer t
-  :general
-  ("M-<f5>" 'say-buffer-from-point)
-  :config
-  (defun say-buffer-from-point (&optional stop)
-    "Send the text from the current point to the end of the buffer to the 'say' command.
+(use-package
+ my-piper
+ :straight nil
+ :defer t
+ :general ("M-<f5>" 'say-buffer-from-point)
+ :config
+ (defun say-buffer-from-point (&optional stop)
+   "Send the text from the current point to the end of the buffer to the 'say' command.
 If called with a prefix argument (STOP), print the message 'foo'."
-    (interactive "P")
-    (if stop
-        (message "foo")
-      (let ((text (buffer-substring-no-properties (point) (point-max))))
-        (with-temp-buffer
-          (insert text)
-          (call-process-region (point-min) (point-max) "bash" nil 0 nil "/home/ryan/.config/bash/tts.sh" "say"))))))
+   (interactive "P")
+   (if stop
+       (message "foo")
+     (let ((text
+            (buffer-substring-no-properties (point) (point-max))))
+       (with-temp-buffer
+         (insert text)
+         (call-process-region (point-min) (point-max) "bash"
+                              nil
+                              0
+                              nil
+                              "/home/ryan/.config/bash/tts.sh"
+                              "say"))))))
 
 
-(use-package my-piper
-  :straight nil
-  :defer t
-  :general
-  ("M-<f5>" 'say-buffer-from-point)
-  :config
-  (defun say-buffer-from-point ()
-    "Send the text from the current point to the end of the buffer to the 'say' command."
-    (interactive)
-    (let ((text (buffer-substring-no-properties (point) (point-max))))
-      (with-temp-buffer
-        (insert text)
-        (call-process-region (point-min) (point-max) "bash" nil 0 nil "/home/ryan/.config/bash/tts.sh" "say")))))
+(use-package
+ my-piper
+ :straight nil
+ :defer t
+ :general ("M-<f5>" 'say-buffer-from-point)
+ :config
+ (defun say-buffer-from-point ()
+   "Send the text from the current point to the end of the buffer to the 'say' command."
+   (interactive)
+   (let ((text (buffer-substring-no-properties (point) (point-max))))
+     (with-temp-buffer
+       (insert text)
+       (call-process-region (point-min) (point-max) "bash"
+                            nil
+                            0
+                            nil
+                            "/home/ryan/.config/bash/tts.sh"
+                            "say")))))
 
-(use-package gptel
-  :general
-  ("C-c C-g" 'gptel-menu)
-  (:keymaps 'gptel-mode-map
-            "C-c C-c" 'gptel-send)
-  :config
-  (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
-  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
-  :init
-  ;; LM-studio offers an OpenAI compatible API
-  (setq
-   gptel-model   'test
-   gptel-backend (gptel-make-openai "lm-studio"
-                   :stream t
-                   :protocol "http"
-                   :host "localhost:1234"
-                   :models '(test)))
-  )
+(use-package
+ gptel
+ :general
+ ("C-c C-g" 'gptel-menu)
+ (:keymaps 'gptel-mode-map "C-c C-c" 'gptel-send)
+ :config
+ (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+ (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+ :init
+ ;; LM-studio offers an OpenAI compatible API
+ (setq
+  gptel-model 'test
+  gptel-backend
+  (gptel-make-openai
+   "lm-studio"
+   :stream t
+   :protocol "http"
+   :host "localhost:1234"
+   :models '(test))))
 
-(use-package elysium
-  :custom
-  (elysium-window-size 0.5)
-  (elysium-window-style 'horizontal))
+(use-package
+ elysium
+ :custom (elysium-window-size 0.5) (elysium-window-style 'horizontal))
 
 ;; PDF tools
 ;; (use-package pdf-tools
@@ -1075,18 +1156,15 @@ If called with a prefix argument (STOP), print the message 'foo'."
 
 (use-package keycast)
 
-(use-package kotlin-mode
-  :ensure t
-  :hook (kotlin-mode . lsp))
+(use-package kotlin-mode :ensure t :hook (kotlin-mode . lsp))
 
-(use-package jinja2-mode
-  :mode ("\\.jinja\\'" "\\.j2\\'" "\\.jinja2\\'")
-  :straight t
-  :bind (:map jinja2-mode-map
-              ("C-c t" . nil)))
+(use-package
+ jinja2-mode
+ :mode ("\\.jinja\\'" "\\.j2\\'" "\\.jinja2\\'")
+ :straight t
+ :bind (:map jinja2-mode-map ("C-c t" . nil)))
 
 ;; Start server
 (require 'server)
 (unless (server-running-p)
   (server-start))
-
