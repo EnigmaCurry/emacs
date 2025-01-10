@@ -1,4 +1,4 @@
- ;; -*- coding: utf-8 -*-
+;; -*- coding: utf-8 -*-
 ;; EnigmaCurry's emacs config
 ;; inspiration : https://github.com/susam/emfy
 ;;               https://emacs.amodernist.com
@@ -15,7 +15,7 @@
 ;;; Enter debugger on specific logger regex (see *Messages* buffer):
 ;; (setq debug-on-message "Example log message to trace")
 ;;; M-x toggle-debug-on-error
-;; (setq debug-on-error t)
+(setq debug-on-error t)
 
 ;; Profile startup time (minus early-init.el time) using profile-dotemacs.el:
 ;;; curl -O https://raw.githubusercontent.com/emacsmirror/emacswiki.org/ed647e999fd4942d1c0bed02abe75bdf20f42baf/profile-dotemacs.el
@@ -35,6 +35,7 @@
 (setq-default tab-width 4)
 (setq-default visible-bell t)
 (setq-default dired-listing-switches "-al --group-directories-first")
+(setq-default tramp-default-method "ssh")
 (column-number-mode)
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
@@ -176,17 +177,19 @@
   (general-define-key
    "C-h B" 'general-describe-keybindings
    "s-b" 'quick-switch-buffer
-   "s-B" 'buffer-menu "C-x B" 'buffer-menu
+   "s-B" 'buffer-menu-other-window
+   "C-x B" 'buffer-menu-other-window
    "s-o" 'browse-url
    "C-;" 'comment-region                ; C-u C-; to uncomment
    "s-<down-mouse-1>" 'mouse-drag-region-rectangle
    )
-;;; Emacs default keybindings you want included in general-describe-keybindings:
+;;; Put the Emacs default keybindings you want included in general-describe-keybindings here:
 ;;; Its useful to duplicate these simply as a way of documentation:
   (general-define-key
    "M-SPC" 'cycle-spacing   ; If you document it, you will use it.
    "M-h" 'mark-paragraph    ; C-h B is like your personal cheat sheet.
-   "C-h b" 'describe-bindings
+   "C-h b" 'describe-bindings ;; default binding for documentation purpose
+   "C-x 4 c" 'clone-indirect-buffer-other-window ;; default binding
    )
 ;;; Define bindings for specific builtin (non use-package) modes:
   ;; Emacs Lisp mode bindings:
@@ -240,9 +243,7 @@
 ;; Ivy / counsel (list-completion) :: https://oremacs.com/swiper/#introduction
 (use-package counsel
   :general
-  ("M-y" 'counsel-yank-pop
-   "s-b" 'ivy-switch-buffer
-   )
+  ("M-y" 'counsel-yank-pop)
   :init
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
@@ -288,6 +289,7 @@
   :general
   ("s-<up>" 'org-previous-visible-heading)
   ("s-<down>" 'org-next-visible-heading)
+  ("C-c o k" 'org-babel-remove-result)
   :config
   (setq org-directory (expand-file-name "~/git/vendor/enigmacurry/org"))
   (setenv "ORG_DIR" org-directory)
@@ -308,7 +310,7 @@
   (add-hook 'org-mode-hook 'visual-line-mode)
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((python . t) (shell . t) (ditaa . t)))
+   '((python . t) (scheme . t) (shell . t) (ditaa . t)))
   (defun my/org-babel-execute:ditaa (body params)
     "Execute BODY of Ditaa code with org-babel according to PARAMS using a custom Java command."
     (let* ((out-file (or (cdr (assq :file params))
@@ -335,6 +337,12 @@
   (advice-add 'rustic-babel-run-update-result-block :after
               (lambda (&rest _)
                 (org-link-preview-refresh)))
+  (defun save-buffer-after-org-babel-execute ()
+  "Save the buffer after evaluating an org-babel code block."
+  (when (eq major-mode 'org-mode)
+    (save-buffer)))
+  (add-hook 'org-babel-after-execute-hook #'save-buffer-after-org-babel-execute)
+  
   :init
   ;; Hydra for commonly used org commands:
   (defhydra hydra-org (global-map "C-c o" :exit t)
@@ -406,13 +414,13 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
           (when (org-in-src-block-p)
             (setq found t))))
       count))
-
-  
   )
 
-  (use-package org-preview-html
-    :after org
-    )
+(use-package org-preview-html
+  :after org
+  )
+
+(use-package ob-async)
 
 (use-package ox-hugo
   :after org
@@ -425,6 +433,7 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
           ("video" :raw t)
           ("run" :raw t)
           ("stdout" :raw t)
+          ("html" :raw t)
           ("mermaid" :raw t)
           ("edit" :raw t)
           ("env" :raw t)
@@ -637,8 +646,8 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
   (setq aw-scope 'frame)
   (global-set-key [remap other-window] 'ace-window)
   :general
-  ("M-o" 'ace-window "s-o" 'ace-window "°" 'ace-window
-   ;"C-x o" #'(lambda()(interactive) (message "Use M-o or s-o instead!"))
+  ("M-o" 'ace-window
+   ;"C-x o" #'(lambda()(interactive) (message "Use M-o instead!"))
    ))
 
 ;; lispy LISP mode :: https://github.com/abo-abo/lispy
@@ -929,7 +938,11 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 
 ;; Guile Scheme
 ;; https://www.nongnu.org/geiser/
-(use-package geiser-guile)
+(use-package geiser-guile
+  :config
+  (setq geiser-guile-binary "guile3.0"))
+(use-package macrostep-geiser)
+(use-package sicp)
 
 ;; Javascript
 (use-package js2-mode
