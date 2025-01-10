@@ -2,10 +2,6 @@
 # name: Emacs Lisp
 # key: elisp
 # --
-<<<<<<< HEAD
-#+begin_src emacs-lisp :exports true :wrap stdout :linenos true
-=======
-#+begin_src elisp :exports true :linenos true
->>>>>>> c92cc1009a66af337e246b172225bde840071a15
+#+begin_src elisp
 $0
 #+end_src
