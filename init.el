@@ -137,14 +137,14 @@
   doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
  ;;; Pick a theme:
- (load-theme 'doom-acario-dark t)
+ ;;(load-theme 'doom-acario-dark t)
  ;;(load-theme 'doom-ir-black t)
  ;;(load-theme 'doom-old-hope t)
  ;;(load-theme 'doom-rouge t)
  ;;(load-theme 'doom-1337 t)
  ;;(load-theme 'doom-tokyo-night t)
  ;;(load-theme 'doom-tomorrow-night t)
- ;;(load-theme 'doom-ayu-dark t)
+ (load-theme 'doom-ayu-dark t)
  ;;(load-theme 'doom-challenger-deep t)
  ;;(load-theme 'doom-homage-black t)
 
@@ -725,7 +725,15 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
  :general
  ("M-o" 'ace-window
   ;"C-x o" #'(lambda()(interactive) (message "Use M-o instead!"))
-  ))
+  )
+ :config (advice-add 'ace-window :after 'golden-ratio))
+
+(use-package
+ golden-ratio
+ :hook (after-init . golden-ratio-mode)
+ :config (setq golden-ratio-auto-scale t) ;; lessen the effect on wide monitors
+ :custom (golden-ratio-exclude-modes '(occur-mode)))
+
 
 ;; lispy LISP mode :: https://github.com/abo-abo/lispy
 ;; (use-package lispy
