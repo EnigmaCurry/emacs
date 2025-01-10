@@ -172,37 +172,46 @@
 ;; Theres's two ways to show the bindings for the current buffer:
 ;;; Describe *all* bindings (including default bindings): C-h b
 ;;; Describe only the general.el configured bindings: C-h B
-(use-package general
-  :config
-;;; Custom global bindings:
-  (general-define-key
-   "C-h B" 'general-describe-keybindings
-   "s-b" 'quick-switch-buffer
-   "s-B" 'buffer-menu-other-window
-   "C-x B" 'buffer-menu-other-window
-   "s-o" 'browse-url
-   "C-;" 'comment-region                ; C-u C-; to uncomment
-   "s-<down-mouse-1>" 'mouse-drag-region-rectangle
-   )
-;;; Put the Emacs default keybindings you want included in general-describe-keybindings here:
-;;; Its useful to duplicate these simply as a way of documentation:
-  (general-define-key
-   "M-SPC" 'cycle-spacing   ; If you document it, you will use it.
-   "M-h" 'mark-paragraph    ; C-h B is like your personal cheat sheet.
-   "C-h b" 'describe-bindings ;; default binding for documentation purpose
-   "C-x 4 c" 'clone-indirect-buffer-other-window ;; default binding
-   )
-;;; Define bindings for specific builtin (non use-package) modes:
-  ;; Emacs Lisp mode bindings:
-  (general-define-key
-   :keymaps 'emacs-lisp-mode-map
-   "s-e" 'eval-defun                    ;eval top-level form
-   "M-;" 'paredit-comment-dwim
-   )
-  ;; Dired mode bindings:
-  (general-define-key
-   :keymaps 'dired-mode-map
-   "C-c C-q" 'dired-toggle-read-only))
+(use-package
+ general
+ :config
+ ;;; Custom global bindings:
+ (general-define-key
+  "C-h B"
+  'general-describe-keybindings
+  "s-b"
+  'quick-switch-buffer
+  "s-B"
+  'buffer-menu-other-window
+  "C-x B"
+  'buffer-menu-other-window
+  "s-o"
+  'browse-url
+  "C-;"
+  'comment-region ; C-u C-; to uncomment
+  "s-<down-mouse-1>"
+  'mouse-drag-region-rectangle)
+ ;;; Put the Emacs default keybindings you want included in general-describe-keybindings here:
+ ;;; Its useful to duplicate these simply as a way of documentation:
+ (general-define-key
+  "M-SPC"
+  'cycle-spacing ; If you document it, you will use it.
+  "M-h"
+  'mark-paragraph ; C-h B is like your personal cheat sheet.
+  "C-h b"
+  'describe-bindings ;; default binding for documentation purpose
+  "C-x 4 c"
+  'clone-indirect-buffer-other-window ;; default binding
+  )
+ ;;; Define bindings for specific builtin (non use-package) modes:
+ ;; Emacs Lisp mode bindings:
+ (general-define-key
+  :keymaps 'emacs-lisp-mode-map
+  "s-e" 'eval-defun ;eval top-level form
+  "M-;" 'paredit-comment-dwim)
+ ;; Dired mode bindings:
+ (general-define-key
+  :keymaps 'dired-mode-map "C-c C-q" 'dired-toggle-read-only))
 
 ;; Scale text sizes in all buffers :: https://github.com/purcell/default-text-scale
 (use-package
@@ -245,13 +254,13 @@
 (use-package amx :general ("M-x" 'amx "<menu>" 'amx))
 
 ;; Ivy / counsel (list-completion) :: https://oremacs.com/swiper/#introduction
-(use-package counsel
-  :general
-  ("M-y" 'counsel-yank-pop)
-  :init
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-use-selectable-prompt t))
+(use-package
+ counsel
+ :general ("M-y" 'counsel-yank-pop)
+ :init
+ (ivy-mode 1)
+ (setq ivy-use-virtual-buffers t)
+ (setq ivy-use-selectable-prompt t))
 
 ;; hydra (rapid fire mnemonic keybindings) :: https://github.com/abo-abo/hydra
 (use-package hydra)
@@ -286,78 +295,102 @@
  (yas-reload-all))
 
 ;; Org
-(use-package org
-  :after hydra
-  :general
-  ("s-<up>" 'org-previous-visible-heading)
-  ("s-<down>" 'org-next-visible-heading)
-  ("C-c o k" 'org-babel-remove-result)
-  :config
-  (setq org-directory (expand-file-name "~/git/vendor/enigmacurry/org"))
-  (setenv "ORG_DIR" org-directory)
-  (setq org-export-allow-bind-keywords t)
-  (setq org-insert-mode-line-in-empty-file t)
-  (setq org-default-notes-file (concat org-directory "/notes.org"))
-  (setq org-startup-folded t)
-  (setq org-file-apps
-        '((auto-mode . emacs)
-          ("\\.mm\\'" . default)
-          ("\\.x?html?\\'" . "/usr/bin/firefox %s")
-          ("\\.pdf\\'" . default)))
-  (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline "~/org/notes.org" "Tasks")
-           "* TODO %?\n  %i\n  %a")
-          ("j" "Journal" entry (file+olp+datetree "~/org/notes.org" "Journal")
-           "* %?\nEntered on %U\n  %i\n  %a")))
-  (add-hook 'org-mode-hook 'visual-line-mode)
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((python . t) (scheme . t) (shell . t) (ditaa . t)))
-  (defun my/org-babel-execute:ditaa (body params)
-    "Execute BODY of Ditaa code with org-babel according to PARAMS using a custom Java command."
-    (let* ((out-file (or (cdr (assq :file params))
-                         (error "Ditaa code block requires :file header argument")))
-           (cmdline (cdr (assq :cmdline params)))
-           (java (cdr (assq :java params)))
-           (in-file (org-babel-temp-file "ditaa-"))
-           (eps (cdr (assq :eps params)))
-           (eps-file (when eps
-                       (org-babel-process-file-name (concat in-file ".eps"))))
-           (cmd (concat "java -cp /usr/share/java/commons-cli.jar:/usr/share/java/ditaa.jar "
-                        "org.stathissideris.ascii2image.core.CommandLineConverter "
-                        cmdline " "
-                        (org-babel-process-file-name in-file) " "
-                        (org-babel-process-file-name out-file))))
-      (with-temp-file in-file (insert body))
-      (message cmd) (shell-command cmd)
-      nil)) ;; signal that output has already been written to file
+(use-package
+ org
+ :after hydra
+ :general
+ ("s-<up>" 'org-previous-visible-heading)
+ ("s-<down>" 'org-next-visible-heading)
+ ("C-c o k" 'org-babel-remove-result)
+ :config
+ (setq org-directory
+       (expand-file-name "~/git/vendor/enigmacurry/org"))
+ (setenv "ORG_DIR" org-directory)
+ (setq org-export-allow-bind-keywords t)
+ (setq org-insert-mode-line-in-empty-file t)
+ (setq org-default-notes-file (concat org-directory "/notes.org"))
+ (setq org-startup-folded t)
+ (setq org-file-apps
+       '((auto-mode . emacs)
+         ("\\.mm\\'" . default)
+         ("\\.x?html?\\'" . "/usr/bin/firefox %s")
+         ("\\.pdf\\'" . default)))
+ (setq org-capture-templates
+       '(("t"
+          "Todo"
+          entry
+          (file+headline "~/org/notes.org" "Tasks")
+          "* TODO %?\n  %i\n  %a")
+         ("j"
+          "Journal"
+          entry
+          (file+olp+datetree "~/org/notes.org" "Journal")
+          "* %?\nEntered on %U\n  %i\n  %a")))
+ (add-hook 'org-mode-hook 'visual-line-mode)
+ (org-babel-do-load-languages
+  'org-babel-load-languages
+  '((python . t) (scheme . t) (shell . t) (ditaa . t)))
+ (defun my/org-babel-execute:ditaa (body params)
+   "Execute BODY of Ditaa code with org-babel according to PARAMS using a custom Java command."
+   (let*
+       ((out-file
+         (or
+          (cdr (assq :file params))
+          (error "Ditaa code block requires :file header argument")))
+        (cmdline (cdr (assq :cmdline params)))
+        (java (cdr (assq :java params)))
+        (in-file (org-babel-temp-file "ditaa-"))
+        (eps (cdr (assq :eps params)))
+        (eps-file
+         (when eps
+           (org-babel-process-file-name (concat in-file ".eps"))))
+        (cmd
+         (concat
+          "java -cp /usr/share/java/commons-cli.jar:/usr/share/java/ditaa.jar "
+          "org.stathissideris.ascii2image.core.CommandLineConverter "
+          cmdline
+          " "
+          (org-babel-process-file-name in-file)
+          " "
+          (org-babel-process-file-name out-file))))
+     (with-temp-file in-file
+       (insert body))
+     (message cmd)
+     (shell-command cmd)
+     nil)) ;; signal that output has already been written to file
 
-  (advice-add 'org-babel-execute:ditaa :override #'my/org-babel-execute:ditaa)
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (org-link-preview-region nil nil (point-min) (point-max))))
-  (advice-add 'rustic-babel-run-update-result-block :after
-              (lambda (&rest _)
-                (org-link-preview-refresh)))
-  (defun save-buffer-after-org-babel-execute ()
-  "Save the buffer after evaluating an org-babel code block."
-  (when (eq major-mode 'org-mode)
-    (save-buffer)))
-  (add-hook 'org-babel-after-execute-hook #'save-buffer-after-org-babel-execute)
-  
-  :init
-  ;; Hydra for commonly used org commands:
-  (defhydra hydra-org (global-map "C-c o" :exit t)
-    "org"
-    ("o" open-org-file)
-    ("l" org-store-link "store link")
-    ("i" org-insert-link "insert link")
-    ("a" org-agenda "agenda")
-    ("c" org-capture "capture")
-    ("m" org-info "read info manual")
-    ("e" org-export-dispatch "export")
-    ("p" org-preview-html-mode "toggle preview mode")
-    ("s" org-insert-source-code-block "insert source code block"))
+ (advice-add
+  'org-babel-execute:ditaa
+  :override #'my/org-babel-execute:ditaa)
+ (add-hook
+  'org-mode-hook
+  (lambda ()
+    (org-link-preview-region nil nil (point-min) (point-max))))
+ (advice-add
+  'rustic-babel-run-update-result-block
+  :after (lambda (&rest _) (org-link-preview-refresh)))
+ (defun save-buffer-after-org-babel-execute ()
+   "Save the buffer after evaluating an org-babel code block."
+   (when (eq major-mode 'org-mode)
+     (save-buffer)))
+ (add-hook
+  'org-babel-after-execute-hook #'save-buffer-after-org-babel-execute)
+
+ :init
+ ;; Hydra for commonly used org commands:
+ (defhydra
+  hydra-org
+  (global-map "C-c o" :exit t)
+  "org"
+  ("o" open-org-file)
+  ("l" org-store-link "store link")
+  ("i" org-insert-link "insert link")
+  ("a" org-agenda "agenda")
+  ("c" org-capture "capture")
+  ("m" org-info "read info manual")
+  ("e" org-export-dispatch "export")
+  ("p" org-preview-html-mode "toggle preview mode")
+  ("s" org-insert-source-code-block "insert source code block"))
 
  ;; https://emacs.stackexchange.com/a/70606 thanks Chris!
  (defun org-insert-source-code-block (&optional language file)
@@ -440,45 +473,46 @@ The `:tangle FILE` header argument will be added when pulling in file contents."
           (format "/block-%d" block-number)
         ""))))
 
-  (defun my/org-babel-src-block-number ()
-    "Count the number of source blocks in the current subtree up to the current block."
-    (let ((count 0)
-          (found nil))
-      (save-excursion
-        (org-back-to-heading t) ;; Go to the current heading
-        (while (and (not found) ;; Stop if we find the current block
-                    (re-search-forward org-babel-src-block-regexp (save-excursion (org-end-of-subtree t)) t))
-          (setq count (1+ count))
-          (when (org-in-src-block-p)
-            (setq found t))))
-      count))
-  )
+ (defun my/org-babel-src-block-number ()
+   "Count the number of source blocks in the current subtree up to the current block."
+   (let ((count 0)
+         (found nil))
+     (save-excursion
+       (org-back-to-heading t) ;; Go to the current heading
+       (while (and (not found) ;; Stop if we find the current block
+                   (re-search-forward org-babel-src-block-regexp
+                                      (save-excursion
+                                        (org-end-of-subtree t))
+                                      t))
+         (setq count (1+ count))
+         (when (org-in-src-block-p)
+           (setq found t))))
+     count)))
 
-(use-package org-preview-html
-  :after org
-  )
+(use-package org-preview-html :after org)
 
 (use-package ob-async)
 
-(use-package ox-hugo
-  :after org
-  :config
-  (setq org-hugo-special-block-type-properties
-        '(("audio" :raw t)
-          ("katex" :raw t)
-          ("mark" :trim-pre t :trim-post t)
-          ("tikzjax" :raw t)
-          ("video" :raw t)
-          ("run" :raw t)
-          ("stdout" :raw t)
-          ("html" :raw t)
-          ("mermaid" :raw t)
-          ("edit" :raw t)
-          ("env" :raw t)
-          ("math" :raw t)))
+(use-package
+ ox-hugo
+ :after org
+ :config
+ (setq org-hugo-special-block-type-properties
+       '(("audio" :raw t)
+         ("katex" :raw t)
+         ("mark" :trim-pre t :trim-post t)
+         ("tikzjax" :raw t)
+         ("video" :raw t)
+         ("run" :raw t)
+         ("stdout" :raw t)
+         ("html" :raw t)
+         ("mermaid" :raw t)
+         ("edit" :raw t)
+         ("env" :raw t)
+         ("math" :raw t)))
 
-  (defun my-ox-hugo-update-weight-in-filename ()
-    "Automatically update EXPORT_FILE_NAME to include the latest EXPORT_HUGO_WEIGHT or inherited parent weight.
+ (defun my-ox-hugo-update-weight-in-filename ()
+   "Automatically update EXPORT_FILE_NAME to include the latest EXPORT_HUGO_WEIGHT or inherited parent weight.
 
 The slug is set as EXPORT_HUGO_SLUG, and if it doesn't exist, it is derived from the non-weighted filename.
 Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if it exists. Format weights with six-digit padding."
@@ -680,14 +714,15 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 (use-package ace-link :init (ace-link-setup-default))
 
 ;; jump between windows :: https://github.com/abo-abo/ace-window
-(use-package ace-window
-  :init
-  (setq aw-scope 'frame)
-  (global-set-key [remap other-window] 'ace-window)
-  :general
-  ("M-o" 'ace-window
-   ;"C-x o" #'(lambda()(interactive) (message "Use M-o instead!"))
-   ))
+(use-package
+ ace-window
+ :init
+ (setq aw-scope 'frame)
+ (global-set-key [remap other-window] 'ace-window)
+ :general
+ ("M-o" 'ace-window
+  ;"C-x o" #'(lambda()(interactive) (message "Use M-o instead!"))
+  ))
 
 ;; lispy LISP mode :: https://github.com/abo-abo/lispy
 ;; (use-package lispy
@@ -1004,9 +1039,9 @@ Skip entries where EXPORT_FILE_NAME is '_index', and remove any weight prefix if
 
 ;; Guile Scheme
 ;; https://www.nongnu.org/geiser/
-(use-package geiser-guile
-  :config
-  (setq geiser-guile-binary "guile3.0"))
+(use-package
+ geiser-guile
+ :config (setq geiser-guile-binary "guile3.0"))
 (use-package macrostep-geiser)
 (use-package sicp)
 
@@ -1127,6 +1162,7 @@ If called with a prefix argument (STOP), print the message 'foo'."
  :config
  (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+ (setq gptel-org-branching-context t)
  :init
  ;; LM-studio offers an OpenAI compatible API
  (setq
