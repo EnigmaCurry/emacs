@@ -161,6 +161,138 @@
 ;;solaire-mode modifies the background of virtual (non-file) buffers
 (use-package solaire-mode :init (solaire-global-mode +1))
 
+(use-package
+ all-the-icons
+ :ensure t
+ :if (display-graphic-p)
+ :init
+ (let ((font-file
+        (expand-file-name "~/.local/share/fonts/all-the-icons.ttf")))
+   (unless (file-exists-p font-file)
+     (message "Installing all-the-icons fonts...")
+     (all-the-icons-install-fonts t))))
+
+(use-package
+ dashboard
+ :init
+ (defvar my-last-dashboard-seed nil
+   "Store the last used seed for banner randomness.")
+ (defun my-randomize-dashboard-seed ()
+   "Randomize the dashboard seed."
+   (let* ((new-seed (random most-positive-fixnum))
+          (banner-number (1+ (% new-seed 3))))
+     (when (or (not my-last-dashboard-seed)
+               (/= new-seed my-last-dashboard-seed))
+       (setq dashboard-startup-banner banner-number)
+       (setq my-last-dashboard-seed new-seed))))
+ (advice-add
+  'revert-buffer
+  :before
+  (lambda (&rest _args)
+    "Randomize dashboard seed before reverting buffer."
+    (when (eq major-mode 'dashboard-mode)
+      (my-randomize-dashboard-seed))))
+ (defun my-dashboard-insert-vocabulary (list-size)
+   (dashboard-insert-heading
+    "Word of the moment:" nil
+    (all-the-icons-faicon
+     "newspaper-o"
+     :height 1.2
+     :v-adjust 0.0
+     :face 'dashboard-heading))
+   (insert "\n")
+   (let ((word (latin-word-by-seed my-last-dashboard-seed)))
+     (insert (upcase (replace-regexp-in-string "[0-9]" "" word)))
+     (newline)
+     (let ((data (lookup-latin-definition word)))
+       (let ((part-of-speech (gethash "part_of_speech" data)))
+         (when (and (stringp part-of-speech)
+                    (not (string-empty-p part-of-speech)))
+           (insert part-of-speech)
+           (newline)))
+       (let ((main-notes (gethash "main_notes" data)))
+         (let* ((start (point)))
+           (insert main-notes)
+           (fill-region start (point)))
+         (newline))
+       (let ((senses (gethash "senses" data)))
+         (let* ((start (point))
+                (senses-string
+                 (replace-regexp-in-string
+                  "[][()]" "" (prin1-to-string (list senses))))
+                (truncated-string
+                 (if (> (length senses-string) 500)
+                     (concat (substring senses-string 0 500) "...")
+                   senses-string)))
+           (insert truncated-string)
+           (fill-region start (point)))
+         (newline)))))
+ (defun my-latin-dictionary-git-clone-and-cache ()
+   "Clone the Lewis and Short Latin dictionary from GitHub to ~/.emacs.d/latin-dictionary-lewis-short."
+   (let ((repo-url
+          "https://github.com/EnigmaCurry/lewis-short-json.git")
+         (target-dir
+          (expand-file-name
+           "~/.emacs.d/latin-dictionary-lewis-short")))
+     ;; Ensure the target directory does not already exist
+     (if (file-directory-p target-dir)
+         (message
+          "Directory %s already exists. Skipping clone of latin dictionary."
+          target-dir)
+       (make-directory target-dir t)
+       (let ((default-directory target-dir))
+         (call-process "git" nil nil nil "clone" repo-url ".")
+         (message "Cloned repository to %s" target-dir)))
+     (setq latin-dictionary-directory target-dir)))
+ (defun latin-word-by-seed (seed)
+   "Retrieve a Latin word by a given SEED from JSON files in `latin-dictionary-directory`."
+   (let* ((default-directory latin-dictionary-directory)
+          (command "jq -r '.[] | .key' *.json | sort -u")
+          (words
+           (split-string (shell-command-to-string command) "\n" t))
+          (num-words (length words)))
+     (if (> num-words 0)
+         (let* ((index (mod seed num-words))
+                (word (nth index words)))
+           (message "%s" word)
+           word)
+       (message "No words found."))))
+ (defun lookup-latin-definition (word)
+   "Lookup WORD in the Latin dictionary dataset, flattening the 'senses' key if it's nested."
+   (let*
+       ((first-letter (upcase (substring word 0 1)))
+        (file-name
+         (concat
+          latin-dictionary-directory "/" "ls_" first-letter ".json"))
+        ;; Updated jq command to flatten "senses"
+        (jq-command
+         (format
+          "jq -r --arg word '%s' '.[] | select(.key == $word) | .senses |= (if type == \"array\" then flatten else . end)' %s"
+          word file-name))
+        (result (shell-command-to-string jq-command)))
+     (if (string-blank-p result)
+         (json-parse-string "{}")
+       (json-parse-string result))))
+ (my-latin-dictionary-git-clone-and-cache)
+ :ensure t
+ :custom
+ (dashboard-center-content t)
+ (dashboard-set-heading-icons nil)
+ (dashboard-set-file-icons nil)
+ (dashboard-icon-type nil)
+ (dashboard-items
+  '((vocabulary)
+    (recents . 5) (bookmarks . 5)
+    ;; (monthly-balance)
+    ))
+ (dashboard-item-generators
+  '((vocabulary . my-dashboard-insert-vocabulary)
+    (recents . dashboard-insert-recents)
+    (bookmarks . dashboard-insert-bookmarks)))
+ :config
+ (my-randomize-dashboard-seed)
+ (dashboard-setup-startup-hook))
+
 ;; General keybinding manager
 ;;    https://github.com/noctuid/general.el#readme
 ;; This keymap set is for an extended PC keyboard with extra modifiers
@@ -1210,6 +1342,45 @@ If called with a prefix argument (STOP), print the message 'foo'."
  :mode ("\\.jinja\\'" "\\.j2\\'" "\\.jinja2\\'")
  :straight t
  :bind (:map jinja2-mode-map ("C-c t" . nil)))
+
+;; (use-package
+;;  grammaticus
+;;  :straight
+;;  (grammaticus
+;;   :type git
+;;   :host github
+;;   :repo "sinic/grammaticus"
+;;   :branch "dominus")
+;;  :init
+;;  (defun my-download-and-cache-latin-words ()
+;;    "Download latin-words.txt if not already cached."
+;;    (let ((cache-file (expand-file-name "~/.emacs.d/latin-words.txt")))
+;;      (unless (file-exists-p cache-file)
+;;        (shell-command
+;;         (format
+;;          "curl -o %s https://raw.githubusercontent.com/EnigmaCurry/latin-macronizer/master/vocabulary.txt"
+;;          cache-file)))
+;;      cache-file))
+;;  (defun my-download-and-cache-latin-grammar ()
+;;    "Download latin-words.txt if not already cached."
+;;    (let ((cache-file
+;;           (expand-file-name "~/.emacs.d/latin-grammar.txt")))
+;;      (unless (file-exists-p cache-file)
+;;        (shell-command
+;;         (format
+;;          "curl -o %s https://raw.githubusercontent.com/EnigmaCurry/latin-macronizer/master/macrons.txt"
+;;          cache-file)))
+;;      cache-file))
+;;  (defun latin-word-by-seed (seed)
+;;    "Return a deterministic Latin word from the `latin-words-file' based on SEED."
+;;    (with-temp-buffer
+;;      (insert-file-contents latin-words-file)
+;;      (let* ((lines (split-string (buffer-string) "\n"))
+;;             (random-line-number (% seed (length lines))))
+;;        (nth random-line-number lines))))
+;;  (setq latin-grammar-file (my-download-and-cache-latin-grammar))
+;;  (setq latin-words-file (my-download-and-cache-latin-words))
+;;  (grammaticus-add-words latin-grammar-file))
 
 ;; Start server
 (require 'server)
