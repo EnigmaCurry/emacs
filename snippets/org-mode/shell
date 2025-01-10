@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Shell script
+# key: shell
+# --
+#+begin_src shell :results output :exports true :wrap stdout :linenos true
+$0
+#+end_src

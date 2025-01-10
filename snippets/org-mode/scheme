@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Guile Scheme
+# key: scheme
+# --
+#+begin_src scheme :session guile-test :exports both :linenos true :wrap result
+$0
+#+end_src
