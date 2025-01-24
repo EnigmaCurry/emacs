@@ -31,12 +31,12 @@
     :global t
     (if my/org-export-html-with-useful-ids-mode
 	(advice-add #'org-export-get-reference :override #'my/org-export-get-reference)
-      (advice-remove #'org-export-get-reference #'my/org-export-get-reference)))
+  (advice-remove #'org-export-get-reference #'my/org-export-get-reference)))
 
   (defun my/org-export-get-reference (datum info)
     "Like `org-export-get-reference', except uses heading titles instead of random numbers."
     (let ((cache (plist-get info :internal-references)))
-      (or (car (rassq datum cache))
+  (or (car (rassq datum cache))
 	  (let* ((crossrefs (plist-get info :crossrefs))
 		 (cells (org-export-search-cells datum))
 		 ;; Preserve any pre-existing association between
@@ -55,7 +55,7 @@
 		 (new (or (cl-some
 			   (lambda (cell)
 			     (let ((stored (cdr (assoc cell crossrefs))))
-			       (when stored
+			   (when stored
 				 (let ((old (org-export-format-reference stored)))
 				   (and (not (assoc old cache)) stored)))))
 			   cells)
@@ -82,26 +82,26 @@
     "Return new reference for DATUM that is unique in CACHE."
     (cl-macrolet ((inc-suffixf (place)
 		    `(progn
-		       (string-match (rx bos
+		   (string-match (rx bos
 					 (minimal-match (group (1+ anything)))
 					 (optional "--" (group (1+ digit)))
 					 eos)
 				     ,place)
-		       ;; HACK: `s1' instead of a gensym.
-		       (-let* (((s1 suffix) (list (match-string 1 ,place)
+		   ;; HACK: `s1' instead of a gensym.
+		   (-let* (((s1 suffix) (list (match-string 1 ,place)
 						  (match-string 2 ,place)))
-			       (suffix (if suffix
+			   (suffix (if suffix
 					   (string-to-number suffix)
 					 0)))
-			      (setf ,place (format "%s--%s" s1 (cl-incf suffix)))))))
-      (let* ((title (org-element-property :raw-value datum))
+			  (setf ,place (format "%s--%s" s1 (cl-incf suffix)))))))
+  (let* ((title (org-element-property :raw-value datum))
 	     (ref (url-hexify-string (substring-no-properties title)))
 	     (parent (org-element-property :parent datum)))
 	(while (cl-some (lambda (it) (equal ref (car it))) cache)
 	  ;; Title not unique: make it so.
 	  (if parent
-	      ;; Append ancestor title.
-	      (setf title (concat (org-element-property :raw-value parent)
+	  ;; Append ancestor title.
+	  (setf title (concat (org-element-property :raw-value parent)
 				  "--" title)
 		    ref (url-hexify-string (substring-no-properties title))
 		    parent (org-element-property :parent parent))
