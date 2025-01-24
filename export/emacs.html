@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-24 Fri 16:05 -->
+<!-- 2025-01-24 Fri 16:21 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>GNU Emacs Configuration</title>
@@ -201,44 +201,45 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org6bea858">1. Goals</a></li>
-<li><a href="#org4e36eed">2. LICENSE</a></li>
-<li><a href="#orge19a903">3. Early Init</a>
+<li><a href="#org54c37e1">1. Goals</a></li>
+<li><a href="#org8aee690">2. LICENSE</a></li>
+<li><a href="#org156dfb6">3. Early Init</a>
 <ul>
-<li><a href="#orgf3f494c">3.1. Dark theme</a></li>
-<li><a href="#org1361ec3">3.2. Font</a></li>
-<li><a href="#org26ea34a">3.3. Disable GUI menu, toolbar, and scrollbar</a></li>
+<li><a href="#org5558087">3.1. Dark theme</a></li>
+<li><a href="#orgad09bea">3.2. Font</a></li>
+<li><a href="#orge188b74">3.3. Disable GUI menu, toolbar, and scrollbar</a></li>
 </ul>
 </li>
-<li><a href="#orgedc8b97">4. Base config</a></li>
-<li><a href="#org5cac484">5. Per-machine config with opt-in features</a>
+<li><a href="#orgb71ee22">4. Base config</a></li>
+<li><a href="#org9ae22b0">5. Per-machine config with opt-in features</a>
 <ul>
-<li><a href="#orgea03c80">5.1. Load submodules</a></li>
+<li><a href="#org6b10deb">5.1. Load submodules</a></li>
 </ul>
 </li>
-<li><a href="#org410460a">6. Org mode</a>
+<li><a href="#org90447b4">6. Org mode</a>
 <ul>
-<li><a href="#org29e78c8">6.1. Enable spell-check</a></li>
-<li><a href="#orga66296e">6.2. Tangle Emacs config and write HTML document</a></li>
-<li><a href="#org926ddf9">6.3. Local HTTP server for displaying exported HTML</a></li>
-<li><a href="#orge2b5abf">6.4. Org-Tempo code block snippets</a></li>
-<li><a href="#orgb9f3c70">6.5. Use org headings as HTML anchors</a></li>
-<li><a href="#org315df73">6.6. Electric pairs</a></li>
+<li><a href="#org74198fc">6.1. Enable spell-check</a></li>
+<li><a href="#orgda704fe">6.2. Enable syntax highlighting in HTML export</a></li>
+<li><a href="#org27efc74">6.3. Tangle Emacs config and write HTML document</a></li>
+<li><a href="#org1d5e5da">6.4. Local HTTP server for displaying exported HTML</a></li>
+<li><a href="#org211b7f8">6.5. Org-Tempo code block snippets</a></li>
+<li><a href="#orgcbbd8e1">6.6. Use org headings as HTML anchors</a></li>
+<li><a href="#orgbf6c842">6.7. Electric pairs</a></li>
 </ul>
 </li>
-<li><a href="#org4f748a0">7. Registers</a>
+<li><a href="#orgb59b201">7. Registers</a>
 <ul>
-<li><a href="#orga69dc2d">7.1. Position registers</a></li>
+<li><a href="#orgd9a0322">7.1. Position registers</a></li>
 </ul>
 </li>
-<li><a href="#orgede8f91">8. Public Domain License (0BSD)</a></li>
-<li><a href="#org4d23483">9. GNU General Public License</a></li>
+<li><a href="#org1f9aa0f">8. Public Domain License (0BSD)</a></li>
+<li><a href="#org35020b8">9. GNU General Public License</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org6bea858" class="outline-2">
-<h2 id="org6bea858"><span class="section-number-2">1.</span> Goals</h2>
+<div id="outline-container-org54c37e1" class="outline-2">
+<h2 id="org54c37e1"><span class="section-number-2">1.</span> Goals</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This is a new attempt at writing a literate Emacs config in Org Mode.
@@ -260,8 +261,8 @@ to have the prefix (namespace) <code>my/</code>.</li>
 </div>
 </div>
 
-<div id="outline-container-org4e36eed" class="outline-2">
-<h2 id="org4e36eed"><span class="section-number-2">2.</span> LICENSE</h2>
+<div id="outline-container-org8aee690" class="outline-2">
+<h2 id="org8aee690"><span class="section-number-2">2.</span> LICENSE</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 This document and git repository has a mixed license (GPLv3 AND 0BSD).
@@ -278,17 +279,17 @@ licensed as GPLv3.
 </p>
 
 <p>
-See <a href="#orgede8f91">Public Domain License (0BSD)</a>
+See <a href="#org1f9aa0f">Public Domain License (0BSD)</a>
 </p>
 
 <p>
-See <a href="#org4d23483">GNU General Public License</a>
+See <a href="#org35020b8">GNU General Public License</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-orge19a903" class="outline-2">
-<h2 id="orge19a903"><span class="section-number-2">3.</span> Early Init</h2>
+<div id="outline-container-org156dfb6" class="outline-2">
+<h2 id="org156dfb6"><span class="section-number-2">3.</span> Early Init</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 The early-init.el is the first config file that is loaded. It is used
@@ -297,8 +298,8 @@ doesnt have a jarring change during load.
 </p>
 </div>
 
-<div id="outline-container-orgf3f494c" class="outline-3">
-<h3 id="orgf3f494c"><span class="section-number-3">3.1.</span> Dark theme</h3>
+<div id="outline-container-org5558087" class="outline-3">
+<h3 id="org5558087"><span class="section-number-3">3.1.</span> Dark theme</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 A dark theme is an accesibility requirement.
@@ -311,8 +312,8 @@ A dark theme is an accesibility requirement.
 </div>
 </div>
 
-<div id="outline-container-org1361ec3" class="outline-3">
-<h3 id="org1361ec3"><span class="section-number-3">3.2.</span> Font</h3>
+<div id="outline-container-orgad09bea" class="outline-3">
+<h3 id="orgad09bea"><span class="section-number-3">3.2.</span> Font</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 Set the font size:
@@ -324,8 +325,8 @@ Set the font size:
 </div>
 </div>
 
-<div id="outline-container-org26ea34a" class="outline-3">
-<h3 id="org26ea34a"><span class="section-number-3">3.3.</span> Disable GUI menu, toolbar, and scrollbar</h3>
+<div id="outline-container-orge188b74" class="outline-3">
+<h3 id="orge188b74"><span class="section-number-3">3.3.</span> Disable GUI menu, toolbar, and scrollbar</h3>
 <div class="outline-text-3" id="text-3-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Turn off distractions</span>
@@ -341,8 +342,8 @@ Set the font size:
 </div>
 </div>
 
-<div id="outline-container-orgedc8b97" class="outline-2">
-<h2 id="orgedc8b97"><span class="section-number-2">4.</span> Base config</h2>
+<div id="outline-container-orgb71ee22" class="outline-2">
+<h2 id="orgb71ee22"><span class="section-number-2">4.</span> Base config</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 This is the base config that is loaded in all environments. Only Emacs
@@ -378,8 +379,8 @@ builtins allowed here:
 </div>
 </div>
 
-<div id="outline-container-org5cac484" class="outline-2">
-<h2 id="org5cac484"><span class="section-number-2">5.</span> Per-machine config with opt-in features</h2>
+<div id="outline-container-org9ae22b0" class="outline-2">
+<h2 id="org9ae22b0"><span class="section-number-2">5.</span> Per-machine config with opt-in features</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 This Emacs configuration is designed to run in several different
@@ -392,7 +393,7 @@ enabled by adding labels to machines.
 Add your machine specific labels in <code>~/.config/machine-labels</code>:
 </p>
 
-<pre class="example" id="org9917ea1">
+<pre class="example" id="orgadeec95">
 # ~/.config/machine-labels
 # Put your machine-specific labels here to enable configurable features:
 org
@@ -426,8 +427,8 @@ Now you can configuration that applies only to certain machine labels:
 </div>
 </div>
 
-<div id="outline-container-orgea03c80" class="outline-3">
-<h3 id="orgea03c80"><span class="section-number-3">5.1.</span> Load submodules</h3>
+<div id="outline-container-org6b10deb" class="outline-3">
+<h3 id="org6b10deb"><span class="section-number-3">5.1.</span> Load submodules</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 All the code-blocks in this file are tangled to separate categorized
@@ -448,7 +449,7 @@ files under the <code>modules</code> subdirectory. Load all of them from
     <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load .el files from subdirectories matching machine labels</span>
     (<span style="color: #b6a0ff;">dolist</span> (subdir (directory-files my/modules-dir t <span style="color: #79a8ff;">"^[</span><span style="color: #d0bc00;">^</span><span style="color: #79a8ff;">.]"</span> t)) <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Skip . and ..</span>
       (<span style="color: #b6a0ff;">when</span> (<span style="color: #b6a0ff;">and</span> (file-directory-p subdir)
-                 (my/has-label (file-name-nondirectory subdir)))  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Check label</span>
+                 (my/machine-has-label (file-name-nondirectory subdir)))  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Check label</span>
         (<span style="color: #b6a0ff;">let</span> ((files (directory-files subdir t <span style="color: #79a8ff;">"\\.el\\'"</span>)))
           (<span style="color: #b6a0ff;">dolist</span> (file (sort files #'string&lt;))
             (message <span style="color: #79a8ff;">"Loading module from %s: %s"</span> (file-name-nondirectory subdir) file)
@@ -457,15 +458,33 @@ files under the <code>modules</code> subdirectory. Load all of them from
   (my/load-modules)
 </pre>
 </div>
+
+<p>
+Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">org</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
-<div id="outline-container-org410460a" class="outline-2">
-<h2 id="org410460a"><span class="section-number-2">6.</span> Org mode</h2>
+
+<div id="outline-container-org90447b4" class="outline-2">
+<h2 id="org90447b4"><span class="section-number-2">6.</span> Org mode</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-org29e78c8" class="outline-3">
-<h3 id="org29e78c8"><span class="section-number-3">6.1.</span> Enable spell-check</h3>
+<div id="outline-container-org74198fc" class="outline-3">
+<h3 id="org74198fc"><span class="section-number-3">6.1.</span> Enable spell-check</h3>
 <div class="outline-text-3" id="text-6-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(add-hook 'org-mode-hook 'flyspell-mode)
@@ -495,10 +514,20 @@ files under the <code>modules</code> subdirectory. Load all of them from
 </table>
 </div>
 </div>
-
-<div id="outline-container-orga66296e" class="outline-3">
-<h3 id="orga66296e"><span class="section-number-3">6.2.</span> Tangle Emacs config and write HTML document</h3>
+<div id="outline-container-orgda704fe" class="outline-3">
+<h3 id="orgda704fe"><span class="section-number-3">6.2.</span> Enable syntax highlighting in HTML export</h3>
 <div class="outline-text-3" id="text-6-2">
+<p>
+#+begin<sub>src</sub> emacs-lisp :tangle "modules/org/org-mode.el"
+(use-package htmlize
+:ensure t)
+#+end<sub>src</sub>&gt;
+</p>
+</div>
+</div>
+<div id="outline-container-org27efc74" class="outline-3">
+<h3 id="org27efc74"><span class="section-number-3">6.3.</span> Tangle Emacs config and write HTML document</h3>
+<div class="outline-text-3" id="text-6-3">
 <p>
 This function tangles this file (<code>emacs.org</code>) and exports an HTML page
 (<code>emacs.html</code>):
@@ -507,8 +536,6 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/emacs-org-tangle</span> ()
 <span style="color: #b0d6f5;">"Tangle all code blocks in '</span><span style="color: #00bcff;">emacs.org</span><span style="color: #b0d6f5;">' and export this document to HTML."</span>
-(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">htmlize</span>
-  <span style="color: #f78fe7;">:ensure</span> t)
 (<span style="color: #b6a0ff;">let*</span> ((org-file (expand-file-name <span style="color: #79a8ff;">"emacs.org"</span> user-emacs-directory))
        (modules-dir (expand-file-name <span style="color: #79a8ff;">"modules"</span> user-emacs-directory))
        (export-dir (expand-file-name <span style="color: #79a8ff;">"export"</span> user-emacs-directory))
@@ -532,9 +559,9 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 
-<div id="outline-container-org926ddf9" class="outline-3">
-<h3 id="org926ddf9"><span class="section-number-3">6.3.</span> Local HTTP server for displaying exported HTML</h3>
-<div class="outline-text-3" id="text-6-3">
+<div id="outline-container-org1d5e5da" class="outline-3">
+<h3 id="org1d5e5da"><span class="section-number-3">6.4.</span> Local HTTP server for displaying exported HTML</h3>
+<div class="outline-text-3" id="text-6-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/emacs-org-html-server-host</span> <span style="color: #79a8ff;">"127.0.0.1"</span>) <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Set to 0.0.0.0 to serve publicly</span>
 (<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/emacs-org-html-server-port</span> <span style="color: #79a8ff;">"7776"</span>)
@@ -547,9 +574,9 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 
-<div id="outline-container-orge2b5abf" class="outline-3">
-<h3 id="orge2b5abf"><span class="section-number-3">6.4.</span> Org-Tempo code block snippets</h3>
-<div class="outline-text-3" id="text-6-4">
+<div id="outline-container-org211b7f8" class="outline-3">
+<h3 id="org211b7f8"><span class="section-number-3">6.5.</span> Org-Tempo code block snippets</h3>
+<div class="outline-text-3" id="text-6-5">
 <p>
 See the Org-Mode manual for <a href="https://orgmode.org/manual/Structure-Templates.html">Structure Templates</a>.
 </p>
@@ -568,9 +595,9 @@ library:
 </div>
 </div>
 
-<div id="outline-container-orgb9f3c70" class="outline-3">
-<h3 id="orgb9f3c70"><span class="section-number-3">6.5.</span> Use org headings as HTML anchors</h3>
-<div class="outline-text-3" id="text-6-5">
+<div id="outline-container-orgcbbd8e1" class="outline-3">
+<h3 id="orgcbbd8e1"><span class="section-number-3">6.6.</span> Use org headings as HTML anchors</h3>
+<div class="outline-text-3" id="text-6-6">
 <p>
 <a href="https://github.com/alphapapa/unpackaged.el/tree/master?tab=readme-ov-file#export-to-html-with-useful-anchors">unpackaged.el: Export to HTML with useful anchors</a>
 </p>
@@ -691,9 +718,9 @@ library:
 </div>
 </div>
 
-<div id="outline-container-org315df73" class="outline-3">
-<h3 id="org315df73"><span class="section-number-3">6.6.</span> Electric pairs</h3>
-<div class="outline-text-3" id="text-6-6">
+<div id="outline-container-orgbf6c842" class="outline-3">
+<h3 id="orgbf6c842"><span class="section-number-3">6.7.</span> Electric pairs</h3>
+<div class="outline-text-3" id="text-6-7">
 <p>
 This makes it so certain characters are duplicated automatically to
 make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</code>.
@@ -711,8 +738,8 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 
-<div id="outline-container-org4f748a0" class="outline-2">
-<h2 id="org4f748a0"><span class="section-number-2">7.</span> Registers</h2>
+<div id="outline-container-orgb59b201" class="outline-2">
+<h2 id="orgb59b201"><span class="section-number-2">7.</span> Registers</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 Registers are storage comparments in Emacs, which can hold several
@@ -721,8 +748,8 @@ configs, etc.
 </p>
 </div>
 
-<div id="outline-container-orga69dc2d" class="outline-3">
-<h3 id="orga69dc2d"><span class="section-number-3">7.1.</span> Position registers</h3>
+<div id="outline-container-orgd9a0322" class="outline-3">
+<h3 id="orgd9a0322"><span class="section-number-3">7.1.</span> Position registers</h3>
 <div class="outline-text-3" id="text-7-1">
 <p>
 There are some files that I want to have easy access to via <a href="https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Position-Registers">Position
@@ -742,8 +769,8 @@ Registers</a>. These registers are accessed via the prefix: <code>C-x r j</code>
 </div>
 </div>
 
-<div id="outline-container-orgede8f91" class="outline-2">
-<h2 id="orgede8f91"><span class="section-number-2">8.</span> Public Domain License (0BSD)</h2>
+<div id="outline-container-org1f9aa0f" class="outline-2">
+<h2 id="org1f9aa0f"><span class="section-number-2">8.</span> Public Domain License (0BSD)</h2>
 <div class="outline-text-2" id="text-8">
 <div class="org-src-container">
 <pre class="src src-:tangle">Copyright (C) 2025 by EnigmaCurry
@@ -765,8 +792,8 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.[21]
 </div>
 </div>
 
-<div id="outline-container-org4d23483" class="outline-2">
-<h2 id="org4d23483"><span class="section-number-2">9.</span> GNU General Public License</h2>
+<div id="outline-container-org35020b8" class="outline-2">
+<h2 id="org35020b8"><span class="section-number-2">9.</span> GNU General Public License</h2>
 <div class="outline-text-2" id="text-9">
 <div class="org-src-container">
 <pre class="src src-text">Some code in this distribution is specifically identified as being
@@ -1402,7 +1429,7 @@ copy of the Program in return for a fee.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-01-24 Fri 16:05</p>
+<p class="date">Created: 2025-01-24 Fri 16:21</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

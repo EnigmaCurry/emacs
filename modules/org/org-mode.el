@@ -2,8 +2,6 @@
 
 (defun my/emacs-org-tangle ()
 "Tangle all code blocks in 'emacs.org' and export this document to HTML."
-(use-package htmlize
-  :ensure t)
 (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))
        (modules-dir (expand-file-name "modules" user-emacs-directory))
        (export-dir (expand-file-name "export" user-emacs-directory))

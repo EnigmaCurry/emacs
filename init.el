@@ -47,7 +47,7 @@
     ;; Load .el files from subdirectories matching machine labels
     (dolist (subdir (directory-files my/modules-dir t "^[^.]" t)) ;; Skip . and ..
       (when (and (file-directory-p subdir)
-                 (my/has-label (file-name-nondirectory subdir)))  ;; Check label
+                 (my/machine-has-label (file-name-nondirectory subdir)))  ;; Check label
         (let ((files (directory-files subdir t "\\.el\\'")))
           (dolist (file (sort files #'string<))
             (message "Loading module from %s: %s" (file-name-nondirectory subdir) file)

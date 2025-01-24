@@ -156,7 +156,7 @@ files under the =modules= subdirectory. Load all of them from
       ;; Load .el files from subdirectories matching machine labels
       (dolist (subdir (directory-files my/modules-dir t "^[^.]" t)) ;; Skip . and ..
         (when (and (file-directory-p subdir)
-                   (my/has-label (file-name-nondirectory subdir)))  ;; Check label
+                   (my/machine-has-label (file-name-nondirectory subdir)))  ;; Check label
           (let ((files (directory-files subdir t "\\.el\\'")))
             (dolist (file (sort files #'string<))
               (message "Loading module from %s: %s" (file-name-nondirectory subdir) file)
@@ -164,6 +164,16 @@ files under the =modules= subdirectory. Load all of them from
 
     (my/load-modules)
 #+end_src
+
+Here are the [[https://github.com/EnigmaCurry/emacs/tree/literate-new/modules][available modules]]:
+
+#+begin_src emacs-lisp :results value replace :exports results
+my/machine-labels
+#+end_src
+
+#+RESULTS:
+| org |
+
 * Org mode
 ** Enable spell-check
 
@@ -176,7 +186,12 @@ files under the =modules= subdirectory. Load all of them from
 |------------------------------------------|
 | =M-x flyspell-correct-word-before-point= |
 | =C-c $=                                  |
+** Enable syntax highlighting in HTML export
 
+#+begin_src emacs-lisp :tangle "modules/org/org-mode.el"
+(use-package htmlize
+:ensure t)
+#+end_src>
 ** Tangle Emacs config and write HTML document
 
 This function tangles this file (=emacs.org=) and exports an HTML page
@@ -185,8 +200,6 @@ This function tangles this file (=emacs.org=) and exports an HTML page
 #+begin_src emacs-lisp :tangle "modules/org/org-mode.el"  :mkdirp yes
   (defun my/emacs-org-tangle ()
   "Tangle all code blocks in 'emacs.org' and export this document to HTML."
-  (use-package htmlize
-    :ensure t)
   (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))
          (modules-dir (expand-file-name "modules" user-emacs-directory))
          (export-dir (expand-file-name "export" user-emacs-directory))
