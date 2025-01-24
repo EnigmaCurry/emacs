@@ -1,0 +1,123 @@
+#+TITLE: GNU Emacs 
+#+AUTHOR: EnigmaCurry
+#+LANGUAGE: en
+
+This is a new attempt at writing a literate Emacs config in Org Mode.
+
+* Goals
+
+ * All config goes in this file (=emacs.org=).
+ * All code blocks should be tangled into normal elisp files and
+   committed to the git reposiory after every source
+   change. =org-babel-load-file= is not to be used during startup.
+ * Basic functionality should work with stock Emacs features using
+   zero third party libraries.
+ * Loading external depdencies should be an opt-in experience for each
+   installation.
+ * To work on Linux (Wayland) and Android.
+ * All custom elisp functions and variables defined in this file are
+   to have the prefix (namespace) =my/=.
+
+* Early Init
+
+The early-init.el is the first config file that is loaded. It is used
+to set the visual look and feel before everything else, so that it
+doesnt have a jarring change during load.
+
+** Dark theme
+
+A dark theme is an accesibility requirement.
+
+#+begin_src emacs-lisp :tangle "early-init.el"
+  (load-theme 'modus-vivendi) ;; modus themes are builtin to Emacs.
+#+end_src
+
+** Font
+
+Set the font size:
+#+begin_src emacs-lisp :tangle "early-init.el"
+  (set-face-attribute 'default nil :height 150) ;; font size
+#+end_src
+
+** Disable GUI menu, toolbar, and scrollbar
+
+#+begin_src emacs-lisp :tangle "early-init.el"
+  ;; Turn off distractions
+  (menu-bar-mode -1)  ;; Press F10 to bring up the menu if you still need it
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (setq inhibit-startup-screen t)
+  (setq window-resize-pixelwise t)
+  (setq frame-resize-pixelwise t)
+#+end_src
+
+* Load submodules
+
+All the code-blocks in this file are tangled to separate categorized
+files under the =modules= subdirectory. Load all of them from
+=init.el=:
+
+#+begin_src emacs-lisp :tangle "init.el"
+  (defvar my/modules-dir (expand-file-name "modules/" user-emacs-directory))
+  (defun my/load-modules ()
+    "Load all Emacs Lisp files in the modules sub-directory in lexicographic order."
+    (when (file-directory-p my/modules-dir)
+      (let ((files (directory-files my/modules-dir t "\\.el\\'")))
+	(dolist (file (sort files #'string<))
+	  (message "Loading module: %s" file)
+	  (load file nil 'nomessage)))))
+  (my/load-modules)
+#+end_src
+
+* Registers
+
+Registers are storage comparments in Emacs, which can hold several
+different types of things: strings, numbers, buffer positions, frame
+configs, etc.
+
+** Position registers
+
+There are some files that I want to have easy access to via [[info:emacs#Position Registers][Position
+Registers]]. These registers are accessed via the prefix: =C-x r j=
+(register jump):
+
+ * =C-x r j e= - open the Emacs config file buffer
+
+ #+begin_src emacs-lisp :tangle "modules/registers.el"
+   (set-register ?e '(file . "~/git/vendor/enigmacurry/emacs-new/emacs.org"))
+ #+end_src
+
+* Org mode
+
+** Tangle emacs function
+
+This function tangles this file (=emacs.org=):
+
+#+begin_src emacs-lisp :tangle "modules/org-mode.el"
+(defun my/tangle-emacs-org ()
+  "Tangle the 'emacs.org' file in the user-emacs-directory."
+  (let ((org-file (expand-file-name "emacs.org" user-emacs-directory)))
+    (when (file-exists-p org-file)
+      (org-babel-tangle-file org-file))))
+#+end_src
+
+This function must be added to the list of allowed local variables:
+
+** Org-Tempo code block snippets
+
+See the Org-Mode manual for [[https://orgmode.org/manual/Structure-Templates.html][Structure Templates]].
+
+To easily create Org source blocks, you can type the keys =<s= +
+TAB. This feature is turned on only if you load the =org-tempo=
+library:
+
+#+begin_src emacs-lisp :tangle "modules/org-mode.el"
+  (require 'org-tempo) ; required for Structure Templates
+                       ; See https://orgmode.org/manual/Structure-Templates.html
+#+end_src
+
+* Local Variables :noexport:
+# Local Variables:
+# coding: utf-8
+# eval: (add-hook 'after-save-hook 'my/tangle-emacs-org nil t)
+# End:
