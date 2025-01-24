@@ -1,4 +1,4 @@
-#+TITLE: GNU Emacs 
+#+TITLE: GNU Emacs Configuration
 #+AUTHOR: EnigmaCurry
 #+LANGUAGE: en
 
@@ -6,18 +6,26 @@ This is a new attempt at writing a literate Emacs config in Org Mode.
 
 * Goals
 
- * All config goes in this file (=emacs.org=).
+ * All config goes in this file ([[file:emacs.org][emacs.org]]) [[[https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org][GitHub]]].
  * All code blocks should be tangled into normal elisp files and
    committed to the git reposiory after every source
-   change. =org-babel-load-file= is not to be used during startup.
+   change. [[https://orgmode.org/worg/org-contrib/babel/intro.html#emacs-initialization][org-babel-load-file]] is *NOT* used during startup.
  * Basic functionality should work with stock Emacs features using
    zero third party libraries.
  * Loading external depdencies should be an opt-in experience for each
    installation.
- * To work on Linux (Wayland) and Android.
+ * To work on Linux CLI, Wayland, and Android.
  * All custom elisp functions and variables defined in this file are
    to have the prefix (namespace) =my/=.
 
+* LICENSE
+
+This entire configuration is licensed under the GNU GENERAL PUBLIC
+LICENSE Version 3, published 29 June 2007. See [[file:LICENSE][LICENSE]]. Personally I
+don't care what you do with this code, and you don't have to credit me
+if you copy it, but I may have copied other GPL code from other people
+that do care.
+ 
 * Early Init
 
 The early-init.el is the first config file that is loaded. It is used
@@ -89,19 +97,40 @@ Registers]]. These registers are accessed via the prefix: =C-x r j=
 
 * Org mode
 
-** Tangle emacs function
+** Tangle emacs config and write HTML document
 
-This function tangles this file (=emacs.org=):
+This function tangles this file (=emacs.org=) and exports an HTML page
+(=emacs.html=):
 
 #+begin_src emacs-lisp :tangle "modules/org-mode.el"
-(defun my/tangle-emacs-org ()
-  "Tangle the 'emacs.org' file in the user-emacs-directory."
-  (let ((org-file (expand-file-name "emacs.org" user-emacs-directory)))
+  (defun my/emacs-org-tangle ()
+  "Tangle all code blocks in 'emacs.org' and export this document to HTML."
+  (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))
+	 (export-dir (expand-file-name "export" user-emacs-directory))
+	 (export-file (expand-file-name "emacs.html" export-dir)))
     (when (file-exists-p org-file)
-      (org-babel-tangle-file org-file))))
+      (with-current-buffer (find-file-noselect org-file)
+	(org-babel-tangle)
+	(org-export-to-file 'html export-file)
+	;; No reason to save the buffer again, but maybe in the future,
+	;; we will want to run code blocks automatically and capture output?
+	;(save-buffer)
+	))))
+  ;; Tell Emacs to trust this code in all buffer local vars:
+  (add-to-list 'safe-local-variable-values
+	       '(eval add-hook 'after-save-hook 'my/emacs-org-tangle nil t))
 #+end_src
 
-This function must be added to the list of allowed local variables:
+
+** Local HTTP server for displaying exported HTMLz
+
+#+begin_src emacs-lisp :tangle "modules/org-mode.el"
+  (defvar my/emacs-org-html-server-host "127.0.0.1") ;; Set to 0.0.0.0 to serve publicly
+  (defvar my/emacs-org-html-server-port "7776")
+  (start-process "live-server" "*my/emacs-org-html-server*" "live-server" "-H" my/emacs-org-html-server-host "-p"
+   my/emacs-org-html-server-port "-o" "emacs.html"
+		 (expand-file-name "export" user-emacs-directory))
+#+end_src
 
 ** Org-Tempo code block snippets
 
@@ -116,8 +145,129 @@ library:
                        ; See https://orgmode.org/manual/Structure-Templates.html
 #+end_src
 
+** Use org headings as HTML anchors
+
+[[https://github.com/alphapapa/unpackaged.el/tree/master?tab=readme-ov-file#export-to-html-with-useful-anchors][unpackaged.el: Export to HTML with useful anchors]]
+
+#+begin_src emacs-lisp :tangle "modules/org-mode-unpackaged.el"
+  ;; This is a modified portion of unpackaged.el
+  ;;
+  ;; Copyright (C) 2018  Adam Porter
+  ;; URL: https://github.com/alphapapa/unpackaged.el
+  ;;
+  ;;; License:
+  ;; This program is free software; you can redistribute it and/or modify
+  ;; it under the terms of the GNU General Public License as published by
+  ;; the Free Software Foundation, either version 3 of the License, or
+  ;; (at your option) any later version.
+  ;;
+  ;; This program is distributed in the hope that it will be useful,
+  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ;; GNU General Public License for more details.
+  ;;
+  ;; You should have received a copy of the GNU General Public License
+  ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+  (require 'cl-lib)
+  (eval-when-compile
+    (require 'easy-mmode)
+    (require 'ox))
+
+  (use-package ox
+    :config
+    (define-minor-mode my/org-export-html-with-useful-ids-mode
+      "Attempt to export Org as HTML with useful link IDs.
+    Instead of random IDs like \"#orga1b2c3\", use heading titles,
+    made unique when necessary."
+      :global t
+      (if my/org-export-html-with-useful-ids-mode
+	  (advice-add #'org-export-get-reference :override #'my/org-export-get-reference)
+	(advice-remove #'org-export-get-reference #'my/org-export-get-reference)))
+
+    (defun my/org-export-get-reference (datum info)
+      "Like `org-export-get-reference', except uses heading titles instead of random numbers."
+      (let ((cache (plist-get info :internal-references)))
+	(or (car (rassq datum cache))
+	    (let* ((crossrefs (plist-get info :crossrefs))
+		   (cells (org-export-search-cells datum))
+		   ;; Preserve any pre-existing association between
+		   ;; a search cell and a reference, i.e., when some
+		   ;; previously published document referenced a location
+		   ;; within current file (see
+		   ;; `org-publish-resolve-external-link').
+		   ;;
+		   ;; However, there is no guarantee that search cells are
+		   ;; unique, e.g., there might be duplicate custom ID or
+		   ;; two headings with the same title in the file.
+		   ;;
+		   ;; As a consequence, before re-using any reference to
+		   ;; an element or object, we check that it doesn't refer
+		   ;; to a previous element or object.
+		   (new (or (cl-some
+			     (lambda (cell)
+			       (let ((stored (cdr (assoc cell crossrefs))))
+				 (when stored
+				   (let ((old (org-export-format-reference stored)))
+				     (and (not (assoc old cache)) stored)))))
+			     cells)
+			    (when (org-element-property :raw-value datum)
+			      ;; Heading with a title
+			      (my/org-export-new-title-reference datum cache))
+			    ;; NOTE: This probably breaks some Org Export
+			    ;; feature, but if it does what I need, fine.
+			    (org-export-format-reference
+			     (org-export-new-reference cache))))
+		   (reference-string new))
+	      ;; Cache contains both data already associated to
+	      ;; a reference and in-use internal references, so as to make
+	      ;; unique references.
+	      (dolist (cell cells) (push (cons cell new) cache))
+	      ;; Retain a direct association between reference string and
+	      ;; DATUM since (1) not every object or element can be given
+	      ;; a search cell (2) it permits quick lookup.
+	      (push (cons reference-string datum) cache)
+	      (plist-put info :internal-references cache)
+	      reference-string))))
+
+    (defun my/org-export-new-title-reference (datum cache)
+      "Return new reference for DATUM that is unique in CACHE."
+      (cl-macrolet ((inc-suffixf (place)
+		      `(progn
+			 (string-match (rx bos
+					   (minimal-match (group (1+ anything)))
+					   (optional "--" (group (1+ digit)))
+					   eos)
+				       ,place)
+			 ;; HACK: `s1' instead of a gensym.
+			 (-let* (((s1 suffix) (list (match-string 1 ,place)
+						    (match-string 2 ,place)))
+				 (suffix (if suffix
+					     (string-to-number suffix)
+					   0)))
+				(setf ,place (format "%s--%s" s1 (cl-incf suffix)))))))
+	(let* ((title (org-element-property :raw-value datum))
+	       (ref (url-hexify-string (substring-no-properties title)))
+	       (parent (org-element-property :parent datum)))
+	  (while (cl-some (lambda (it) (equal ref (car it))) cache)
+	    ;; Title not unique: make it so.
+	    (if parent
+		;; Append ancestor title.
+		(setf title (concat (org-element-property :raw-value parent)
+				    "--" title)
+		      ref (url-hexify-string (substring-no-properties title))
+		      parent (org-element-property :parent parent))
+	      ;; No more ancestors: add and increment a number.
+	      (inc-suffixf ref)))
+	  ref))))
+#+end_src
+
 * Local Variables :noexport:
+
+The local variables section needs to be at the very bottom of this
+file.
+
 # Local Variables:
 # coding: utf-8
-# eval: (add-hook 'after-save-hook 'my/tangle-emacs-org nil t)
+# eval: (add-hook 'after-save-hook 'my/emacs-org-tangle nil t)
 # End:
