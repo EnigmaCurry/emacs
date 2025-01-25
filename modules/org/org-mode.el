@@ -1,10 +1,10 @@
 (use-package org
   :ensure nil
   :hook (org-mode . flyspell-mode)
-  :general
-  ("s-<up>" 'org-previous-visible-heading)
-  ("s-<down>" 'org-next-visible-heading)
-  ("C-c o k" 'org-babel-remove-result)
+  ;:general
+  ;("s-<up>" 'org-previous-visible-heading)
+  ;("s-<down>" 'org-next-visible-heading)
+  ;("C-c o k" 'org-babel-remove-result)
   :config
   (setq org-startup-folded t)
   )

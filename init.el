@@ -1,10 +1,9 @@
+;; core libraries
 (require 'cl-lib)
+
 ;; Nice defaults
-(setq confirm-kill-emacs #'yes-or-no-p)
-(setq vc-follow-symlinks t)
-(save-place-mode t)
-(savehist-mode t)
-(recentf-mode t)
+(setq-default confirm-kill-emacs #'yes-or-no-p)
+(setq-default vc-follow-symlinks t)
 (setq-default show-trailing-whitespace t)
 (setq-default indicate-empty-lines t)
 (setq-default indicate-buffer-boundaries 'left)
@@ -14,35 +13,56 @@
 (setq-default visible-bell t)
 (setq-default dired-listing-switches "-al --group-directories-first")
 (setq-default tramp-default-method "ssh")
-(column-number-mode)
+(setq-default native-comp-deferred-compilation-deny-list nil)
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
-;; Enable native compilation for all elisp files:
-(setq-default native-comp-deferred-compilation-deny-list nil)
 
-(defun my/add-cargo-bin-to-path ()
-  "Ensure that ~/.cargo/bin is in the Emacs PATH environment variable.
-If not present, add it to exec-path and PATH environment variable."
+;; Backups and auto-save
+;; Reference: https://www.emacswiki.org/emacs/BackupDirectory
+;; Reference: https://www.emacswiki.org/emacs/ForceBackups
+(setq backup-by-copying t)
+(setq backup-directory-alist
+      `(("." . ,(expand-file-name "backup" user-emacs-directory))))
+(setq delete-old-versions t)
+(setq kept-new-versions 6)
+(setq kept-old-versions 2)
+(setq version-control t)
+(setq vc-make-backup-files t)
+(add-hook 'before-save-hook
+          (lambda () (setq buffer-backed-up nil)))
+;; autosaves go in a separate directory
+(let ((auto-save-dir (expand-file-name "auto-save" user-emacs-directory)))
+  (make-directory auto-save-dir t)
+  (setq auto-save-file-name-transforms
+        `((".*" ,auto-save-dir t))))
+
+;; Store customizations in custom.el
+(setq custom-file (locate-user-emacs-file "custom.el"))
+(when (file-exists-p custom-file)
+  (load custom-file))
+;; Shortcut to open custom settings:
+(defun my/custom-settings ()
+  "Open the Emacs customization interface for my custom settings."
   (interactive)
-  (let ((cargo-bin (expand-file-name "~/.cargo/bin")))
-    (unless (member cargo-bin exec-path)
-      (message "Adding ~/.cargo/bin to PATH")
-      (setenv "PATH" (concat cargo-bin path-separator (getenv "PATH")))
-      (add-to-list 'exec-path cargo-bin)
-      (message "~/.cargo/bin added to PATH."))
-    (if (member cargo-bin exec-path)
-        (message "~/.cargo/bin is already in PATH.")
-      (message "Failed to add ~/.cargo/bin to PATH."))))
-(my/add-cargo-bin-to-path)
+  (customize-group 'my/custom-settings))
 
-(defvar my/machine-labels
-  (with-temp-buffer
-    (ignore-errors
-      (insert-file-contents (expand-file-name "~/.config/machine-labels"))
-      (cl-remove-if (lambda (line) (string-match-p "^#" line))
-                    (split-string (buffer-string) "\n" t))))
-  "List of machine-specific labels read from .machine-labels, ignoring comments.")
+;; Global minor modes
+(column-number-mode)
+(save-place-mode t)
+(savehist-mode t)
+(recentf-mode t)
+(electric-pair-mode t)
+
+;; Customize which emacs config modules to load per-machine:
+(defcustom my/machine-labels '()
+  "List of machine-specific labels to configure which modules to load."
+  :type '(repeat string)
+  :group 'my/custom-settings)
+(defun my/machine-labels ()
+  "Return the list of machine-specific labels."
+  (interactive)
+  my/machine-labels)
 (defun my/machine-has-label (label)
   "Check if the current machine is labeled with LABEL."
   (if (member label my/machine-labels)
@@ -73,4 +93,5 @@ If not present, add it to exec-path and PATH environment variable."
             (message "Loading module from %s: %s" (file-name-nondirectory subdir) file)
             (load file nil 'nomessage)))))))
 
-  (my/load-modules)
+;; load the modules configured for this macchine
+(my/load-modules)
