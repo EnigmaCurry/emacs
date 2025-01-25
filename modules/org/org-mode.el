@@ -1,4 +1,16 @@
-(add-hook 'org-mode-hook 'flyspell-mode)
+(use-package org
+  :ensure nil
+  :hook (org-mode . flyspell-mode)
+  :general
+  ("s-<up>" 'org-previous-visible-heading)
+  ("s-<down>" 'org-next-visible-heading)
+  ("C-c o k" 'org-babel-remove-result)
+  :config
+  (setq org-startup-folded t)
+  )
+
+(use-package htmlize
+  :ensure t)
 
 (defun my/emacs-org-tangle ()
 "Tangle all code blocks in 'emacs.org' and export this document to HTML."
@@ -23,10 +35,28 @@
 
 (defvar my/emacs-org-html-server-host "127.0.0.1") ;; Set to 0.0.0.0 to serve publicly
 (defvar my/emacs-org-html-server-port "7776")
-(start-process "live-server" "*my/emacs-org-html-server*" "live-server"
-	   "-H" my/emacs-org-html-server-host "-p"
-	   my/emacs-org-html-server-port "-o" "emacs.html"
-	   (expand-file-name "export" user-emacs-directory))
+(defun my/emacs-org-html-server ()
+  "Start a local live-server for org HTML exports. Installs live-server if not found.
+   If cargo is not available, it notifies the user."
+  (interactive)
+  (let ((live-server-path (executable-find "live-server"))
+        (cargo-path (executable-find "cargo")))
+    (if live-server-path
+        (progn
+          (message "live-server found at: %s" live-server-path)
+          (let ((host "127.0.0.1")  ;; Set to "0.0.0.0" to serve publicly
+                (port "7776")
+                (html-file "emacs.html")
+                (export-dir (expand-file-name "export" user-emacs-directory)))
+            (start-process "live-server" "*my/emacs-org-html-server*" "live-server"
+                           "-H" host "-p" port "-o" html-file export-dir)
+            (message "Started live-server on http://%s:%s" host port)))
+      (if cargo-path
+          (progn
+            (message "live-server not found, installing via cargo...")
+            (start-process-shell-command "cargo-install-live-server" "*cargo-install-output*" "cargo install live-server")
+            (message "Installation started. Please rerun `M-x my/emacs-org-html-server` once installation completes."))
+        (message "Neither live-server nor cargo were found. Please install Rust and Cargo first.")))))
 
 (require 'org-tempo) ; required for Structure Templates
                      ; See https://orgmode.org/manual/Structure-Templates.html

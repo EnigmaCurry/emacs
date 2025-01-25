@@ -5,7 +5,8 @@
 
 * Goals
 
-This is a new attempt at writing a literate Emacs config in Org Mode.
+This is a new attempt at writing a light literate Emacs config in Org
+Mode.
 
  * All config goes in this file ([[file:emacs.org][emacs.org]]) [[[https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1][Source on GitHub]]].
  * All code blocks are tangled into normal elisp files and committed
@@ -13,11 +14,13 @@ This is a new attempt at writing a literate Emacs config in Org Mode.
    change. [[https://orgmode.org/worg/org-contrib/babel/intro.html#emacs-initialization][org-babel-load-file]] is *NOT* called during startup.
  * Basic functionality should work with stock Emacs features using
    zero third party libraries.
- * Loading external dependencies should be an opt-in experience for each
-   installation.
+ * Loading external dependencies should be an opt-in experience for
+   each installation. The base config should work out of the box.
  * To work on Linux CLI, Wayland, and Android.
  * All custom elisp functions and variables defined in this file are
    to have the prefix (namespace) =my/=.
+ * Don't have small code blocks for every little thing. Group related
+   config together into larger blocks with =use-package=.
 
 * LICENSE
 
@@ -94,9 +97,30 @@ builtins allowed here:
   (put 'narrow-to-region 'disabled nil)
   (put 'downcase-region 'disabled nil)
   (put 'upcase-region 'disabled nil)
-  (electric-pair-mode 1)
   ;; Enable native compilation for all elisp files:
   (setq-default native-comp-deferred-compilation-deny-list nil)
+#+end_src
+
+** Cargo bin path
+
+Helper utilities are installed via Rust's Cargo. Ensure that the Cargo
+bin path is set:
+
+#+begin_src emacs-lisp :tangle "init.el"
+  (defun my/add-cargo-bin-to-path ()
+    "Ensure that ~/.cargo/bin is in the Emacs PATH environment variable.
+  If not present, add it to exec-path and PATH environment variable."
+    (interactive)
+    (let ((cargo-bin (expand-file-name "~/.cargo/bin")))
+      (unless (member cargo-bin exec-path)
+        (message "Adding ~/.cargo/bin to PATH")
+        (setenv "PATH" (concat cargo-bin path-separator (getenv "PATH")))
+        (add-to-list 'exec-path cargo-bin)
+        (message "~/.cargo/bin added to PATH."))
+      (if (member cargo-bin exec-path)
+          (message "~/.cargo/bin is already in PATH.")
+        (message "Failed to add ~/.cargo/bin to PATH."))))
+  (my/add-cargo-bin-to-path)
 #+end_src
 
 * Per-machine config with opt-in features
@@ -116,18 +140,24 @@ python
 #+end_example
 
 #+begin_src emacs-lisp :tangle "init.el"
-      (defvar my/machine-labels
-        (with-temp-buffer
-          (ignore-errors
-            (insert-file-contents (expand-file-name "~/.config/machine-labels"))
-            (cl-remove-if (lambda (line) (string-match-p "^#" line))
-                          (split-string (buffer-string) "\n" t))))
-        "List of machine-specific labels read from .machine-labels, ignoring comments.")
-      (defun my/machine-has-label (label)
-        "Check if the current machine is labeled with LABEL."
-        (if (member label my/machine-labels)
-            t
-          nil))
+  (defvar my/machine-labels
+    (with-temp-buffer
+      (ignore-errors
+        (insert-file-contents (expand-file-name "~/.config/machine-labels"))
+        (cl-remove-if (lambda (line) (string-match-p "^#" line))
+                      (split-string (buffer-string) "\n" t))))
+    "List of machine-specific labels read from .machine-labels, ignoring comments.")
+  (defun my/machine-has-label (label)
+    "Check if the current machine is labeled with LABEL."
+    (if (member label my/machine-labels)
+        t
+      nil))
+  (defun my/machine-labels-available ()
+    "List all available machine labels"
+    (let ((modules-dir (expand-file-name "modules" user-emacs-directory)))
+      (mapcar #'file-name-nondirectory
+              (seq-filter #'file-directory-p
+                          (directory-files modules-dir t "^[^.]" t)))))
 #+end_src
 
 Now you can configuration that applies only to certain machine labels:
@@ -168,30 +198,43 @@ files under the =modules= subdirectory. Load all of them from
 Here are the [[https://github.com/EnigmaCurry/emacs/tree/literate-new/modules][available modules]]:
 
 #+begin_src emacs-lisp :results value replace :exports results
-my/machine-labels
+(my/machine-labels-available)
 #+end_src
 
 #+RESULTS:
 | org |
 
-* Org mode
-** Enable spell-check
 
-#+begin_src emacs-lisp :tangle "modules/org/org-mode.el" :mkdirp yes
-  (add-hook 'org-mode-hook 'flyspell-mode)
+* Org mode
+
+#+begin_src emacs-lisp :tangle "modules/org/org-mode.el"
+  (use-package org
+    :ensure nil
+    :hook (org-mode . flyspell-mode)
+    :general
+    ("s-<up>" 'org-previous-visible-heading)
+    ("s-<down>" 'org-next-visible-heading)
+    ("C-c o k" 'org-babel-remove-result)
+    :config
+    (setq org-startup-folded t)
+    )
 #+end_src
+
+** Enable spell-check
 
 |------------------------------------------|
 | Fix the spelling of the word at point    |
 |------------------------------------------|
 | =M-x flyspell-correct-word-before-point= |
 | =C-c $=                                  |
+
 ** Enable syntax highlighting in HTML export
 
 #+begin_src emacs-lisp :tangle "modules/org/org-mode.el"
-(use-package htmlize
-:ensure t)
-#+end_src>
+  (use-package htmlize
+    :ensure t)
+#+end_src
+
 ** Tangle Emacs config and write HTML document
 
 This function tangles this file (=emacs.org=) and exports an HTML page
@@ -225,11 +268,34 @@ This function tangles this file (=emacs.org=) and exports an HTML page
 #+begin_src emacs-lisp :tangle "modules/org/org-mode.el"  :mkdirp yes
   (defvar my/emacs-org-html-server-host "127.0.0.1") ;; Set to 0.0.0.0 to serve publicly
   (defvar my/emacs-org-html-server-port "7776")
-  (start-process "live-server" "*my/emacs-org-html-server*" "live-server"
-		 "-H" my/emacs-org-html-server-host "-p"
-		 my/emacs-org-html-server-port "-o" "emacs.html"
-		 (expand-file-name "export" user-emacs-directory))
+  (defun my/emacs-org-html-server ()
+    "Start a local live-server for org HTML exports. Installs live-server if not found.
+     If cargo is not available, it notifies the user."
+    (interactive)
+    (let ((live-server-path (executable-find "live-server"))
+          (cargo-path (executable-find "cargo")))
+      (if live-server-path
+          (progn
+            (message "live-server found at: %s" live-server-path)
+            (let ((host "127.0.0.1")  ;; Set to "0.0.0.0" to serve publicly
+                  (port "7776")
+                  (html-file "emacs.html")
+                  (export-dir (expand-file-name "export" user-emacs-directory)))
+              (start-process "live-server" "*my/emacs-org-html-server*" "live-server"
+                             "-H" host "-p" port "-o" html-file export-dir)
+              (message "Started live-server on http://%s:%s" host port)))
+        (if cargo-path
+            (progn
+              (message "live-server not found, installing via cargo...")
+              (start-process-shell-command "cargo-install-live-server" "*cargo-install-output*" "cargo install live-server")
+              (message "Installation started. Please rerun `M-x my/emacs-org-html-server` once installation completes."))
+          (message "Neither live-server nor cargo were found. Please install Rust and Cargo first.")))))
 #+end_src
+
+|--------------------------------|
+| Start the html server          |
+|--------------------------------|
+| =M-x my/emacs-org-html-server= |
 
 ** Org-Tempo code block snippets
 

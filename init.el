@@ -18,9 +18,23 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
-(electric-pair-mode 1)
 ;; Enable native compilation for all elisp files:
 (setq-default native-comp-deferred-compilation-deny-list nil)
+
+(defun my/add-cargo-bin-to-path ()
+  "Ensure that ~/.cargo/bin is in the Emacs PATH environment variable.
+If not present, add it to exec-path and PATH environment variable."
+  (interactive)
+  (let ((cargo-bin (expand-file-name "~/.cargo/bin")))
+    (unless (member cargo-bin exec-path)
+      (message "Adding ~/.cargo/bin to PATH")
+      (setenv "PATH" (concat cargo-bin path-separator (getenv "PATH")))
+      (add-to-list 'exec-path cargo-bin)
+      (message "~/.cargo/bin added to PATH."))
+    (if (member cargo-bin exec-path)
+        (message "~/.cargo/bin is already in PATH.")
+      (message "Failed to add ~/.cargo/bin to PATH."))))
+(my/add-cargo-bin-to-path)
 
 (defvar my/machine-labels
   (with-temp-buffer
@@ -34,6 +48,12 @@
   (if (member label my/machine-labels)
       t
     nil))
+(defun my/machine-labels-available ()
+  "List all available machine labels"
+  (let ((modules-dir (expand-file-name "modules" user-emacs-directory)))
+    (mapcar #'file-name-nondirectory
+            (seq-filter #'file-directory-p
+                        (directory-files modules-dir t "^[^.]" t)))))
 
 (defvar my/modules-dir (expand-file-name "modules/" user-emacs-directory))
 (defun my/load-modules ()
