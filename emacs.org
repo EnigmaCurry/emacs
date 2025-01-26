@@ -454,27 +454,31 @@ This function tangles this file (=emacs.org=) and exports an HTML page
 
 #+begin_src emacs-lisp :tangle "modules/org/org-mode.el"  :mkdirp yes
   (defun my/emacs-org-tangle ()
-  "Tangle all code blocks in 'emacs.org' and export this document to HTML."
-  (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))
-         (modules-dir (expand-file-name "modules" user-emacs-directory))
-         (export-dir (expand-file-name "export" user-emacs-directory))
-         (export-file (expand-file-name "emacs.html" export-dir))
-         (modules-symlink (expand-file-name "modules" export-dir)))
-    (when (file-exists-p org-file)
-      (with-current-buffer (find-file-noselect org-file)
-        (delete-directory modules-dir t)
-        (make-symbolic-link modules-dir modules-symlink t)
-        (org-babel-tangle)
-        (org-export-to-file 'html export-file)
-        ;; No reason to save the buffer again, but maybe in the future,
-        ;; we will want to run code blocks automatically and capture output?
-                                          ;(save-buffer)
-        ))))
-  ;; Tell Emacs to trust this code in all buffer local vars:
-  (add-to-list 'safe-local-variable-values
-               '(eval add-hook 'after-save-hook 'my/emacs-org-tangle nil t))
-  (add-to-list 'safe-local-variable-values
-               '(org-confirm-babel-evaluate))
+    "Tangle all code blocks in 'emacs.org' and export this document to HTML."
+    (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))
+           (modules-dir (expand-file-name "modules" user-emacs-directory))
+           (export-dir (expand-file-name "export" user-emacs-directory))
+           (export-file (expand-file-name "index.html" user-emacs-directory))
+           (modules-symlink (expand-file-name "modules" export-dir))
+           (index-symlink (expand-file-name "index.html" export-dir)))
+      (when (file-exists-p org-file)
+        (with-current-buffer (find-file-noselect org-file)
+          (delete-directory modules-dir t)
+          (org-babel-tangle)
+          (org-export-to-file 'html export-file)
+          (delete-directory export-dir t)
+          (make-directory export-dir nil)
+          (make-symbolic-link export-file index-symlink t)
+          (make-symbolic-link modules-dir modules-symlink t)
+          ;; No reason to save the buffer again, but maybe in the future,
+          ;; we will want to run code blocks automatically and capture output?
+          ;;(save-buffer)
+          ))))
+    ;; Tell Emacs to trust this code in all buffer local vars:
+    (add-to-list 'safe-local-variable-values
+                 '(eval add-hook 'after-save-hook 'my/emacs-org-tangle nil t))
+    (add-to-list 'safe-local-variable-values
+                 '(org-confirm-babel-evaluate))
 #+end_src
 
 ** Local HTTP server for displaying exported HTML
@@ -493,7 +497,7 @@ This function tangles this file (=emacs.org=) and exports an HTML page
             (message "live-server found at: %s" live-server-path)
             (let ((host "127.0.0.1")  ;; Set to "0.0.0.0" to serve publicly
                   (port "7776")
-                  (html-file "emacs.html")
+                  (html-file "index.html")
                   (export-dir (expand-file-name "export" user-emacs-directory)))
               (start-process "live-server" "*my/emacs-org-html-server*" "live-server"
                              "-H" host "-p" port "-o" html-file export-dir)
