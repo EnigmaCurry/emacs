@@ -70,11 +70,11 @@
              'silent
              'inhibit-cookies)
           (goto-char (point-max))
-          (eval-print-last-sexp)))
+          (eval-print-last-sexp)
+          ))
       (load bootstrap-file nil 'nomessage)
       (setq straight-use-package-by-default t)
-      (straight-use-package 'use-package)
-      (straight-pull-recipe-repositories))))
+      (straight-use-package 'use-package))))
 ;; Advise `use-package` to initialize straight.el when first called
 (advice-add 'use-package :before #'my/bootstrap-straight)
 
