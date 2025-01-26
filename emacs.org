@@ -48,7 +48,7 @@ See [[id:gnu-general-public-license][GNU General Public License]]
 
 * Early Init
 
-The =early-init.el= is the first config file that is loaded on Emacs
+The [[file:early-init.el]] is the first config file that is loaded on Emacs
 startup. It is used to set the visual look and feel before the GUI is
 initialized, so that it doesn't have a jarring visual change during
 startup. Additionally, early debug options are set here.
@@ -78,7 +78,7 @@ startup. Additionally, early debug options are set here.
 
 * Base config
 
-This is the base config of =init.el= which is loaded in all
+This is the base config of [[file:init.el]] which is loaded in all
 environments. Only Emacs builtins will be allowed here:
 
 ** Core libraries

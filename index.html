@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-26 Sun 14:42 -->
+<!-- 2025-01-26 Sun 14:58 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -201,62 +201,62 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org39825a9">1. Goals</a></li>
-<li><a href="#orgfe59262">2. LICENSE</a></li>
-<li><a href="#orge9277be">3. Early Init</a></li>
-<li><a href="#org4403f54">4. Base config</a>
+<li><a href="#org0e4d5e8">1. Goals</a></li>
+<li><a href="#orge8af242">2. LICENSE</a></li>
+<li><a href="#orgacee127">3. Early Init</a></li>
+<li><a href="#org82014a7">4. Base config</a>
 <ul>
-<li><a href="#orgbe57109">4.1. Core libraries</a></li>
-<li><a href="#orge642ac4">4.2. Nice defaults</a></li>
-<li><a href="#org8f7b6a6">4.3. Configure file backups and auto-saves</a></li>
-<li><a href="#orgb641162">4.4. Store Emacs customizations in <code>~/.emacs.d/custom.el</code> and load them</a></li>
-<li><a href="#org34b9940">4.5. Minor modes to activate everywhere</a></li>
+<li><a href="#orgc85f362">4.1. Core libraries</a></li>
+<li><a href="#org0f9aa2a">4.2. Nice defaults</a></li>
+<li><a href="#orgb5414b6">4.3. Configure file backups and auto-saves</a></li>
+<li><a href="#org672271e">4.4. Store Emacs customizations in <code>~/.emacs.d/custom.el</code> and load them</a></li>
+<li><a href="#org9b14cae">4.5. Minor modes to activate everywhere</a></li>
 </ul>
 </li>
-<li><a href="#orga67ea37">5. Rust helper programs</a>
+<li><a href="#org5735a5e">5. Rust helper programs</a>
 <ul>
-<li><a href="#orgade076e">5.1. Install Rustup</a></li>
-<li><a href="#org6d78a93">5.2. Path helpers</a></li>
-<li><a href="#org0153f5b">5.3. Set cargo path</a></li>
-<li><a href="#org0499091">5.4. Justfile</a></li>
+<li><a href="#org12d7367">5.1. Install Rustup</a></li>
+<li><a href="#org6ea148f">5.2. Path helpers</a></li>
+<li><a href="#orga9e116c">5.3. Set cargo path</a></li>
+<li><a href="#orgc8f342c">5.4. Justfile</a></li>
 </ul>
 </li>
-<li><a href="#org9aee944">6. use-package and straight.el</a>
+<li><a href="#org7f1e450">6. use-package and straight.el</a>
 <ul>
-<li><a href="#orga81423a">6.1. Lazy-load straight.el</a></li>
-<li><a href="#org6ced845">6.2. Track packages added via use-package</a></li>
+<li><a href="#org715082b">6.1. Lazy-load straight.el</a></li>
+<li><a href="#org62e0794">6.2. Track packages added via use-package</a></li>
 </ul>
 </li>
-<li><a href="#org8610862">7. Per-machine labels enable opt-in features</a>
+<li><a href="#org6dfcb95">7. Per-machine labels enable opt-in features</a>
 <ul>
-<li><a href="#org06d6e00">7.1. Load sub-modules configured by machine label</a></li>
+<li><a href="#org51aff9c">7.1. Load sub-modules configured by machine label</a></li>
 </ul>
 </li>
-<li><a href="#org628fae4">8. Programming mode</a></li>
-<li><a href="#org78f8e67">9. Registers</a>
+<li><a href="#orgec73ca3">8. Programming mode</a></li>
+<li><a href="#org523104f">9. Registers</a>
 <ul>
-<li><a href="#org3cfc56b">9.1. Position registers</a></li>
+<li><a href="#orgd431cd9">9.1. Position registers</a></li>
 </ul>
 </li>
-<li><a href="#orgde9d3c5">10. Org mode</a>
+<li><a href="#org13ae238">10. Org mode</a>
 <ul>
-<li><a href="#org41fe74a">10.1. Enable spell-check</a></li>
-<li><a href="#org344e9c5">10.2. Enable syntax highlighting in HTML export</a></li>
-<li><a href="#org71c8f21">10.3. Tangle Emacs config and write HTML document</a></li>
-<li><a href="#orgd1b9932">10.4. Local HTTP server for displaying exported HTML</a></li>
-<li><a href="#org8dc5175">10.5. Org-Tempo code block snippets</a></li>
-<li><a href="#orgcada837">10.6. Use org headings as HTML anchors</a></li>
-<li><a href="#org59b3fa4">10.7. Electric pairs</a></li>
+<li><a href="#orgb1a71d4">10.1. Enable spell-check</a></li>
+<li><a href="#orgb448840">10.2. Enable syntax highlighting in HTML export</a></li>
+<li><a href="#org51a1440">10.3. Tangle Emacs config and write HTML document</a></li>
+<li><a href="#orgd2b4ff6">10.4. Local HTTP server for displaying exported HTML</a></li>
+<li><a href="#org6d1c537">10.5. Org-Tempo code block snippets</a></li>
+<li><a href="#org7ce56a8">10.6. Use org headings as HTML anchors</a></li>
+<li><a href="#org982ecb1">10.7. Electric pairs</a></li>
 </ul>
 </li>
-<li><a href="#orga43f88d">11. Markdown mode</a></li>
-<li><a href="#org1334f7e">12. Public Domain License (0BSD)</a></li>
-<li><a href="#orgf8f7628">13. GNU General Public License</a></li>
+<li><a href="#orgf573625">11. Markdown mode</a></li>
+<li><a href="#orgff26538">12. Public Domain License (0BSD)</a></li>
+<li><a href="#org29cb445">13. GNU General Public License</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org39825a9" class="outline-2">
-<h2 id="org39825a9"><span class="section-number-2">1.</span> Goals</h2>
+<div id="outline-container-org0e4d5e8" class="outline-2">
+<h2 id="org0e4d5e8"><span class="section-number-2">1.</span> Goals</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This is a new attempt at writing a literate and modular Emacs config
@@ -288,8 +288,8 @@ little code blocks and bullet points.</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgfe59262" class="outline-2">
-<h2 id="orgfe59262"><span class="section-number-2">2.</span> LICENSE</h2>
+<div id="outline-container-orge8af242" class="outline-2">
+<h2 id="orge8af242"><span class="section-number-2">2.</span> LICENSE</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 This document and git repository has a mixed license (GPLv3 AND 0BSD).
@@ -306,19 +306,19 @@ repository is effectively (infectively) licensed as GPLv3.
 </p>
 
 <p>
-See <a href="#org1334f7e">Public Domain License (0BSD)</a>
+See <a href="#orgff26538">Public Domain License (0BSD)</a>
 </p>
 
 <p>
-See <a href="#orgf8f7628">GNU General Public License</a>
+See <a href="#org29cb445">GNU General Public License</a>
 </p>
 </div>
 </div>
-<div id="outline-container-orge9277be" class="outline-2">
-<h2 id="orge9277be"><span class="section-number-2">3.</span> Early Init</h2>
+<div id="outline-container-orgacee127" class="outline-2">
+<h2 id="orgacee127"><span class="section-number-2">3.</span> Early Init</h2>
 <div class="outline-text-2" id="text-3">
 <p>
-The <code>early-init.el</code> is the first config file that is loaded on Emacs
+The <a href="early-init.el">early-init.el</a> is the first config file that is loaded on Emacs
 startup. It is used to set the visual look and feel before the GUI is
 initialized, so that it doesn't have a jarring visual change during
 startup. Additionally, early debug options are set here.
@@ -349,16 +349,16 @@ startup. Additionally, early debug options are set here.
 </div>
 </div>
 </div>
-<div id="outline-container-org4403f54" class="outline-2">
-<h2 id="org4403f54"><span class="section-number-2">4.</span> Base config</h2>
+<div id="outline-container-org82014a7" class="outline-2">
+<h2 id="org82014a7"><span class="section-number-2">4.</span> Base config</h2>
 <div class="outline-text-2" id="text-4">
 <p>
-This is the base config of <code>init.el</code> which is loaded in all
+This is the base config of <a href="init.el">init.el</a> which is loaded in all
 environments. Only Emacs builtins will be allowed here:
 </p>
 </div>
-<div id="outline-container-orgbe57109" class="outline-3">
-<h3 id="orgbe57109"><span class="section-number-3">4.1.</span> Core libraries</h3>
+<div id="outline-container-orgc85f362" class="outline-3">
+<h3 id="orgc85f362"><span class="section-number-3">4.1.</span> Core libraries</h3>
 <div class="outline-text-3" id="text-4-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">core libraries</span>
@@ -367,8 +367,8 @@ environments. Only Emacs builtins will be allowed here:
 </div>
 </div>
 </div>
-<div id="outline-container-orge642ac4" class="outline-3">
-<h3 id="orge642ac4"><span class="section-number-3">4.2.</span> Nice defaults</h3>
+<div id="outline-container-org0f9aa2a" class="outline-3">
+<h3 id="org0f9aa2a"><span class="section-number-3">4.2.</span> Nice defaults</h3>
 <div class="outline-text-3" id="text-4-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Nice defaults</span>
@@ -392,8 +392,8 @@ environments. Only Emacs builtins will be allowed here:
 </div>
 </div>
 </div>
-<div id="outline-container-org8f7b6a6" class="outline-3">
-<h3 id="org8f7b6a6"><span class="section-number-3">4.3.</span> Configure file backups and auto-saves</h3>
+<div id="outline-container-orgb5414b6" class="outline-3">
+<h3 id="orgb5414b6"><span class="section-number-3">4.3.</span> Configure file backups and auto-saves</h3>
 <div class="outline-text-3" id="text-4-3">
 <ul class="org-ul">
 <li>Store file backups in <code>~/.emacs.d/backup</code> rather than being
@@ -427,8 +427,8 @@ idle buffers into the auto-save directory.</li>
 </div>
 </div>
 </div>
-<div id="outline-container-orgb641162" class="outline-3">
-<h3 id="orgb641162"><span class="section-number-3">4.4.</span> Store Emacs customizations in <code>~/.emacs.d/custom.el</code> and load them</h3>
+<div id="outline-container-org672271e" class="outline-3">
+<h3 id="org672271e"><span class="section-number-3">4.4.</span> Store Emacs customizations in <code>~/.emacs.d/custom.el</code> and load them</h3>
 <div class="outline-text-3" id="text-4-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Store customizations in custom.el</span>
@@ -444,8 +444,8 @@ idle buffers into the auto-save directory.</li>
 </div>
 </div>
 </div>
-<div id="outline-container-org34b9940" class="outline-3">
-<h3 id="org34b9940"><span class="section-number-3">4.5.</span> Minor modes to activate everywhere</h3>
+<div id="outline-container-org9b14cae" class="outline-3">
+<h3 id="org9b14cae"><span class="section-number-3">4.5.</span> Minor modes to activate everywhere</h3>
 <div class="outline-text-3" id="text-4-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Global minor modes</span>
@@ -459,8 +459,8 @@ idle buffers into the auto-save directory.</li>
 </div>
 </div>
 </div>
-<div id="outline-container-orga67ea37" class="outline-2">
-<h2 id="orga67ea37"><span class="section-number-2">5.</span> Rust helper programs</h2>
+<div id="outline-container-org5735a5e" class="outline-2">
+<h2 id="org5735a5e"><span class="section-number-2">5.</span> Rust helper programs</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 When moving beyond the base config, some additional helper programs
@@ -469,8 +469,8 @@ Rust's Cargo package manager, which is easily installed on any system
 via <a href="https://rustup.rs/">rustup</a>.
 </p>
 </div>
-<div id="outline-container-orgade076e" class="outline-3">
-<h3 id="orgade076e"><span class="section-number-3">5.1.</span> Install Rustup</h3>
+<div id="outline-container-org12d7367" class="outline-3">
+<h3 id="org12d7367"><span class="section-number-3">5.1.</span> Install Rustup</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 You may be able to find <code>rustup</code> in your system package manager, and
@@ -492,8 +492,8 @@ But you can also <a href="https://rustup.rs/">install it</a> the curl bomb way:
 </div>
 </div>
 </div>
-<div id="outline-container-org6d78a93" class="outline-3">
-<h3 id="org6d78a93"><span class="section-number-3">5.2.</span> Path helpers</h3>
+<div id="outline-container-org6ea148f" class="outline-3">
+<h3 id="org6ea148f"><span class="section-number-3">5.2.</span> Path helpers</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 These functions help to find programs in your path:
@@ -527,8 +527,8 @@ These functions help to find programs in your path:
 </div>
 </div>
 </div>
-<div id="outline-container-org0153f5b" class="outline-3">
-<h3 id="org0153f5b"><span class="section-number-3">5.3.</span> Set cargo path</h3>
+<div id="outline-container-orga9e116c" class="outline-3">
+<h3 id="orga9e116c"><span class="section-number-3">5.3.</span> Set cargo path</h3>
 <div class="outline-text-3" id="text-5-3">
 <p>
 Cargo is the package manager for Rust and it is already installed via
@@ -553,8 +553,8 @@ Ensure that the Cargo bin path is set:
 </div>
 </div>
 </div>
-<div id="outline-container-org0499091" class="outline-3">
-<h3 id="org0499091"><span class="section-number-3">5.4.</span> Justfile</h3>
+<div id="outline-container-orgc8f342c" class="outline-3">
+<h3 id="orgc8f342c"><span class="section-number-3">5.4.</span> Justfile</h3>
 <div class="outline-text-3" id="text-5-4">
 <p>
 <a href="https://github.com/casey/just">Just</a> is like Make. Install <code>just</code> via cargo:
@@ -586,12 +586,12 @@ clean:
 </div>
 </div>
 </div>
-<div id="outline-container-org9aee944" class="outline-2">
-<h2 id="org9aee944"><span class="section-number-2">6.</span> use-package and straight.el</h2>
+<div id="outline-container-org7f1e450" class="outline-2">
+<h2 id="org7f1e450"><span class="section-number-2">6.</span> use-package and straight.el</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-orga81423a" class="outline-3">
-<h3 id="orga81423a"><span class="section-number-3">6.1.</span> Lazy-load straight.el</h3>
+<div id="outline-container-org715082b" class="outline-3">
+<h3 id="org715082b"><span class="section-number-3">6.1.</span> Lazy-load straight.el</h3>
 <div class="outline-text-3" id="text-6-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/bootstrap-straight</span> (<span style="color: #6ae4b9;">&amp;rest</span> _)
@@ -619,8 +619,8 @@ clean:
 </div>
 </div>
 </div>
-<div id="outline-container-org6ced845" class="outline-3">
-<h3 id="org6ced845"><span class="section-number-3">6.2.</span> Track packages added via use-package</h3>
+<div id="outline-container-org62e0794" class="outline-3">
+<h3 id="org62e0794"><span class="section-number-3">6.2.</span> Track packages added via use-package</h3>
 <div class="outline-text-3" id="text-6-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/use-package-tracked-list</span> nil
@@ -655,8 +655,8 @@ clean:
 </div>
 </div>
 </div>
-<div id="outline-container-org8610862" class="outline-2">
-<h2 id="org8610862"><span class="section-number-2">7.</span> Per-machine labels enable opt-in features</h2>
+<div id="outline-container-org6dfcb95" class="outline-2">
+<h2 id="org6dfcb95"><span class="section-number-2">7.</span> Per-machine labels enable opt-in features</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 This is a modular Emacs configuration designed to run in several
@@ -694,8 +694,8 @@ that become enabled by adding labels on a per-machine basis.
 described in the next section.
 </p>
 </div>
-<div id="outline-container-org06d6e00" class="outline-3">
-<h3 id="org06d6e00"><span class="section-number-3">7.1.</span> Load sub-modules configured by machine label</h3>
+<div id="outline-container-org51aff9c" class="outline-3">
+<h3 id="org51aff9c"><span class="section-number-3">7.1.</span> Load sub-modules configured by machine label</h3>
 <div class="outline-text-3" id="text-7-1">
 <p>
 The code-blocks in this file are tangled to separate categorized files
@@ -767,8 +767,8 @@ Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/mod
 </div>
 </div>
 </div>
-<div id="outline-container-org628fae4" class="outline-2">
-<h2 id="org628fae4"><span class="section-number-2">8.</span> Programming mode</h2>
+<div id="outline-container-orgec73ca3" class="outline-2">
+<h2 id="orgec73ca3"><span class="section-number-2">8.</span> Programming mode</h2>
 <div class="outline-text-2" id="text-8">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Basic programming mode settings</span>
@@ -779,8 +779,8 @@ Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/mod
 </div>
 </div>
 </div>
-<div id="outline-container-org78f8e67" class="outline-2">
-<h2 id="org78f8e67"><span class="section-number-2">9.</span> Registers</h2>
+<div id="outline-container-org523104f" class="outline-2">
+<h2 id="org523104f"><span class="section-number-2">9.</span> Registers</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 Registers are storage comparments in Emacs, which can hold several
@@ -788,8 +788,8 @@ different types of things: strings, numbers, buffer positions, frame
 configs, etc.
 </p>
 </div>
-<div id="outline-container-org3cfc56b" class="outline-3">
-<h3 id="org3cfc56b"><span class="section-number-3">9.1.</span> Position registers</h3>
+<div id="outline-container-orgd431cd9" class="outline-3">
+<h3 id="orgd431cd9"><span class="section-number-3">9.1.</span> Position registers</h3>
 <div class="outline-text-3" id="text-9-1">
 <p>
 There are some files that I want to have easy access to via <a href="https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Position-Registers">Position
@@ -808,8 +808,8 @@ Registers</a>. These registers are accessed via the prefix: <code>C-x r j</code>
 </div>
 </div>
 </div>
-<div id="outline-container-orgde9d3c5" class="outline-2">
-<h2 id="orgde9d3c5"><span class="section-number-2">10.</span> Org mode</h2>
+<div id="outline-container-org13ae238" class="outline-2">
+<h2 id="org13ae238"><span class="section-number-2">10.</span> Org mode</h2>
 <div class="outline-text-2" id="text-10">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">org</span>
@@ -824,8 +824,8 @@ Registers</a>. These registers are accessed via the prefix: <code>C-x r j</code>
 </pre>
 </div>
 </div>
-<div id="outline-container-org41fe74a" class="outline-3">
-<h3 id="org41fe74a"><span class="section-number-3">10.1.</span> Enable spell-check</h3>
+<div id="outline-container-orgb1a71d4" class="outline-3">
+<h3 id="orgb1a71d4"><span class="section-number-3">10.1.</span> Enable spell-check</h3>
 <div class="outline-text-3" id="text-10-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -850,8 +850,8 @@ Registers</a>. These registers are accessed via the prefix: <code>C-x r j</code>
 </table>
 </div>
 </div>
-<div id="outline-container-org344e9c5" class="outline-3">
-<h3 id="org344e9c5"><span class="section-number-3">10.2.</span> Enable syntax highlighting in HTML export</h3>
+<div id="outline-container-orgb448840" class="outline-3">
+<h3 id="orgb448840"><span class="section-number-3">10.2.</span> Enable syntax highlighting in HTML export</h3>
 <div class="outline-text-3" id="text-10-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">htmlize</span>)
@@ -859,8 +859,8 @@ Registers</a>. These registers are accessed via the prefix: <code>C-x r j</code>
 </div>
 </div>
 </div>
-<div id="outline-container-org71c8f21" class="outline-3">
-<h3 id="org71c8f21"><span class="section-number-3">10.3.</span> Tangle Emacs config and write HTML document</h3>
+<div id="outline-container-org51a1440" class="outline-3">
+<h3 id="org51a1440"><span class="section-number-3">10.3.</span> Tangle Emacs config and write HTML document</h3>
 <div class="outline-text-3" id="text-10-3">
 <p>
 This function tangles this file (<code>emacs.org</code>) and exports an HTML page
@@ -898,8 +898,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 </div>
-<div id="outline-container-orgd1b9932" class="outline-3">
-<h3 id="orgd1b9932"><span class="section-number-3">10.4.</span> Local HTTP server for displaying exported HTML</h3>
+<div id="outline-container-orgd2b4ff6" class="outline-3">
+<h3 id="orgd2b4ff6"><span class="section-number-3">10.4.</span> Local HTTP server for displaying exported HTML</h3>
 <div class="outline-text-3" id="text-10-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/emacs-org-html-server-host</span> <span style="color: #79a8ff;">"127.0.0.1"</span>) <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Set to 0.0.0.0 to serve publicly</span>
@@ -948,8 +948,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </table>
 </div>
 </div>
-<div id="outline-container-org8dc5175" class="outline-3">
-<h3 id="org8dc5175"><span class="section-number-3">10.5.</span> Org-Tempo code block snippets</h3>
+<div id="outline-container-org6d1c537" class="outline-3">
+<h3 id="org6d1c537"><span class="section-number-3">10.5.</span> Org-Tempo code block snippets</h3>
 <div class="outline-text-3" id="text-10-5">
 <p>
 See the Org-Mode manual for <a href="https://orgmode.org/manual/Structure-Templates.html">Structure Templates</a>.
@@ -968,8 +968,8 @@ library:
 </div>
 </div>
 </div>
-<div id="outline-container-orgcada837" class="outline-3">
-<h3 id="orgcada837"><span class="section-number-3">10.6.</span> Use org headings as HTML anchors</h3>
+<div id="outline-container-org7ce56a8" class="outline-3">
+<h3 id="org7ce56a8"><span class="section-number-3">10.6.</span> Use org headings as HTML anchors</h3>
 <div class="outline-text-3" id="text-10-6">
 <p>
 <a href="https://github.com/alphapapa/unpackaged.el/tree/master?tab=readme-ov-file#export-to-html-with-useful-anchors">unpackaged.el: Export to HTML with useful anchors</a>
@@ -1084,8 +1084,8 @@ library:
 </div>
 </div>
 </div>
-<div id="outline-container-org59b3fa4" class="outline-3">
-<h3 id="org59b3fa4"><span class="section-number-3">10.7.</span> Electric pairs</h3>
+<div id="outline-container-org982ecb1" class="outline-3">
+<h3 id="org982ecb1"><span class="section-number-3">10.7.</span> Electric pairs</h3>
 <div class="outline-text-3" id="text-10-7">
 <p>
 This makes it so certain characters are duplicated automatically to
@@ -1103,8 +1103,8 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 </div>
-<div id="outline-container-orga43f88d" class="outline-2">
-<h2 id="orga43f88d"><span class="section-number-2">11.</span> Markdown mode</h2>
+<div id="outline-container-orgf573625" class="outline-2">
+<h2 id="orgf573625"><span class="section-number-2">11.</span> Markdown mode</h2>
 <div class="outline-text-2" id="text-11">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">markdown-mode</span>)
@@ -1112,8 +1112,8 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 </div>
-<div id="outline-container-org1334f7e" class="outline-2">
-<h2 id="org1334f7e"><span class="section-number-2">12.</span> Public Domain License (0BSD)</h2>
+<div id="outline-container-orgff26538" class="outline-2">
+<h2 id="orgff26538"><span class="section-number-2">12.</span> Public Domain License (0BSD)</h2>
 <div class="outline-text-2" id="text-12">
 <div class="org-src-container">
 <pre class="src src-:tangle">Copyright (C) 2025 by EnigmaCurry
@@ -1134,8 +1134,8 @@ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.[21]
 </div>
 </div>
 </div>
-<div id="outline-container-orgf8f7628" class="outline-2">
-<h2 id="orgf8f7628"><span class="section-number-2">13.</span> GNU General Public License</h2>
+<div id="outline-container-org29cb445" class="outline-2">
+<h2 id="org29cb445"><span class="section-number-2">13.</span> GNU General Public License</h2>
 <div class="outline-text-2" id="text-13">
 <div class="org-src-container">
 <pre class="src src-text">Some code in this distribution is specifically identified as being
@@ -1771,7 +1771,7 @@ copy of the Program in return for a fee.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-01-26 Sun 14:42</p>
+<p class="date">Created: 2025-01-26 Sun 14:58</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
