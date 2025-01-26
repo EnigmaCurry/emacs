@@ -11,3 +11,10 @@
 ;; Don't resize the frame when adjusting the font size:
 (setq window-resize-pixelwise t)
 (setq frame-resize-pixelwise t)
+
+;; Debug options:
+;;; Start Emacs with the `--debug-init` argument, to debug errors during startup.
+;;; Enter debugger on specific logger regex (see *Messages* buffer):
+;; (setq debug-on-message "Example log message to trace")
+;;; M-x toggle-debug-on-error
+(setq debug-on-error t)

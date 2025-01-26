@@ -14,6 +14,7 @@
 (setq-default dired-listing-switches "-al --group-directories-first")
 (setq-default tramp-default-method "ssh")
 (setq-default native-comp-deferred-compilation-deny-list nil)
+(setq-default browse-url-browser-function 'browse-url-firefox)
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
@@ -52,7 +53,58 @@
 (save-place-mode t)
 (savehist-mode t)
 (recentf-mode t)
-(electric-pair-mode t)
+;(electric-pair-mode t)
+
+;; Function to bootstrap straight.el only when needed
+(defun my/bootstrap-straight (&rest _)
+  "Bootstrap straight.el if it's not already installed."
+  (unless (bound-and-true-p straight--build-dir)
+    (let ((bootstrap-file
+           (expand-file-name "straight/repos/straight.el/bootstrap.el"
+                             user-emacs-directory))
+          (bootstrap-version 5))
+      (unless (file-exists-p bootstrap-file)
+        (with-current-buffer
+            (url-retrieve-synchronously
+             "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+             'silent
+             'inhibit-cookies)
+          (goto-char (point-max))
+          (eval-print-last-sexp)))
+      (load bootstrap-file nil 'nomessage)
+      (setq straight-use-package-by-default t)
+      (straight-use-package 'use-package)
+      (straight-pull-recipe-repositories))))
+;; Advise `use-package` to initialize straight.el when first called
+(advice-add 'use-package :before #'my/bootstrap-straight)
+
+(defvar my/use-package-tracked-list nil
+  "A list to track the names of packages declared via `use-package`.")
+(defun my/use-package-tracked-list ()
+  "Display the tracked `use-package` packages in a new buffer, one per line.
+If the buffer already exists, delete it and recreate it."
+  (interactive)
+  (let ((buffer-name "*Tracked Packages*"))
+    (when (get-buffer buffer-name)
+      (kill-buffer buffer-name))
+    (let ((buffer (get-buffer-create buffer-name)))
+      (with-current-buffer buffer
+        (erase-buffer)
+        (insert "# Packages tracked via use-package:\n")
+        (if my/use-package-tracked-list
+            (dolist (pkg (sort my/use-package-tracked-list #'string<))
+              (insert (format "%s\n" pkg)))
+          (insert "No packages tracked.\n"))
+        (read-only-mode 1))
+      (pop-to-buffer buffer))))
+(defun my/use-package-advice (orig-fun &rest args)
+  "Advice around `use-package' to track package names."
+  (when (symbolp (car args))
+    (push (symbol-name (car args)) my/use-package-tracked-list)
+    (setq my/use-package-tracked-list (delete-dups my/use-package-tracked-list)))
+  (apply orig-fun args))
+
+(advice-add 'use-package :around #'my/use-package-advice)
 
 ;; Customize which emacs config modules to load per-machine:
 (defcustom my/machine-labels '()

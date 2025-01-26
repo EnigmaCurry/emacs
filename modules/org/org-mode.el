@@ -1,5 +1,4 @@
 (use-package org
-  :ensure nil
   :hook (org-mode . flyspell-mode)
   ;:general
   ;("s-<up>" 'org-previous-visible-heading)
@@ -9,8 +8,7 @@
   (setq org-startup-folded t)
   )
 
-(use-package htmlize
-  :ensure t)
+(use-package htmlize)
 
 (defun my/emacs-org-tangle ()
 "Tangle all code blocks in 'emacs.org' and export this document to HTML."

@@ -1,12 +1,12 @@
-#+TITLE: GNU Emacs Configuration
+#+TITLE: Modular Literate GNU Emacs Configuration
 #+AUTHOR: EnigmaCurry
 #+LANGUAGE: en
 #+PROPERTY: header-args :results none :eval yes
 
 * Goals
 
-This is a new attempt at writing a light literate Emacs config in Org
-Mode.
+This is a new attempt at writing a literate and modular Emacs config
+in Org Mode.
 
  * All Emacs config is written in Org Mode and it goes in this file
    ([[file:emacs.org][emacs.org]]) [[[https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1][Source on GitHub]]].
@@ -17,12 +17,12 @@ Mode.
    are split by category. These elisp files are directly committed
    into the git repository so that it can be cloned and loaded
    directly without invoking org-mode. [[https://orgmode.org/worg/org-contrib/babel/intro.html#emacs-initialization][org-babel-load-file]] is *NOT*
-   used during startup (nor ever).
+   used.
  * All custom elisp functions and variables should have the namespace
    prefix =my/=, which being non-proprietary promotes code adoption by
    others (meme: [[https://ec-share.nyc3.digitaloceanspaces.com/i-made-this-1.jpg]["I made this"]]).
- * Basic Emacs functionality should work with zero third party
-   libraries.
+ * Basic Emacs functionality should work without needing to download
+   any third party libraries.
  * To load extra modules, each machine may customize
    =my/machine-labels= to enable loading additional modules in an
    opt-in fashion.
@@ -34,13 +34,13 @@ Mode.
 
 This document and git repository has a mixed license (GPLv3 AND 0BSD).
 
-To the extent that I have not identified that a peice of code came
-from somewhere else, all proprietary code herein is licensed to you as
-public domain (0BSD). Some code has been copied from sources that are
-licensed GPLv3, and so I have identified these in this document and in
-the tangled source files. As long as these additional sources are
-included this distribution, this work is effectively (infectively)
-licensed as GPLv3.
+Everything in this git repository, that has not been identified in the
+comments that it has been taken from somewhere else, is licensed to
+you as public domain (0BSD). Some code has been copied from sources
+that are licensed GPLv3, and so I have identified these in the
+comments in this document and in the tangled source files. As long as
+these additional sources are included in this distribution, this
+repository is effectively (infectively) licensed as GPLv3.
 
 See [[id:public-domain-license][Public Domain License (0BSD)]]
 
@@ -48,9 +48,10 @@ See [[id:gnu-general-public-license][GNU General Public License]]
 
 * Early Init
 
-The early-init.el is the first config file that is loaded. It is used
-to set the visual look and feel before the GUI is initialized, so that
-it doesn't have a jarring visual change during startup.
+The =early-init.el= is the first config file that is loaded on Emacs
+startup. It is used to set the visual look and feel before the GUI is
+initialized, so that it doesn't have a jarring visual change during
+startup. Additionally, early debug options are set here.
 
 #+begin_src emacs-lisp :tangle "early-init.el"
   ;; Load modus-vivendi, one of the dark-mode themes builtin to Emacs.
@@ -66,6 +67,13 @@ it doesn't have a jarring visual change during startup.
   ;; Don't resize the frame when adjusting the font size:
   (setq window-resize-pixelwise t)
   (setq frame-resize-pixelwise t)
+
+  ;; Debug options:
+  ;;; Start Emacs with the `--debug-init` argument, to debug errors during startup.
+  ;;; Enter debugger on specific logger regex (see *Messages* buffer):
+  ;; (setq debug-on-message "Example log message to trace")
+  ;;; M-x toggle-debug-on-error
+  (setq debug-on-error t)
 #+end_src
 
 * Base config
@@ -96,6 +104,7 @@ environments. Only Emacs builtins will be allowed here:
   (setq-default dired-listing-switches "-al --group-directories-first")
   (setq-default tramp-default-method "ssh")
   (setq-default native-comp-deferred-compilation-deny-list nil)
+  (setq-default browse-url-browser-function 'browse-url-firefox)
   (put 'narrow-to-region 'disabled nil)
   (put 'downcase-region 'disabled nil)
   (put 'upcase-region 'disabled nil)
@@ -153,7 +162,66 @@ environments. Only Emacs builtins will be allowed here:
   (save-place-mode t)
   (savehist-mode t)
   (recentf-mode t)
-  (electric-pair-mode t)
+  ;(electric-pair-mode t)
+#+end_src
+
+* use-package and straight.el
+** Lazy-load straight.el
+
+#+begin_src emacs-lisp :tangle "init.el"
+    ;; Function to bootstrap straight.el only when needed
+    (defun my/bootstrap-straight (&rest _)
+      "Bootstrap straight.el if it's not already installed."
+      (unless (bound-and-true-p straight--build-dir)
+        (let ((bootstrap-file
+               (expand-file-name "straight/repos/straight.el/bootstrap.el"
+                                 user-emacs-directory))
+              (bootstrap-version 5))
+          (unless (file-exists-p bootstrap-file)
+            (with-current-buffer
+                (url-retrieve-synchronously
+                 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+                 'silent
+                 'inhibit-cookies)
+              (goto-char (point-max))
+              (eval-print-last-sexp)))
+          (load bootstrap-file nil 'nomessage)
+          (setq straight-use-package-by-default t)
+          (straight-use-package 'use-package)
+          (straight-pull-recipe-repositories))))
+    ;; Advise `use-package` to initialize straight.el when first called
+    (advice-add 'use-package :before #'my/bootstrap-straight)
+#+end_src
+** Track packages added via use-package
+
+#+begin_src emacs-lisp :tangle "init.el"
+  (defvar my/use-package-tracked-list nil
+    "A list to track the names of packages declared via `use-package`.")
+  (defun my/use-package-tracked-list ()
+    "Display the tracked `use-package` packages in a new buffer, one per line.
+  If the buffer already exists, delete it and recreate it."
+    (interactive)
+    (let ((buffer-name "*Tracked Packages*"))
+      (when (get-buffer buffer-name)
+        (kill-buffer buffer-name))
+      (let ((buffer (get-buffer-create buffer-name)))
+        (with-current-buffer buffer
+          (erase-buffer)
+          (insert "# Packages tracked via use-package:\n")
+          (if my/use-package-tracked-list
+              (dolist (pkg (sort my/use-package-tracked-list #'string<))
+                (insert (format "%s\n" pkg)))
+            (insert "No packages tracked.\n"))
+          (read-only-mode 1))
+        (pop-to-buffer buffer))))
+  (defun my/use-package-advice (orig-fun &rest args)
+    "Advice around `use-package' to track package names."
+    (when (symbolp (car args))
+      (push (symbol-name (car args)) my/use-package-tracked-list)
+      (setq my/use-package-tracked-list (delete-dups my/use-package-tracked-list)))
+    (apply orig-fun args))
+
+  (advice-add 'use-package :around #'my/use-package-advice)
 #+end_src
 
 * Per-machine labels enable opt-in features
@@ -231,7 +299,6 @@ Here are the [[https://github.com/EnigmaCurry/emacs/tree/literate-new/modules][a
 |-------------------------------------------------------|
 | Customize the machine labels for the current machine: |
 | =M-x my/custom-settings=                              |
-
 * Cargo bin path
 
 Helper utilities are installed via Rust's Cargo. Ensure that the Cargo
@@ -275,13 +342,8 @@ bin path is set:
 * Markdown mode
 
 #+begin_src emacs-lisp :tangle "modules/markdown.el" :mkdirp yes
-  (defvar markdown-electric-pairs '((96 . 96) (?* . ?*))
-    "Electric pairs for markdown-mode.")
-  (defun markdown-add-electric-pairs ()
-    (setq-local electric-pair-pairs
-                (append electric-pair-pairs markdown-electric-pairs))
-    (setq-local electric-pair-text-pairs electric-pair-pairs))
-  (add-hook 'markdown-mode-hook 'markdown-add-electric-pairs)
+  (use-package markdown-mode
+    :ensure t)
 #+end_src
 
 * Org mode
