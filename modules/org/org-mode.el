@@ -15,10 +15,12 @@
 (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))
        (modules-dir (expand-file-name "modules" user-emacs-directory))
        (export-dir (expand-file-name "export" user-emacs-directory))
-       (export-file (expand-file-name "emacs.html" export-dir)))
+       (export-file (expand-file-name "emacs.html" export-dir))
+       (modules-symlink (expand-file-name "modules" export-dir)))
   (when (file-exists-p org-file)
     (with-current-buffer (find-file-noselect org-file)
       (delete-directory modules-dir t)
+      (make-symbolic-link modules-dir modules-symlink t)
       (org-babel-tangle)
       (org-export-to-file 'html export-file)
       ;; No reason to save the buffer again, but maybe in the future,

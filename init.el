@@ -55,9 +55,32 @@
 (recentf-mode t)
 ;(electric-pair-mode t)
 
-;; Function to bootstrap straight.el only when needed
+;; Function to add a directory to PATH and exec-path
+(defun my/add-exec-path (dir)
+  "Add DIR to the environment PATH and exec-path if not already present."
+  (unless (member dir exec-path)
+    (insert (format "Adding %s to PATH\n" dir))
+    (setenv "PATH" (concat dir path-separator (getenv "PATH")))
+    (add-to-list 'exec-path dir)
+    (insert (format "%s added to PATH.\n" dir)))
+  (if (member dir exec-path)
+      (insert (format "%s is already in PATH.\n" dir))
+    (insert (format "Failed to add %s to PATH.\n" dir))))
+
+;; Function to check if a binary is available in PATH
+(defun my/check-binary-availability (binary log-buffer-name)
+  "Check if BINARY is available in PATH, logging results in LOG-BUFFER-NAME."
+  (if (executable-find binary)
+      (progn
+        (insert (format "%s is available in PATH.\n" (capitalize binary)))
+        (kill-buffer log-buffer-name))
+    (progn
+      (message "%s binary is NOT found." binary)
+      (insert (format "%s binary is NOT found.\n" (capitalize binary)))
+      (display-buffer log-buffer-name))))
+
 (defun my/bootstrap-straight (&rest _)
-  "Bootstrap straight.el if it's not already installed."
+  "Bootstrap straight.el only if it's not already installed."
   (unless (bound-and-true-p straight--build-dir)
     (let ((bootstrap-file
            (expand-file-name "straight/repos/straight.el/bootstrap.el"

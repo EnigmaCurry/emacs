@@ -165,13 +165,106 @@ environments. Only Emacs builtins will be allowed here:
   ;(electric-pair-mode t)
 #+end_src
 
+* Rust helper programs
+
+When moving beyond the base config, some additional helper programs
+are expected to be installed on your system. These are managed by
+Rust's Cargo package manager, which is easily installed on any system
+via [[https://rustup.rs/][rustup]].
+
+** Install Rustup
+
+You may be able to find =rustup= in your system package manager, and
+install it that way:
+
+#+begin_src shell
+sudo dnf install rustup
+#+end_src
+
+But you can also [[https://rustup.rs/][install it]] the curl bomb way:
+
+#+begin_src shell
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+#+end_src
+
+** Path helpers
+
+These functions help to find programs in your path:
+
+#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
+;; Function to add a directory to PATH and exec-path
+(defun my/add-exec-path (dir)
+  "Add DIR to the environment PATH and exec-path if not already present."
+  (unless (member dir exec-path)
+    (insert (format "Adding %s to PATH\n" dir))
+    (setenv "PATH" (concat dir path-separator (getenv "PATH")))
+    (add-to-list 'exec-path dir)
+    (insert (format "%s added to PATH.\n" dir)))
+  (if (member dir exec-path)
+      (insert (format "%s is already in PATH.\n" dir))
+    (insert (format "Failed to add %s to PATH.\n" dir))))
+
+;; Function to check if a binary is available in PATH
+(defun my/check-binary-availability (binary log-buffer-name)
+  "Check if BINARY is available in PATH, logging results in LOG-BUFFER-NAME."
+  (if (executable-find binary)
+      (progn
+        (insert (format "%s is available in PATH.\n" (capitalize binary)))
+        (kill-buffer log-buffer-name))
+    (progn
+      (message "%s binary is NOT found." binary)
+      (insert (format "%s binary is NOT found.\n" (capitalize binary)))
+      (display-buffer log-buffer-name))))
+#+end_src
+
+** Set cargo path
+
+Cargo is the package manager for Rust and it is already installed via
+rustup. Other helper programs and libraries are installed via Cargo.
+
+Ensure that the Cargo bin path is set:
+
+#+begin_src emacs-lisp :tangle "modules/cargo.el" :mkdirp yes
+  ;; Ensure that cargo (Rust) is installed and found in PATH.
+  (unless (executable-find "cargo")
+    (let ((cargo-bin (expand-file-name "~/.cargo/bin"))
+          (log-buffer-name "*Cargo Setup Log*"))
+      (with-current-buffer (get-buffer-create log-buffer-name)
+        (erase-buffer)  ;; Clear previous content if the buffer exists
+        (insert "Checking for Cargo environment setup...\n\n")
+        (my/add-exec-path "~/.cargo/bin")
+        (my/check-binary-availability "cargo" log-buffer-name))))
+#+end_src
+
+** Justfile
+
+[[https://github.com/casey/just][Just]] is like Make. Install =just= via cargo:
+
+#+begin_src shell
+  cargo install just
+#+end_src
+
+This =Justfile= consolidates commands that operate
+on this git repository
+
+#+begin_src text :tangle Justfile
+  set export
+  current_dir := `pwd`
+
+  # Print this help message for the Justfile targets
+  help:
+      @just -l
+
+  # Clean pacage cache
+  clean:
+      rm -rf straight eln-cache
+#+end_src
 * use-package and straight.el
 ** Lazy-load straight.el
 
 #+begin_src emacs-lisp :tangle "init.el"
-    ;; Function to bootstrap straight.el only when needed
     (defun my/bootstrap-straight (&rest _)
-      "Bootstrap straight.el if it's not already installed."
+      "Bootstrap straight.el only if it's not already installed."
       (unless (bound-and-true-p straight--build-dir)
         (let ((bootstrap-file
                (expand-file-name "straight/repos/straight.el/bootstrap.el"
@@ -299,37 +392,6 @@ Here are the [[https://github.com/EnigmaCurry/emacs/tree/literate-new/modules][a
 |-------------------------------------------------------|
 | Customize the machine labels for the current machine: |
 | =M-x my/custom-settings=                              |
-* Cargo bin path
-
-Helper utilities are installed via Rust's Cargo. Ensure that the Cargo
-bin path is set:
-
-#+begin_src emacs-lisp :tangle "modules/cargo.el" :mkdirp yes
-  ;; Ensure that cargo (Rust) is installed and found in PATH.
-  (let ((cargo-bin (expand-file-name "~/.cargo/bin"))
-        (log-buffer-name "*Cargo Setup Log*"))
-    (with-current-buffer (get-buffer-create log-buffer-name)
-      (erase-buffer)  ;; Clear previous content if the buffer exists
-      (insert "Checking for Cargo environment setup...\n\n")
-      (unless (member cargo-bin exec-path)
-        (insert "Adding ~/.cargo/bin to PATH\n")
-        (setenv "PATH" (concat cargo-bin path-separator (getenv "PATH")))
-        (add-to-list 'exec-path cargo-bin)
-        (insert "~/.cargo/bin added to PATH.\n"))
-      (if (member cargo-bin exec-path)
-          (insert "~/.cargo/bin is already in PATH.\n")
-        (insert "Failed to add ~/.cargo/bin to PATH.\n"))
-      ;; Check if `cargo` is available
-      (if (executable-find "cargo")
-          (progn
-            (insert "Cargo is available in PATH.\n")
-            (kill-buffer log-buffer-name))
-        (progn
-          (message "cargo binary is NOT found.")
-          (insert "cargo binary is NOT found.\n")
-          (display-buffer log-buffer-name)))))
-#+end_src
-
 * Programming mode
 
 #+begin_src emacs-lisp :tangle "modules/programming.el" :mkdirp yes
@@ -339,10 +401,22 @@ bin path is set:
   (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 #+end_src
 
-* Markdown mode
+* Registers
 
-#+begin_src emacs-lisp :tangle "modules/markdown.el" :mkdirp yes
-  (use-package markdown-mode)
+Registers are storage comparments in Emacs, which can hold several
+different types of things: strings, numbers, buffer positions, frame
+configs, etc.
+
+** Position registers
+
+There are some files that I want to have easy access to via [[info:emacs#Position Registers][Position
+Registers]]. These registers are accessed via the prefix: =C-x r j=
+(register jump):
+
+ * =C-x r j e= - open the Emacs config file buffer
+
+#+begin_src emacs-lisp :tangle "modules/registers.el"
+  (set-register ?e '(file . "~/git/vendor/enigmacurry/emacs-new/emacs.org"))
 #+end_src
 
 * Org mode
@@ -384,10 +458,12 @@ This function tangles this file (=emacs.org=) and exports an HTML page
   (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))
          (modules-dir (expand-file-name "modules" user-emacs-directory))
          (export-dir (expand-file-name "export" user-emacs-directory))
-         (export-file (expand-file-name "emacs.html" export-dir)))
+         (export-file (expand-file-name "emacs.html" export-dir))
+         (modules-symlink (expand-file-name "modules" export-dir)))
     (when (file-exists-p org-file)
       (with-current-buffer (find-file-noselect org-file)
         (delete-directory modules-dir t)
+        (make-symbolic-link modules-dir modules-symlink t)
         (org-babel-tangle)
         (org-export-to-file 'html export-file)
         ;; No reason to save the buffer again, but maybe in the future,
@@ -572,39 +648,12 @@ make org-mode syntax easier to type: ===, =/=, =~=.
                              ))
 #+end_src
 
-* Registers
+* Markdown mode
 
-Registers are storage comparments in Emacs, which can hold several
-different types of things: strings, numbers, buffer positions, frame
-configs, etc.
-
-** Position registers
-
-There are some files that I want to have easy access to via [[info:emacs#Position Registers][Position
-Registers]]. These registers are accessed via the prefix: =C-x r j=
-(register jump):
-
- * =C-x r j e= - open the Emacs config file buffer
-
-#+begin_src emacs-lisp :tangle "modules/registers.el"
-  (set-register ?e '(file . "~/git/vendor/enigmacurry/emacs-new/emacs.org"))
+#+begin_src emacs-lisp :tangle "modules/markdown/markdown.el" :mkdirp yes
+  (use-package markdown-mode)
 #+end_src
 
-* Makefile
-
-This =Makefile= consolidates commands that operate on this git
-repository (make sure you preserve TAB characters not spaces!)
-
-#+begin_src text :tangle Makefile
-.PHONY: help # Show this help screen
-help:
-	@grep -h '^.PHONY: .* #' Makefile | \
-	sed 's/\.PHONY: \(.*\) # \(.*\)/make \1 \t- \2/' | expand -t20
-
-.PHONY: clean # Remove package caches
-clean:
-	rm -rf straight eln-cache
-#+end_src
 * Public Domain License (0BSD)
 :PROPERTIES:
 :ID: public-domain-license
