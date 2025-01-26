@@ -9,7 +9,7 @@ This is a new attempt at writing a literate and modular Emacs config
 in Org Mode.
 
  * All Emacs config is written in Org Mode and it goes in this file
-   ([[file:emacs.org][emacs.org]]) [[[https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1][Source on GitHub]]].
+   ([[file:emacs.org]]) [[[https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1][Source on GitHub]]].
  * All configuration is displayed (exported) as a single HTML page on
    the web. Having it be a single page allows for easy searchability
    without requiring any JavaScript.
@@ -458,18 +458,18 @@ This function tangles this file (=emacs.org=) and exports an HTML page
     (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))
            (modules-dir (expand-file-name "modules" user-emacs-directory))
            (export-dir (expand-file-name "export" user-emacs-directory))
-           (export-file (expand-file-name "index.html" user-emacs-directory))
-           (modules-symlink (expand-file-name "modules" export-dir))
-           (index-symlink (expand-file-name "index.html" export-dir)))
+           (export-file (expand-file-name "index.html" user-emacs-directory)))
       (when (file-exists-p org-file)
         (with-current-buffer (find-file-noselect org-file)
           (delete-directory modules-dir t)
           (org-babel-tangle)
           (org-export-to-file 'html export-file)
-          (delete-directory export-dir t)
-          (make-directory export-dir nil)
-          (make-symbolic-link export-file index-symlink t)
-          (make-symbolic-link modules-dir modules-symlink t)
+          (unless (file-directory-p export-dir)
+            (make-directory export-dir))
+          (make-symbolic-link "index.html" "emacs.html" t)
+          (make-symbolic-link "../index.html" "export/index.html" t)
+          (make-symbolic-link "../index.html" "export/emacs.html" t)
+          (make-symbolic-link "../modules" "export/modules" t)
           ;; No reason to save the buffer again, but maybe in the future,
           ;; we will want to run code blocks automatically and capture output?
           ;;(save-buffer)
