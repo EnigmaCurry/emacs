@@ -1,11 +1,15 @@
 (use-package org
-  :hook (org-mode . flyspell-mode)
+  :hook ((org-mode . flyspell-mode)
+         (org-mode . unpackaged/org-export-html-with-useful-ids-mode))
   ;:general
   ;("s-<up>" 'org-previous-visible-heading)
   ;("s-<down>" 'org-next-visible-heading)
   ;("C-c o k" 'org-babel-remove-result)
   :config
   (setq org-startup-folded t)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t) (scheme . t) (shell . t) (ditaa . t)))
   )
 
 (use-package htmlize)
@@ -27,6 +31,9 @@
         (make-symbolic-link "../index.html" "export/index.html" t)
         (make-symbolic-link "../index.html" "export/emacs.html" t)
         (make-symbolic-link "../modules" "export/modules" t)
+        (make-symbolic-link "../LICENSE.txt" "export/LICENSE.txt" t)
+        (make-symbolic-link "../early-init.el" "export/early-init.el" t)
+        (make-symbolic-link "../init.el" "export/init.el" t)
         ;; No reason to save the buffer again, but maybe in the future,
         ;; we will want to run code blocks automatically and capture output?
         ;;(save-buffer)
@@ -40,27 +47,23 @@
 (defvar my/emacs-org-html-server-host "127.0.0.1") ;; Set to 0.0.0.0 to serve publicly
 (defvar my/emacs-org-html-server-port "7776")
 (defun my/emacs-org-html-server ()
-  "Start a local live-server for org HTML exports. Installs live-server if not found.
-   If cargo is not available, it notifies the user."
+  "Start a local live-server for the Emacs org HTML export."
   (interactive)
   (let ((live-server-path (executable-find "live-server"))
-        (cargo-path (executable-find "cargo")))
-    (if live-server-path
-        (progn
-          (message "live-server found at: %s" live-server-path)
-          (let ((host "127.0.0.1")  ;; Set to "0.0.0.0" to serve publicly
-                (port "7776")
-                (html-file "index.html")
-                (export-dir (expand-file-name "export" user-emacs-directory)))
-            (start-process "live-server" "*my/emacs-org-html-server*" "live-server"
-                           "-H" host "-p" port "-o" html-file export-dir)
-            (message "Started live-server on http://%s:%s" host port)))
-      (if cargo-path
+        (log-buffer-name "*my/emacs/org-html-server*"))
+    (with-current-buffer (get-buffer-create log-buffer-name)
+      (if live-server-path
           (progn
-            (message "live-server not found, installing via cargo...")
-            (start-process-shell-command "cargo-install-live-server" "*cargo-install-output*" "cargo install live-server")
-            (message "Installation started. Please rerun `M-x my/emacs-org-html-server` once installation completes."))
-        (message "Neither live-server nor cargo were found. Please install Rust and Cargo first.")))))
+            (message "live-server found at: %s" live-server-path)
+            (let ((host "127.0.0.1")  ;; Set to "0.0.0.0" to serve publicly
+                  (port "7776")
+                  (html-file "index.html")
+                  (export-dir (expand-file-name "export" user-emacs-directory)))
+              (start-process "live-server" log-buffer-name "live-server"
+                             "-H" host "-p" port "-o" "" export-dir)
+              (message "Started live-server on http://%s:%s" host port)))
+        (unless (executable-find "live-server")
+          (message "live-server NOT found - please run: cargo install live-server"))))))
 
 (require 'org-tempo) ; required for Structure Templates
                      ; See https://orgmode.org/manual/Structure-Templates.html

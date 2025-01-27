@@ -9,7 +9,7 @@ This is a new attempt at writing a literate and modular Emacs config
 in Org Mode.
 
  * All Emacs config is written in Org Mode and it goes in this file
-   ([[file:emacs.org]]) [[[https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1][Source on GitHub]]].
+   ([[file:emacs.org][emacs.org]]) [[[https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1][Source on GitHub]]].
  * All configuration is displayed (exported) as a single HTML page on
    the web. Having it be a single page allows for easy searchability
    without requiring any JavaScript.
@@ -32,19 +32,20 @@ in Org Mode.
 
 * LICENSE
 
-This document and git repository has a mixed license (GPLv3 AND 0BSD).
+See [[file:LICENSE.txt]]
 
-Everything in this git repository, that has not been identified in the
-comments that it has been taken from somewhere else, is licensed to
-you as public domain (0BSD). Some code has been copied from sources
-that are licensed GPLv3, and so I have identified these in the
-comments in this document and in the tangled source files. As long as
-these additional sources are included in this distribution, this
-repository is effectively (infectively) licensed as GPLv3.
+This distribution has a mixed license (0BSD and GPLv3). Everything
+here that has not been identified in the comments as having been taken
+from somewhere else, is licensed/dedicated to you as public domain
+(0BSD). Some code has been copied from other sources that are licensed
+GPLv3 and so I have identified these as such in the code block
+comments. As long as these additional sources are included in this
+distribution, this repository is effectively (infectively) licensed as
+GPLv3.
 
-See [[id:public-domain-license][Public Domain License (0BSD)]]
-
-See [[id:gnu-general-public-license][GNU General Public License]]
+#+begin_src text :noweb yes :tangle "LICENSE.txt" :exports none
+<<license>>
+#+end_src
 
 * Early Init
 
@@ -67,6 +68,8 @@ startup. Additionally, early debug options are set here.
   ;; Don't resize the frame when adjusting the font size:
   (setq window-resize-pixelwise t)
   (setq frame-resize-pixelwise t)
+  ;; Disable package.el in favor of straight.el
+  (setq package-enable-at-startup nil)
 
   ;; Debug options:
   ;;; Start Emacs with the `--debug-init` argument, to debug errors during startup.
@@ -154,7 +157,7 @@ environments. Only Emacs builtins will be allowed here:
     (customize-group 'my/custom-settings))
 #+end_src
 
-** Minor modes to activate everywhere
+** Builtin minor modes to activate everywhere
 
 #+begin_src emacs-lisp :tangle "init.el"
   ;; Global minor modes
@@ -164,7 +167,15 @@ environments. Only Emacs builtins will be allowed here:
   (recentf-mode t)
   ;(electric-pair-mode t)
 #+end_src
-
+** PATH setup
+#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
+  ;; Function to add a directory to PATH and exec-path
+  (defun my/add-exec-path (dir)
+    "Add DIR to the environment PATH and exec-path if not already present."
+    (unless (member dir exec-path)
+      (setenv "PATH" (concat dir path-separator (getenv "PATH")))
+      (add-to-list 'exec-path dir)))
+#+end_src
 * Rust helper programs
 
 When moving beyond the base config, some additional helper programs
@@ -174,11 +185,12 @@ via [[https://rustup.rs/][rustup]].
 
 ** Install Rustup
 
-You may be able to find =rustup= in your system package manager, and
+You may be able to find =rustup= in your system package manager and
 install it that way:
 
 #+begin_src shell
-sudo dnf install rustup
+  # e.g., Fedora:
+  sudo dnf install rustup
 #+end_src
 
 But you can also [[https://rustup.rs/][install it]] the curl bomb way:
@@ -187,65 +199,32 @@ But you can also [[https://rustup.rs/][install it]] the curl bomb way:
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 #+end_src
 
-** Path helpers
-
-These functions help to find programs in your path:
-
-#+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
-;; Function to add a directory to PATH and exec-path
-(defun my/add-exec-path (dir)
-  "Add DIR to the environment PATH and exec-path if not already present."
-  (unless (member dir exec-path)
-    (insert (format "Adding %s to PATH\n" dir))
-    (setenv "PATH" (concat dir path-separator (getenv "PATH")))
-    (add-to-list 'exec-path dir)
-    (insert (format "%s added to PATH.\n" dir)))
-  (if (member dir exec-path)
-      (insert (format "%s is already in PATH.\n" dir))
-    (insert (format "Failed to add %s to PATH.\n" dir))))
-
-;; Function to check if a binary is available in PATH
-(defun my/check-binary-availability (binary log-buffer-name)
-  "Check if BINARY is available in PATH, logging results in LOG-BUFFER-NAME."
-  (if (executable-find binary)
-      (progn
-        (insert (format "%s is available in PATH.\n" (capitalize binary)))
-        (kill-buffer log-buffer-name))
-    (progn
-      (message "%s binary is NOT found." binary)
-      (insert (format "%s binary is NOT found.\n" (capitalize binary)))
-      (display-buffer log-buffer-name))))
-#+end_src
-
-** Set cargo path
-
-Cargo is the package manager for Rust and it is already installed via
-rustup. Other helper programs and libraries are installed via Cargo.
-
-Ensure that the Cargo bin path is set:
-
-#+begin_src emacs-lisp :tangle "modules/cargo.el" :mkdirp yes
-  ;; Ensure that cargo (Rust) is installed and found in PATH.
-  (unless (executable-find "cargo")
-    (let ((cargo-bin (expand-file-name "~/.cargo/bin"))
-          (log-buffer-name "*Cargo Setup Log*"))
-      (with-current-buffer (get-buffer-create log-buffer-name)
-        (erase-buffer)  ;; Clear previous content if the buffer exists
-        (insert "Checking for Cargo environment setup...\n\n")
-        (my/add-exec-path "~/.cargo/bin")
-        (my/check-binary-availability "cargo" log-buffer-name))))
-#+end_src
-
-** Justfile
-
-[[https://github.com/casey/just][Just]] is like Make. Install =just= via cargo:
+** Install tools
+Once you've installed =cargo=, you can install the rest of the necessary
+helper programs:
 
 #+begin_src shell
-  cargo install just
+  cargo install just live-server ripgrep
 #+end_src
 
+** Set cargo binary PATH
+
+Cargo and all of the helper programs you install go in =~/.cargo/bin=.
+Ensure that this path is set (because Emacs might not have read
+=~/.bashrc=):
+
+#+begin_src emacs-lisp :tangle "modules/cargo.el" :mkdirp yes
+  (my/add-exec-path "~/.cargo/bin")
+  (unless (executable-find "cargo")
+    (message "cargo binary NOT found."))
+#+end_src
+
+* Justfile
+
+[[https://github.com/casey/just][Just]] is better than Make.
+
 This =Justfile= consolidates commands that operate
-on this git repository
+on this git repository:
 
 #+begin_src text :tangle Justfile
   set export
@@ -259,6 +238,11 @@ on this git repository
   clean:
       rm -rf straight eln-cache
 #+end_src
+
+|-------------------------------------|
+| Clean package cache (shell command) |
+| =just clean=                        |
+
 * use-package and straight.el
 ** Lazy-load straight.el
 
@@ -419,21 +403,34 @@ Registers]]. These registers are accessed via the prefix: =C-x r j=
   (set-register ?e '(file . "~/git/vendor/enigmacurry/emacs-new/emacs.org"))
 #+end_src
 
-* Org mode
+* Modules
+
+Modules that extend the base config are enabled by customizing the
+variable =my/machine-labels= and adding the labels you want to this
+list (saves to =custom.el=).
+
+|--------------------------|
+| =M-x my/custom-settings= |
+
+** Org mode (label =org=)
 
 #+begin_src emacs-lisp :tangle "modules/org/org-mode.el"
   (use-package org
-    :hook (org-mode . flyspell-mode)
+    :hook ((org-mode . flyspell-mode)
+           (org-mode . unpackaged/org-export-html-with-useful-ids-mode))
     ;:general
     ;("s-<up>" 'org-previous-visible-heading)
     ;("s-<down>" 'org-next-visible-heading)
     ;("C-c o k" 'org-babel-remove-result)
     :config
     (setq org-startup-folded t)
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((python . t) (scheme . t) (shell . t) (ditaa . t)))
     )
 #+end_src
 
-** Enable spell-check
+*** Enable spell-check
 
 |------------------------------------------|
 | Fix the spelling of the word at point    |
@@ -441,13 +438,13 @@ Registers]]. These registers are accessed via the prefix: =C-x r j=
 | =M-x flyspell-correct-word-before-point= |
 | =C-c $=                                  |
 
-** Enable syntax highlighting in HTML export
+*** Enable syntax highlighting in HTML export
 
 #+begin_src emacs-lisp :tangle "modules/org/org-mode.el"
   (use-package htmlize)
 #+end_src
 
-** Tangle Emacs config and write HTML document
+*** Tangle Emacs config and write HTML document
 
 This function tangles this file (=emacs.org=) and exports an HTML page
 (=emacs.html=):
@@ -470,6 +467,9 @@ This function tangles this file (=emacs.org=) and exports an HTML page
           (make-symbolic-link "../index.html" "export/index.html" t)
           (make-symbolic-link "../index.html" "export/emacs.html" t)
           (make-symbolic-link "../modules" "export/modules" t)
+          (make-symbolic-link "../LICENSE.txt" "export/LICENSE.txt" t)
+          (make-symbolic-link "../early-init.el" "export/early-init.el" t)
+          (make-symbolic-link "../init.el" "export/init.el" t)
           ;; No reason to save the buffer again, but maybe in the future,
           ;; we will want to run code blocks automatically and capture output?
           ;;(save-buffer)
@@ -481,33 +481,35 @@ This function tangles this file (=emacs.org=) and exports an HTML page
                  '(org-confirm-babel-evaluate))
 #+end_src
 
-** Local HTTP server for displaying exported HTML
+*** Local HTTP server for displaying exported HTML
+
+Install [[https://github.com/lomirus/live-server][live-server]]:
+
+#+begin_src shell
+  cargo install live-server
+#+end_src
 
 #+begin_src emacs-lisp :tangle "modules/org/org-mode.el"  :mkdirp yes
-  (defvar my/emacs-org-html-server-host "127.0.0.1") ;; Set to 0.0.0.0 to serve publicly
-  (defvar my/emacs-org-html-server-port "7776")
-  (defun my/emacs-org-html-server ()
-    "Start a local live-server for org HTML exports. Installs live-server if not found.
-     If cargo is not available, it notifies the user."
-    (interactive)
-    (let ((live-server-path (executable-find "live-server"))
-          (cargo-path (executable-find "cargo")))
-      (if live-server-path
-          (progn
-            (message "live-server found at: %s" live-server-path)
-            (let ((host "127.0.0.1")  ;; Set to "0.0.0.0" to serve publicly
-                  (port "7776")
-                  (html-file "index.html")
-                  (export-dir (expand-file-name "export" user-emacs-directory)))
-              (start-process "live-server" "*my/emacs-org-html-server*" "live-server"
-                             "-H" host "-p" port "-o" html-file export-dir)
-              (message "Started live-server on http://%s:%s" host port)))
-        (if cargo-path
-            (progn
-              (message "live-server not found, installing via cargo...")
-              (start-process-shell-command "cargo-install-live-server" "*cargo-install-output*" "cargo install live-server")
-              (message "Installation started. Please rerun `M-x my/emacs-org-html-server` once installation completes."))
-          (message "Neither live-server nor cargo were found. Please install Rust and Cargo first.")))))
+    (defvar my/emacs-org-html-server-host "127.0.0.1") ;; Set to 0.0.0.0 to serve publicly
+    (defvar my/emacs-org-html-server-port "7776")
+    (defun my/emacs-org-html-server ()
+      "Start a local live-server for the Emacs org HTML export."
+      (interactive)
+      (let ((live-server-path (executable-find "live-server"))
+            (log-buffer-name "*my/emacs/org-html-server*"))
+        (with-current-buffer (get-buffer-create log-buffer-name)
+          (if live-server-path
+              (progn
+                (message "live-server found at: %s" live-server-path)
+                (let ((host "127.0.0.1")  ;; Set to "0.0.0.0" to serve publicly
+                      (port "7776")
+                      (html-file "index.html")
+                      (export-dir (expand-file-name "export" user-emacs-directory)))
+                  (start-process "live-server" log-buffer-name "live-server"
+                                 "-H" host "-p" port "-o" "" export-dir)
+                  (message "Started live-server on http://%s:%s" host port)))
+            (unless (executable-find "live-server")
+              (message "live-server NOT found - please run: cargo install live-server"))))))
 #+end_src
 
 |--------------------------------|
@@ -515,7 +517,7 @@ This function tangles this file (=emacs.org=) and exports an HTML page
 |--------------------------------|
 | =M-x my/emacs-org-html-server= |
 
-** Org-Tempo code block snippets
+*** Org-Tempo code block snippets
 
 See the Org-Mode manual for [[https://orgmode.org/manual/Structure-Templates.html][Structure Templates]].
 
@@ -528,7 +530,7 @@ library:
                        ; See https://orgmode.org/manual/Structure-Templates.html
 #+end_src
 
-** Use org headings as HTML anchors
+*** Use org headings as HTML anchors
 
 [[https://github.com/alphapapa/unpackaged.el/tree/master?tab=readme-ov-file#export-to-html-with-useful-anchors][unpackaged.el: Export to HTML with useful anchors]]
 
@@ -553,76 +555,62 @@ library:
     ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
     (require 'cl-lib)
-      (define-minor-mode unpackaged/org-export-html-with-useful-ids-mode
+    (define-minor-mode unpackaged/org-export-html-with-useful-ids-mode
       "Attempt to export Org as HTML with useful link IDs.
-  Instead of random IDs like \"#orga1b2c3\", use heading titles,
-  made unique when necessary."
+    Instead of random IDs like \"#orga1b2c3\", use heading titles,
+    made unique when necessary."
       :global t
       (if unpackaged/org-export-html-with-useful-ids-mode
           (advice-add #'org-export-get-reference :override #'unpackaged/org-export-get-reference)
         (advice-remove #'org-export-get-reference #'unpackaged/org-export-get-reference)))
 
-    (defun unpackaged/org-export-get-reference (datum info)
-      "Like `org-export-get-reference', except uses heading titles instead of random numbers."
-      (let ((cache (plist-get info :internal-references)))
-        (or (car (rassq datum cache))
-            (let* ((crossrefs (plist-get info :crossrefs))
-                   (cells (org-export-search-cells datum))
-                   ;; Preserve any pre-existing association between
-                   ;; a search cell and a reference, i.e., when some
-                   ;; previously published document referenced a location
-                   ;; within current file (see
-                   ;; `org-publish-resolve-external-link').
-                   ;;
-                   ;; However, there is no guarantee that search cells are
-                   ;; unique, e.g., there might be duplicate custom ID or
-                   ;; two headings with the same title in the file.
-                   ;;
-                   ;; As a consequence, before re-using any reference to
-                   ;; an element or object, we check that it doesn't refer
-                   ;; to a previous element or object.
-                   (new (or (cl-some
-                             (lambda (cell)
-                               (let ((stored (cdr (assoc cell crossrefs))))
-                                 (when stored
-                                   (let ((old (org-export-format-reference stored)))
-                                     (and (not (assoc old cache)) stored)))))
-                             cells)
-                            (when (org-element-property :raw-value datum)
-                              ;; Heading with a title
-                              (unpackaged/org-export-new-title-reference datum cache))
-                            ;; NOTE: This probably breaks some Org Export
-                            ;; feature, but if it does what I need, fine.
-                            (org-export-format-reference
-                             (org-export-new-reference cache))))
-                   (reference-string new))
-              ;; Cache contains both data already associated to
-              ;; a reference and in-use internal references, so as to make
-              ;; unique references.
-              (dolist (cell cells) (push (cons cell new) cache))
-              ;; Retain a direct association between reference string and
-              ;; DATUM since (1) not every object or element can be given
-              ;; a search cell (2) it permits quick lookup.
-              (push (cons reference-string datum) cache)
-              (plist-put info :internal-references cache)
-              reference-string))))
+  (defun unpackaged/org-export-get-reference (datum info)
+    "Like `org-export-get-reference', except uses heading titles instead of random numbers."
+    (let ((cache (plist-get info :internal-references)))
+      (or (car (rassq datum cache))
+          (let* ((crossrefs (plist-get info :crossrefs))
+                 (cells (org-export-search-cells datum))
+                 ;; Preserve any pre-existing association between
+                 ;; a search cell and a reference.
+                 (new (or (cl-some
+                           (lambda (cell)
+                             (let ((stored (cdr (assoc cell crossrefs))))
+                               (when stored
+                                 (let ((old (org-export-format-reference stored)))
+                                   (and (not (assoc old cache)) stored)))))
+                           cells)
+                          (when (org-element-property :raw-value datum)
+                            ;; Heading with a title
+                            (unpackaged/org-export-new-title-reference datum cache))
+                          ;; Generate new reference
+                          (org-export-format-reference
+                           (org-export-new-reference cache))))
+                 (reference-string (replace-regexp-in-string "%20" "_" new)))
+            ;; Cache contains both data already associated to
+            ;; a reference and in-use internal references, so as to make
+            ;; unique references.
+            (dolist (cell cells) (push (cons cell new) cache))
+            ;; Retain a direct association between reference string and DATUM.
+            (push (cons reference-string datum) cache)
+            (plist-put info :internal-references cache)
+            reference-string))))
 
     (defun unpackaged/org-export-new-title-reference (datum cache)
       "Return new reference for DATUM that is unique in CACHE."
       (cl-macrolet ((inc-suffixf (place)
-                                 `(progn
-                                    (string-match (rx bos
-                                                      (minimal-match (group (1+ anything)))
-                                                      (optional "--" (group (1+ digit)))
-                                                      eos)
-                                                  ,place)
-                                    ;; HACK: `s1' instead of a gensym.
-                                    (-let* (((s1 suffix) (list (match-string 1 ,place)
-                                                               (match-string 2 ,place)))
-                                            (suffix (if suffix
-                                                        (string-to-number suffix)
-                                                      0)))
-                                      (setf ,place (format "%s--%s" s1 (cl-incf suffix)))))))
+                      `(progn
+                         (string-match (rx bos
+                                           (minimal-match (group (1+ anything)))
+                                           (optional "--" (group (1+ digit)))
+                                           eos)
+                                       ,place)
+                         ;; HACK: `s1' instead of a gensym.
+                         (-let* (((s1 suffix) (list (match-string 1 ,place)
+                                                    (match-string 2 ,place)))
+                                 (suffix (if suffix
+                                             (string-to-number suffix)
+                                           0)))
+                                (setf ,place (format "%s--%s" s1 (cl-incf suffix)))))))
         (let* ((title (org-element-property :raw-value datum))
                (ref (url-hexify-string (substring-no-properties title)))
                (parent (org-element-property :parent datum)))
@@ -639,7 +627,7 @@ library:
           ref)))
 #+end_src
 
-** Electric pairs
+*** Electric pairs
 
 This makes it so certain characters are duplicated automatically to
 make org-mode syntax easier to type: ===, =/=, =~=.
@@ -652,54 +640,51 @@ make org-mode syntax easier to type: ===, =/=, =~=.
                              ))
 #+end_src
 
-* Markdown mode
+** Markdown mode (label =markdown=)
 
 #+begin_src emacs-lisp :tangle "modules/markdown/markdown.el" :mkdirp yes
   (use-package markdown-mode)
 #+end_src
 
-* Public Domain License (0BSD)
-:PROPERTIES:
-:ID: public-domain-license
-:END:
+* LICENSE (appendix)                                               :noexport:
 
-#+begin_src :tangle "LICENSE"
-    Copyright (C) 2025 by EnigmaCurry
+#+begin_src text :noweb-ref license :exports none
+  License for:
+  https://emacs.rymcg.tech
+  https://github.com/EnigmaCurry/emacs/tree/literate-new
 
-    Permission to use, copy, modify, and/or distribute this software
-    for any purpose with or without fee is hereby granted.
+                   PUBLIC DOMAIN LICENSE (0BSD)
 
-    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
-    WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
-    WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
-    AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR
-    CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-    LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
-    NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
-    CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.[21]
-  
+  Copyright (C) 2025 by EnigmaCurry
+
+  Permission to use, copy, modify, and/or distribute this software
+  for any purpose with or without fee is hereby granted.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+  WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+  AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR
+  CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+  NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+  CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.[21]
+
 #+end_src
 
-* GNU General Public License
-:PROPERTIES:
-:ID: gnu-general-public-license
-:END:
-
 :LICENSE:
-#+begin_src text :tangle "LICENSE"
+#+begin_src text :noweb-ref license :exports none
   Some code in this distribution is specifically identified as being
-  licensed GPLv3.  Their inclusion in this distribution modifies the
-  license:
+  licensed GPLv3. If these files continue to be reproduced, the license
+  of this entire distribution is modified to GPLv3:
 
-
-		      GNU GENERAL PUBLIC LICENSE
-			 Version 3, 29 June 2007
+                      GNU GENERAL PUBLIC LICENSE
+                         Version 3, 29 June 2007
 
    Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
    Everyone is permitted to copy and distribute verbatim copies
    of this license document, but changing it is not allowed.
 
-			      Preamble
+                              Preamble
 
     The GNU General Public License is a free, copyleft license for
   software and other kinds of works.
@@ -762,7 +747,7 @@ make org-mode syntax easier to type: ===, =/=, =~=.
     The precise terms and conditions for copying, distribution and
   modification follow.
 
-			 TERMS AND CONDITIONS
+                         TERMS AND CONDITIONS
 
     0. Definitions.
 
@@ -1312,7 +1297,60 @@ make org-mode syntax easier to type: ===, =/=, =~=.
   Program, unless a warranty or assumption of liability accompanies a
   copy of the Program in return for a fee.
 
-		       END OF TERMS AND CONDITIONS
+                       END OF TERMS AND CONDITIONS
+
+              How to Apply These Terms to Your New Programs
+
+    If you develop a new program, and you want it to be of the greatest
+  possible use to the public, the best way to achieve this is to make it
+  free software which everyone can redistribute and change under these terms.
+
+    To do so, attach the following notices to the program.  It is safest
+  to attach them to the start of each source file to most effectively
+  state the exclusion of warranty; and each file should have at least
+  the "copyright" line and a pointer to where the full notice is found.
+
+      <one line to give the program's name and a brief idea of what it does.>
+      Copyright (C) <year>  <name of author>
+
+      This program is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+  Also add information on how to contact you by electronic and paper mail.
+
+    If the program does terminal interaction, make it output a short
+  notice like this when it starts in an interactive mode:
+
+      <program>  Copyright (C) <year>  <name of author>
+      This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
+      This is free software, and you are welcome to redistribute it
+      under certain conditions; type `show c' for details.
+
+  The hypothetical commands `show w' and `show c' should show the appropriate
+  parts of the General Public License.  Of course, your program's commands
+  might be different; for a GUI interface, you would use an "about box".
+
+    You should also get your employer (if you work as a programmer) or school,
+  if any, to sign a "copyright disclaimer" for the program, if necessary.
+  For more information on this, and how to apply and follow the GNU GPL, see
+  <https://www.gnu.org/licenses/>.
+
+    The GNU General Public License does not permit incorporating your program
+  into proprietary programs.  If your program is a subroutine library, you
+  may consider it more useful to permit linking proprietary applications with
+  the library.  If this is what you want to do, use the GNU Lesser General
+  Public License instead of this License.  But first, please read
+  <https://www.gnu.org/licenses/why-not-lgpl.html>.
 #+end_src
 :END:
 

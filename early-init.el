@@ -11,6 +11,8 @@
 ;; Don't resize the frame when adjusting the font size:
 (setq window-resize-pixelwise t)
 (setq frame-resize-pixelwise t)
+;; Disable package.el in favor of straight.el
+(setq package-enable-at-startup nil)
 
 ;; Debug options:
 ;;; Start Emacs with the `--debug-init` argument, to debug errors during startup.
