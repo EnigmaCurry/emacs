@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-27 Mon 01:26 -->
+<!-- 2025-01-27 Mon 22:29 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -241,18 +241,20 @@
 </li>
 <li><a href="#Modules">11. Modules</a>
 <ul>
-<li><a href="#Org_mode_%28label_%3Dorg%3D%29">11.1. Org mode (label <code>org</code>)</a>
+<li><a href="#General_keybindings_manager_%28label_%3Dgeneral%3D%29">11.1. General keybindings manager (label <code>general</code>)</a></li>
+<li><a href="#Org_mode_%28label_%3Dorg%3D%29">11.2. Org mode (label <code>org</code>)</a>
 <ul>
-<li><a href="#Enable_spell-check">11.1.1. Enable spell-check</a></li>
-<li><a href="#Enable_syntax_highlighting_in_HTML_export">11.1.2. Enable syntax highlighting in HTML export</a></li>
-<li><a href="#Tangle_Emacs_config_and_write_HTML_document">11.1.3. Tangle Emacs config and write HTML document</a></li>
-<li><a href="#Local_HTTP_server_for_displaying_exported_HTML">11.1.4. Local HTTP server for displaying exported HTML</a></li>
-<li><a href="#Org-Tempo_code_block_snippets">11.1.5. Org-Tempo code block snippets</a></li>
-<li><a href="#Use_org_headings_as_HTML_anchors">11.1.6. Use org headings as HTML anchors</a></li>
-<li><a href="#Electric_pairs">11.1.7. Electric pairs</a></li>
+<li><a href="#Enable_spell-check">11.2.1. Enable spell-check</a></li>
+<li><a href="#Enable_syntax_highlighting_in_HTML_export">11.2.2. Enable syntax highlighting in HTML export</a></li>
+<li><a href="#Tangle_Emacs_config_and_write_HTML_document">11.2.3. Tangle Emacs config and write HTML document</a></li>
+<li><a href="#Local_HTTP_server_for_displaying_exported_HTML">11.2.4. Local HTTP server for displaying exported HTML</a></li>
+<li><a href="#Org-Tempo_code_block_snippets">11.2.5. Org-Tempo code block snippets</a></li>
+<li><a href="#Use_org_headings_as_HTML_anchors">11.2.6. Use org headings as HTML anchors</a></li>
+<li><a href="#Electric_pairs">11.2.7. Electric pairs</a></li>
 </ul>
 </li>
-<li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">11.2. Markdown mode (label <code>markdown</code>)</a></li>
+<li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">11.3. Markdown mode (label <code>markdown</code>)</a></li>
+<li><a href="#Magit_%28label_%3Dmagit%3D%29">11.4. Magit (label <code>magit</code>)</a></li>
 </ul>
 </li>
 </ul>
@@ -678,9 +680,9 @@ that become enabled by adding labels on a per-machine basis.
 (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/machine-labels-available</span> ()
   <span style="color: #b0d6f5;">"List all available machine labels"</span>
   (<span style="color: #b6a0ff;">let</span> ((modules-dir (expand-file-name <span style="color: #79a8ff;">"modules"</span> user-emacs-directory)))
-    (mapcar #'file-name-nondirectory
+    (cl-sort (mapcar #'file-name-nondirectory
             (seq-filter #'file-directory-p
-                        (directory-files modules-dir t <span style="color: #79a8ff;">"^[</span><span style="color: #d0bc00;">^</span><span style="color: #79a8ff;">.]"</span> t)))))
+                        (directory-files modules-dir t <span style="color: #79a8ff;">"^[</span><span style="color: #d0bc00;">^</span><span style="color: #79a8ff;">.]"</span> t))) <span style="color: #d0bc00;">#'string&lt;)))</span>
 </pre>
 </div>
 
@@ -722,43 +724,6 @@ in <code>~/.config/machine-labels</code>:
 (my/load-modules)
 </pre>
 </div>
-
-<p>
-Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
-</p>
-
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<tbody>
-<tr>
-<td class="org-left">markdown</td>
-<td class="org-left">org</td>
-</tr>
-</tbody>
-</table>
-
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-</colgroup>
-<tbody>
-<tr>
-<td class="org-left">Customize the machine labels for the current machine:</td>
-</tr>
-
-<tr>
-<td class="org-left"><code>M-x my/custom-settings</code></td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 </div>
@@ -807,9 +772,25 @@ Registers</a>. These registers are accessed via the prefix: <code>C-x r j</code>
 <h2 id="Modules"><span class="section-number-2">11.</span> Modules</h2>
 <div class="outline-text-2" id="text-11">
 <p>
-Modules that extend the base config are enabled by customizing the
-variable <code>my/machine-labels</code> and adding the labels you want to this
-list (saves to <code>custom.el</code>).
+Modules are optional and they extend the base config.
+</p>
+
+<p>
+Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
+</p>
+
+<pre class="example">
+- general
+- magit
+- markdown
+- org
+</pre>
+
+
+
+<p>
+<b>All modules are disabled by default! You must customize
+<code>my/machine-labels</code> on each machine you configure.</b>
 </p>
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
@@ -824,10 +805,111 @@ list (saves to <code>custom.el</code>).
 </tr>
 </tbody>
 </table>
+
+<p>
+This will open the customization interface allowing you to set the
+list named <code>My Machine Labels</code>. For example, add each of the labels
+you want to enable for the current machine: <code>general</code>, <code>org</code>,
+<code>markdown</code>, etc:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-example">↓ My Machine Labels:
+Repeat:
+INS DEL String: general
+INS DEL String: org
+INS DEL String: markdown
+INS
+    State : SAVED and set.
+   List of machine-specific labels to configure which modules to load.
+</pre>
+</div>
+
+<p>
+When done, press <code>C-x C-s</code> to save the settings.
+</p>
+
+<p>
+If you want to enable ALL of the features, you can evaluate this elisp
+(the result will be saved in <code>custom.el</code>):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">This is an elisp alternative to using the customize interface shown above:</span>
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Example to enable the custom labels: general, org, and markdown:</span>
+(customize-set-variable 'my/machine-labels (my/machine-labels-available))
+(customize-save-customized)
+</pre>
+</div>
+
+<p>
+You can then remove any of the modules you don't want, the same as
+before: <code>M-x my/custom-settings</code>.
+</p>
+
+<p>
+You should restart Emacs to reload the configured modules from
+<code>custom.el</code>.
+</p>
+</div>
+<div id="outline-container-General_keybindings_manager_%28label_%3Dgeneral%3D%29" class="outline-3">
+<h3 id="General_keybindings_manager_%28label_%3Dgeneral%3D%29"><span class="section-number-3">11.1.</span> General keybindings manager (label <code>general</code>)</h3>
+<div class="outline-text-3" id="text-11-1">
+<p>
+See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">general.el</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span>
+  general
+  <span style="color: #f78fe7;">:init</span>
+  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Switch between two most recent buffers:</span>
+  (fset 'quick-switch-buffer [?\C-x ?b return])
+  <span style="color: #f78fe7;">:config</span>
+   <span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Custom global bindings:</span>
+  (general-define-key
+   <span style="color: #79a8ff;">"C-h B"</span>
+   'general-describe-keybindings
+   <span style="color: #79a8ff;">"s-b"</span>
+   'quick-switch-buffer
+   <span style="color: #79a8ff;">"s-B"</span>
+   'buffer-menu-other-window
+   <span style="color: #79a8ff;">"C-x B"</span>
+   'buffer-menu-other-window
+   <span style="color: #79a8ff;">"s-o"</span>
+   'browse-url
+   <span style="color: #79a8ff;">"C-;"</span>
+   'comment-region <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">C-u C-; to uncomment</span>
+   <span style="color: #79a8ff;">"s-&lt;down-mouse-1&gt;"</span>
+   'mouse-drag-region-rectangle)
+  <span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Put the Emacs default keybindings you want included in general-describe-keybindings here:</span>
+  <span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Its useful to duplicate these simply as a way of documentation:</span>
+  (general-define-key
+   <span style="color: #79a8ff;">"M-SPC"</span>
+   'cycle-spacing <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">If you document it, you will use it.</span>
+   <span style="color: #79a8ff;">"M-h"</span>
+   'mark-paragraph <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">C-h B is like your personal cheat sheet.</span>
+   <span style="color: #79a8ff;">"C-h b"</span>
+   'describe-bindings <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">default binding for documentation purpose</span>
+   <span style="color: #79a8ff;">"C-x 4 c"</span>
+   'clone-indirect-buffer-other-window <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">default binding</span>
+   )
+  <span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Define bindings for specific builtin (non use-package) modes:</span>
+  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Emacs Lisp mode bindings:</span>
+  (general-define-key
+   <span style="color: #f78fe7;">:keymaps</span> 'emacs-lisp-mode-map
+   <span style="color: #79a8ff;">"s-e"</span> 'eval-defun <span style="color: #a8a8a8;">;</span><span style="color: #a8a8a8;">eval top-level form</span>
+   <span style="color: #79a8ff;">"M-;"</span> 'paredit-comment-dwim)
+  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Dired mode bindings:</span>
+  (general-define-key
+   <span style="color: #f78fe7;">:keymaps</span> 'dired-mode-map <span style="color: #79a8ff;">"C-c C-q"</span> 'dired-toggle-read-only))
+</pre>
+</div>
+</div>
 </div>
 <div id="outline-container-Org_mode_%28label_%3Dorg%3D%29" class="outline-3">
-<h3 id="Org_mode_%28label_%3Dorg%3D%29"><span class="section-number-3">11.1.</span> Org mode (label <code>org</code>)</h3>
-<div class="outline-text-3" id="text-11-1">
+<h3 id="Org_mode_%28label_%3Dorg%3D%29"><span class="section-number-3">11.2.</span> Org mode (label <code>org</code>)</h3>
+<div class="outline-text-3" id="text-11-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">org</span>
   <span style="color: #f78fe7;">:hook</span> ((org-mode . flyspell-mode)
@@ -846,8 +928,8 @@ list (saves to <code>custom.el</code>).
 </div>
 </div>
 <div id="outline-container-Enable_spell-check" class="outline-4">
-<h4 id="Enable_spell-check"><span class="section-number-4">11.1.1.</span> Enable spell-check</h4>
-<div class="outline-text-4" id="text-11-1-1">
+<h4 id="Enable_spell-check"><span class="section-number-4">11.2.1.</span> Enable spell-check</h4>
+<div class="outline-text-4" id="text-11-2-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -872,8 +954,8 @@ list (saves to <code>custom.el</code>).
 </div>
 </div>
 <div id="outline-container-Enable_syntax_highlighting_in_HTML_export" class="outline-4">
-<h4 id="Enable_syntax_highlighting_in_HTML_export"><span class="section-number-4">11.1.2.</span> Enable syntax highlighting in HTML export</h4>
-<div class="outline-text-4" id="text-11-1-2">
+<h4 id="Enable_syntax_highlighting_in_HTML_export"><span class="section-number-4">11.2.2.</span> Enable syntax highlighting in HTML export</h4>
+<div class="outline-text-4" id="text-11-2-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">htmlize</span>)
 </pre>
@@ -881,8 +963,8 @@ list (saves to <code>custom.el</code>).
 </div>
 </div>
 <div id="outline-container-Tangle_Emacs_config_and_write_HTML_document" class="outline-4">
-<h4 id="Tangle_Emacs_config_and_write_HTML_document"><span class="section-number-4">11.1.3.</span> Tangle Emacs config and write HTML document</h4>
-<div class="outline-text-4" id="text-11-1-3">
+<h4 id="Tangle_Emacs_config_and_write_HTML_document"><span class="section-number-4">11.2.3.</span> Tangle Emacs config and write HTML document</h4>
+<div class="outline-text-4" id="text-11-2-3">
 <p>
 This function tangles this file (<code>emacs.org</code>) and exports an HTML page
 (<code>emacs.html</code>):
@@ -923,8 +1005,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Local_HTTP_server_for_displaying_exported_HTML" class="outline-4">
-<h4 id="Local_HTTP_server_for_displaying_exported_HTML"><span class="section-number-4">11.1.4.</span> Local HTTP server for displaying exported HTML</h4>
-<div class="outline-text-4" id="text-11-1-4">
+<h4 id="Local_HTTP_server_for_displaying_exported_HTML"><span class="section-number-4">11.2.4.</span> Local HTTP server for displaying exported HTML</h4>
+<div class="outline-text-4" id="text-11-2-4">
 <p>
 Install <a href="https://github.com/lomirus/live-server">live-server</a>:
 </p>
@@ -978,8 +1060,8 @@ Install <a href="https://github.com/lomirus/live-server">live-server</a>:
 </div>
 </div>
 <div id="outline-container-Org-Tempo_code_block_snippets" class="outline-4">
-<h4 id="Org-Tempo_code_block_snippets"><span class="section-number-4">11.1.5.</span> Org-Tempo code block snippets</h4>
-<div class="outline-text-4" id="text-11-1-5">
+<h4 id="Org-Tempo_code_block_snippets"><span class="section-number-4">11.2.5.</span> Org-Tempo code block snippets</h4>
+<div class="outline-text-4" id="text-11-2-5">
 <p>
 See the Org-Mode manual for <a href="https://orgmode.org/manual/Structure-Templates.html">Structure Templates</a>.
 </p>
@@ -998,8 +1080,8 @@ library:
 </div>
 </div>
 <div id="outline-container-Use_org_headings_as_HTML_anchors" class="outline-4">
-<h4 id="Use_org_headings_as_HTML_anchors"><span class="section-number-4">11.1.6.</span> Use org headings as HTML anchors</h4>
-<div class="outline-text-4" id="text-11-1-6">
+<h4 id="Use_org_headings_as_HTML_anchors"><span class="section-number-4">11.2.6.</span> Use org headings as HTML anchors</h4>
+<div class="outline-text-4" id="text-11-2-6">
 <p>
 <a href="https://github.com/alphapapa/unpackaged.el/tree/master?tab=readme-ov-file#export-to-html-with-useful-anchors">unpackaged.el: Export to HTML with useful anchors</a>
 </p>
@@ -1100,8 +1182,8 @@ library:
 </div>
 </div>
 <div id="outline-container-Electric_pairs" class="outline-4">
-<h4 id="Electric_pairs"><span class="section-number-4">11.1.7.</span> Electric pairs</h4>
-<div class="outline-text-4" id="text-11-1-7">
+<h4 id="Electric_pairs"><span class="section-number-4">11.2.7.</span> Electric pairs</h4>
+<div class="outline-text-4" id="text-11-2-7">
 <p>
 This makes it so certain characters are duplicated automatically to
 make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</code>.
@@ -1119,10 +1201,26 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 <div id="outline-container-Markdown_mode_%28label_%3Dmarkdown%3D%29" class="outline-3">
-<h3 id="Markdown_mode_%28label_%3Dmarkdown%3D%29"><span class="section-number-3">11.2.</span> Markdown mode (label <code>markdown</code>)</h3>
-<div class="outline-text-3" id="text-11-2">
+<h3 id="Markdown_mode_%28label_%3Dmarkdown%3D%29"><span class="section-number-3">11.3.</span> Markdown mode (label <code>markdown</code>)</h3>
+<div class="outline-text-3" id="text-11-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">markdown-mode</span>)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Magit_%28label_%3Dmagit%3D%29" class="outline-3">
+<h3 id="Magit_%28label_%3Dmagit%3D%29"><span class="section-number-3">11.4.</span> Magit (label <code>magit</code>)</h3>
+<div class="outline-text-3" id="text-11-4">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Magit (git version control system) :: https://magit.vc/</span>
+(<span style="color: #b6a0ff;">use-package</span>
+  magit
+  <span style="color: #f78fe7;">:general</span> (<span style="color: #79a8ff;">"C-c g"</span> 'magit-status)
+  <span style="color: #f78fe7;">:config</span>
+  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">open magit in a full frame always:</span>
+  (<span style="color: #b6a0ff;">setq</span> magit-display-buffer-function
+        #'magit-display-buffer-fullframe-status-v1))
 </pre>
 </div>
 </div>
@@ -1131,7 +1229,7 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-01-27 Mon 01:26</p>
+<p class="date">Created: 2025-01-27 Mon 22:29</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

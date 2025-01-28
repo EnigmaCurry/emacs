@@ -326,9 +326,9 @@ that become enabled by adding labels on a per-machine basis.
   (defun my/machine-labels-available ()
     "List all available machine labels"
     (let ((modules-dir (expand-file-name "modules" user-emacs-directory)))
-      (mapcar #'file-name-nondirectory
+      (cl-sort (mapcar #'file-name-nondirectory
               (seq-filter #'file-directory-p
-                          (directory-files modules-dir t "^[^.]" t)))))
+                          (directory-files modules-dir t "^[^.]" t))) #'string<)))
 #+end_src
 
 =my/machine-has-label= is used automatically by =my/load-modules=
@@ -364,18 +364,6 @@ in =~/.config/machine-labels=:
   (my/load-modules)
 #+end_src
 
-Here are the [[https://github.com/EnigmaCurry/emacs/tree/literate-new/modules][available modules]]:
-
-#+begin_src emacs-lisp :results value replace :exports results
-(my/machine-labels-available)
-#+end_src
-
-#+RESULTS:
-| org |
-
-|-------------------------------------------------------|
-| Customize the machine labels for the current machine: |
-| =M-x my/custom-settings=                              |
 * Programming mode
 
 #+begin_src emacs-lisp :tangle "modules/programming.el" :mkdirp yes
@@ -405,13 +393,110 @@ Registers]]. These registers are accessed via the prefix: =C-x r j=
 
 * Modules
 
-Modules that extend the base config are enabled by customizing the
-variable =my/machine-labels= and adding the labels you want to this
-list (saves to =custom.el=).
+Modules are optional and they extend the base config.
+
+Here are the [[https://github.com/EnigmaCurry/emacs/tree/literate-new/modules][available modules]]:
+
+#+begin_src emacs-lisp :results value replace :exports results
+  (mapconcat (lambda (x) (format "- %s" x)) (my/machine-labels-available) "\n")
+#+end_src
+
+#+RESULTS:
+: - general
+: - magit
+: - markdown
+: - org
+
+
+*All modules are disabled by default! You must customize
+=my/machine-labels= on each machine you configure.*
 
 |--------------------------|
 | =M-x my/custom-settings= |
 
+This will open the customization interface allowing you to set the
+list named =My Machine Labels=. For example, add each of the labels
+you want to enable for the current machine: =general=, =org=,
+=markdown=, etc:
+
+#+begin_src example
+↓ My Machine Labels:
+Repeat:
+INS DEL String: general
+INS DEL String: org
+INS DEL String: markdown
+INS
+    State : SAVED and set.
+   List of machine-specific labels to configure which modules to load.
+#+end_src
+
+When done, press =C-x C-s= to save the settings.
+
+If you want to enable ALL of the features, you can evaluate this elisp
+(the result will be saved in =custom.el=):
+
+#+begin_src emacs-lisp
+  ;; This is an elisp alternative to using the customize interface shown above:
+  ;; Example to enable the custom labels: general, org, and markdown:
+  (customize-set-variable 'my/machine-labels (my/machine-labels-available))
+  (customize-save-customized)
+#+end_src
+
+You can then remove any of the modules you don't want, the same as
+before: =M-x my/custom-settings=.
+
+You should restart Emacs to reload the configured modules from
+=custom.el=.
+
+** General keybindings manager (label =general=)
+
+See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.el]]
+
+#+begin_src emacs-lisp :tangle "modules/general/general.el" :mkdirp yes
+    (use-package
+      general
+      :init
+      ;; Switch between two most recent buffers:
+      (fset 'quick-switch-buffer [?\C-x ?b return])
+      :config
+       ;;; Custom global bindings:
+      (general-define-key
+       "C-h B"
+       'general-describe-keybindings
+       "s-b"
+       'quick-switch-buffer
+       "s-B"
+       'buffer-menu-other-window
+       "C-x B"
+       'buffer-menu-other-window
+       "s-o"
+       'browse-url
+       "C-;"
+       'comment-region ; C-u C-; to uncomment
+       "s-<down-mouse-1>"
+       'mouse-drag-region-rectangle)
+      ;;; Put the Emacs default keybindings you want included in general-describe-keybindings here:
+      ;;; Its useful to duplicate these simply as a way of documentation:
+      (general-define-key
+       "M-SPC"
+       'cycle-spacing ; If you document it, you will use it.
+       "M-h"
+       'mark-paragraph ; C-h B is like your personal cheat sheet.
+       "C-h b"
+       'describe-bindings ;; default binding for documentation purpose
+       "C-x 4 c"
+       'clone-indirect-buffer-other-window ;; default binding
+       )
+      ;;; Define bindings for specific builtin (non use-package) modes:
+      ;; Emacs Lisp mode bindings:
+      (general-define-key
+       :keymaps 'emacs-lisp-mode-map
+       "s-e" 'eval-defun ;eval top-level form
+       "M-;" 'paredit-comment-dwim)
+      ;; Dired mode bindings:
+      (general-define-key
+       :keymaps 'dired-mode-map "C-c C-q" 'dired-toggle-read-only))
+#+end_src
 ** Org mode (label =org=)
 
 #+begin_src emacs-lisp :tangle "modules/org/org-mode.el"
@@ -646,6 +731,18 @@ make org-mode syntax easier to type: ===, =/=, =~=.
   (use-package markdown-mode)
 #+end_src
 
+** Magit (label =magit=)
+
+#+begin_src emacs-lisp :tangle "modules/magit/magit.el" :mkdirp yes
+  ;; Magit (git version control system) :: https://magit.vc/
+  (use-package
+    magit
+    :general ("C-c g" 'magit-status)
+    :config
+    ;; open magit in a full frame always:
+    (setq magit-display-buffer-function
+          #'magit-display-buffer-fullframe-status-v1))
+#+end_src
 * LICENSE (appendix)                                               :noexport:
 
 #+begin_src text :noweb-ref license :exports none

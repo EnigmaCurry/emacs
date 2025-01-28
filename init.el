@@ -129,9 +129,9 @@ If the buffer already exists, delete it and recreate it."
 (defun my/machine-labels-available ()
   "List all available machine labels"
   (let ((modules-dir (expand-file-name "modules" user-emacs-directory)))
-    (mapcar #'file-name-nondirectory
+    (cl-sort (mapcar #'file-name-nondirectory
             (seq-filter #'file-directory-p
-                        (directory-files modules-dir t "^[^.]" t)))))
+                        (directory-files modules-dir t "^[^.]" t))) #'string<)))
 
 (defvar my/modules-dir (expand-file-name "modules/" user-emacs-directory))
 (defun my/load-modules ()

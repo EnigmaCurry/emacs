@@ -8,3 +8,6 @@
 /custom.el
 /straight/
 /export/
+/.git
+.gitignore
+/export/hello.txt
