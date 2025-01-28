@@ -11,8 +11,8 @@ in Org Mode.
  * All Emacs config is written in Org Mode and it goes in this file
    ([[file:emacs.org][emacs.org]]) [[[https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1][Source on GitHub]]].
  * All configuration is displayed (exported) as a single HTML page on
-   the web. Having it be a single page allows for easy searchability
-   without requiring any JavaScript.
+   the web. A single page is easy to search and requires no
+   JavaScript.
  * All Org-Babel code blocks are tangled into normal elisp files that
    are split by category. These elisp files are directly committed
    into the git repository so that it can be cloned and loaded
@@ -23,12 +23,11 @@ in Org Mode.
    others (meme: [[https://ec-share.nyc3.digitaloceanspaces.com/i-made-this-1.jpg]["I made this"]]).
  * Basic Emacs functionality should work without needing to download
    any third party libraries.
- * To load extra modules, each machine may customize
-   =my/machine-labels= to enable loading additional modules in an
-   opt-in fashion.
- * This config should work on Linux CLI, Wayland, and Android.
+ * Multi-platform support for Linux CLI, Wayland, and Android.
+ * Create custom variable =my/machine-labels= to set per-machine
+   labels that opt-in to load additional modules.
  * Keep code blocks tidy and of medium size. Avoid having lots of
-   little code blocks and bullet points.
+   little code blocks and excessive structures.
 
 * LICENSE
 
@@ -293,9 +292,9 @@ configs, etc.
 
 *** Position registers
 
-There are some files that I want to have easy access to via [[info:emacs#Position Registers][Position
-Registers]]. These registers are accessed via the prefix: =C-x r j=
-(register jump):
+There are some files that I want to have easy access to via
+[[info:emacs#Position Registers][Position Registers]]. These registers
+are accessed via the prefix: =C-x r j= (register jump):
 
  * =C-x r j e= - open the Emacs config file buffer
 
@@ -391,7 +390,13 @@ on this git repository:
 | Clean package cache (shell command) |
 | =just clean=                        |
 
-* use-package and straight.el
+* straight.el and use-package
+
+[[https://github.com/radian-software/straight.el][straight.el]] replaces the builtin package manager of Emacs
+([[https://github.com/emacs-mirror/emacs/blob/master/lisp/emacs-lisp/package.el][package.el]]). In return, you can install packages directly from git,
+and lock dependencies for reproducible installs. [[https://github.com/jwiegley/use-package][use-package]] is an
+Emacs builtin macro that enables declarative package configuration.
+
 ** Lazy-load straight.el
 
 #+begin_src emacs-lisp :tangle "init.el"
