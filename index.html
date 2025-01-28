@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-27 Mon 23:52 -->
+<!-- 2025-01-28 Tue 00:25 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -223,9 +223,8 @@
 <li><a href="#Rust_helper_programs">5. Rust helper programs</a>
 <ul>
 <li><a href="#Install_Rustup">5.1. Install Rustup</a></li>
-<li><a href="#Install_tools">5.2. Install tools</a></li>
-<li><a href="#Set_cargo_binary_PATH">5.3. Set cargo binary PATH</a></li>
-<li><a href="#Cargo_functions">5.4. Cargo functions</a></li>
+<li><a href="#Set_cargo_binary_PATH">5.2. Set cargo binary PATH</a></li>
+<li><a href="#Cargo_functions">5.3. Cargo functions</a></li>
 </ul>
 </li>
 <li><a href="#Justfile">6. Justfile</a></li>
@@ -533,6 +532,7 @@ install it that way:
 <div class="org-src-container">
 <pre class="src src-shell"><span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">e.g., Fedora:</span>
 sudo dnf install rustup
+rustup-init
 </pre>
 </div>
 
@@ -546,23 +546,9 @@ But you can also <a href="https://rustup.rs/">install it</a> the curl bomb way:
 </div>
 </div>
 </div>
-<div id="outline-container-Install_tools" class="outline-3">
-<h3 id="Install_tools"><span class="section-number-3">5.2.</span> Install tools</h3>
-<div class="outline-text-3" id="text-5-2">
-<p>
-Once you've installed <code>cargo</code>, you can install the rest of the necessary
-helper programs:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-shell">cargo install just live-server ripgrep
-</pre>
-</div>
-</div>
-</div>
 <div id="outline-container-Set_cargo_binary_PATH" class="outline-3">
-<h3 id="Set_cargo_binary_PATH"><span class="section-number-3">5.3.</span> Set cargo binary PATH</h3>
-<div class="outline-text-3" id="text-5-3">
+<h3 id="Set_cargo_binary_PATH"><span class="section-number-3">5.2.</span> Set cargo binary PATH</h3>
+<div class="outline-text-3" id="text-5-2">
 <p>
 Cargo and all of the helper programs you install go in <code>~/.cargo/bin</code>.
 Ensure that this path is set (because Emacs might not have read
@@ -578,8 +564,8 @@ Ensure that this path is set (because Emacs might not have read
 </div>
 </div>
 <div id="outline-container-Cargo_functions" class="outline-3">
-<h3 id="Cargo_functions"><span class="section-number-3">5.4.</span> Cargo functions</h3>
-<div class="outline-text-3" id="text-5-4">
+<h3 id="Cargo_functions"><span class="section-number-3">5.3.</span> Cargo functions</h3>
+<div class="outline-text-3" id="text-5-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/cargo-package-installed-p</span> (package)
   <span style="color: #b0d6f5;">"Check if a Cargo PACKAGE is installed."</span>
@@ -1210,30 +1196,49 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 The code-blocks in this file are tangled to separate categorized files
 under the <code>modules</code> sub-directory. These are loaded on a per-machine
 basis based on <code>my/machine-has-label</code> (and per-machine labels stored
-in <code>~/.config/machine-labels</code>:
+in <code>~/.config/machine-labels</code>):
 </p>
 
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/modules-dir</span> (expand-file-name <span style="color: #79a8ff;">"modules/"</span> user-emacs-directory))
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/load-modules</span> ()
-  <span style="color: #b0d6f5;">"Load all Emacs Lisp files in the modules/ directory and subdirectories matching labels."</span>
+(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/priority-list</span> '(<span style="color: #79a8ff;">"general"</span>) <span style="color: #b0d6f5;">"List of prioritized modules."</span>)
+(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/load-modules</span> (requested-modules)
+  <span style="color: #b0d6f5;">"Load user-requested modules in a priority order.</span>
+<span style="color: #b0d6f5;">  REQUESTED-MODULES is a list of module names to load."</span>
+  (<span style="color: #b6a0ff;">let</span> ((prioritized-modules (seq-filter (<span style="color: #b6a0ff;">lambda</span> (mod) (member mod my/priority-list)) requested-modules))
+        (remaining-modules (seq-remove (<span style="color: #b6a0ff;">lambda</span> (mod) (member mod my/priority-list)) requested-modules)))
+    <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Sort prioritized modules based on `my/priority-list`</span>
+    (<span style="color: #b6a0ff;">setq</span> prioritized-modules
+          (sort prioritized-modules
+                (<span style="color: #b6a0ff;">lambda</span> (a b)
+                  (&lt; (<span style="color: #b6a0ff;">or</span> (cl-position a my/priority-list) most-positive-fixnum)
+                     (<span style="color: #b6a0ff;">or</span> (cl-position b my/priority-list) most-positive-fixnum)))))
+    <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Combine prioritized and remaining modules</span>
+    (<span style="color: #b6a0ff;">let</span> ((ordered-modules (append prioritized-modules remaining-modules)))
+      (<span style="color: #b6a0ff;">dolist</span> (mod ordered-modules)
+        (<span style="color: #b6a0ff;">let</span> ((mod-path (expand-file-name mod my/modules-dir)))
+          (<span style="color: #b6a0ff;">if</span> (file-directory-p mod-path)
+              (<span style="color: #b6a0ff;">progn</span>
+                (message <span style="color: #79a8ff;">"Loading module: %s"</span> mod)
+                (<span style="color: #b6a0ff;">let</span> ((files (directory-files mod-path t <span style="color: #79a8ff;">"\\.el\\'"</span>)))
+                  (<span style="color: #b6a0ff;">dolist</span> (file (sort files #'string&lt;))
+                    (<span style="color: #b6a0ff;">condition-case</span> err
+                        (load file nil 'nomessage)
+                      (<span style="color: #d0bc00;">error</span> (message <span style="color: #79a8ff;">"Error loading %s: %s"</span> file err))))))
+            (message <span style="color: #79a8ff;">"Skipping module: %s (not found)"</span> mod)))))))
+(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/load-single-file-modules</span> ()
+  <span style="color: #b0d6f5;">"Find and load all .el files directly in the modules directory."</span>
   (<span style="color: #b6a0ff;">when</span> (file-directory-p my/modules-dir)
-    <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load all .el files in the root modules/ directory</span>
-    (<span style="color: #b6a0ff;">let</span> ((root-files (directory-files my/modules-dir t <span style="color: #79a8ff;">"\\.el\\'"</span>)))
-      (<span style="color: #b6a0ff;">dolist</span> (file (sort root-files #'string&lt;))
+    (<span style="color: #b6a0ff;">let</span> ((files (directory-files my/modules-dir t <span style="color: #79a8ff;">"\\.el\\'"</span>)))
+      (<span style="color: #b6a0ff;">dolist</span> (file (sort files #'string&lt;))
         (message <span style="color: #79a8ff;">"Loading module: %s"</span> file)
-        (load file nil 'nomessage)))
-    <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load .el files from subdirectories matching machine labels</span>
-    (<span style="color: #b6a0ff;">dolist</span> (subdir (directory-files my/modules-dir t <span style="color: #79a8ff;">"^[</span><span style="color: #d0bc00;">^</span><span style="color: #79a8ff;">.]"</span> t)) <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Skip . and ..</span>
-      (<span style="color: #b6a0ff;">when</span> (<span style="color: #b6a0ff;">and</span> (file-directory-p subdir)
-                 (my/machine-has-label (file-name-nondirectory subdir)))  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Check label</span>
-        (<span style="color: #b6a0ff;">let</span> ((files (directory-files subdir t <span style="color: #79a8ff;">"\\.el\\'"</span>)))
-          (<span style="color: #b6a0ff;">dolist</span> (file (sort files #'string&lt;))
-            (message <span style="color: #79a8ff;">"Loading module from %s: %s"</span> (file-name-nondirectory subdir) file)
-            (load file nil 'nomessage)))))))
+        (<span style="color: #b6a0ff;">condition-case</span> err
+            (load file nil 'nomessage)
+          (<span style="color: #d0bc00;">error</span> (message <span style="color: #79a8ff;">"Error loading %s: %s"</span> file err)))))))
 
 <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">load the modules configured for this macchine</span>
-(my/load-modules)
+(my/load-single-file-modules)
+(my/load-modules my/machine-labels)
 </pre>
 </div>
 </div>
@@ -1253,7 +1258,7 @@ in <code>~/.config/machine-labels</code>:
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-01-27 Mon 23:52</p>
+<p class="date">Created: 2025-01-28 Tue 00:25</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

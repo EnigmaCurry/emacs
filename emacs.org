@@ -218,20 +218,13 @@ install it that way:
 #+begin_src shell
   # e.g., Fedora:
   sudo dnf install rustup
+  rustup-init
 #+end_src
 
 But you can also [[https://rustup.rs/][install it]] the curl bomb way:
 
 #+begin_src shell
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-#+end_src
-
-** Install tools
-Once you've installed =cargo=, you can install the rest of the necessary
-helper programs:
-
-#+begin_src shell
-  cargo install just live-server ripgrep
 #+end_src
 
 ** Set cargo binary PATH
@@ -749,29 +742,48 @@ make org-mode syntax easier to type: ===, =/=, =~=.
 The code-blocks in this file are tangled to separate categorized files
 under the =modules= sub-directory. These are loaded on a per-machine
 basis based on =my/machine-has-label= (and per-machine labels stored
-in =~/.config/machine-labels=:
+in =~/.config/machine-labels=):
 
 #+begin_src emacs-lisp :tangle "init.el"
   (defvar my/modules-dir (expand-file-name "modules/" user-emacs-directory))
-  (defun my/load-modules ()
-    "Load all Emacs Lisp files in the modules/ directory and subdirectories matching labels."
+  (defvar my/priority-list '("general") "List of prioritized modules.")
+  (defun my/load-modules (requested-modules)
+    "Load user-requested modules in a priority order.
+    REQUESTED-MODULES is a list of module names to load."
+    (let ((prioritized-modules (seq-filter (lambda (mod) (member mod my/priority-list)) requested-modules))
+          (remaining-modules (seq-remove (lambda (mod) (member mod my/priority-list)) requested-modules)))
+      ;; Sort prioritized modules based on `my/priority-list`
+      (setq prioritized-modules
+            (sort prioritized-modules
+                  (lambda (a b)
+                    (< (or (cl-position a my/priority-list) most-positive-fixnum)
+                       (or (cl-position b my/priority-list) most-positive-fixnum)))))
+      ;; Combine prioritized and remaining modules
+      (let ((ordered-modules (append prioritized-modules remaining-modules)))
+        (dolist (mod ordered-modules)
+          (let ((mod-path (expand-file-name mod my/modules-dir)))
+            (if (file-directory-p mod-path)
+                (progn
+                  (message "Loading module: %s" mod)
+                  (let ((files (directory-files mod-path t "\\.el\\'")))
+                    (dolist (file (sort files #'string<))
+                      (condition-case err
+                          (load file nil 'nomessage)
+                        (error (message "Error loading %s: %s" file err))))))
+              (message "Skipping module: %s (not found)" mod)))))))
+  (defun my/load-single-file-modules ()
+    "Find and load all .el files directly in the modules directory."
     (when (file-directory-p my/modules-dir)
-      ;; Load all .el files in the root modules/ directory
-      (let ((root-files (directory-files my/modules-dir t "\\.el\\'")))
-        (dolist (file (sort root-files #'string<))
+      (let ((files (directory-files my/modules-dir t "\\.el\\'")))
+        (dolist (file (sort files #'string<))
           (message "Loading module: %s" file)
-          (load file nil 'nomessage)))
-      ;; Load .el files from subdirectories matching machine labels
-      (dolist (subdir (directory-files my/modules-dir t "^[^.]" t)) ;; Skip . and ..
-        (when (and (file-directory-p subdir)
-                   (my/machine-has-label (file-name-nondirectory subdir)))  ;; Check label
-          (let ((files (directory-files subdir t "\\.el\\'")))
-            (dolist (file (sort files #'string<))
-              (message "Loading module from %s: %s" (file-name-nondirectory subdir) file)
-              (load file nil 'nomessage)))))))
+          (condition-case err
+              (load file nil 'nomessage)
+            (error (message "Error loading %s: %s" file err)))))))
 
   ;; load the modules configured for this macchine
-  (my/load-modules)
+  (my/load-single-file-modules)
+  (my/load-modules my/machine-labels)
 #+end_src
 
 ** Install rust helper programs declared by module
