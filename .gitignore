@@ -11,3 +11,4 @@
 /.git
 .gitignore
 /export/hello.txt
+/transient/

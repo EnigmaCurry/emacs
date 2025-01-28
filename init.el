@@ -134,18 +134,28 @@ If the buffer already exists, delete it and recreate it."
                         (directory-files modules-dir t "^[^.]" t))) #'string<)))
 
 (defvar my/modules-dir (expand-file-name "modules/" user-emacs-directory))
-(defvar my/priority-list '("general") "List of prioritized modules.")
+(defvar my/module-priority-list '("general") "List of prioritized modules to install first.")
 (defun my/load-modules (requested-modules)
   "Load user-requested modules in a priority order.
   REQUESTED-MODULES is a list of module names to load."
-  (let ((prioritized-modules (seq-filter (lambda (mod) (member mod my/priority-list)) requested-modules))
-        (remaining-modules (seq-remove (lambda (mod) (member mod my/priority-list)) requested-modules)))
-    ;; Sort prioritized modules based on `my/priority-list`
+  ;; Find and load all single file modules and load them regardless of any config
+  ;; (these onesshouldn't have any extra dependencies)
+  (when (file-directory-p my/modules-dir)
+    (let ((files (directory-files my/modules-dir t "\\.el\\'")))
+      (dolist (file (sort files #'string<))
+        (message "Loading module: %s" file)
+        (condition-case err
+            (load file nil 'nomessage)
+          (error (message "Error loading %s: %s" file err))))))
+  ;; Prioritize and install the requested third party / optional modules:
+  (let ((prioritized-modules (seq-filter (lambda (mod) (member mod my/module-priority-list)) requested-modules))
+        (remaining-modules (seq-remove (lambda (mod) (member mod my/module-priority-list)) requested-modules)))
+    ;; Sort prioritized modules based on `my/module-priority-list`
     (setq prioritized-modules
           (sort prioritized-modules
                 (lambda (a b)
-                  (< (or (cl-position a my/priority-list) most-positive-fixnum)
-                     (or (cl-position b my/priority-list) most-positive-fixnum)))))
+                  (< (or (cl-position a my/module-priority-list) most-positive-fixnum)
+                     (or (cl-position b my/module-priority-list) most-positive-fixnum)))))
     ;; Combine prioritized and remaining modules
     (let ((ordered-modules (append prioritized-modules remaining-modules)))
       (dolist (mod ordered-modules)
@@ -159,18 +169,8 @@ If the buffer already exists, delete it and recreate it."
                         (load file nil 'nomessage)
                       (error (message "Error loading %s: %s" file err))))))
             (message "Skipping module: %s (not found)" mod)))))))
-(defun my/load-single-file-modules ()
-  "Find and load all .el files directly in the modules directory."
-  (when (file-directory-p my/modules-dir)
-    (let ((files (directory-files my/modules-dir t "\\.el\\'")))
-      (dolist (file (sort files #'string<))
-        (message "Loading module: %s" file)
-        (condition-case err
-            (load file nil 'nomessage)
-          (error (message "Error loading %s: %s" file err)))))))
 
 ;; load the modules configured for this macchine
-(my/load-single-file-modules)
 (my/load-modules my/machine-labels)
 
 ;; Install rust dependencies that were declared by modules

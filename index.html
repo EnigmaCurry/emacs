@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-28 Tue 00:25 -->
+<!-- 2025-01-28 Tue 00:40 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -250,8 +250,12 @@
 </li>
 <li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">9.3. Markdown mode (label <code>markdown</code>)</a></li>
 <li><a href="#Magit_%28label_%3Dmagit%3D%29">9.4. Magit (label <code>magit</code>)</a></li>
-<li><a href="#Load_the_configured_sub-modules_by_machine_label">9.5. Load the configured sub-modules by machine label</a></li>
-<li><a href="#Install_rust_helper_programs_declared_by_module">9.6. Install rust helper programs declared by module</a></li>
+</ul>
+</li>
+<li><a href="#Load_modules">10. Load modules</a>
+<ul>
+<li><a href="#Prioritize_and_load_requested_modules">10.1. Prioritize and load requested modules</a></li>
+<li><a href="#Install_rust_helper_programs_declared_by_module">10.2. Install rust helper programs declared by module</a></li>
 </ul>
 </li>
 </ul>
@@ -1121,7 +1125,7 @@ library:
                                          eos)
                                      ,place)
                        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">HACK: `</span><span style="color: #00bcff;">s1</span><span style="color: #a8a8a8;">' instead of a gensym.</span>
-                       (-let* (((s1 suffix) (list (match-string 1 ,place)
+                       (<span style="color: #b6a0ff;">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
                                                   (match-string 2 ,place)))
                                (suffix (<span style="color: #b6a0ff;">if</span> suffix
                                            (string-to-number suffix)
@@ -1189,30 +1193,44 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 </div>
-<div id="outline-container-Load_the_configured_sub-modules_by_machine_label" class="outline-3">
-<h3 id="Load_the_configured_sub-modules_by_machine_label"><span class="section-number-3">9.5.</span> Load the configured sub-modules by machine label</h3>
-<div class="outline-text-3" id="text-9-5">
+</div>
+<div id="outline-container-Load_modules" class="outline-2">
+<h2 id="Load_modules"><span class="section-number-2">10.</span> Load modules</h2>
+<div class="outline-text-2" id="text-10">
 <p>
 The code-blocks in this file are tangled to separate categorized files
 under the <code>modules</code> sub-directory. These are loaded on a per-machine
 basis based on <code>my/machine-has-label</code> (and per-machine labels stored
 in <code>~/.config/machine-labels</code>):
 </p>
-
+</div>
+<div id="outline-container-Prioritize_and_load_requested_modules" class="outline-3">
+<h3 id="Prioritize_and_load_requested_modules"><span class="section-number-3">10.1.</span> Prioritize and load requested modules</h3>
+<div class="outline-text-3" id="text-10-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/modules-dir</span> (expand-file-name <span style="color: #79a8ff;">"modules/"</span> user-emacs-directory))
-(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/priority-list</span> '(<span style="color: #79a8ff;">"general"</span>) <span style="color: #b0d6f5;">"List of prioritized modules."</span>)
+(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/module-priority-list</span> '(<span style="color: #79a8ff;">"general"</span>) <span style="color: #b0d6f5;">"List of prioritized modules to install first."</span>)
 (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/load-modules</span> (requested-modules)
   <span style="color: #b0d6f5;">"Load user-requested modules in a priority order.</span>
 <span style="color: #b0d6f5;">  REQUESTED-MODULES is a list of module names to load."</span>
-  (<span style="color: #b6a0ff;">let</span> ((prioritized-modules (seq-filter (<span style="color: #b6a0ff;">lambda</span> (mod) (member mod my/priority-list)) requested-modules))
-        (remaining-modules (seq-remove (<span style="color: #b6a0ff;">lambda</span> (mod) (member mod my/priority-list)) requested-modules)))
-    <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Sort prioritized modules based on `my/priority-list`</span>
+  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Find and load all single file modules and load them regardless of any config</span>
+  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">(these onesshouldn't have any extra dependencies)</span>
+  (<span style="color: #b6a0ff;">when</span> (file-directory-p my/modules-dir)
+    (<span style="color: #b6a0ff;">let</span> ((files (directory-files my/modules-dir t <span style="color: #79a8ff;">"\\.el\\'"</span>)))
+      (<span style="color: #b6a0ff;">dolist</span> (file (sort files #'string&lt;))
+        (message <span style="color: #79a8ff;">"Loading module: %s"</span> file)
+        (<span style="color: #b6a0ff;">condition-case</span> err
+            (load file nil 'nomessage)
+          (<span style="color: #d0bc00;">error</span> (message <span style="color: #79a8ff;">"Error loading %s: %s"</span> file err))))))
+  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Prioritize and install the requested third party / optional modules:</span>
+  (<span style="color: #b6a0ff;">let</span> ((prioritized-modules (seq-filter (<span style="color: #b6a0ff;">lambda</span> (mod) (member mod my/module-priority-list)) requested-modules))
+        (remaining-modules (seq-remove (<span style="color: #b6a0ff;">lambda</span> (mod) (member mod my/module-priority-list)) requested-modules)))
+    <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Sort prioritized modules based on `my/module-priority-list`</span>
     (<span style="color: #b6a0ff;">setq</span> prioritized-modules
           (sort prioritized-modules
                 (<span style="color: #b6a0ff;">lambda</span> (a b)
-                  (&lt; (<span style="color: #b6a0ff;">or</span> (cl-position a my/priority-list) most-positive-fixnum)
-                     (<span style="color: #b6a0ff;">or</span> (cl-position b my/priority-list) most-positive-fixnum)))))
+                  (&lt; (<span style="color: #b6a0ff;">or</span> (cl-position a my/module-priority-list) most-positive-fixnum)
+                     (<span style="color: #b6a0ff;">or</span> (cl-position b my/module-priority-list) most-positive-fixnum)))))
     <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Combine prioritized and remaining modules</span>
     (<span style="color: #b6a0ff;">let</span> ((ordered-modules (append prioritized-modules remaining-modules)))
       (<span style="color: #b6a0ff;">dolist</span> (mod ordered-modules)
@@ -1226,26 +1244,16 @@ in <code>~/.config/machine-labels</code>):
                         (load file nil 'nomessage)
                       (<span style="color: #d0bc00;">error</span> (message <span style="color: #79a8ff;">"Error loading %s: %s"</span> file err))))))
             (message <span style="color: #79a8ff;">"Skipping module: %s (not found)"</span> mod)))))))
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/load-single-file-modules</span> ()
-  <span style="color: #b0d6f5;">"Find and load all .el files directly in the modules directory."</span>
-  (<span style="color: #b6a0ff;">when</span> (file-directory-p my/modules-dir)
-    (<span style="color: #b6a0ff;">let</span> ((files (directory-files my/modules-dir t <span style="color: #79a8ff;">"\\.el\\'"</span>)))
-      (<span style="color: #b6a0ff;">dolist</span> (file (sort files #'string&lt;))
-        (message <span style="color: #79a8ff;">"Loading module: %s"</span> file)
-        (<span style="color: #b6a0ff;">condition-case</span> err
-            (load file nil 'nomessage)
-          (<span style="color: #d0bc00;">error</span> (message <span style="color: #79a8ff;">"Error loading %s: %s"</span> file err)))))))
 
 <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">load the modules configured for this macchine</span>
-(my/load-single-file-modules)
 (my/load-modules my/machine-labels)
 </pre>
 </div>
 </div>
 </div>
 <div id="outline-container-Install_rust_helper_programs_declared_by_module" class="outline-3">
-<h3 id="Install_rust_helper_programs_declared_by_module"><span class="section-number-3">9.6.</span> Install rust helper programs declared by module</h3>
-<div class="outline-text-3" id="text-9-6">
+<h3 id="Install_rust_helper_programs_declared_by_module"><span class="section-number-3">10.2.</span> Install rust helper programs declared by module</h3>
+<div class="outline-text-3" id="text-10-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Install rust dependencies that were declared by modules</span>
 (<span style="color: #b6a0ff;">when</span> my/cargo-dependencies
@@ -1258,7 +1266,7 @@ in <code>~/.config/machine-labels</code>):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-01-28 Tue 00:25</p>
+<p class="date">Created: 2025-01-28 Tue 00:40</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
