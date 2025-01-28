@@ -284,9 +284,15 @@ Ensure that this path is set (because Emacs might not have read
     (unless (member crate my/cargo-dependencies)
       (setq my/cargo-dependencies (cons crate my/cargo-dependencies))))
 #+end_src
-* Justfile
+** Justfile
 
 [[https://github.com/casey/just][Just]] is better than Make.
+
+#+begin_src emacs-lisp :tangle "modules/just/just.el" :mkdirp yes
+  ;; depend on the just crate so its installed automatically
+  ;; you must add "just" to the list of my/machine-labels for this to work:
+  (my/cargo-dependency "just")
+#+end_src
 
 This =Justfile= consolidates commands that operate
 on this git repository:
@@ -409,13 +415,6 @@ Here are the [[https://github.com/EnigmaCurry/emacs/tree/literate-new/modules][a
   (mapconcat (lambda (x) (format "- %s" x)) (my/machine-labels-available) "\n")
 #+end_src
 
-#+RESULTS:
-: - general
-: - magit
-: - markdown
-: - org
-
-
 *All modules are disabled by default! You must customize
 =my/machine-labels= on each machine you configure.*
 
@@ -440,17 +439,18 @@ INS
 
 When done, press =C-x C-s= to save the settings.
 
-If you want to enable ALL of the features, you can evaluate this elisp
+If you want to enable ALL of the modules, you can evaluate this elisp
 (the result will be saved in =custom.el=):
 
 #+begin_src emacs-lisp
   ;; This is an elisp alternative to using the customize interface shown above:
   ;; Example to enable the custom labels: general, org, and markdown:
-  (customize-set-variable 'my/machine-labels (my/machine-labels-available))
-  (customize-save-customized)
+  (progn
+    (customize-set-variable 'my/machine-labels (my/machine-labels-available))
+    (customize-save-customized))
 #+end_src
 
-You can then remove any of the modules you don't want, the same as
+You can then remove any of the modules you don't want, the same way as
 before: =M-x my/custom-settings=.
 
 You should restart Emacs to reload the configured modules from
@@ -717,6 +717,33 @@ make org-mode syntax easier to type: ===, =/=, =~=.
                              (modify-syntax-entry ?~ "$~" org-mode-syntax-table)
                              (modify-syntax-entry ?= "$=" org-mode-syntax-table)
                              ))
+#+end_src
+
+** Vterm
+
+#+begin_src emacs-lisp :tangle "modules/vterm/vterm.el" :mkdirp yes
+;; vterm (terminal emulator) :: https://github.com/akermu/emacs-libvterm
+;; Configure BASH to work with vterm: https://github.com/akermu/emacs-libvterm#vterm-clear-scrollback
+(use-package
+ vterm
+ :custom (vterm-always-compile-module t)
+ :general ("C-c t" 'my-vterm-toggle)
+ :config (define-key vterm-mode-map (kbd "<f5>") nil)
+ :init
+ (defun my-vterm-toggle (&optional args)
+   "Customized vterm-toggle wrapper- this fixes the universal argument (C-u) to always create a new terminal"
+   (interactive "P")
+   (if (not
+        (or (derived-mode-p 'vterm-mode)
+            (and (vterm-toggle--get-window)
+                 vterm-toggle-hide-method)))
+       (if (equal current-prefix-arg '(4))
+           (vterm-toggle--new args)
+         (vterm-toggle args))
+     (vterm-toggle args))))
+
+;; shell-pop for vterm :: https://github.com/jixiuf/vterm-toggle
+(use-package vterm-toggle)
 #+end_src
 
 ** Markdown mode (label =markdown=)

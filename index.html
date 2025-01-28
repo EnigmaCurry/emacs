@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-28 Tue 00:40 -->
+<!-- 2025-01-28 Tue 12:23 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -225,37 +225,38 @@
 <li><a href="#Install_Rustup">5.1. Install Rustup</a></li>
 <li><a href="#Set_cargo_binary_PATH">5.2. Set cargo binary PATH</a></li>
 <li><a href="#Cargo_functions">5.3. Cargo functions</a></li>
+<li><a href="#Justfile">5.4. Justfile</a></li>
 </ul>
 </li>
-<li><a href="#Justfile">6. Justfile</a></li>
-<li><a href="#use-package_and_straight.el">7. use-package and straight.el</a>
+<li><a href="#use-package_and_straight.el">6. use-package and straight.el</a>
 <ul>
-<li><a href="#Lazy-load_straight.el">7.1. Lazy-load straight.el</a></li>
-<li><a href="#Track_packages_added_via_use-package">7.2. Track packages added via use-package</a></li>
+<li><a href="#Lazy-load_straight.el">6.1. Lazy-load straight.el</a></li>
+<li><a href="#Track_packages_added_via_use-package">6.2. Track packages added via use-package</a></li>
 </ul>
 </li>
-<li><a href="#Per-machine_labels_enable_opt-in_features">8. Per-machine labels enable opt-in features</a></li>
-<li><a href="#Modules">9. Modules</a>
+<li><a href="#Per-machine_labels_enable_opt-in_features">7. Per-machine labels enable opt-in features</a></li>
+<li><a href="#Modules">8. Modules</a>
 <ul>
-<li><a href="#General_keybindings_manager_%28label_%3Dgeneral%3D%29">9.1. General keybindings manager (label <code>general</code>)</a></li>
-<li><a href="#Org_mode_%28label_%3Dorg%3D%29">9.2. Org mode (label <code>org</code>)</a>
+<li><a href="#General_keybindings_manager_%28label_%3Dgeneral%3D%29">8.1. General keybindings manager (label <code>general</code>)</a></li>
+<li><a href="#Org_mode_%28label_%3Dorg%3D%29">8.2. Org mode (label <code>org</code>)</a>
 <ul>
-<li><a href="#Tangle_Emacs_config_and_write_HTML_document">9.2.1. Tangle Emacs config and write HTML document</a></li>
-<li><a href="#Local_HTTP_server_for_displaying_exported_HTML">9.2.2. Local HTTP server for displaying exported HTML</a></li>
-<li><a href="#Enable_syntax_highlighting_in_HTML_export">9.2.3. Enable syntax highlighting in HTML export</a></li>
-<li><a href="#Org-Tempo_code_block_snippets">9.2.4. Org-Tempo code block snippets</a></li>
-<li><a href="#Use_org_headings_as_HTML_anchors">9.2.5. Use org headings as HTML anchors</a></li>
-<li><a href="#Electric_pairs">9.2.6. Electric pairs</a></li>
+<li><a href="#Tangle_Emacs_config_and_write_HTML_document">8.2.1. Tangle Emacs config and write HTML document</a></li>
+<li><a href="#Local_HTTP_server_for_displaying_exported_HTML">8.2.2. Local HTTP server for displaying exported HTML</a></li>
+<li><a href="#Enable_syntax_highlighting_in_HTML_export">8.2.3. Enable syntax highlighting in HTML export</a></li>
+<li><a href="#Org-Tempo_code_block_snippets">8.2.4. Org-Tempo code block snippets</a></li>
+<li><a href="#Use_org_headings_as_HTML_anchors">8.2.5. Use org headings as HTML anchors</a></li>
+<li><a href="#Electric_pairs">8.2.6. Electric pairs</a></li>
 </ul>
 </li>
-<li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">9.3. Markdown mode (label <code>markdown</code>)</a></li>
-<li><a href="#Magit_%28label_%3Dmagit%3D%29">9.4. Magit (label <code>magit</code>)</a></li>
+<li><a href="#Vterm">8.3. Vterm</a></li>
+<li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">8.4. Markdown mode (label <code>markdown</code>)</a></li>
+<li><a href="#Magit_%28label_%3Dmagit%3D%29">8.5. Magit (label <code>magit</code>)</a></li>
 </ul>
 </li>
-<li><a href="#Load_modules">10. Load modules</a>
+<li><a href="#Load_modules">9. Load modules</a>
 <ul>
-<li><a href="#Prioritize_and_load_requested_modules">10.1. Prioritize and load requested modules</a></li>
-<li><a href="#Install_rust_helper_programs_declared_by_module">10.2. Install rust helper programs declared by module</a></li>
+<li><a href="#Prioritize_and_load_requested_modules">9.1. Prioritize and load requested modules</a></li>
+<li><a href="#Install_rust_helper_programs_declared_by_module">9.2. Install rust helper programs declared by module</a></li>
 </ul>
 </li>
 </ul>
@@ -616,13 +617,19 @@ Ensure that this path is set (because Emacs might not have read
 </div>
 </div>
 </div>
-</div>
-<div id="outline-container-Justfile" class="outline-2">
-<h2 id="Justfile"><span class="section-number-2">6.</span> Justfile</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-Justfile" class="outline-3">
+<h3 id="Justfile"><span class="section-number-3">5.4.</span> Justfile</h3>
+<div class="outline-text-3" id="text-5-4">
 <p>
 <a href="https://github.com/casey/just">Just</a> is better than Make.
 </p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">depend on the just crate so its installed automatically</span>
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">you must add "just" to the list of my/machine-labels for this to work:</span>
+(my/cargo-dependency <span style="color: #79a8ff;">"just"</span>)
+</pre>
+</div>
 
 <p>
 This <code>Justfile</code> consolidates commands that operate
@@ -661,13 +668,14 @@ clean:
 </table>
 </div>
 </div>
+</div>
 <div id="outline-container-use-package_and_straight.el" class="outline-2">
-<h2 id="use-package_and_straight.el"><span class="section-number-2">7.</span> use-package and straight.el</h2>
-<div class="outline-text-2" id="text-7">
+<h2 id="use-package_and_straight.el"><span class="section-number-2">6.</span> use-package and straight.el</h2>
+<div class="outline-text-2" id="text-6">
 </div>
 <div id="outline-container-Lazy-load_straight.el" class="outline-3">
-<h3 id="Lazy-load_straight.el"><span class="section-number-3">7.1.</span> Lazy-load straight.el</h3>
-<div class="outline-text-3" id="text-7-1">
+<h3 id="Lazy-load_straight.el"><span class="section-number-3">6.1.</span> Lazy-load straight.el</h3>
+<div class="outline-text-3" id="text-6-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/bootstrap-straight</span> (<span style="color: #6ae4b9;">&amp;rest</span> _)
   <span style="color: #b0d6f5;">"Bootstrap straight.el only if it's not already installed."</span>
@@ -695,8 +703,8 @@ clean:
 </div>
 </div>
 <div id="outline-container-Track_packages_added_via_use-package" class="outline-3">
-<h3 id="Track_packages_added_via_use-package"><span class="section-number-3">7.2.</span> Track packages added via use-package</h3>
-<div class="outline-text-3" id="text-7-2">
+<h3 id="Track_packages_added_via_use-package"><span class="section-number-3">6.2.</span> Track packages added via use-package</h3>
+<div class="outline-text-3" id="text-6-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/use-package-tracked-list</span> nil
   <span style="color: #b0d6f5;">"A list to track the names of packages declared via `use-package`."</span>)
@@ -731,8 +739,8 @@ clean:
 </div>
 </div>
 <div id="outline-container-Per-machine_labels_enable_opt-in_features" class="outline-2">
-<h2 id="Per-machine_labels_enable_opt-in_features"><span class="section-number-2">8.</span> Per-machine labels enable opt-in features</h2>
-<div class="outline-text-2" id="text-8">
+<h2 id="Per-machine_labels_enable_opt-in_features"><span class="section-number-2">7.</span> Per-machine labels enable opt-in features</h2>
+<div class="outline-text-2" id="text-7">
 <p>
 This is a modular Emacs configuration designed to run in several
 different environments and serving different roles. Each machine will
@@ -771,8 +779,8 @@ described in the next section.
 </div>
 </div>
 <div id="outline-container-Modules" class="outline-2">
-<h2 id="Modules"><span class="section-number-2">9.</span> Modules</h2>
-<div class="outline-text-2" id="text-9">
+<h2 id="Modules"><span class="section-number-2">8.</span> Modules</h2>
+<div class="outline-text-2" id="text-8">
 <p>
 Modules are optional and they extend the base config.
 </p>
@@ -783,11 +791,12 @@ Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/mod
 
 <pre class="example">
 - general
+- just
 - magit
 - markdown
 - org
+- vterm
 </pre>
-
 
 
 <p>
@@ -832,20 +841,21 @@ When done, press <code>C-x C-s</code> to save the settings.
 </p>
 
 <p>
-If you want to enable ALL of the features, you can evaluate this elisp
+If you want to enable ALL of the modules, you can evaluate this elisp
 (the result will be saved in <code>custom.el</code>):
 </p>
 
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">This is an elisp alternative to using the customize interface shown above:</span>
 <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Example to enable the custom labels: general, org, and markdown:</span>
-(customize-set-variable 'my/machine-labels (my/machine-labels-available))
-(customize-save-customized)
+(<span style="color: #b6a0ff;">progn</span>
+  (customize-set-variable 'my/machine-labels (my/machine-labels-available))
+  (customize-save-customized))
 </pre>
 </div>
 
 <p>
-You can then remove any of the modules you don't want, the same as
+You can then remove any of the modules you don't want, the same way as
 before: <code>M-x my/custom-settings</code>.
 </p>
 
@@ -855,8 +865,8 @@ You should restart Emacs to reload the configured modules from
 </p>
 </div>
 <div id="outline-container-General_keybindings_manager_%28label_%3Dgeneral%3D%29" class="outline-3">
-<h3 id="General_keybindings_manager_%28label_%3Dgeneral%3D%29"><span class="section-number-3">9.1.</span> General keybindings manager (label <code>general</code>)</h3>
-<div class="outline-text-3" id="text-9-1">
+<h3 id="General_keybindings_manager_%28label_%3Dgeneral%3D%29"><span class="section-number-3">8.1.</span> General keybindings manager (label <code>general</code>)</h3>
+<div class="outline-text-3" id="text-8-1">
 <p>
 See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">general.el</a>
 </p>
@@ -910,8 +920,8 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
 </div>
 </div>
 <div id="outline-container-Org_mode_%28label_%3Dorg%3D%29" class="outline-3">
-<h3 id="Org_mode_%28label_%3Dorg%3D%29"><span class="section-number-3">9.2.</span> Org mode (label <code>org</code>)</h3>
-<div class="outline-text-3" id="text-9-2">
+<h3 id="Org_mode_%28label_%3Dorg%3D%29"><span class="section-number-3">8.2.</span> Org mode (label <code>org</code>)</h3>
+<div class="outline-text-3" id="text-8-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">org</span>
   <span style="color: #f78fe7;">:hook</span> ((org-mode . flyspell-mode)
@@ -930,8 +940,8 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
 </div>
 </div>
 <div id="outline-container-Tangle_Emacs_config_and_write_HTML_document" class="outline-4">
-<h4 id="Tangle_Emacs_config_and_write_HTML_document"><span class="section-number-4">9.2.1.</span> Tangle Emacs config and write HTML document</h4>
-<div class="outline-text-4" id="text-9-2-1">
+<h4 id="Tangle_Emacs_config_and_write_HTML_document"><span class="section-number-4">8.2.1.</span> Tangle Emacs config and write HTML document</h4>
+<div class="outline-text-4" id="text-8-2-1">
 <p>
 This function tangles this file (<code>emacs.org</code>) and exports an HTML page
 (<code>emacs.html</code>):
@@ -972,8 +982,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Local_HTTP_server_for_displaying_exported_HTML" class="outline-4">
-<h4 id="Local_HTTP_server_for_displaying_exported_HTML"><span class="section-number-4">9.2.2.</span> Local HTTP server for displaying exported HTML</h4>
-<div class="outline-text-4" id="text-9-2-2">
+<h4 id="Local_HTTP_server_for_displaying_exported_HTML"><span class="section-number-4">8.2.2.</span> Local HTTP server for displaying exported HTML</h4>
+<div class="outline-text-4" id="text-8-2-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(my/cargo-dependency <span style="color: #79a8ff;">"live-server"</span>) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">declares but defers install of live-server Rust crate</span>
 (<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/emacs-org-html-server-host</span> <span style="color: #79a8ff;">"127.0.0.1"</span>) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">Set to 0.0.0.0 to serve publicly</span>
@@ -1019,8 +1029,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Enable_syntax_highlighting_in_HTML_export" class="outline-4">
-<h4 id="Enable_syntax_highlighting_in_HTML_export"><span class="section-number-4">9.2.3.</span> Enable syntax highlighting in HTML export</h4>
-<div class="outline-text-4" id="text-9-2-3">
+<h4 id="Enable_syntax_highlighting_in_HTML_export"><span class="section-number-4">8.2.3.</span> Enable syntax highlighting in HTML export</h4>
+<div class="outline-text-4" id="text-8-2-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">htmlize</span>)
 </pre>
@@ -1028,8 +1038,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Org-Tempo_code_block_snippets" class="outline-4">
-<h4 id="Org-Tempo_code_block_snippets"><span class="section-number-4">9.2.4.</span> Org-Tempo code block snippets</h4>
-<div class="outline-text-4" id="text-9-2-4">
+<h4 id="Org-Tempo_code_block_snippets"><span class="section-number-4">8.2.4.</span> Org-Tempo code block snippets</h4>
+<div class="outline-text-4" id="text-8-2-4">
 <p>
 See the Org-Mode manual for <a href="https://orgmode.org/manual/Structure-Templates.html">Structure Templates</a>.
 </p>
@@ -1048,8 +1058,8 @@ library:
 </div>
 </div>
 <div id="outline-container-Use_org_headings_as_HTML_anchors" class="outline-4">
-<h4 id="Use_org_headings_as_HTML_anchors"><span class="section-number-4">9.2.5.</span> Use org headings as HTML anchors</h4>
-<div class="outline-text-4" id="text-9-2-5">
+<h4 id="Use_org_headings_as_HTML_anchors"><span class="section-number-4">8.2.5.</span> Use org headings as HTML anchors</h4>
+<div class="outline-text-4" id="text-8-2-5">
 <p>
 <a href="https://github.com/alphapapa/unpackaged.el/tree/master?tab=readme-ov-file#export-to-html-with-useful-anchors">unpackaged.el: Export to HTML with useful anchors</a>
 </p>
@@ -1125,7 +1135,7 @@ library:
                                          eos)
                                      ,place)
                        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">HACK: `</span><span style="color: #00bcff;">s1</span><span style="color: #a8a8a8;">' instead of a gensym.</span>
-                       (<span style="color: #b6a0ff;">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
+                       (-let* (((s1 suffix) (list (match-string 1 ,place)
                                                   (match-string 2 ,place)))
                                (suffix (<span style="color: #b6a0ff;">if</span> suffix
                                            (string-to-number suffix)
@@ -1150,8 +1160,8 @@ library:
 </div>
 </div>
 <div id="outline-container-Electric_pairs" class="outline-4">
-<h4 id="Electric_pairs"><span class="section-number-4">9.2.6.</span> Electric pairs</h4>
-<div class="outline-text-4" id="text-9-2-6">
+<h4 id="Electric_pairs"><span class="section-number-4">8.2.6.</span> Electric pairs</h4>
+<div class="outline-text-4" id="text-8-2-6">
 <p>
 This makes it so certain characters are duplicated automatically to
 make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</code>.
@@ -1168,9 +1178,39 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 </div>
+<div id="outline-container-Vterm" class="outline-3">
+<h3 id="Vterm"><span class="section-number-3">8.3.</span> Vterm</h3>
+<div class="outline-text-3" id="text-8-3">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">vterm (terminal emulator) :: https://github.com/akermu/emacs-libvterm</span>
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Configure BASH to work with vterm: https://github.com/akermu/emacs-libvterm#vterm-clear-scrollback</span>
+(<span style="color: #b6a0ff;">use-package</span>
+ vterm
+ <span style="color: #f78fe7;">:custom</span> (vterm-always-compile-module t)
+ <span style="color: #f78fe7;">:general</span> (<span style="color: #79a8ff;">"C-c t"</span> 'my-vterm-toggle)
+ <span style="color: #f78fe7;">:config</span> (define-key vterm-mode-map (kbd <span style="color: #79a8ff;">"&lt;f5&gt;"</span>) nil)
+ <span style="color: #f78fe7;">:init</span>
+ (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my-vterm-toggle</span> (<span style="color: #6ae4b9;">&amp;optional</span> args)
+   <span style="color: #b0d6f5;">"Customized vterm-toggle wrapper- this fixes the universal argument (C-u) to always create a new terminal"</span>
+   (<span style="color: #b6a0ff;">interactive</span> <span style="color: #79a8ff;">"P"</span>)
+   (<span style="color: #b6a0ff;">if</span> (not
+        (<span style="color: #b6a0ff;">or</span> (derived-mode-p 'vterm-mode)
+            (<span style="color: #b6a0ff;">and</span> (vterm-toggle--get-window)
+                 vterm-toggle-hide-method)))
+       (<span style="color: #b6a0ff;">if</span> (equal current-prefix-arg '(4))
+           (vterm-toggle--new args)
+         (vterm-toggle args))
+     (vterm-toggle args))))
+
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">shell-pop for vterm :: https://github.com/jixiuf/vterm-toggle</span>
+(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">vterm-toggle</span>)
+</pre>
+</div>
+</div>
+</div>
 <div id="outline-container-Markdown_mode_%28label_%3Dmarkdown%3D%29" class="outline-3">
-<h3 id="Markdown_mode_%28label_%3Dmarkdown%3D%29"><span class="section-number-3">9.3.</span> Markdown mode (label <code>markdown</code>)</h3>
-<div class="outline-text-3" id="text-9-3">
+<h3 id="Markdown_mode_%28label_%3Dmarkdown%3D%29"><span class="section-number-3">8.4.</span> Markdown mode (label <code>markdown</code>)</h3>
+<div class="outline-text-3" id="text-8-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">markdown-mode</span>)
 </pre>
@@ -1178,8 +1218,8 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 <div id="outline-container-Magit_%28label_%3Dmagit%3D%29" class="outline-3">
-<h3 id="Magit_%28label_%3Dmagit%3D%29"><span class="section-number-3">9.4.</span> Magit (label <code>magit</code>)</h3>
-<div class="outline-text-3" id="text-9-4">
+<h3 id="Magit_%28label_%3Dmagit%3D%29"><span class="section-number-3">8.5.</span> Magit (label <code>magit</code>)</h3>
+<div class="outline-text-3" id="text-8-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Magit (git version control system) :: https://magit.vc/</span>
 (<span style="color: #b6a0ff;">use-package</span>
@@ -1195,8 +1235,8 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 <div id="outline-container-Load_modules" class="outline-2">
-<h2 id="Load_modules"><span class="section-number-2">10.</span> Load modules</h2>
-<div class="outline-text-2" id="text-10">
+<h2 id="Load_modules"><span class="section-number-2">9.</span> Load modules</h2>
+<div class="outline-text-2" id="text-9">
 <p>
 The code-blocks in this file are tangled to separate categorized files
 under the <code>modules</code> sub-directory. These are loaded on a per-machine
@@ -1205,8 +1245,8 @@ in <code>~/.config/machine-labels</code>):
 </p>
 </div>
 <div id="outline-container-Prioritize_and_load_requested_modules" class="outline-3">
-<h3 id="Prioritize_and_load_requested_modules"><span class="section-number-3">10.1.</span> Prioritize and load requested modules</h3>
-<div class="outline-text-3" id="text-10-1">
+<h3 id="Prioritize_and_load_requested_modules"><span class="section-number-3">9.1.</span> Prioritize and load requested modules</h3>
+<div class="outline-text-3" id="text-9-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/modules-dir</span> (expand-file-name <span style="color: #79a8ff;">"modules/"</span> user-emacs-directory))
 (<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/module-priority-list</span> '(<span style="color: #79a8ff;">"general"</span>) <span style="color: #b0d6f5;">"List of prioritized modules to install first."</span>)
@@ -1252,8 +1292,8 @@ in <code>~/.config/machine-labels</code>):
 </div>
 </div>
 <div id="outline-container-Install_rust_helper_programs_declared_by_module" class="outline-3">
-<h3 id="Install_rust_helper_programs_declared_by_module"><span class="section-number-3">10.2.</span> Install rust helper programs declared by module</h3>
-<div class="outline-text-3" id="text-10-2">
+<h3 id="Install_rust_helper_programs_declared_by_module"><span class="section-number-3">9.2.</span> Install rust helper programs declared by module</h3>
+<div class="outline-text-3" id="text-9-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Install rust dependencies that were declared by modules</span>
 (<span style="color: #b6a0ff;">when</span> my/cargo-dependencies
@@ -1266,7 +1306,7 @@ in <code>~/.config/machine-labels</code>):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-01-28 Tue 00:40</p>
+<p class="date">Created: 2025-01-28 Tue 12:23</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
