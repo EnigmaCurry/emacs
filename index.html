@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-27 Mon 22:29 -->
+<!-- 2025-01-27 Mon 23:52 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -212,6 +212,12 @@
 <li><a href="#Store_Emacs_customizations_in_%3D~%2F.emacs.d%2Fcustom.el%3D_and_load_them">4.4. Store Emacs customizations in <code>~/.emacs.d/custom.el</code> and load them</a></li>
 <li><a href="#Builtin_minor_modes_to_activate_everywhere">4.5. Builtin minor modes to activate everywhere</a></li>
 <li><a href="#PATH_setup">4.6. PATH setup</a></li>
+<li><a href="#Programming_mode">4.7. Programming mode</a></li>
+<li><a href="#Registers">4.8. Registers</a>
+<ul>
+<li><a href="#Position_registers">4.8.1. Position registers</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#Rust_helper_programs">5. Rust helper programs</a>
@@ -219,6 +225,7 @@
 <li><a href="#Install_Rustup">5.1. Install Rustup</a></li>
 <li><a href="#Install_tools">5.2. Install tools</a></li>
 <li><a href="#Set_cargo_binary_PATH">5.3. Set cargo binary PATH</a></li>
+<li><a href="#Cargo_functions">5.4. Cargo functions</a></li>
 </ul>
 </li>
 <li><a href="#Justfile">6. Justfile</a></li>
@@ -228,33 +235,24 @@
 <li><a href="#Track_packages_added_via_use-package">7.2. Track packages added via use-package</a></li>
 </ul>
 </li>
-<li><a href="#Per-machine_labels_enable_opt-in_features">8. Per-machine labels enable opt-in features</a>
+<li><a href="#Per-machine_labels_enable_opt-in_features">8. Per-machine labels enable opt-in features</a></li>
+<li><a href="#Modules">9. Modules</a>
 <ul>
-<li><a href="#Load_sub-modules_configured_by_machine_label">8.1. Load sub-modules configured by machine label</a></li>
+<li><a href="#General_keybindings_manager_%28label_%3Dgeneral%3D%29">9.1. General keybindings manager (label <code>general</code>)</a></li>
+<li><a href="#Org_mode_%28label_%3Dorg%3D%29">9.2. Org mode (label <code>org</code>)</a>
+<ul>
+<li><a href="#Tangle_Emacs_config_and_write_HTML_document">9.2.1. Tangle Emacs config and write HTML document</a></li>
+<li><a href="#Local_HTTP_server_for_displaying_exported_HTML">9.2.2. Local HTTP server for displaying exported HTML</a></li>
+<li><a href="#Enable_syntax_highlighting_in_HTML_export">9.2.3. Enable syntax highlighting in HTML export</a></li>
+<li><a href="#Org-Tempo_code_block_snippets">9.2.4. Org-Tempo code block snippets</a></li>
+<li><a href="#Use_org_headings_as_HTML_anchors">9.2.5. Use org headings as HTML anchors</a></li>
+<li><a href="#Electric_pairs">9.2.6. Electric pairs</a></li>
 </ul>
 </li>
-<li><a href="#Programming_mode">9. Programming mode</a></li>
-<li><a href="#Registers">10. Registers</a>
-<ul>
-<li><a href="#Position_registers">10.1. Position registers</a></li>
-</ul>
-</li>
-<li><a href="#Modules">11. Modules</a>
-<ul>
-<li><a href="#General_keybindings_manager_%28label_%3Dgeneral%3D%29">11.1. General keybindings manager (label <code>general</code>)</a></li>
-<li><a href="#Org_mode_%28label_%3Dorg%3D%29">11.2. Org mode (label <code>org</code>)</a>
-<ul>
-<li><a href="#Enable_spell-check">11.2.1. Enable spell-check</a></li>
-<li><a href="#Enable_syntax_highlighting_in_HTML_export">11.2.2. Enable syntax highlighting in HTML export</a></li>
-<li><a href="#Tangle_Emacs_config_and_write_HTML_document">11.2.3. Tangle Emacs config and write HTML document</a></li>
-<li><a href="#Local_HTTP_server_for_displaying_exported_HTML">11.2.4. Local HTTP server for displaying exported HTML</a></li>
-<li><a href="#Org-Tempo_code_block_snippets">11.2.5. Org-Tempo code block snippets</a></li>
-<li><a href="#Use_org_headings_as_HTML_anchors">11.2.6. Use org headings as HTML anchors</a></li>
-<li><a href="#Electric_pairs">11.2.7. Electric pairs</a></li>
-</ul>
-</li>
-<li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">11.3. Markdown mode (label <code>markdown</code>)</a></li>
-<li><a href="#Magit_%28label_%3Dmagit%3D%29">11.4. Magit (label <code>magit</code>)</a></li>
+<li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">9.3. Markdown mode (label <code>markdown</code>)</a></li>
+<li><a href="#Magit_%28label_%3Dmagit%3D%29">9.4. Magit (label <code>magit</code>)</a></li>
+<li><a href="#Load_the_configured_sub-modules_by_machine_label">9.5. Load the configured sub-modules by machine label</a></li>
+<li><a href="#Install_rust_helper_programs_declared_by_module">9.6. Install rust helper programs declared by module</a></li>
 </ul>
 </li>
 </ul>
@@ -472,6 +470,47 @@ idle buffers into the auto-save directory.</li>
 </div>
 </div>
 </div>
+<div id="outline-container-Programming_mode" class="outline-3">
+<h3 id="Programming_mode"><span class="section-number-3">4.7.</span> Programming mode</h3>
+<div class="outline-text-3" id="text-4-7">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Basic programming mode settings</span>
+(<span style="color: #b6a0ff;">setq-default</span> display-fill-column-indicator-column 80)
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Registers" class="outline-3">
+<h3 id="Registers"><span class="section-number-3">4.8.</span> Registers</h3>
+<div class="outline-text-3" id="text-4-8">
+<p>
+Registers are storage comparments in Emacs, which can hold several
+different types of things: strings, numbers, buffer positions, frame
+configs, etc.
+</p>
+</div>
+<div id="outline-container-Position_registers" class="outline-4">
+<h4 id="Position_registers"><span class="section-number-4">4.8.1.</span> Position registers</h4>
+<div class="outline-text-4" id="text-4-8-1">
+<p>
+There are some files that I want to have easy access to via <a href="https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Position-Registers">Position
+Registers</a>. These registers are accessed via the prefix: <code>C-x r j</code>
+(register jump):
+</p>
+
+<ul class="org-ul">
+<li><code>C-x r j e</code> - open the Emacs config file buffer</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(set-register ?e '(file . <span style="color: #79a8ff;">"~/git/vendor/enigmacurry/emacs-new/emacs.org"</span>))
+</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="outline-container-Rust_helper_programs" class="outline-2">
 <h2 id="Rust_helper_programs"><span class="section-number-2">5.</span> Rust helper programs</h2>
@@ -534,6 +573,55 @@ Ensure that this path is set (because Emacs might not have read
 <pre class="src src-emacs-lisp">(my/add-exec-path <span style="color: #79a8ff;">"~/.cargo/bin"</span>)
 (<span style="color: #b6a0ff;">unless</span> (executable-find <span style="color: #79a8ff;">"cargo"</span>)
   (message <span style="color: #79a8ff;">"cargo binary NOT found."</span>))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Cargo_functions" class="outline-3">
+<h3 id="Cargo_functions"><span class="section-number-3">5.4.</span> Cargo functions</h3>
+<div class="outline-text-3" id="text-5-4">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/cargo-package-installed-p</span> (package)
+  <span style="color: #b0d6f5;">"Check if a Cargo PACKAGE is installed."</span>
+  (<span style="color: #b6a0ff;">with-temp-buffer</span>
+    (<span style="color: #b6a0ff;">let</span> ((exit-code (call-process <span style="color: #79a8ff;">"cargo"</span> nil t nil <span style="color: #79a8ff;">"install"</span> <span style="color: #79a8ff;">"--list"</span>)))
+      (<span style="color: #b6a0ff;">if</span> (zerop exit-code)
+          (<span style="color: #b6a0ff;">progn</span>
+            (goto-char (point-min))
+            (search-forward package nil t))
+        (<span style="color: #d0bc00;">error</span> <span style="color: #79a8ff;">"Failed to run 'cargo install --list'"</span>)))))
+(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/cargo-install</span> (programs)
+  <span style="color: #b0d6f5;">"Install a list of PROGRAMS via `cargo install`, skipping those already installed.</span>
+<span style="color: #b0d6f5;">PROGRAMS can be a single string (with space-separated programs) or a list of strings."</span>
+  (<span style="color: #b6a0ff;">unless</span> programs
+    (<span style="color: #d0bc00;">user-error</span> <span style="color: #79a8ff;">"No programs specified for cargo install"</span>))
+  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Handle single string: split by spaces and convert to list</span>
+  (<span style="color: #b6a0ff;">setq</span> programs (<span style="color: #b6a0ff;">if</span> (stringp programs)
+                     (split-string programs) <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Split a single string into a list</span>
+                   programs))
+  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Filter out installed packages</span>
+  (<span style="color: #b6a0ff;">let</span> ((to-install (seq-remove #'my/cargo-package-installed-p programs)))
+    (<span style="color: #b6a0ff;">if</span> (null to-install)
+        (message <span style="color: #79a8ff;">"All specified programs are already installed"</span>)
+      (<span style="color: #b6a0ff;">let*</span> ((buffer-name (concat <span style="color: #79a8ff;">"*cargo install "</span> (string-join to-install <span style="color: #79a8ff;">" "</span>) <span style="color: #79a8ff;">"*"</span>))
+             (existing-buffer (get-buffer buffer-name)))
+        (<span style="color: #b6a0ff;">if</span> (<span style="color: #b6a0ff;">and</span> existing-buffer (get-buffer-process existing-buffer))
+            (<span style="color: #d0bc00;">user-error</span> <span style="color: #79a8ff;">"Cargo install already in progress for programs: %s"</span> (string-join to-install <span style="color: #79a8ff;">", "</span>))
+          (<span style="color: #b6a0ff;">when</span> existing-buffer
+            (kill-buffer existing-buffer))
+          (<span style="color: #b6a0ff;">let</span> ((buffer (get-buffer-create buffer-name)))
+            (start-process <span style="color: #79a8ff;">"cargo-install"</span> buffer
+                           <span style="color: #79a8ff;">"/bin/bash"</span> <span style="color: #79a8ff;">"-c"</span> (concat <span style="color: #79a8ff;">"cargo install "</span> (string-join to-install <span style="color: #79a8ff;">" "</span>)))
+            (display-buffer buffer)
+            (<span style="color: #b6a0ff;">with-current-buffer</span> buffer
+              (comint-mode)
+              (goto-char (point-min)))))))))
+(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/cargo-dependencies</span> nil
+  <span style="color: #b0d6f5;">"A list of Rust crate dependencies to be installed."</span>)
+(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/cargo-dependency</span> (crate)
+  <span style="color: #b0d6f5;">"Add a Rust CRATE to the list of dependencies."</span>
+  (<span style="color: #b6a0ff;">unless</span> (member crate my/cargo-dependencies)
+    (<span style="color: #b6a0ff;">setq</span> my/cargo-dependencies (cons crate my/cargo-dependencies))))
 </pre>
 </div>
 </div>
@@ -691,86 +779,10 @@ that become enabled by adding labels on a per-machine basis.
 described in the next section.
 </p>
 </div>
-<div id="outline-container-Load_sub-modules_configured_by_machine_label" class="outline-3">
-<h3 id="Load_sub-modules_configured_by_machine_label"><span class="section-number-3">8.1.</span> Load sub-modules configured by machine label</h3>
-<div class="outline-text-3" id="text-8-1">
-<p>
-The code-blocks in this file are tangled to separate categorized files
-under the <code>modules</code> sub-directory. These are loaded on a per-machine
-basis based on <code>my/machine-has-label</code> (and per-machine labels stored
-in <code>~/.config/machine-labels</code>:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/modules-dir</span> (expand-file-name <span style="color: #79a8ff;">"modules/"</span> user-emacs-directory))
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/load-modules</span> ()
-  <span style="color: #b0d6f5;">"Load all Emacs Lisp files in the modules/ directory and subdirectories matching labels."</span>
-  (<span style="color: #b6a0ff;">when</span> (file-directory-p my/modules-dir)
-    <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load all .el files in the root modules/ directory</span>
-    (<span style="color: #b6a0ff;">let</span> ((root-files (directory-files my/modules-dir t <span style="color: #79a8ff;">"\\.el\\'"</span>)))
-      (<span style="color: #b6a0ff;">dolist</span> (file (sort root-files #'string&lt;))
-        (message <span style="color: #79a8ff;">"Loading module: %s"</span> file)
-        (load file nil 'nomessage)))
-    <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load .el files from subdirectories matching machine labels</span>
-    (<span style="color: #b6a0ff;">dolist</span> (subdir (directory-files my/modules-dir t <span style="color: #79a8ff;">"^[</span><span style="color: #d0bc00;">^</span><span style="color: #79a8ff;">.]"</span> t)) <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Skip . and ..</span>
-      (<span style="color: #b6a0ff;">when</span> (<span style="color: #b6a0ff;">and</span> (file-directory-p subdir)
-                 (my/machine-has-label (file-name-nondirectory subdir)))  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Check label</span>
-        (<span style="color: #b6a0ff;">let</span> ((files (directory-files subdir t <span style="color: #79a8ff;">"\\.el\\'"</span>)))
-          (<span style="color: #b6a0ff;">dolist</span> (file (sort files #'string&lt;))
-            (message <span style="color: #79a8ff;">"Loading module from %s: %s"</span> (file-name-nondirectory subdir) file)
-            (load file nil 'nomessage)))))))
-
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">load the modules configured for this macchine</span>
-(my/load-modules)
-</pre>
-</div>
-</div>
-</div>
-</div>
-<div id="outline-container-Programming_mode" class="outline-2">
-<h2 id="Programming_mode"><span class="section-number-2">9.</span> Programming mode</h2>
-<div class="outline-text-2" id="text-9">
-<div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Basic programming mode settings</span>
-(<span style="color: #b6a0ff;">setq-default</span> display-fill-column-indicator-column 80)
-(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
-(add-hook 'prog-mode-hook #'display-line-numbers-mode)
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-Registers" class="outline-2">
-<h2 id="Registers"><span class="section-number-2">10.</span> Registers</h2>
-<div class="outline-text-2" id="text-10">
-<p>
-Registers are storage comparments in Emacs, which can hold several
-different types of things: strings, numbers, buffer positions, frame
-configs, etc.
-</p>
-</div>
-<div id="outline-container-Position_registers" class="outline-3">
-<h3 id="Position_registers"><span class="section-number-3">10.1.</span> Position registers</h3>
-<div class="outline-text-3" id="text-10-1">
-<p>
-There are some files that I want to have easy access to via <a href="https://www.gnu.org/software/emacs/manual/html_mono/emacs.html#Position-Registers">Position
-Registers</a>. These registers are accessed via the prefix: <code>C-x r j</code>
-(register jump):
-</p>
-
-<ul class="org-ul">
-<li><code>C-x r j e</code> - open the Emacs config file buffer</li>
-</ul>
-
-<div class="org-src-container">
-<pre class="src src-emacs-lisp">(set-register ?e '(file . <span style="color: #79a8ff;">"~/git/vendor/enigmacurry/emacs-new/emacs.org"</span>))
-</pre>
-</div>
-</div>
-</div>
 </div>
 <div id="outline-container-Modules" class="outline-2">
-<h2 id="Modules"><span class="section-number-2">11.</span> Modules</h2>
-<div class="outline-text-2" id="text-11">
+<h2 id="Modules"><span class="section-number-2">9.</span> Modules</h2>
+<div class="outline-text-2" id="text-9">
 <p>
 Modules are optional and they extend the base config.
 </p>
@@ -853,8 +865,8 @@ You should restart Emacs to reload the configured modules from
 </p>
 </div>
 <div id="outline-container-General_keybindings_manager_%28label_%3Dgeneral%3D%29" class="outline-3">
-<h3 id="General_keybindings_manager_%28label_%3Dgeneral%3D%29"><span class="section-number-3">11.1.</span> General keybindings manager (label <code>general</code>)</h3>
-<div class="outline-text-3" id="text-11-1">
+<h3 id="General_keybindings_manager_%28label_%3Dgeneral%3D%29"><span class="section-number-3">9.1.</span> General keybindings manager (label <code>general</code>)</h3>
+<div class="outline-text-3" id="text-9-1">
 <p>
 See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">general.el</a>
 </p>
@@ -908,8 +920,8 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
 </div>
 </div>
 <div id="outline-container-Org_mode_%28label_%3Dorg%3D%29" class="outline-3">
-<h3 id="Org_mode_%28label_%3Dorg%3D%29"><span class="section-number-3">11.2.</span> Org mode (label <code>org</code>)</h3>
-<div class="outline-text-3" id="text-11-2">
+<h3 id="Org_mode_%28label_%3Dorg%3D%29"><span class="section-number-3">9.2.</span> Org mode (label <code>org</code>)</h3>
+<div class="outline-text-3" id="text-9-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">org</span>
   <span style="color: #f78fe7;">:hook</span> ((org-mode . flyspell-mode)
@@ -927,44 +939,9 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
 </pre>
 </div>
 </div>
-<div id="outline-container-Enable_spell-check" class="outline-4">
-<h4 id="Enable_spell-check"><span class="section-number-4">11.2.1.</span> Enable spell-check</h4>
-<div class="outline-text-4" id="text-11-2-1">
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Fix the spelling of the word at point</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left"><code>M-x flyspell-correct-word-before-point</code></td>
-</tr>
-
-<tr>
-<td class="org-left"><code>C-c $</code></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="outline-container-Enable_syntax_highlighting_in_HTML_export" class="outline-4">
-<h4 id="Enable_syntax_highlighting_in_HTML_export"><span class="section-number-4">11.2.2.</span> Enable syntax highlighting in HTML export</h4>
-<div class="outline-text-4" id="text-11-2-2">
-<div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">htmlize</span>)
-</pre>
-</div>
-</div>
-</div>
 <div id="outline-container-Tangle_Emacs_config_and_write_HTML_document" class="outline-4">
-<h4 id="Tangle_Emacs_config_and_write_HTML_document"><span class="section-number-4">11.2.3.</span> Tangle Emacs config and write HTML document</h4>
-<div class="outline-text-4" id="text-11-2-3">
+<h4 id="Tangle_Emacs_config_and_write_HTML_document"><span class="section-number-4">9.2.1.</span> Tangle Emacs config and write HTML document</h4>
+<div class="outline-text-4" id="text-9-2-1">
 <p>
 This function tangles this file (<code>emacs.org</code>) and exports an HTML page
 (<code>emacs.html</code>):
@@ -1005,19 +982,11 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Local_HTTP_server_for_displaying_exported_HTML" class="outline-4">
-<h4 id="Local_HTTP_server_for_displaying_exported_HTML"><span class="section-number-4">11.2.4.</span> Local HTTP server for displaying exported HTML</h4>
-<div class="outline-text-4" id="text-11-2-4">
-<p>
-Install <a href="https://github.com/lomirus/live-server">live-server</a>:
-</p>
-
+<h4 id="Local_HTTP_server_for_displaying_exported_HTML"><span class="section-number-4">9.2.2.</span> Local HTTP server for displaying exported HTML</h4>
+<div class="outline-text-4" id="text-9-2-2">
 <div class="org-src-container">
-<pre class="src src-shell">cargo install live-server
-</pre>
-</div>
-
-<div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/emacs-org-html-server-host</span> <span style="color: #79a8ff;">"127.0.0.1"</span>) <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Set to 0.0.0.0 to serve publicly</span>
+<pre class="src src-emacs-lisp">(my/cargo-dependency <span style="color: #79a8ff;">"live-server"</span>) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">declares but defers install of live-server Rust crate</span>
+(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/emacs-org-html-server-host</span> <span style="color: #79a8ff;">"127.0.0.1"</span>) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">Set to 0.0.0.0 to serve publicly</span>
 (<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/emacs-org-html-server-port</span> <span style="color: #79a8ff;">"7776"</span>)
 (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/emacs-org-html-server</span> ()
   <span style="color: #b0d6f5;">"Start a local live-server for the Emacs org HTML export."</span>
@@ -1028,7 +997,7 @@ Install <a href="https://github.com/lomirus/live-server">live-server</a>:
       (<span style="color: #b6a0ff;">if</span> live-server-path
           (<span style="color: #b6a0ff;">progn</span>
             (message <span style="color: #79a8ff;">"live-server found at: %s"</span> live-server-path)
-            (<span style="color: #b6a0ff;">let</span> ((host <span style="color: #79a8ff;">"127.0.0.1"</span>)  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Set to "0.0.0.0" to serve publicly</span>
+            (<span style="color: #b6a0ff;">let</span> ((host <span style="color: #79a8ff;">"127.0.0.1"</span>)  <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">Set to "0.0.0.0" to serve publicly</span>
                   (port <span style="color: #79a8ff;">"7776"</span>)
                   (html-file <span style="color: #79a8ff;">"index.html"</span>)
                   (export-dir (expand-file-name <span style="color: #79a8ff;">"export"</span> user-emacs-directory)))
@@ -1059,9 +1028,18 @@ Install <a href="https://github.com/lomirus/live-server">live-server</a>:
 </table>
 </div>
 </div>
+<div id="outline-container-Enable_syntax_highlighting_in_HTML_export" class="outline-4">
+<h4 id="Enable_syntax_highlighting_in_HTML_export"><span class="section-number-4">9.2.3.</span> Enable syntax highlighting in HTML export</h4>
+<div class="outline-text-4" id="text-9-2-3">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">htmlize</span>)
+</pre>
+</div>
+</div>
+</div>
 <div id="outline-container-Org-Tempo_code_block_snippets" class="outline-4">
-<h4 id="Org-Tempo_code_block_snippets"><span class="section-number-4">11.2.5.</span> Org-Tempo code block snippets</h4>
-<div class="outline-text-4" id="text-11-2-5">
+<h4 id="Org-Tempo_code_block_snippets"><span class="section-number-4">9.2.4.</span> Org-Tempo code block snippets</h4>
+<div class="outline-text-4" id="text-9-2-4">
 <p>
 See the Org-Mode manual for <a href="https://orgmode.org/manual/Structure-Templates.html">Structure Templates</a>.
 </p>
@@ -1080,8 +1058,8 @@ library:
 </div>
 </div>
 <div id="outline-container-Use_org_headings_as_HTML_anchors" class="outline-4">
-<h4 id="Use_org_headings_as_HTML_anchors"><span class="section-number-4">11.2.6.</span> Use org headings as HTML anchors</h4>
-<div class="outline-text-4" id="text-11-2-6">
+<h4 id="Use_org_headings_as_HTML_anchors"><span class="section-number-4">9.2.5.</span> Use org headings as HTML anchors</h4>
+<div class="outline-text-4" id="text-9-2-5">
 <p>
 <a href="https://github.com/alphapapa/unpackaged.el/tree/master?tab=readme-ov-file#export-to-html-with-useful-anchors">unpackaged.el: Export to HTML with useful anchors</a>
 </p>
@@ -1182,8 +1160,8 @@ library:
 </div>
 </div>
 <div id="outline-container-Electric_pairs" class="outline-4">
-<h4 id="Electric_pairs"><span class="section-number-4">11.2.7.</span> Electric pairs</h4>
-<div class="outline-text-4" id="text-11-2-7">
+<h4 id="Electric_pairs"><span class="section-number-4">9.2.6.</span> Electric pairs</h4>
+<div class="outline-text-4" id="text-9-2-6">
 <p>
 This makes it so certain characters are duplicated automatically to
 make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</code>.
@@ -1201,8 +1179,8 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 <div id="outline-container-Markdown_mode_%28label_%3Dmarkdown%3D%29" class="outline-3">
-<h3 id="Markdown_mode_%28label_%3Dmarkdown%3D%29"><span class="section-number-3">11.3.</span> Markdown mode (label <code>markdown</code>)</h3>
-<div class="outline-text-3" id="text-11-3">
+<h3 id="Markdown_mode_%28label_%3Dmarkdown%3D%29"><span class="section-number-3">9.3.</span> Markdown mode (label <code>markdown</code>)</h3>
+<div class="outline-text-3" id="text-9-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">markdown-mode</span>)
 </pre>
@@ -1210,8 +1188,8 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 <div id="outline-container-Magit_%28label_%3Dmagit%3D%29" class="outline-3">
-<h3 id="Magit_%28label_%3Dmagit%3D%29"><span class="section-number-3">11.4.</span> Magit (label <code>magit</code>)</h3>
-<div class="outline-text-3" id="text-11-4">
+<h3 id="Magit_%28label_%3Dmagit%3D%29"><span class="section-number-3">9.4.</span> Magit (label <code>magit</code>)</h3>
+<div class="outline-text-3" id="text-9-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Magit (git version control system) :: https://magit.vc/</span>
 (<span style="color: #b6a0ff;">use-package</span>
@@ -1225,11 +1203,57 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 </div>
+<div id="outline-container-Load_the_configured_sub-modules_by_machine_label" class="outline-3">
+<h3 id="Load_the_configured_sub-modules_by_machine_label"><span class="section-number-3">9.5.</span> Load the configured sub-modules by machine label</h3>
+<div class="outline-text-3" id="text-9-5">
+<p>
+The code-blocks in this file are tangled to separate categorized files
+under the <code>modules</code> sub-directory. These are loaded on a per-machine
+basis based on <code>my/machine-has-label</code> (and per-machine labels stored
+in <code>~/.config/machine-labels</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/modules-dir</span> (expand-file-name <span style="color: #79a8ff;">"modules/"</span> user-emacs-directory))
+(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/load-modules</span> ()
+  <span style="color: #b0d6f5;">"Load all Emacs Lisp files in the modules/ directory and subdirectories matching labels."</span>
+  (<span style="color: #b6a0ff;">when</span> (file-directory-p my/modules-dir)
+    <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load all .el files in the root modules/ directory</span>
+    (<span style="color: #b6a0ff;">let</span> ((root-files (directory-files my/modules-dir t <span style="color: #79a8ff;">"\\.el\\'"</span>)))
+      (<span style="color: #b6a0ff;">dolist</span> (file (sort root-files #'string&lt;))
+        (message <span style="color: #79a8ff;">"Loading module: %s"</span> file)
+        (load file nil 'nomessage)))
+    <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load .el files from subdirectories matching machine labels</span>
+    (<span style="color: #b6a0ff;">dolist</span> (subdir (directory-files my/modules-dir t <span style="color: #79a8ff;">"^[</span><span style="color: #d0bc00;">^</span><span style="color: #79a8ff;">.]"</span> t)) <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Skip . and ..</span>
+      (<span style="color: #b6a0ff;">when</span> (<span style="color: #b6a0ff;">and</span> (file-directory-p subdir)
+                 (my/machine-has-label (file-name-nondirectory subdir)))  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Check label</span>
+        (<span style="color: #b6a0ff;">let</span> ((files (directory-files subdir t <span style="color: #79a8ff;">"\\.el\\'"</span>)))
+          (<span style="color: #b6a0ff;">dolist</span> (file (sort files #'string&lt;))
+            (message <span style="color: #79a8ff;">"Loading module from %s: %s"</span> (file-name-nondirectory subdir) file)
+            (load file nil 'nomessage)))))))
+
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">load the modules configured for this macchine</span>
+(my/load-modules)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Install_rust_helper_programs_declared_by_module" class="outline-3">
+<h3 id="Install_rust_helper_programs_declared_by_module"><span class="section-number-3">9.6.</span> Install rust helper programs declared by module</h3>
+<div class="outline-text-3" id="text-9-6">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Install rust dependencies that were declared by modules</span>
+(<span style="color: #b6a0ff;">when</span> my/cargo-dependencies
+  (my/cargo-install my/cargo-dependencies))
+</pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-01-27 Mon 22:29</p>
+<p class="date">Created: 2025-01-27 Mon 23:52</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

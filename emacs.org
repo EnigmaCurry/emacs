@@ -176,6 +176,33 @@ environments. Only Emacs builtins will be allowed here:
       (setenv "PATH" (concat dir path-separator (getenv "PATH")))
       (add-to-list 'exec-path dir)))
 #+end_src
+** Programming mode
+
+#+begin_src emacs-lisp :tangle "modules/programming.el" :mkdirp yes
+  ;; Basic programming mode settings
+  (setq-default display-fill-column-indicator-column 80)
+  (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+  (add-hook 'prog-mode-hook #'display-line-numbers-mode)
+#+end_src
+
+** Registers
+
+Registers are storage comparments in Emacs, which can hold several
+different types of things: strings, numbers, buffer positions, frame
+configs, etc.
+
+*** Position registers
+
+There are some files that I want to have easy access to via [[info:emacs#Position Registers][Position
+Registers]]. These registers are accessed via the prefix: =C-x r j=
+(register jump):
+
+ * =C-x r j e= - open the Emacs config file buffer
+
+#+begin_src emacs-lisp :tangle "modules/registers.el"
+  (set-register ?e '(file . "~/git/vendor/enigmacurry/emacs-new/emacs.org"))
+#+end_src
+
 * Rust helper programs
 
 When moving beyond the base config, some additional helper programs
@@ -219,6 +246,51 @@ Ensure that this path is set (because Emacs might not have read
     (message "cargo binary NOT found."))
 #+end_src
 
+** Cargo functions
+
+#+begin_src emacs-lisp :tangle "modules/cargo.el"
+  (defun my/cargo-package-installed-p (package)
+    "Check if a Cargo PACKAGE is installed."
+    (with-temp-buffer
+      (let ((exit-code (call-process "cargo" nil t nil "install" "--list")))
+        (if (zerop exit-code)
+            (progn
+              (goto-char (point-min))
+              (search-forward package nil t))
+          (error "Failed to run 'cargo install --list'")))))
+  (defun my/cargo-install (programs)
+    "Install a list of PROGRAMS via `cargo install`, skipping those already installed.
+  PROGRAMS can be a single string (with space-separated programs) or a list of strings."
+    (unless programs
+      (user-error "No programs specified for cargo install"))
+    ;; Handle single string: split by spaces and convert to list
+    (setq programs (if (stringp programs)
+                       (split-string programs) ;; Split a single string into a list
+                     programs))
+    ;; Filter out installed packages
+    (let ((to-install (seq-remove #'my/cargo-package-installed-p programs)))
+      (if (null to-install)
+          (message "All specified programs are already installed")
+        (let* ((buffer-name (concat "*cargo install " (string-join to-install " ") "*"))
+               (existing-buffer (get-buffer buffer-name)))
+          (if (and existing-buffer (get-buffer-process existing-buffer))
+              (user-error "Cargo install already in progress for programs: %s" (string-join to-install ", "))
+            (when existing-buffer
+              (kill-buffer existing-buffer))
+            (let ((buffer (get-buffer-create buffer-name)))
+              (start-process "cargo-install" buffer
+                             "/bin/bash" "-c" (concat "cargo install " (string-join to-install " ")))
+              (display-buffer buffer)
+              (with-current-buffer buffer
+                (comint-mode)
+                (goto-char (point-min)))))))))
+  (defvar my/cargo-dependencies nil
+    "A list of Rust crate dependencies to be installed.")
+  (defun my/cargo-dependency (crate)
+    "Add a Rust CRATE to the list of dependencies."
+    (unless (member crate my/cargo-dependencies)
+      (setq my/cargo-dependencies (cons crate my/cargo-dependencies))))
+#+end_src
 * Justfile
 
 [[https://github.com/casey/just][Just]] is better than Make.
@@ -333,63 +405,6 @@ that become enabled by adding labels on a per-machine basis.
 
 =my/machine-has-label= is used automatically by =my/load-modules=
 described in the next section.
-
-** Load sub-modules configured by machine label
-
-The code-blocks in this file are tangled to separate categorized files
-under the =modules= sub-directory. These are loaded on a per-machine
-basis based on =my/machine-has-label= (and per-machine labels stored
-in =~/.config/machine-labels=:
-
-#+begin_src emacs-lisp :tangle "init.el"
-  (defvar my/modules-dir (expand-file-name "modules/" user-emacs-directory))
-  (defun my/load-modules ()
-    "Load all Emacs Lisp files in the modules/ directory and subdirectories matching labels."
-    (when (file-directory-p my/modules-dir)
-      ;; Load all .el files in the root modules/ directory
-      (let ((root-files (directory-files my/modules-dir t "\\.el\\'")))
-        (dolist (file (sort root-files #'string<))
-          (message "Loading module: %s" file)
-          (load file nil 'nomessage)))
-      ;; Load .el files from subdirectories matching machine labels
-      (dolist (subdir (directory-files my/modules-dir t "^[^.]" t)) ;; Skip . and ..
-        (when (and (file-directory-p subdir)
-                   (my/machine-has-label (file-name-nondirectory subdir)))  ;; Check label
-          (let ((files (directory-files subdir t "\\.el\\'")))
-            (dolist (file (sort files #'string<))
-              (message "Loading module from %s: %s" (file-name-nondirectory subdir) file)
-              (load file nil 'nomessage)))))))
-
-  ;; load the modules configured for this macchine
-  (my/load-modules)
-#+end_src
-
-* Programming mode
-
-#+begin_src emacs-lisp :tangle "modules/programming.el" :mkdirp yes
-  ;; Basic programming mode settings
-  (setq-default display-fill-column-indicator-column 80)
-  (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
-  (add-hook 'prog-mode-hook #'display-line-numbers-mode)
-#+end_src
-
-* Registers
-
-Registers are storage comparments in Emacs, which can hold several
-different types of things: strings, numbers, buffer positions, frame
-configs, etc.
-
-** Position registers
-
-There are some files that I want to have easy access to via [[info:emacs#Position Registers][Position
-Registers]]. These registers are accessed via the prefix: =C-x r j=
-(register jump):
-
- * =C-x r j e= - open the Emacs config file buffer
-
-#+begin_src emacs-lisp :tangle "modules/registers.el"
-  (set-register ?e '(file . "~/git/vendor/enigmacurry/emacs-new/emacs.org"))
-#+end_src
 
 * Modules
 
@@ -515,20 +530,6 @@ See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.e
     )
 #+end_src
 
-*** Enable spell-check
-
-|------------------------------------------|
-| Fix the spelling of the word at point    |
-|------------------------------------------|
-| =M-x flyspell-correct-word-before-point= |
-| =C-c $=                                  |
-
-*** Enable syntax highlighting in HTML export
-
-#+begin_src emacs-lisp :tangle "modules/org/org-mode.el"
-  (use-package htmlize)
-#+end_src
-
 *** Tangle Emacs config and write HTML document
 
 This function tangles this file (=emacs.org=) and exports an HTML page
@@ -567,40 +568,40 @@ This function tangles this file (=emacs.org=) and exports an HTML page
 #+end_src
 
 *** Local HTTP server for displaying exported HTML
-
-Install [[https://github.com/lomirus/live-server][live-server]]:
-
-#+begin_src shell
-  cargo install live-server
-#+end_src
-
 #+begin_src emacs-lisp :tangle "modules/org/org-mode.el"  :mkdirp yes
-    (defvar my/emacs-org-html-server-host "127.0.0.1") ;; Set to 0.0.0.0 to serve publicly
-    (defvar my/emacs-org-html-server-port "7776")
-    (defun my/emacs-org-html-server ()
-      "Start a local live-server for the Emacs org HTML export."
-      (interactive)
-      (let ((live-server-path (executable-find "live-server"))
-            (log-buffer-name "*my/emacs/org-html-server*"))
-        (with-current-buffer (get-buffer-create log-buffer-name)
-          (if live-server-path
-              (progn
-                (message "live-server found at: %s" live-server-path)
-                (let ((host "127.0.0.1")  ;; Set to "0.0.0.0" to serve publicly
-                      (port "7776")
-                      (html-file "index.html")
-                      (export-dir (expand-file-name "export" user-emacs-directory)))
-                  (start-process "live-server" log-buffer-name "live-server"
-                                 "-H" host "-p" port "-o" "" export-dir)
-                  (message "Started live-server on http://%s:%s" host port)))
-            (unless (executable-find "live-server")
-              (message "live-server NOT found - please run: cargo install live-server"))))))
+  (my/cargo-dependency "live-server") ; declares but defers install of live-server Rust crate
+  (defvar my/emacs-org-html-server-host "127.0.0.1") ; Set to 0.0.0.0 to serve publicly
+  (defvar my/emacs-org-html-server-port "7776")
+  (defun my/emacs-org-html-server ()
+    "Start a local live-server for the Emacs org HTML export."
+    (interactive)
+    (let ((live-server-path (executable-find "live-server"))
+          (log-buffer-name "*my/emacs/org-html-server*"))
+      (with-current-buffer (get-buffer-create log-buffer-name)
+        (if live-server-path
+            (progn
+              (message "live-server found at: %s" live-server-path)
+              (let ((host "127.0.0.1")  ; Set to "0.0.0.0" to serve publicly
+                    (port "7776")
+                    (html-file "index.html")
+                    (export-dir (expand-file-name "export" user-emacs-directory)))
+                (start-process "live-server" log-buffer-name "live-server"
+                               "-H" host "-p" port "-o" "" export-dir)
+                (message "Started live-server on http://%s:%s" host port)))
+          (unless (executable-find "live-server")
+            (message "live-server NOT found - please run: cargo install live-server"))))))
 #+end_src
 
 |--------------------------------|
 | Start the html server          |
 |--------------------------------|
 | =M-x my/emacs-org-html-server= |
+
+*** Enable syntax highlighting in HTML export
+
+#+begin_src emacs-lisp :tangle "modules/org/org-mode.el"
+  (use-package htmlize)
+#+end_src
 
 *** Org-Tempo code block snippets
 
@@ -742,6 +743,43 @@ make org-mode syntax easier to type: ===, =/=, =~=.
     ;; open magit in a full frame always:
     (setq magit-display-buffer-function
           #'magit-display-buffer-fullframe-status-v1))
+#+end_src
+** Load the configured sub-modules by machine label
+
+The code-blocks in this file are tangled to separate categorized files
+under the =modules= sub-directory. These are loaded on a per-machine
+basis based on =my/machine-has-label= (and per-machine labels stored
+in =~/.config/machine-labels=:
+
+#+begin_src emacs-lisp :tangle "init.el"
+  (defvar my/modules-dir (expand-file-name "modules/" user-emacs-directory))
+  (defun my/load-modules ()
+    "Load all Emacs Lisp files in the modules/ directory and subdirectories matching labels."
+    (when (file-directory-p my/modules-dir)
+      ;; Load all .el files in the root modules/ directory
+      (let ((root-files (directory-files my/modules-dir t "\\.el\\'")))
+        (dolist (file (sort root-files #'string<))
+          (message "Loading module: %s" file)
+          (load file nil 'nomessage)))
+      ;; Load .el files from subdirectories matching machine labels
+      (dolist (subdir (directory-files my/modules-dir t "^[^.]" t)) ;; Skip . and ..
+        (when (and (file-directory-p subdir)
+                   (my/machine-has-label (file-name-nondirectory subdir)))  ;; Check label
+          (let ((files (directory-files subdir t "\\.el\\'")))
+            (dolist (file (sort files #'string<))
+              (message "Loading module from %s: %s" (file-name-nondirectory subdir) file)
+              (load file nil 'nomessage)))))))
+
+  ;; load the modules configured for this macchine
+  (my/load-modules)
+#+end_src
+
+** Install rust helper programs declared by module
+
+#+begin_src emacs-lisp :tangle "init.el"
+  ;; Install rust dependencies that were declared by modules
+  (when my/cargo-dependencies
+    (my/cargo-install my/cargo-dependencies))
 #+end_src
 * LICENSE (appendix)                                               :noexport:
 

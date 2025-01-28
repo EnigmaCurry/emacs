@@ -153,3 +153,7 @@ If the buffer already exists, delete it and recreate it."
 
 ;; load the modules configured for this macchine
 (my/load-modules)
+
+;; Install rust dependencies that were declared by modules
+(when my/cargo-dependencies
+  (my/cargo-install my/cargo-dependencies))

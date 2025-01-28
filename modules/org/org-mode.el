@@ -12,8 +12,6 @@
    '((python . t) (scheme . t) (shell . t) (ditaa . t)))
   )
 
-(use-package htmlize)
-
 (defun my/emacs-org-tangle ()
   "Tangle all code blocks in 'emacs.org' and export this document to HTML."
   (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))
@@ -44,7 +42,8 @@
   (add-to-list 'safe-local-variable-values
                '(org-confirm-babel-evaluate))
 
-(defvar my/emacs-org-html-server-host "127.0.0.1") ;; Set to 0.0.0.0 to serve publicly
+(my/cargo-dependency "live-server") ; declares but defers install of live-server Rust crate
+(defvar my/emacs-org-html-server-host "127.0.0.1") ; Set to 0.0.0.0 to serve publicly
 (defvar my/emacs-org-html-server-port "7776")
 (defun my/emacs-org-html-server ()
   "Start a local live-server for the Emacs org HTML export."
@@ -55,7 +54,7 @@
       (if live-server-path
           (progn
             (message "live-server found at: %s" live-server-path)
-            (let ((host "127.0.0.1")  ;; Set to "0.0.0.0" to serve publicly
+            (let ((host "127.0.0.1")  ; Set to "0.0.0.0" to serve publicly
                   (port "7776")
                   (html-file "index.html")
                   (export-dir (expand-file-name "export" user-emacs-directory)))
@@ -64,6 +63,8 @@
               (message "Started live-server on http://%s:%s" host port)))
         (unless (executable-find "live-server")
           (message "live-server NOT found - please run: cargo install live-server"))))))
+
+(use-package htmlize)
 
 (require 'org-tempo) ; required for Structure Templates
                      ; See https://orgmode.org/manual/Structure-Templates.html
