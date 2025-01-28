@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-28 Tue 12:23 -->
+<!-- 2025-01-28 Tue 12:28 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -1135,7 +1135,7 @@ library:
                                          eos)
                                      ,place)
                        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">HACK: `</span><span style="color: #00bcff;">s1</span><span style="color: #a8a8a8;">' instead of a gensym.</span>
-                       (-let* (((s1 suffix) (list (match-string 1 ,place)
+                       (<span style="color: #b6a0ff;">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
                                                   (match-string 2 ,place)))
                                (suffix (<span style="color: #b6a0ff;">if</span> suffix
                                            (string-to-number suffix)
@@ -1187,10 +1187,12 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 (<span style="color: #b6a0ff;">use-package</span>
  vterm
  <span style="color: #f78fe7;">:custom</span> (vterm-always-compile-module t)
- <span style="color: #f78fe7;">:general</span> (<span style="color: #79a8ff;">"C-c t"</span> 'my-vterm-toggle)
+ <span style="color: #f78fe7;">:general</span> (<span style="color: #79a8ff;">"C-c t"</span> 'my/vterm-toggle)
  <span style="color: #f78fe7;">:config</span> (define-key vterm-mode-map (kbd <span style="color: #79a8ff;">"&lt;f5&gt;"</span>) nil)
  <span style="color: #f78fe7;">:init</span>
- (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my-vterm-toggle</span> (<span style="color: #6ae4b9;">&amp;optional</span> args)
+ <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">shell-pop for vterm :: https://github.com/jixiuf/vterm-toggle</span>
+ (<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">vterm-toggle</span>)
+ (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/vterm-toggle</span> (<span style="color: #6ae4b9;">&amp;optional</span> args)
    <span style="color: #b0d6f5;">"Customized vterm-toggle wrapper- this fixes the universal argument (C-u) to always create a new terminal"</span>
    (<span style="color: #b6a0ff;">interactive</span> <span style="color: #79a8ff;">"P"</span>)
    (<span style="color: #b6a0ff;">if</span> (not
@@ -1201,9 +1203,6 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
            (vterm-toggle--new args)
          (vterm-toggle args))
      (vterm-toggle args))))
-
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">shell-pop for vterm :: https://github.com/jixiuf/vterm-toggle</span>
-(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">vterm-toggle</span>)
 </pre>
 </div>
 </div>
@@ -1306,7 +1305,7 @@ in <code>~/.config/machine-labels</code>):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-01-28 Tue 12:23</p>
+<p class="date">Created: 2025-01-28 Tue 12:28</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
