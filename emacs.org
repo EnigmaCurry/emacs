@@ -47,6 +47,106 @@ GPLv3.
 <<license>>
 #+end_src
 
+* Dependencies
+** Emacs
+You will need a recent version of Emacs. I am using the latest version
+on Fedora:
+
+#+begin_src shell
+  #e.g., Fedora:
+  sudo dnf install emacs
+#+end_src
+
+#+begin_src emacs-lisp :results replace :exports results
+(message (emacs-version))
+#+end_src
+
+** Rustup
+
+[[https://rustup.rs/][Rustup]] is a tool that installs the latest versions of [[https://www.rust-lang.org/][Rust]] and [[https://doc.rust-lang.org/cargo/][Cargo]]
+/in your home directory/. Cargo is a user-space source-package manager
+for Rust programs and libraries. This config uses Cargo to install the
+optional helper programs used by its modules. Once setup, any
+user-space packages installed by Cargo are placed in =~/.cargo/bin=.
+
+You may be able to find the =rustup= tool in your system package
+manager and install it that way:
+
+#+begin_src shell
+  # e.g., Fedora:
+  sudo dnf install rustup
+  rustup-init
+#+end_src
+
+But you can also [[https://rustup.rs/][install it]] the "curl bomb" way on most other systems:
+
+#+begin_src shell
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+#+end_src
+
+Cargo packages are declared by Emacs modules themselves:
+
+#+begin_src emacs-lisp
+  ;; this example declares the "just" crate needs to be installed.
+  ;; (the actual install is deferred until later):
+  (my/cargo-dependency "just")
+#+end_src
+
+All of the crates are installed together [[#cargo-install-my-cargo-dependencies][/after/ all of the modules
+have been loaded]].
+
+** Git
+
+Install =git= via your package manager:
+
+#+begin_src shell
+  #e.g., Fedora:
+  sudo dnf install git
+#+end_src
+
+Clone this git repository:
+
+#+begin_src shell
+  git clone https://github.com/EnigmaCurry/emacs.git \
+      ~/git/vendor/enigmacurry/emacs
+#+end_src
+
+Switch to the right branch:
+
+#+begin_src emacs-lisp :results replace :exports results
+  (message "git checkout %s" (my/emacs-git-branch))
+#+end_src
+
+*** Function to get the current git branch                         :noexport:
+#+begin_src emacs-lisp :tangle "modules/git.el" :mkdirp yes
+  ;;; function to determine the current git branch -- ignore this in context
+  (defun my/emacs-git-branch ()
+    (substring (shell-command-to-string "git branch --show-current") 0 -1))
+#+end_src
+
+** Create your Emacs config directory
+
+You can try this config out without modifying your existing config.
+The following command tells Emacs to load config directly (ignoring
+your existing config):
+
+#+begin_src shell
+  emacs --init-directory ~/git/vendor/enigmacurry/emacs
+#+end_src
+
+If you omit =--init-directory=, the default location Emacs looks for
+your config is =~/.emacs.d=
+
+To set this config as the default, symlink the git repository from
+=~/.emacs.d= :
+
+#+begin_src shell
+  ln -s ~/git/vendor/enigmacurry/emacs ~/.emacs.d
+#+end_src
+
+Now when you run =emacs= with no arguments it will load the =init.el=
+found in the git repository.
+
 * Early Init
 
 The [[file:early-init.el]] is the first config file that is loaded on Emacs
@@ -203,30 +303,7 @@ Registers]]. These registers are accessed via the prefix: =C-x r j=
   (set-register ?e '(file . "~/git/vendor/enigmacurry/emacs-new/emacs.org"))
 #+end_src
 
-* Rust helper programs
-
-When moving beyond the base config, some additional helper programs
-are expected to be installed on your system. These are managed by
-Rust's Cargo package manager, which is easily installed on any system
-via [[https://rustup.rs/][rustup]].
-
-** Install Rustup
-
-You may be able to find =rustup= in your system package manager and
-install it that way:
-
-#+begin_src shell
-  # e.g., Fedora:
-  sudo dnf install rustup
-  rustup-init
-#+end_src
-
-But you can also [[https://rustup.rs/][install it]] the curl bomb way:
-
-#+begin_src shell
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-#+end_src
-
+* Cargo
 ** Set cargo binary PATH
 
 Cargo and all of the helper programs you install go in =~/.cargo/bin=.
@@ -461,49 +538,38 @@ You should restart Emacs to reload the configured modules from
 See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.el]]
 
 #+begin_src emacs-lisp :tangle "modules/general/general.el" :mkdirp yes
-    (use-package
-      general
-      :init
-      ;; Switch between two most recent buffers:
-      (fset 'quick-switch-buffer [?\C-x ?b return])
-      :config
-       ;;; Custom global bindings:
-      (general-define-key
-       "C-h B"
-       'general-describe-keybindings
-       "s-b"
-       'quick-switch-buffer
-       "s-B"
-       'buffer-menu-other-window
-       "C-x B"
-       'buffer-menu-other-window
-       "s-o"
-       'browse-url
-       "C-;"
-       'comment-region ; C-u C-; to uncomment
-       "s-<down-mouse-1>"
-       'mouse-drag-region-rectangle)
-      ;;; Put the Emacs default keybindings you want included in general-describe-keybindings here:
-      ;;; Its useful to duplicate these simply as a way of documentation:
-      (general-define-key
-       "M-SPC"
-       'cycle-spacing ; If you document it, you will use it.
-       "M-h"
-       'mark-paragraph ; C-h B is like your personal cheat sheet.
-       "C-h b"
-       'describe-bindings ;; default binding for documentation purpose
-       "C-x 4 c"
-       'clone-indirect-buffer-other-window ;; default binding
-       )
-      ;;; Define bindings for specific builtin (non use-package) modes:
-      ;; Emacs Lisp mode bindings:
-      (general-define-key
-       :keymaps 'emacs-lisp-mode-map
-       "s-e" 'eval-defun ;eval top-level form
-       "M-;" 'paredit-comment-dwim)
-      ;; Dired mode bindings:
-      (general-define-key
-       :keymaps 'dired-mode-map "C-c C-q" 'dired-toggle-read-only))
+  (use-package
+    general
+    :init
+    ;; Switch between two most recent buffers:
+    (fset 'quick-switch-buffer [?\C-x ?b return])
+    :config
+     ;;; Custom global bindings:
+    (general-define-key
+     "C-h B"     'general-describe-keybindings
+     "s-b"       'quick-switch-buffer
+     "s-B"       'buffer-menu-other-window
+     "C-x B"     'buffer-menu-other-window
+     "s-o"       'browse-url
+     "C-;"       'comment-region ; C-u C-; to uncomment
+     "s-<down-mouse-1>"       'mouse-drag-region-rectangle)
+    ;;; Put the Emacs default keybindings you want included in general-describe-keybindings here:
+    ;;; Its useful to duplicate these simply as a way of documentation:
+    (general-define-key
+     "M-SPC"     'cycle-spacing ; If you document it, you will use it.
+     "M-h"       'mark-paragraph ; C-h B is like your personal cheat sheet.
+     "C-h b"     'describe-bindings ;; default binding for documentation purpose
+     "C-x 4 c"   'clone-indirect-buffer-other-window ;; default binding
+     )
+    ;;; Define bindings for specific builtin (non use-package) modes:
+    ;; Emacs Lisp mode bindings:
+    (general-define-key
+     :keymaps 'emacs-lisp-mode-map
+     "s-e" 'eval-defun ;eval top-level form
+     "M-;" 'paredit-comment-dwim)
+    ;; Dired mode bindings:
+    (general-define-key
+     :keymaps 'dired-mode-map "C-c C-q" 'dired-toggle-read-only))
 #+end_src
 ** Org mode (label =org=)
 
@@ -642,7 +708,6 @@ library:
       (if unpackaged/org-export-html-with-useful-ids-mode
           (advice-add #'org-export-get-reference :override #'unpackaged/org-export-get-reference)
         (advice-remove #'org-export-get-reference #'unpackaged/org-export-get-reference)))
-
   (defun unpackaged/org-export-get-reference (datum info)
     "Like `org-export-get-reference', except uses heading titles instead of random numbers."
     (let ((cache (plist-get info :internal-references)))
@@ -673,7 +738,6 @@ library:
             (push (cons reference-string datum) cache)
             (plist-put info :internal-references cache)
             reference-string))))
-
     (defun unpackaged/org-export-new-title-reference (datum cache)
       "Return new reference for DATUM that is unique in CACHE."
       (cl-macrolet ((inc-suffixf (place)
@@ -751,6 +815,21 @@ make org-mode syntax easier to type: ===, =/=, =~=.
   (use-package markdown-mode)
 #+end_src
 
+** SSH agent (label =ssh-agent=)
+
+#+begin_src emacs-lisp :tangle "modules/ssh-agent/ssh-agent.el" :mkdirp yes
+  ;; Load SSH / GPG keys from keychain agent
+  (use-package
+    keychain-environment
+   :straight
+   (keychain-environment
+    :type git
+    :files (:defaults "keychain-environment")
+    :host github
+    :repo "tarsius/keychain-environment")
+   :init (keychain-refresh-environment))
+#+end_src
+
 ** Magit (label =magit=)
 
 #+begin_src emacs-lisp :tangle "modules/magit/magit.el" :mkdirp yes
@@ -815,6 +894,9 @@ in =~/.config/machine-labels=):
 #+end_src
 
 ** Install rust helper programs declared by module
+:PROPERTIES:
+:CUSTOM_ID: cargo-install-my-cargo-dependencies
+:END:
 
 #+begin_src emacs-lisp :tangle "init.el"
   ;; Install rust dependencies that were declared by modules

@@ -26,7 +26,6 @@
     (if unpackaged/org-export-html-with-useful-ids-mode
         (advice-add #'org-export-get-reference :override #'unpackaged/org-export-get-reference)
       (advice-remove #'org-export-get-reference #'unpackaged/org-export-get-reference)))
-
 (defun unpackaged/org-export-get-reference (datum info)
   "Like `org-export-get-reference', except uses heading titles instead of random numbers."
   (let ((cache (plist-get info :internal-references)))
@@ -57,7 +56,6 @@
           (push (cons reference-string datum) cache)
           (plist-put info :internal-references cache)
           reference-string))))
-
   (defun unpackaged/org-export-new-title-reference (datum cache)
     "Return new reference for DATUM that is unique in CACHE."
     (cl-macrolet ((inc-suffixf (place)
