@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-28 Tue 16:54 -->
+<!-- 2025-01-29 Wed 13:32 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -259,6 +259,13 @@
 <li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">9.4. Markdown mode (label <code>markdown</code>)</a></li>
 <li><a href="#SSH_agent_%28label_%3Dssh-agent%3D%29">9.5. SSH agent (label <code>ssh-agent</code>)</a></li>
 <li><a href="#Magit_%28label_%3Dmagit%3D%29">9.6. Magit (label <code>magit</code>)</a></li>
+<li><a href="#Fonts_%28label_%3Dfonts%3D%29">9.7. Fonts (label <code>fonts</code>)</a>
+<ul>
+<li><a href="#List_installed_font_families">9.7.1. List installed font families</a></li>
+<li><a href="#Set_font_faces">9.7.2. Set font faces</a></li>
+<li><a href="#all-the-icons">9.7.3. all-the-icons</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#Load_modules">10. Load modules</a>
@@ -473,13 +480,18 @@ startup. Additionally, early debug options are set here.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load modus-vivendi, one of the dark-mode themes builtin to Emacs.</span>
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Use Modus themes that are builtin to Emacs:</span>
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Set variable pitch mode for modus themes:</span>
+(<span style="color: #b6a0ff;">setq</span> modus-themes-mixed-fonts t) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">allow variable-pitch-mode for</span>
+                                  <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">org-mode but not for code blocks</span>
+(add-hook 'text-mode-hook #'variable-pitch-mode)
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load modus-vivendi which is a builtin dark mode theme:</span>
 (load-theme 'modus-vivendi)
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Set a larger font than the default:</span>
+
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Set a larger default font size (150 = 15 pt size):</span>
 (set-face-attribute 'default nil <span style="color: #f78fe7;">:height</span> 150)
 <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Turn off GUI distractions:</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Press F10 to bring up the menu if you still need it.</span>
-(menu-bar-mode -1)
+(menu-bar-mode -1) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">Press F10 to bring up the menu if you still need it.</span>
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (<span style="color: #b6a0ff;">setq</span> inhibit-startup-screen t)
@@ -913,6 +925,7 @@ Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/mod
 </p>
 
 <pre class="example">
+- fonts
 - general
 - just
 - magit
@@ -1039,10 +1052,10 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">org</span>
   <span style="color: #f78fe7;">:hook</span> ((org-mode . flyspell-mode)
          (org-mode . unpackaged/org-export-html-with-useful-ids-mode))
-  <span style="color: #a8a8a8;">;</span><span style="color: #a8a8a8;">:general</span>
-  <span style="color: #a8a8a8;">;</span><span style="color: #a8a8a8;">("s-&lt;up&gt;" 'org-previous-visible-heading)</span>
-  <span style="color: #a8a8a8;">;</span><span style="color: #a8a8a8;">("s-&lt;down&gt;" 'org-next-visible-heading)</span>
-  <span style="color: #a8a8a8;">;</span><span style="color: #a8a8a8;">("C-c o k" 'org-babel-remove-result)</span>
+  <span style="color: #f78fe7;">:general</span>
+  (<span style="color: #79a8ff;">"s-&lt;up&gt;"</span> 'org-previous-visible-heading)
+  (<span style="color: #79a8ff;">"s-&lt;down&gt;"</span> 'org-next-visible-heading)
+  (<span style="color: #79a8ff;">"C-c o k"</span> 'org-babel-remove-result)
   <span style="color: #f78fe7;">:config</span>
   (<span style="color: #b6a0ff;">setq</span> org-startup-folded t)
   (org-babel-do-load-languages
@@ -1246,7 +1259,7 @@ library:
                                          eos)
                                      ,place)
                        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">HACK: `</span><span style="color: #00bcff;">s1</span><span style="color: #a8a8a8;">' instead of a gensym.</span>
-                       (<span style="color: #b6a0ff;">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
+                       (-let* (((s1 suffix) (list (match-string 1 ,place)
                                                   (match-string 2 ,place)))
                                (suffix (<span style="color: #b6a0ff;">if</span> suffix
                                            (string-to-number suffix)
@@ -1361,6 +1374,67 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 </div>
+<div id="outline-container-Fonts_%28label_%3Dfonts%3D%29" class="outline-3">
+<h3 id="Fonts_%28label_%3Dfonts%3D%29"><span class="section-number-3">9.7.</span> Fonts (label <code>fonts</code>)</h3>
+<div class="outline-text-3" id="text-9-7">
+<p>
+<a href="https://protesilaos.com/codelog/2024-01-16-customize-emacs-fonts/">https://protesilaos.com/codelog/2024-01-16-customize-emacs-fonts/</a>
+</p>
+</div>
+<div id="outline-container-List_installed_font_families" class="outline-4">
+<h4 id="List_installed_font_families"><span class="section-number-4">9.7.1.</span> List installed font families</h4>
+<div class="outline-text-4" id="text-9-7-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(mapconcat (<span style="color: #b6a0ff;">lambda</span> (x) (format <span style="color: #79a8ff;">"- %s"</span> x)) (delete-dups (sort (font-family-list) #'string&lt;)) <span style="color: #79a8ff;">"\n"</span>)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Set_font_faces" class="outline-4">
+<h4 id="Set_font_faces"><span class="section-number-4">9.7.2.</span> Set font faces</h4>
+<div class="outline-text-4" id="text-9-7-2">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">show default font:</span>
+(face-attribute 'default <span style="color: #f78fe7;">:font</span>)
+</pre>
+</div>
+
+<pre class="example">
+#&lt;font-object "-ADBO-Source Code Pro-regular-normal-normal-*-20-*-*-*-m-0-iso10646-1"&gt;
+</pre>
+</div>
+</div>
+<div id="outline-container-all-the-icons" class="outline-4">
+<h4 id="all-the-icons"><span class="section-number-4">9.7.3.</span> all-the-icons</h4>
+<div class="outline-text-4" id="text-9-7-3">
+<p>
+<a href="https://github.com/domtronn/all-the-icons.el?tab=readme-ov-file">all-the-icons</a> provides several fonts for displaying icons:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Install all the icons:</span>
+(<span style="color: #b6a0ff;">use-package</span>
+ all-the-icons
+ <span style="color: #f78fe7;">:if</span> (display-graphic-p)
+ <span style="color: #f78fe7;">:init</span>
+ (<span style="color: #b6a0ff;">let</span> ((font-file
+        (expand-file-name <span style="color: #79a8ff;">"~/.local/share/fonts/all-the-icons.ttf"</span>)))
+   (<span style="color: #b6a0ff;">unless</span> (file-exists-p font-file)
+     (message <span style="color: #79a8ff;">"Installing all-the-icons fonts..."</span>)
+     (all-the-icons-install-fonts t))))
+</pre>
+</div>
+
+<p>
+Example icons:
+</p>
+
+<pre class="example">
+
+</pre>
+</div>
+</div>
+</div>
 </div>
 <div id="outline-container-Load_modules" class="outline-2">
 <h2 id="Load_modules"><span class="section-number-2">10.</span> Load modules</h2>
@@ -1434,7 +1508,7 @@ in <code>~/.config/machine-labels</code>):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-01-28 Tue 16:54</p>
+<p class="date">Created: 2025-01-29 Wed 13:32</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

@@ -154,13 +154,18 @@ initialized, so that it doesn't have a jarring visual change during
 startup. Additionally, early debug options are set here.
 
 #+begin_src emacs-lisp :tangle "early-init.el"
-  ;; Load modus-vivendi, one of the dark-mode themes builtin to Emacs.
+  ;; Use Modus themes that are builtin to Emacs:
+  ;; Set variable pitch mode for modus themes:
+  (setq modus-themes-mixed-fonts t) ; allow variable-pitch-mode for
+                                    ; org-mode but not for code blocks
+  (add-hook 'text-mode-hook #'variable-pitch-mode)
+  ;; Load modus-vivendi which is a builtin dark mode theme:
   (load-theme 'modus-vivendi)
-  ;; Set a larger font than the default:
+
+  ;; Set a larger default font size (150 = 15 pt size):
   (set-face-attribute 'default nil :height 150)
   ;; Turn off GUI distractions:
-  ;; Press F10 to bring up the menu if you still need it.
-  (menu-bar-mode -1)
+  (menu-bar-mode -1) ; Press F10 to bring up the menu if you still need it.
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (setq inhibit-startup-screen t)
@@ -582,10 +587,10 @@ See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.e
   (use-package org
     :hook ((org-mode . flyspell-mode)
            (org-mode . unpackaged/org-export-html-with-useful-ids-mode))
-    ;:general
-    ;("s-<up>" 'org-previous-visible-heading)
-    ;("s-<down>" 'org-next-visible-heading)
-    ;("C-c o k" 'org-babel-remove-result)
+    :general
+    ("s-<up>" 'org-previous-visible-heading)
+    ("s-<down>" 'org-next-visible-heading)
+    ("C-c o k" 'org-babel-remove-result)
     :config
     (setq org-startup-folded t)
     (org-babel-do-load-languages
@@ -847,6 +852,49 @@ make org-mode syntax easier to type: ===, =/=, =~=.
     (setq magit-display-buffer-function
           #'magit-display-buffer-fullframe-status-v1))
 #+end_src
+** Fonts (label =fonts=)
+
+https://protesilaos.com/codelog/2024-01-16-customize-emacs-fonts/
+
+*** List installed font families
+#+begin_src emacs-lisp :results replace
+  (mapconcat (lambda (x) (format "- %s" x)) (delete-dups (sort (font-family-list) #'string<)) "\n")
+#+end_src
+
+*** Set font faces
+#+begin_src emacs-lisp :results replace :exports both
+  ;;; show default font:
+  (face-attribute 'default :font)
+#+end_src
+
+#+RESULTS:
+
+*** all-the-icons
+
+[[https://github.com/domtronn/all-the-icons.el?tab=readme-ov-file][all-the-icons]] provides several fonts for displaying icons:
+
+#+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
+  ;;; Install all the icons:
+  (use-package
+   all-the-icons
+   :if (display-graphic-p)
+   :init
+   (let ((font-file
+          (expand-file-name "~/.local/share/fonts/all-the-icons.ttf")))
+     (unless (file-exists-p font-file)
+       (message "Installing all-the-icons fonts...")
+       (all-the-icons-install-fonts t))))
+#+end_src
+
+Example icons:
+
+#+begin_src emacs-lisp :results replace :exports results
+(all-the-icons-faicon "cogs")
+#+end_src
+
+#+RESULTS:
+: 
+
 * Load modules
 
 The code-blocks in this file are tangled to separate categorized files
@@ -1616,7 +1664,7 @@ in =~/.config/machine-labels=):
 #+end_src
 :END:
 
-* Local Variables :noexport:
+* Local Variables                                                  :noexport:
 
 The local variables section needs to be at the very bottom of this
 file.
