@@ -50,6 +50,8 @@
             "Re-apply custom settings after saving customizations."
             (my/font-settings-apply)))
 
+(use-package show-font)
+
 ;;; Install all the icons:
 (use-package
  all-the-icons

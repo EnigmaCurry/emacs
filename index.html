@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-30 Thu 01:01 -->
+<!-- 2025-01-30 Thu 12:37 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -264,8 +264,9 @@
 <li><a href="#List_installed_font_families">9.7.1. List installed font families</a></li>
 <li><a href="#Install_font%3A_JetBrains_Mono">9.7.2. Install font: JetBrains Mono</a></li>
 <li><a href="#Set_font_faces">9.7.3. Set font faces</a></li>
-<li><a href="#all-the-icons">9.7.4. all-the-icons</a></li>
-<li><a href="#Scale_fonts_uniformly_in_all_buffers">9.7.5. Scale fonts uniformly in all buffers</a></li>
+<li><a href="#Preview_fonts">9.7.4. Preview fonts</a></li>
+<li><a href="#all-the-icons">9.7.5. all-the-icons</a></li>
+<li><a href="#Scale_fonts_uniformly_in_all_buffers">9.7.6. Scale fonts uniformly in all buffers</a></li>
 </ul>
 </li>
 </ul>
@@ -1262,7 +1263,7 @@ library:
                                          eos)
                                      ,place)
                        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">HACK: `</span><span style="color: #00bcff;">s1</span><span style="color: #a8a8a8;">' instead of a gensym.</span>
-                       (-let* (((s1 suffix) (list (match-string 1 ,place)
+                       (<span style="color: #b6a0ff;">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
                                                   (match-string 2 ,place)))
                                (suffix (<span style="color: #b6a0ff;">if</span> suffix
                                            (string-to-number suffix)
@@ -1433,7 +1434,7 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 (<span style="color: #b6a0ff;">defgroup</span> <span style="color: #6ae4b9;">my/font-settings</span> nil
   <span style="color: #b0d6f5;">"My custom font settings"</span>
     <span style="color: #f78fe7;">:group</span> 'my/custom-settings)
-(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-family-default</span> <span style="color: #79a8ff;">"Noto Sans"</span>
+(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-family-default</span> <span style="color: #79a8ff;">"Noto Sans Mono"</span>
   <span style="color: #b0d6f5;">"Default font family"</span>
   <span style="color: #f78fe7;">:type</span> 'string
   <span style="color: #f78fe7;">:group</span> 'my/font-settings)
@@ -1445,21 +1446,14 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
   <span style="color: #b0d6f5;">"Default font size"</span>
   <span style="color: #f78fe7;">:type</span> 'string
   <span style="color: #f78fe7;">:group</span> 'my/font-settings)
-(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/variable-pitch-mode</span> ()
-  <span style="color: #b0d6f5;">"Enable or disable variable-pitch-mode for text modes."</span>
-  <span style="color: #f78fe7;">:type</span> 'boolean
-  <span style="color: #f78fe7;">:group</span> 'my/font-settings)
 (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/font-settings-apply</span> ()
   <span style="color: #b0d6f5;">"Set the default font based on `my/font-family-default` and `my/font-size-default`."</span>
   (set-face-attribute 'default nil
                       <span style="color: #f78fe7;">:family</span> my/font-family-default
                       <span style="color: #f78fe7;">:height</span> my/font-size-default)
   (set-face-attribute 'fixed-pitch nil
-                      <span style="color: #f78fe7;">:family</span> my/font-family-fixed-pitch
+                      <span style="color: #f78fe7;">:family</span> my/font-family-default-fixed-pitch
                       <span style="color: #f78fe7;">:height</span> my/font-size-default)
-  (<span style="color: #b6a0ff;">if</span> my/variable-pitch-mode
-      (add-hook 'text-mode-hook #'variable-pitch-mode)
-    (remove-hook 'text-mode-hook #'variable-pitch-mode))
   t)
 (my/font-settings-apply)
 (add-hook 'after-init-hook #'my/font-settings-apply)
@@ -1477,9 +1471,27 @@ selection.
 </p>
 </div>
 </div>
-<div id="outline-container-all-the-icons" class="outline-4">
-<h4 id="all-the-icons"><span class="section-number-4">9.7.4.</span> all-the-icons</h4>
+<div id="outline-container-Preview_fonts" class="outline-4">
+<h4 id="Preview_fonts"><span class="section-number-4">9.7.4.</span> Preview fonts</h4>
 <div class="outline-text-4" id="text-9-7-4">
+<p>
+<a href="https://protesilaos.com/emacs/show-font">show-font</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">show-font</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(show-font-list)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-all-the-icons" class="outline-4">
+<h4 id="all-the-icons"><span class="section-number-4">9.7.5.</span> all-the-icons</h4>
+<div class="outline-text-4" id="text-9-7-5">
 <p>
 <a href="https://github.com/domtronn/all-the-icons.el?tab=readme-ov-file">all-the-icons</a> provides several fonts for displaying icons:
 </p>
@@ -1508,8 +1520,8 @@ Example icons:
 </div>
 </div>
 <div id="outline-container-Scale_fonts_uniformly_in_all_buffers" class="outline-4">
-<h4 id="Scale_fonts_uniformly_in_all_buffers"><span class="section-number-4">9.7.5.</span> Scale fonts uniformly in all buffers</h4>
-<div class="outline-text-4" id="text-9-7-5">
+<h4 id="Scale_fonts_uniformly_in_all_buffers"><span class="section-number-4">9.7.6.</span> Scale fonts uniformly in all buffers</h4>
+<div class="outline-text-4" id="text-9-7-6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/default-text-scale-reset</span> nil
   (<span style="color: #b6a0ff;">setq</span> default-text-scale--complement 0)
@@ -1613,7 +1625,7 @@ in <code>~/.config/machine-labels</code>):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-01-30 Thu 01:01</p>
+<p class="date">Created: 2025-01-30 Thu 12:37</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

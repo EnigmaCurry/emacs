@@ -928,6 +928,18 @@ Choose your default font family and font size for your machine. Use
 =M-x describe-char= and =M-x describe-font= to help debug font
 selection.
 
+*** Preview fonts
+
+[[https://protesilaos.com/emacs/show-font][show-font]]
+
+#+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
+  (use-package show-font)
+#+end_src
+
+#+begin_src emacs-lisp
+  (show-font-list)
+#+end_src
+
 *** all-the-icons
 
 [[https://github.com/domtronn/all-the-icons.el?tab=readme-ov-file][all-the-icons]] provides several fonts for displaying icons:
