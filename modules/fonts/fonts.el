@@ -41,7 +41,7 @@
                       :family my/font-family-default
                       :height my/font-size-default)
   (set-face-attribute 'fixed-pitch nil
-                      :family my/font-family-fixed-pitch
+                      :family my/font-family-default-fixed-pitch
                       :height my/font-size-default)
   t)
 (my/font-settings-apply)
