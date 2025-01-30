@@ -1,7 +1,5 @@
 ;; Load modus-vivendi which is a builtin dark mode theme:
 (load-theme 'modus-vivendi)
-(setq modus-themes-mixed-fonts t) ; allow variable-pitch-mode for
-                                  ; org-mode but not for code blocks
 ;; Set a larger default font size (150 = 15 pt size):
 (setq my/default-text-height 150)
 (set-face-attribute 'default nil :height my/default-text-height)

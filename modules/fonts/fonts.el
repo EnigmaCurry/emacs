@@ -23,12 +23,8 @@
 (defgroup my/font-settings nil
   "My custom font settings"
     :group 'my/custom-settings)
-(defcustom my/font-family-default "Noto Sans Mono"
+(defcustom my/font-family-default "JetBrains Mono"
   "Default font family"
-  :type 'string
-  :group 'my/font-settings)
-(defcustom my/font-family-default-fixed-pitch "Noto Sans Mono"
-  "Default font family for fixed-pitch faces"
   :type 'string
   :group 'my/font-settings)
 (defcustom my/font-size-default 120
@@ -39,9 +35,6 @@
   "Set the default font based on `my/font-family-default` and `my/font-size-default`."
   (set-face-attribute 'default nil
                       :family my/font-family-default
-                      :height my/font-size-default)
-  (set-face-attribute 'fixed-pitch nil
-                      :family my/font-family-default-fixed-pitch
                       :height my/font-size-default)
   t)
 (my/font-settings-apply)

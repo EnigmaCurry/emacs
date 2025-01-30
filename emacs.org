@@ -156,8 +156,6 @@ during startup. Additionally, early debug options are set here.
 #+begin_src emacs-lisp :tangle "early-init.el"
   ;; Load modus-vivendi which is a builtin dark mode theme:
   (load-theme 'modus-vivendi)
-  (setq modus-themes-mixed-fonts t) ; allow variable-pitch-mode for
-                                    ; org-mode but not for code blocks
   ;; Set a larger default font size (150 = 15 pt size):
   (setq my/default-text-height 150)
   (set-face-attribute 'default nil :height my/default-text-height)
@@ -307,7 +305,6 @@ are accessed via the prefix: =C-x r j= (register jump):
 #+begin_src emacs-lisp :tangle "modules/registers.el"
   (set-register ?e '(file . "~/git/vendor/enigmacurry/emacs-new/emacs.org"))
 #+end_src
-
 
 * Cargo
 ** Set cargo binary PATH
@@ -895,12 +892,8 @@ https://protesilaos.com/codelog/2024-01-16-customize-emacs-fonts/
   (defgroup my/font-settings nil
     "My custom font settings"
       :group 'my/custom-settings)
-  (defcustom my/font-family-default "Noto Sans Mono"
+  (defcustom my/font-family-default "JetBrains Mono"
     "Default font family"
-    :type 'string
-    :group 'my/font-settings)
-  (defcustom my/font-family-default-fixed-pitch "Noto Sans Mono"
-    "Default font family for fixed-pitch faces"
     :type 'string
     :group 'my/font-settings)
   (defcustom my/font-size-default 120
@@ -911,9 +904,6 @@ https://protesilaos.com/codelog/2024-01-16-customize-emacs-fonts/
     "Set the default font based on `my/font-family-default` and `my/font-size-default`."
     (set-face-attribute 'default nil
                         :family my/font-family-default
-                        :height my/font-size-default)
-    (set-face-attribute 'fixed-pitch nil
-                        :family my/font-family-default-fixed-pitch
                         :height my/font-size-default)
     t)
   (my/font-settings-apply)
@@ -937,6 +927,7 @@ selection.
 #+end_src
 
 #+begin_src emacs-lisp
+  (setq show-font-pangram (concat "A wizard’s job is to vex chumps quickly in fog.\n\t٩(-̮̮̃-̃)۶ ٩(●̮̮̃•̃)۶ ٩(͡๏̯͡๏)۶ ٩(-̮̮̃•̃).\n\tΣὲ γνωρίζω ἀπὸ τὴν κόψη"))
   (show-font-list)
 #+end_src
 

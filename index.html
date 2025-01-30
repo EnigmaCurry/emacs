@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-30 Thu 12:37 -->
+<!-- 2025-01-30 Thu 15:09 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -485,8 +485,6 @@ during startup. Additionally, early debug options are set here.
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load modus-vivendi which is a builtin dark mode theme:</span>
 (load-theme 'modus-vivendi)
-(<span style="color: #b6a0ff;">setq</span> modus-themes-mixed-fonts t) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">allow variable-pitch-mode for</span>
-                                  <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">org-mode but not for code blocks</span>
 <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Set a larger default font size (150 = 15 pt size):</span>
 (<span style="color: #b6a0ff;">setq</span> my/default-text-height 150)
 (set-face-attribute 'default nil <span style="color: #f78fe7;">:height</span> my/default-text-height)
@@ -1263,7 +1261,7 @@ library:
                                          eos)
                                      ,place)
                        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">HACK: `</span><span style="color: #00bcff;">s1</span><span style="color: #a8a8a8;">' instead of a gensym.</span>
-                       (<span style="color: #b6a0ff;">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
+                       (-let* (((s1 suffix) (list (match-string 1 ,place)
                                                   (match-string 2 ,place)))
                                (suffix (<span style="color: #b6a0ff;">if</span> suffix
                                            (string-to-number suffix)
@@ -1434,12 +1432,8 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 (<span style="color: #b6a0ff;">defgroup</span> <span style="color: #6ae4b9;">my/font-settings</span> nil
   <span style="color: #b0d6f5;">"My custom font settings"</span>
     <span style="color: #f78fe7;">:group</span> 'my/custom-settings)
-(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-family-default</span> <span style="color: #79a8ff;">"Noto Sans Mono"</span>
+(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-family-default</span> <span style="color: #79a8ff;">"JetBrains Mono"</span>
   <span style="color: #b0d6f5;">"Default font family"</span>
-  <span style="color: #f78fe7;">:type</span> 'string
-  <span style="color: #f78fe7;">:group</span> 'my/font-settings)
-(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-family-default-fixed-pitch</span> <span style="color: #79a8ff;">"Noto Sans Mono"</span>
-  <span style="color: #b0d6f5;">"Default font family for fixed-pitch faces"</span>
   <span style="color: #f78fe7;">:type</span> 'string
   <span style="color: #f78fe7;">:group</span> 'my/font-settings)
 (<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-size-default</span> 120
@@ -1450,9 +1444,6 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
   <span style="color: #b0d6f5;">"Set the default font based on `my/font-family-default` and `my/font-size-default`."</span>
   (set-face-attribute 'default nil
                       <span style="color: #f78fe7;">:family</span> my/font-family-default
-                      <span style="color: #f78fe7;">:height</span> my/font-size-default)
-  (set-face-attribute 'fixed-pitch nil
-                      <span style="color: #f78fe7;">:family</span> my/font-family-default-fixed-pitch
                       <span style="color: #f78fe7;">:height</span> my/font-size-default)
   t)
 (my/font-settings-apply)
@@ -1484,7 +1475,8 @@ selection.
 </div>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(show-font-list)
+<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">setq</span> show-font-pangram (concat <span style="color: #79a8ff;">"A wizard&#8217;s job is to vex chumps quickly in fog.\n\t&#1641;(-&#814;&#814;&#771;-&#771;)&#1782; &#1641;(&#9679;&#814;&#814;&#771;&#8226;&#771;)&#1782; &#1641;(&#865;&#3663;&#815;&#865;&#3663;)&#1782; &#1641;(-&#814;&#814;&#771;&#8226;&#771;).\n\t&#931;&#8050; &#947;&#957;&#969;&#961;&#8055;&#950;&#969; &#7936;&#960;&#8056; &#964;&#8052;&#957; &#954;&#8057;&#968;&#951;"</span>))
+(show-font-list)
 </pre>
 </div>
 </div>
@@ -1625,7 +1617,7 @@ in <code>~/.config/machine-labels</code>):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-01-30 Thu 12:37</p>
+<p class="date">Created: 2025-01-30 Thu 15:09</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
