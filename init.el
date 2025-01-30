@@ -42,6 +42,10 @@
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (when (file-exists-p custom-file)
   (load custom-file))
+;; Store all customizations under my/custom-settings group
+(defgroup my/custom-settings nil
+  "My custom Emacs settings"
+  :group 'emacs)
 ;; Shortcut to open custom settings:
 (defun my/custom-settings ()
   "Open the Emacs customization interface for my custom settings."

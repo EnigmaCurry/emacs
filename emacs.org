@@ -148,22 +148,19 @@ found in the git repository.
 
 * Early Init
 
-The [[file:early-init.el]] is the first config file that is loaded on Emacs
-startup. It is used to set the visual look and feel before the GUI is
-initialized, so that it doesn't have a jarring visual change during
-startup. Additionally, early debug options are set here.
+The [[file:early-init.el]] is the first config file that is loaded on
+Emacs startup. It is used to set the visual look and feel before the
+GUI is initialized, so that it doesn't have a jarring visual change
+during startup. Additionally, early debug options are set here.
 
 #+begin_src emacs-lisp :tangle "early-init.el"
-  ;; Use Modus themes that are builtin to Emacs:
-  ;; Set variable pitch mode for modus themes:
-  (setq modus-themes-mixed-fonts t) ; allow variable-pitch-mode for
-                                    ; org-mode but not for code blocks
-  (add-hook 'text-mode-hook #'variable-pitch-mode)
   ;; Load modus-vivendi which is a builtin dark mode theme:
   (load-theme 'modus-vivendi)
-
+  (setq modus-themes-mixed-fonts t) ; allow variable-pitch-mode for
+                                    ; org-mode but not for code blocks
   ;; Set a larger default font size (150 = 15 pt size):
-  (set-face-attribute 'default nil :height 150)
+  (setq my/default-text-height 150)
+  (set-face-attribute 'default nil :height my/default-text-height)
   ;; Turn off GUI distractions:
   (menu-bar-mode -1) ; Press F10 to bring up the menu if you still need it.
   (tool-bar-mode -1)
@@ -247,18 +244,22 @@ environments. Only Emacs builtins will be allowed here:
           `((".*" ,auto-save-dir t))))
 #+end_src
 
-** Store Emacs customizations in =~/.emacs.d/custom.el= and load them
+** Customization
 
 #+begin_src emacs-lisp :tangle "init.el"
-  ;; Store customizations in custom.el
-  (setq custom-file (locate-user-emacs-file "custom.el"))
-  (when (file-exists-p custom-file)
-    (load custom-file))
-  ;; Shortcut to open custom settings:
-  (defun my/custom-settings ()
-    "Open the Emacs customization interface for my custom settings."
-    (interactive)
-    (customize-group 'my/custom-settings))
+      ;; Store customizations in custom.el
+      (setq custom-file (locate-user-emacs-file "custom.el"))
+      (when (file-exists-p custom-file)
+        (load custom-file))
+      ;; Store all customizations under my/custom-settings group
+      (defgroup my/custom-settings nil
+        "My custom Emacs settings"
+        :group 'emacs)
+      ;; Shortcut to open custom settings:
+      (defun my/custom-settings ()
+        "Open the Emacs customization interface for my custom settings."
+        (interactive)
+        (customize-group 'my/custom-settings))
 #+end_src
 
 ** Builtin minor modes to activate everywhere
@@ -306,6 +307,7 @@ are accessed via the prefix: =C-x r j= (register jump):
 #+begin_src emacs-lisp :tangle "modules/registers.el"
   (set-register ?e '(file . "~/git/vendor/enigmacurry/emacs-new/emacs.org"))
 #+end_src
+
 
 * Cargo
 ** Set cargo binary PATH
@@ -861,13 +863,70 @@ https://protesilaos.com/codelog/2024-01-16-customize-emacs-fonts/
   (mapconcat (lambda (x) (format "- %s" x)) (delete-dups (sort (font-family-list) #'string<)) "\n")
 #+end_src
 
+*** Install font: JetBrains Mono
+
+[[https://www.jetbrains.com/lp/mono/][JetBrains Mono typeface]]
+
+#+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
+  ;;; Download JetBrains Mono typeface
+  (let* ((url "https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip")
+         (zip-file (expand-file-name "JetBrainsMono.zip" temporary-file-directory))
+         (font-dir (expand-file-name "~/.local/share/fonts/JetBrainsMono/"))
+         (default-directory temporary-file-directory))
+    (unless (file-directory-p font-dir)
+      (url-copy-file url zip-file t)
+      (make-directory font-dir t)
+      (let ((output-buffer (generate-new-buffer "*unzip-output*")))
+        (unwind-protect
+            (call-process "unzip" nil output-buffer nil "-j" zip-file "-d" font-dir)
+          (kill-buffer output-buffer)))
+      (call-process "fc-cache" nil nil nil "-fv")
+      (delete-file zip-file)
+      (message "JetBrains Mono font installed successfully.")))
+#+end_src
 *** Set font faces
-#+begin_src emacs-lisp :results replace :exports both
+#+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
+  ;;; show list of installed fonts:
+  ;;(font-family-list)
   ;;; show default font:
-  (face-attribute 'default :font)
+  ;;(face-attribute 'default :font)
+  ;;; Set default font faces:
+  ;; M-x my/custom-settings    :: font-settings group:
+  (defgroup my/font-settings nil
+    "My custom font settings"
+      :group 'my/custom-settings)
+  (defcustom my/font-family-default "Noto Sans Mono"
+    "Default font family"
+    :type 'string
+    :group 'my/font-settings)
+  (defcustom my/font-family-default-fixed-pitch "Noto Sans Mono"
+    "Default font family for fixed-pitch faces"
+    :type 'string
+    :group 'my/font-settings)
+  (defcustom my/font-size-default 120
+    "Default font size"
+    :type 'string
+    :group 'my/font-settings)
+  (defun my/font-settings-apply ()
+    "Set the default font based on `my/font-family-default` and `my/font-size-default`."
+    (set-face-attribute 'default nil
+                        :family my/font-family-default
+                        :height my/font-size-default)
+    (set-face-attribute 'fixed-pitch nil
+                        :family my/font-family-fixed-pitch
+                        :height my/font-size-default)
+    t)
+  (my/font-settings-apply)
+  (add-hook 'after-init-hook #'my/font-settings-apply)
+  (advice-add 'custom-save-all :after (lambda ()
+              "Re-apply custom settings after saving customizations."
+              (my/font-settings-apply)))
 #+end_src
 
-#+RESULTS:
+Run =M-x my/custom-settings= and go to the font customize sub-menu.
+Choose your default font family and font size for your machine. Use
+=M-x describe-char= and =M-x describe-font= to help debug font
+selection.
 
 *** all-the-icons
 
@@ -894,6 +953,34 @@ Example icons:
 
 #+RESULTS:
 : 
+
+*** Scale fonts uniformly in all buffers
+#+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
+  (defun my/default-text-scale-reset nil
+    (setq default-text-scale--complement 0)
+    (set-face-attribute 'default
+                        nil
+                        :height my/default-text-height)
+    (message "Text height reset: %d" my/default-text-height)
+    )
+  ;; Scale text sizes in all buffers :: https://github.com/purcell/default-text-scale
+  (use-package
+    default-text-scale
+    :general
+    ("C-="
+     'default-text-scale-increase
+     "C--"
+     (lambda ()
+       "Reset text scale if C-u is used, otherwise decrease it."
+       (interactive)
+       (let ((prefix current-prefix-arg))
+         ;; Intercept and clear the prefix argument before calling the function
+         (setq current-prefix-arg nil)
+         (if prefix
+             (my/default-text-scale-reset)
+           (default-text-scale-decrease)))))
+    :init (setq default-text-scale-amount 5))
+#+end_src
 
 * Load modules
 

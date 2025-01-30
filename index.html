@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-29 Wed 13:32 -->
+<!-- 2025-01-30 Thu 01:01 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -217,7 +217,7 @@
 <li><a href="#Core_libraries">5.1. Core libraries</a></li>
 <li><a href="#Nice_defaults">5.2. Nice defaults</a></li>
 <li><a href="#Configure_file_backups_and_auto-saves">5.3. Configure file backups and auto-saves</a></li>
-<li><a href="#Store_Emacs_customizations_in_%3D~%2F.emacs.d%2Fcustom.el%3D_and_load_them">5.4. Store Emacs customizations in <code>~/.emacs.d/custom.el</code> and load them</a></li>
+<li><a href="#Customization">5.4. Customization</a></li>
 <li><a href="#Builtin_minor_modes_to_activate_everywhere">5.5. Builtin minor modes to activate everywhere</a></li>
 <li><a href="#PATH_setup">5.6. PATH setup</a></li>
 <li><a href="#Programming_mode">5.7. Programming mode</a></li>
@@ -262,8 +262,10 @@
 <li><a href="#Fonts_%28label_%3Dfonts%3D%29">9.7. Fonts (label <code>fonts</code>)</a>
 <ul>
 <li><a href="#List_installed_font_families">9.7.1. List installed font families</a></li>
-<li><a href="#Set_font_faces">9.7.2. Set font faces</a></li>
-<li><a href="#all-the-icons">9.7.3. all-the-icons</a></li>
+<li><a href="#Install_font%3A_JetBrains_Mono">9.7.2. Install font: JetBrains Mono</a></li>
+<li><a href="#Set_font_faces">9.7.3. Set font faces</a></li>
+<li><a href="#all-the-icons">9.7.4. all-the-icons</a></li>
+<li><a href="#Scale_fonts_uniformly_in_all_buffers">9.7.5. Scale fonts uniformly in all buffers</a></li>
 </ul>
 </li>
 </ul>
@@ -473,23 +475,20 @@ found in the git repository.
 <h2 id="Early_Init"><span class="section-number-2">4.</span> Early Init</h2>
 <div class="outline-text-2" id="text-4">
 <p>
-The <a href="early-init.el">early-init.el</a> is the first config file that is loaded on Emacs
-startup. It is used to set the visual look and feel before the GUI is
-initialized, so that it doesn't have a jarring visual change during
-startup. Additionally, early debug options are set here.
+The <a href="early-init.el">early-init.el</a> is the first config file that is loaded on
+Emacs startup. It is used to set the visual look and feel before the
+GUI is initialized, so that it doesn't have a jarring visual change
+during startup. Additionally, early debug options are set here.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Use Modus themes that are builtin to Emacs:</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Set variable pitch mode for modus themes:</span>
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load modus-vivendi which is a builtin dark mode theme:</span>
+(load-theme 'modus-vivendi)
 (<span style="color: #b6a0ff;">setq</span> modus-themes-mixed-fonts t) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">allow variable-pitch-mode for</span>
                                   <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">org-mode but not for code blocks</span>
-(add-hook 'text-mode-hook #'variable-pitch-mode)
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load modus-vivendi which is a builtin dark mode theme:</span>
-(load-theme 'modus-vivendi)
-
 <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Set a larger default font size (150 = 15 pt size):</span>
-(set-face-attribute 'default nil <span style="color: #f78fe7;">:height</span> 150)
+(<span style="color: #b6a0ff;">setq</span> my/default-text-height 150)
+(set-face-attribute 'default nil <span style="color: #f78fe7;">:height</span> my/default-text-height)
 <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Turn off GUI distractions:</span>
 (menu-bar-mode -1) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">Press F10 to bring up the menu if you still need it.</span>
 (tool-bar-mode -1)
@@ -589,14 +588,18 @@ idle buffers into the auto-save directory.</li>
 </div>
 </div>
 </div>
-<div id="outline-container-Store_Emacs_customizations_in_%3D~%2F.emacs.d%2Fcustom.el%3D_and_load_them" class="outline-3">
-<h3 id="Store_Emacs_customizations_in_%3D~%2F.emacs.d%2Fcustom.el%3D_and_load_them"><span class="section-number-3">5.4.</span> Store Emacs customizations in <code>~/.emacs.d/custom.el</code> and load them</h3>
+<div id="outline-container-Customization" class="outline-3">
+<h3 id="Customization"><span class="section-number-3">5.4.</span> Customization</h3>
 <div class="outline-text-3" id="text-5-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Store customizations in custom.el</span>
 (<span style="color: #b6a0ff;">setq</span> custom-file (locate-user-emacs-file <span style="color: #79a8ff;">"custom.el"</span>))
 (<span style="color: #b6a0ff;">when</span> (file-exists-p custom-file)
   (load custom-file))
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Store all customizations under my/custom-settings group</span>
+(<span style="color: #b6a0ff;">defgroup</span> <span style="color: #6ae4b9;">my/custom-settings</span> nil
+  <span style="color: #b0d6f5;">"My custom Emacs settings"</span>
+  <span style="color: #f78fe7;">:group</span> 'emacs)
 <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Shortcut to open custom settings:</span>
 (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/custom-settings</span> ()
   <span style="color: #b0d6f5;">"Open the Emacs customization interface for my custom settings."</span>
@@ -1390,23 +1393,93 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 </div>
-<div id="outline-container-Set_font_faces" class="outline-4">
-<h4 id="Set_font_faces"><span class="section-number-4">9.7.2.</span> Set font faces</h4>
+<div id="outline-container-Install_font%3A_JetBrains_Mono" class="outline-4">
+<h4 id="Install_font%3A_JetBrains_Mono"><span class="section-number-4">9.7.2.</span> Install font: JetBrains Mono</h4>
 <div class="outline-text-4" id="text-9-7-2">
+<p>
+<a href="https://www.jetbrains.com/lp/mono/">JetBrains Mono typeface</a>
+</p>
+
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">show default font:</span>
-(face-attribute 'default <span style="color: #f78fe7;">:font</span>)
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Download JetBrains Mono typeface</span>
+(<span style="color: #b6a0ff;">let*</span> ((url <span style="color: #79a8ff;">"https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip"</span>)
+       (zip-file (expand-file-name <span style="color: #79a8ff;">"JetBrainsMono.zip"</span> temporary-file-directory))
+       (font-dir (expand-file-name <span style="color: #79a8ff;">"~/.local/share/fonts/JetBrainsMono/"</span>))
+       (default-directory temporary-file-directory))
+  (<span style="color: #b6a0ff;">unless</span> (file-directory-p font-dir)
+    (url-copy-file url zip-file t)
+    (make-directory font-dir t)
+    (<span style="color: #b6a0ff;">let</span> ((output-buffer (generate-new-buffer <span style="color: #79a8ff;">"*unzip-output*"</span>)))
+      (<span style="color: #b6a0ff;">unwind-protect</span>
+          (call-process <span style="color: #79a8ff;">"unzip"</span> nil output-buffer nil <span style="color: #79a8ff;">"-j"</span> zip-file <span style="color: #79a8ff;">"-d"</span> font-dir)
+        (kill-buffer output-buffer)))
+    (call-process <span style="color: #79a8ff;">"fc-cache"</span> nil nil nil <span style="color: #79a8ff;">"-fv"</span>)
+    (delete-file zip-file)
+    (message <span style="color: #79a8ff;">"JetBrains Mono font installed successfully."</span>)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Set_font_faces" class="outline-4">
+<h4 id="Set_font_faces"><span class="section-number-4">9.7.3.</span> Set font faces</h4>
+<div class="outline-text-4" id="text-9-7-3">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">show list of installed fonts:</span>
+<span style="color: #a8a8a8;">;;</span><span style="color: #a8a8a8;">(font-family-list)</span>
+<span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">show default font:</span>
+<span style="color: #a8a8a8;">;;</span><span style="color: #a8a8a8;">(face-attribute 'default :font)</span>
+<span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Set default font faces:</span>
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">M-x my/custom-settings    :: font-settings group:</span>
+(<span style="color: #b6a0ff;">defgroup</span> <span style="color: #6ae4b9;">my/font-settings</span> nil
+  <span style="color: #b0d6f5;">"My custom font settings"</span>
+    <span style="color: #f78fe7;">:group</span> 'my/custom-settings)
+(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-family-default</span> <span style="color: #79a8ff;">"Noto Sans"</span>
+  <span style="color: #b0d6f5;">"Default font family"</span>
+  <span style="color: #f78fe7;">:type</span> 'string
+  <span style="color: #f78fe7;">:group</span> 'my/font-settings)
+(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-family-default-fixed-pitch</span> <span style="color: #79a8ff;">"Noto Sans Mono"</span>
+  <span style="color: #b0d6f5;">"Default font family for fixed-pitch faces"</span>
+  <span style="color: #f78fe7;">:type</span> 'string
+  <span style="color: #f78fe7;">:group</span> 'my/font-settings)
+(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-size-default</span> 120
+  <span style="color: #b0d6f5;">"Default font size"</span>
+  <span style="color: #f78fe7;">:type</span> 'string
+  <span style="color: #f78fe7;">:group</span> 'my/font-settings)
+(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/variable-pitch-mode</span> ()
+  <span style="color: #b0d6f5;">"Enable or disable variable-pitch-mode for text modes."</span>
+  <span style="color: #f78fe7;">:type</span> 'boolean
+  <span style="color: #f78fe7;">:group</span> 'my/font-settings)
+(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/font-settings-apply</span> ()
+  <span style="color: #b0d6f5;">"Set the default font based on `my/font-family-default` and `my/font-size-default`."</span>
+  (set-face-attribute 'default nil
+                      <span style="color: #f78fe7;">:family</span> my/font-family-default
+                      <span style="color: #f78fe7;">:height</span> my/font-size-default)
+  (set-face-attribute 'fixed-pitch nil
+                      <span style="color: #f78fe7;">:family</span> my/font-family-fixed-pitch
+                      <span style="color: #f78fe7;">:height</span> my/font-size-default)
+  (<span style="color: #b6a0ff;">if</span> my/variable-pitch-mode
+      (add-hook 'text-mode-hook #'variable-pitch-mode)
+    (remove-hook 'text-mode-hook #'variable-pitch-mode))
+  t)
+(my/font-settings-apply)
+(add-hook 'after-init-hook #'my/font-settings-apply)
+(advice-add 'custom-save-all <span style="color: #f78fe7;">:after</span> (<span style="color: #b6a0ff;">lambda</span> ()
+            <span style="color: #b0d6f5;">"Re-apply custom settings after saving customizations."</span>
+            (my/font-settings-apply)))
 </pre>
 </div>
 
-<pre class="example">
-#&lt;font-object "-ADBO-Source Code Pro-regular-normal-normal-*-20-*-*-*-m-0-iso10646-1"&gt;
-</pre>
+<p>
+Run <code>M-x my/custom-settings</code> and go to the font customize sub-menu.
+Choose your default font family and font size for your machine. Use
+<code>M-x describe-char</code> and <code>M-x describe-font</code> to help debug font
+selection.
+</p>
 </div>
 </div>
 <div id="outline-container-all-the-icons" class="outline-4">
-<h4 id="all-the-icons"><span class="section-number-4">9.7.3.</span> all-the-icons</h4>
-<div class="outline-text-4" id="text-9-7-3">
+<h4 id="all-the-icons"><span class="section-number-4">9.7.4.</span> all-the-icons</h4>
+<div class="outline-text-4" id="text-9-7-4">
 <p>
 <a href="https://github.com/domtronn/all-the-icons.el?tab=readme-ov-file">all-the-icons</a> provides several fonts for displaying icons:
 </p>
@@ -1432,6 +1505,38 @@ Example icons:
 <pre class="example">
 
 </pre>
+</div>
+</div>
+<div id="outline-container-Scale_fonts_uniformly_in_all_buffers" class="outline-4">
+<h4 id="Scale_fonts_uniformly_in_all_buffers"><span class="section-number-4">9.7.5.</span> Scale fonts uniformly in all buffers</h4>
+<div class="outline-text-4" id="text-9-7-5">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/default-text-scale-reset</span> nil
+  (<span style="color: #b6a0ff;">setq</span> default-text-scale--complement 0)
+  (set-face-attribute 'default
+                      nil
+                      <span style="color: #f78fe7;">:height</span> my/default-text-height)
+  (message <span style="color: #79a8ff;">"Text height reset: %d"</span> my/default-text-height)
+  )
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Scale text sizes in all buffers :: https://github.com/purcell/default-text-scale</span>
+(<span style="color: #b6a0ff;">use-package</span>
+  default-text-scale
+  <span style="color: #f78fe7;">:general</span>
+  (<span style="color: #79a8ff;">"C-="</span>
+   'default-text-scale-increase
+   <span style="color: #79a8ff;">"C--"</span>
+   (<span style="color: #b6a0ff;">lambda</span> ()
+     <span style="color: #b0d6f5;">"Reset text scale if C-u is used, otherwise decrease it."</span>
+     (<span style="color: #b6a0ff;">interactive</span>)
+     (<span style="color: #b6a0ff;">let</span> ((prefix current-prefix-arg))
+       <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Intercept and clear the prefix argument before calling the function</span>
+       (<span style="color: #b6a0ff;">setq</span> current-prefix-arg nil)
+       (<span style="color: #b6a0ff;">if</span> prefix
+           (my/default-text-scale-reset)
+         (default-text-scale-decrease)))))
+  <span style="color: #f78fe7;">:init</span> (<span style="color: #b6a0ff;">setq</span> default-text-scale-amount 5))
+</pre>
+</div>
 </div>
 </div>
 </div>
@@ -1508,7 +1613,7 @@ in <code>~/.config/machine-labels</code>):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-01-29 Wed 13:32</p>
+<p class="date">Created: 2025-01-30 Thu 01:01</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
