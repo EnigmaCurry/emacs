@@ -1099,8 +1099,7 @@ This package requires the system dependency [[https://jqlang.github.io/jq/downlo
 
 The code-blocks in this file are tangled to separate categorized files
 under the =modules= sub-directory. These are loaded on a per-machine
-basis based on =my/machine-has-label= (and per-machine labels stored
-in =~/.config/machine-labels=):
+basis based on =my/machine-has-label=:
 
 ** Prioritize and load requested modules
 
