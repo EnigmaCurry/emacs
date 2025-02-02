@@ -2,7 +2,7 @@
 #+AUTHOR: EnigmaCurry
 #+LANGUAGE: en
 #+PROPERTY: header-args :results none :eval yes
-#+SETUPFILE: theme/simple_whiteblue.theme
+#+SETUPFILE: theme/simple_dark.theme
 
 * Goals
 
