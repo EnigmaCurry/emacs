@@ -114,7 +114,6 @@ Switch to the right branch:
 #+begin_src emacs-lisp :results replace :exports results
   (message "git checkout %s" (my/emacs-git-branch))
 #+end_src
-
 *** Function to get the current git branch                         :noexport:
 #+begin_src emacs-lisp :tangle "modules/git.el" :mkdirp yes
   ;;; function to determine the current git branch -- ignore this in context
