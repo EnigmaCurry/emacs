@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-01 Sat 13:59 -->
+<!-- 2025-01-30 Thu 22:29 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -269,8 +269,6 @@
 <li><a href="#Scale_fonts_uniformly_in_all_buffers">9.7.6. Scale fonts uniformly in all buffers</a></li>
 </ul>
 </li>
-<li><a href="#Counsel_%2F_Ivy_%28label_%3Dcouncil%3D%29">9.8. Counsel / Ivy (label <code>council</code>)</a></li>
-<li><a href="#Justfile_mode_%28label_%3Djust%3D%29">9.9. Justfile mode (label <code>just</code>)</a></li>
 </ul>
 </li>
 <li><a href="#Load_modules">10. Load modules</a>
@@ -286,12 +284,11 @@
 <h2 id="Goals"><span class="section-number-2">1.</span> Goals</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-This is a new attempt at writing a literate and modular Emacs config
-in Org Mode.
+This is a new attempt at writing a literate and modular Emacs config:
 </p>
 
 <ul class="org-ul">
-<li>All Emacs config is written in Org Mode and it goes in this file
+<li>All Emacs config (elisp) is written in Org Mode and it goes in this file
 (<a href="emacs.html">emacs.org</a>) [<a href="https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1">Source on GitHub</a>].</li>
 <li>All configuration is displayed (exported) as a single HTML page on
 the web. A single page is easy to search and requires no
@@ -352,8 +349,8 @@ sudo dnf install emacs
 </div>
 
 <pre class="example">
-GNU Emacs 29.4 (build 1, x86_64-redhat-linux-gnu, GTK+ Version 3.24.42, cairo version 1.18.0)
- of 2024-07-16
+GNU Emacs 29.4 (build 1, x86_64-redhat-linux-gnu, GTK+ Version 3.24.43, cairo version 1.18.0)
+ of 2024-10-10
 </pre>
 </div>
 </div>
@@ -929,7 +926,6 @@ Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/mod
 </p>
 
 <pre class="example">
-- counsel
 - fonts
 - general
 - just
@@ -1264,7 +1260,7 @@ library:
                                          eos)
                                      ,place)
                        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">HACK: `</span><span style="color: #00bcff;">s1</span><span style="color: #a8a8a8;">' instead of a gensym.</span>
-                       (<span style="color: #b6a0ff;">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
+                       (-let* (((s1 suffix) (list (match-string 1 ,place)
                                                   (match-string 2 ,place)))
                                (suffix (<span style="color: #b6a0ff;">if</span> suffix
                                            (string-to-number suffix)
@@ -1547,32 +1543,6 @@ Example icons:
 </div>
 </div>
 </div>
-<div id="outline-container-Counsel_%2F_Ivy_%28label_%3Dcouncil%3D%29" class="outline-3">
-<h3 id="Counsel_%2F_Ivy_%28label_%3Dcouncil%3D%29"><span class="section-number-3">9.8.</span> Counsel / Ivy (label <code>council</code>)</h3>
-<div class="outline-text-3" id="text-9-8">
-<div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Ivy / counsel (list-completion) :: https://oremacs.com/swiper/#introduction</span>
-(<span style="color: #b6a0ff;">use-package</span>
-  counsel
-  <span style="color: #f78fe7;">:general</span> (<span style="color: #79a8ff;">"M-y"</span> 'counsel-yank-pop)
-  <span style="color: #f78fe7;">:init</span>
-  (ivy-mode 1)
-  (<span style="color: #b6a0ff;">setq</span> ivy-use-virtual-buffers t)
-  (<span style="color: #b6a0ff;">setq</span> ivy-use-selectable-prompt t))
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-Justfile_mode_%28label_%3Djust%3D%29" class="outline-3">
-<h3 id="Justfile_mode_%28label_%3Djust%3D%29"><span class="section-number-3">9.9.</span> Justfile mode (label <code>just</code>)</h3>
-<div class="outline-text-3" id="text-9-9">
-<div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">just-mode</span>
-(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">just-mode</span>)
-</pre>
-</div>
-</div>
-</div>
 </div>
 <div id="outline-container-Load_modules" class="outline-2">
 <h2 id="Load_modules"><span class="section-number-2">10.</span> Load modules</h2>
@@ -1646,7 +1616,7 @@ in <code>~/.config/machine-labels</code>):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-02-01 Sat 13:59</p>
+<p class="date">Created: 2025-01-30 Thu 22:29</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

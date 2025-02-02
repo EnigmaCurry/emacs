@@ -5,10 +5,9 @@
 
 * Goals
 
-This is a new attempt at writing a literate and modular Emacs config
-in Org Mode.
+This is a new attempt at writing a literate and modular Emacs config:
 
- * All Emacs config is written in Org Mode and it goes in this file
+ * All Emacs config (elisp) is written in Org Mode and it goes in this file
    ([[file:emacs.org][emacs.org]]) [[[https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1][Source on GitHub]]].
  * All configuration is displayed (exported) as a single HTML page on
    the web. A single page is easy to search and requires no
