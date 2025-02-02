@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-02 Sun 00:23 -->
+<!-- 2025-02-02 Sun 00:29 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -270,6 +270,8 @@
 <li><a href="#Magit_%28label_%3Dmagit%3D%29">9.8. Magit (label <code>magit</code>)</a></li>
 <li><a href="#Scale_text_uniformly_in_all_buffers">9.9. Scale text uniformly in all buffers</a></li>
 <li><a href="#Justfile_mode_%28label_%3Djust%3D%29">9.10. Justfile mode (label <code>just</code>)</a></li>
+<li><a href="#Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29">9.11. Latin words dictionary and word of the day (label <code>latin-words</code>)</a></li>
+<li><a href="#Dashboard_%28label_%3Ddashboard%3D%29">9.12. Dashboard (label <code>dashboard</code>)</a></li>
 </ul>
 </li>
 <li><a href="#Load_modules">10. Load modules</a>
@@ -926,11 +928,13 @@ Modules are optional and they extend the base config.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org57ff337">
+<pre class="example" id="orgd17353c">
 - completion
+- dashboard
 - fonts
 - general
 - just
+- latin-words
 - magit
 - markdown
 - org
@@ -1371,7 +1375,7 @@ library:
                                          eos)
                                      ,place)
                        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">HACK: `</span><span style="color: #00bcff;">s1</span><span style="color: #a8a8a8;">' instead of a gensym.</span>
-                       (<span style="color: #b6a0ff;">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
+                       (-let* (((s1 suffix) (list (match-string 1 ,place)
                                                   (match-string 2 ,place)))
                                (suffix (<span style="color: #b6a0ff;">if</span> suffix
                                            (string-to-number suffix)
@@ -1589,6 +1593,60 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 </div>
+<div id="outline-container-Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29" class="outline-3">
+<h3 id="Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29"><span class="section-number-3">9.11.</span> Latin words dictionary and word of the day (label <code>latin-words</code>)</h3>
+<div class="outline-text-3" id="text-9-11">
+<p>
+This package requires the system dependency <a href="https://jqlang.github.io/jq/download/">jq</a>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span>
+  latin-words
+  <span style="color: #f78fe7;">:straight</span>
+  (latin-words <span style="color: #f78fe7;">:type</span> git <span style="color: #f78fe7;">:host</span> github <span style="color: #f78fe7;">:repo</span> <span style="color: #79a8ff;">"enigmacurry/latin-words"</span>)
+  <span style="color: #f78fe7;">:custom</span>
+  (latin-words-directory
+   (expand-file-name <span style="color: #79a8ff;">"~/.emacs.d/straight/repos/latin-words/data"</span>)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Dashboard_%28label_%3Ddashboard%3D%29" class="outline-3">
+<h3 id="Dashboard_%28label_%3Ddashboard%3D%29"><span class="section-number-3">9.12.</span> Dashboard (label <code>dashboard</code>)</h3>
+<div class="outline-text-3" id="text-9-12">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span>
+  dashboard
+  <span style="color: #f78fe7;">:init</span>
+  (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my-dashboard-insert-vocabulary</span> (list-size)
+    (<span style="color: #b6a0ff;">when</span> (fboundp 'latin-word-of-the-day)
+      (dashboard-insert-heading <span style="color: #79a8ff;">"Word of the day:"</span> nil)
+      (insert <span style="color: #79a8ff;">"\n"</span>)
+      (<span style="color: #b6a0ff;">let*</span> ((char-limit 100000)
+             (word (latin-word-of-the-day))
+             (description (latin-word-get-description word)))
+        (insert
+         (substring description
+                    0
+                    (min char-limit (length description)))))))
+  (dashboard-setup-startup-hook)
+  <span style="color: #f78fe7;">:custom</span>
+  (dashboard-center-content t)
+  (dashboard-set-heading-icons nil)
+  (dashboard-set-file-icons nil)
+  (dashboard-icon-type nil)
+  (dashboard-footer-messages (list <span style="color: #79a8ff;">"    "</span>))
+  (dashboard-items '((recents . 5) (bookmarks . 5) (vocabulary)))
+  (dashboard-startup-banner (+ 1 (random 3)))
+  (dashboard-item-generators
+   '((vocabulary . my-dashboard-insert-vocabulary)
+     (recents . dashboard-insert-recents)
+     (bookmarks . dashboard-insert-bookmarks))))
+</pre>
+</div>
+</div>
+</div>
 </div>
 <div id="outline-container-Load_modules" class="outline-2">
 <h2 id="Load_modules"><span class="section-number-2">10.</span> Load modules</h2>
@@ -1662,7 +1720,7 @@ in <code>~/.config/machine-labels</code>):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-02-02 Sun 00:23</p>
+<p class="date">Created: 2025-02-02 Sun 00:29</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
