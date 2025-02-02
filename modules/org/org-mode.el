@@ -1,6 +1,9 @@
 (use-package org
   :hook ((org-mode . flyspell-mode)
          (org-mode . unpackaged/org-export-html-with-useful-ids-mode))
+  :custom
+  (org-html-validation-link nil)
+  (org-html-use-infojs nil)
   :general
   ("s-<up>" 'org-previous-visible-heading)
   ("s-<down>" 'org-next-visible-heading)
@@ -11,6 +14,36 @@
    'org-babel-load-languages
    '((python . t) (scheme . t) (shell . t) (ditaa . t)))
   )
+
+(setq org-html-template
+      (lambda (contents info)
+        "Custom HTML export template for Org mode. CONTENTS holds the content of the document. INFO is a plist holding export options."
+        (concat
+         "<!DOCTYPE html>\n"
+         "<html lang=\"en\">\n"
+         "<head>\n"
+         (org-html--build-meta-info info)
+         (org-html--build-head info)
+         "</head>\n"
+         "<body>\n"
+         "<div id=\"content\">\n"
+         ;; Title
+         (format "<h1 class=\"title\">%s</h1>\n" (org-export-data (plist-get info :title) info))
+         ;; Author and Date (Metadata)
+         (when (plist-get info :with-author)
+           (format "<p class=\"author\">Author: %s</p>\n"
+                   (mapconcat #'identity (plist-get info :author) ", ")))
+         (when (plist-get info :with-date)
+           (format "<p class=\"date\">Created: %s</p>\n"
+                   (org-export-data (plist-get info :date) info)))
+         ;; Table of Contents
+         (when (plist-get info :with-toc)
+           (org-html-toc info))
+         ;; Document contents
+         contents
+         "</div>\n"
+         "</body>\n"
+         "</html>\n")))
 
 (defun my/emacs-org-tangle ()
   "Tangle all code blocks in 'emacs.org' and export this document to HTML."
@@ -36,11 +69,11 @@
         ;; we will want to run code blocks automatically and capture output?
         ;;(save-buffer)
         ))))
-  ;; Tell Emacs to trust this code in all buffer local vars:
-  (add-to-list 'safe-local-variable-values
-               '(eval add-hook 'after-save-hook 'my/emacs-org-tangle nil t))
-  (add-to-list 'safe-local-variable-values
-               '(org-confirm-babel-evaluate))
+;; Tell Emacs to trust this code in all buffer local vars:
+(add-to-list 'safe-local-variable-values
+             '(eval add-hook 'after-save-hook 'my/emacs-org-tangle nil t))
+(add-to-list 'safe-local-variable-values
+             '(org-confirm-babel-evaluate))
 
 (my/cargo-dependency "live-server") ; declares but defers install of live-server Rust crate
 (defvar my/emacs-org-html-server-host "127.0.0.1") ; Set to 0.0.0.0 to serve publicly
