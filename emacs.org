@@ -683,12 +683,21 @@ See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.e
     :custom
     (org-html-validation-link nil)
     (org-html-use-infojs nil)
+    (org-html-postamble 'auto)
+    (org-export-with-author t)
+    (org-export-timestamp-file t)
     :general
     ("s-<up>" 'org-previous-visible-heading)
     ("s-<down>" 'org-next-visible-heading)
     ("C-c o k" 'org-babel-remove-result)
     :config
     (setq org-startup-folded t)
+    (defun my-org-html--translate (original-function keyword info)
+      "Custom advice to translate the keyword 'Created' to 'Last Modified'."
+      (if (string-equal keyword "Created")
+          "Last Modified"
+        (funcall original-function keyword info)))
+    (advice-add 'org-html--translate :around #'my-org-html--translate)
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((python . t) (scheme . t) (shell . t) (ditaa . t)))

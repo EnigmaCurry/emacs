@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-02 Sun 12:41 -->
+<!-- 2025-02-02 Sun 13:40 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -947,7 +947,7 @@ Modules are optional and they extend the base config.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org56aa255">
+<pre class="example" id="orga05afbe">
 - completion
 - dashboard
 - fonts
@@ -1191,12 +1191,21 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
   <span style="color: #f78fe7;">:custom</span>
   (org-html-validation-link nil)
   (org-html-use-infojs nil)
+  (org-html-postamble 'auto)
+  (org-export-with-author t)
+  (org-export-timestamp-file t)
   <span style="color: #f78fe7;">:general</span>
   (<span style="color: #79a8ff;">"s-&lt;up&gt;"</span> 'org-previous-visible-heading)
   (<span style="color: #79a8ff;">"s-&lt;down&gt;"</span> 'org-next-visible-heading)
   (<span style="color: #79a8ff;">"C-c o k"</span> 'org-babel-remove-result)
   <span style="color: #f78fe7;">:config</span>
   (<span style="color: #b6a0ff;">setq</span> org-startup-folded t)
+  (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my-org-html--translate</span> (original-function keyword info)
+    <span style="color: #b0d6f5;">"Custom advice to translate the keyword '</span><span style="color: #00bcff;">Created</span><span style="color: #b0d6f5;">' to 'Last Modified'."</span>
+    (<span style="color: #b6a0ff;">if</span> (string-equal keyword <span style="color: #79a8ff;">"Created"</span>)
+        <span style="color: #79a8ff;">"Last Modified"</span>
+      (funcall original-function keyword info)))
+  (advice-add 'org-html--translate <span style="color: #f78fe7;">:around</span> #'my-org-html--translate)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((python . t) (scheme . t) (shell . t) (ditaa . t)))
@@ -1769,7 +1778,7 @@ enabled):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-02-02 Sun 12:41</p>
+<p class="date">Last Modified: 2025-02-02 Sun 13:40</p>
 </div>
 </body>
 </html>
