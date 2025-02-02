@@ -499,7 +499,6 @@ that become enabled by adding labels on a per-machine basis.
 
 =my/machine-has-label= is used automatically by =my/load-modules=
 described in the next section.
-
 * Modules
 
 Modules are optional and they extend the base config.
@@ -634,7 +633,6 @@ selection.
                       "\n\tΣὲ γνωρίζω ἀπὸ τὴν κόψη"))
         (show-font-list)
 #+end_src
-
 ** General keybindings manager (label =general=)
 
 See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.el]]
@@ -958,7 +956,7 @@ make org-mode syntax easier to type: ===, =/=, =~=.
     (nerd-icons-completion-mode))
 
 #+end_src
-** Vterm
+** Vterm (label =vterm=)
 
 #+begin_src emacs-lisp :tangle "modules/vterm/vterm.el" :mkdirp yes
   ;; vterm (terminal emulator) ::
@@ -1020,7 +1018,7 @@ make org-mode syntax easier to type: ===, =/=, =~=.
     (setq magit-display-buffer-function
           #'magit-display-buffer-fullframe-status-v1))
 #+end_src
-** Scale text uniformly in all buffers
+** Scale text uniformly in all buffers (label =text-scale=)
 #+begin_src emacs-lisp :tangle "modules/text-scale/text-scale.el" :mkdirp yes
   (defun my/default-text-scale-reset nil
     (setq default-text-scale--complement 0)
