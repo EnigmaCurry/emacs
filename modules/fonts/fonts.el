@@ -1,7 +1,7 @@
 ;;; Download JetBrains Mono typeface
-(let* ((url "https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip")
+(let* ((url "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip")
        (zip-file (expand-file-name "JetBrainsMono.zip" temporary-file-directory))
-       (font-dir (expand-file-name "~/.local/share/fonts/JetBrainsMono/"))
+       (font-dir (expand-file-name "~/.local/share/fonts/JetBrainsMonoNerdFont/"))
        (default-directory temporary-file-directory))
   (unless (file-directory-p font-dir)
     (url-copy-file url zip-file t)
@@ -12,7 +12,7 @@
         (kill-buffer output-buffer)))
     (call-process "fc-cache" nil nil nil "-fv")
     (delete-file zip-file)
-    (message "JetBrains Mono font installed successfully.")))
+    (message "JetBrains Mono Nerd Font installed successfully.")))
 
 ;;; show list of installed fonts:
 ;;(font-family-list)
@@ -23,7 +23,7 @@
 (defgroup my/font-settings nil
   "My custom font settings"
     :group 'my/custom-settings)
-(defcustom my/font-family-default "JetBrains Mono"
+(defcustom my/font-family-default "JetBrainsMono Nerd Font"
   "Default font family"
   :type 'string
   :group 'my/font-settings)
@@ -43,40 +43,9 @@
             "Re-apply custom settings after saving customizations."
             (my/font-settings-apply)))
 
+;; Use nerd icons
+(use-package nerd-icons
+  :custom
+  (nerd-icons-font-family "JetBrainsMono Nerd Font"))
+
 (use-package show-font)
-
-;;; Install all the icons:
-(use-package
- all-the-icons
- :if (display-graphic-p)
- :init
- (let ((font-file
-        (expand-file-name "~/.local/share/fonts/all-the-icons.ttf")))
-   (unless (file-exists-p font-file)
-     (message "Installing all-the-icons fonts...")
-     (all-the-icons-install-fonts t))))
-
-(defun my/default-text-scale-reset nil
-  (setq default-text-scale--complement 0)
-  (set-face-attribute 'default
-                      nil
-                      :height my/default-text-height)
-  (message "Text height reset: %d" my/default-text-height)
-  )
-;; Scale text sizes in all buffers :: https://github.com/purcell/default-text-scale
-(use-package
-  default-text-scale
-  :general
-  ("C-="
-   'default-text-scale-increase
-   "C--"
-   (lambda ()
-     "Reset text scale if C-u is used, otherwise decrease it."
-     (interactive)
-     (let ((prefix current-prefix-arg))
-       ;; Intercept and clear the prefix argument before calling the function
-       (setq current-prefix-arg nil)
-       (if prefix
-           (my/default-text-scale-reset)
-         (default-text-scale-decrease)))))
-  :init (setq default-text-scale-amount 5))

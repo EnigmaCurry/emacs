@@ -541,6 +541,90 @@ before: =M-x my/custom-settings=.
 You should restart Emacs to reload the configured modules from
 =custom.el=.
 
+** Fonts (label =fonts=)
+
+*** List installed font families
+#+begin_src emacs-lisp :results replace
+  (mapconcat (lambda (x) (format "- %s" x)) (delete-dups (sort (font-family-list) #'string<)) "\n")
+#+end_src
+
+*** Install font: JetBrains Mono Nerdfont
+
+[[https://www.jetbrains.com/lp/mono/][JetBrains Mono typeface]]
+[[https://www.nerdfonts.com/font-downloads][Nerd Fonts]]
+
+#+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
+  ;;; Download JetBrains Mono typeface
+  (let* ((url "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip")
+         (zip-file (expand-file-name "JetBrainsMono.zip" temporary-file-directory))
+         (font-dir (expand-file-name "~/.local/share/fonts/JetBrainsMonoNerdFont/"))
+         (default-directory temporary-file-directory))
+    (unless (file-directory-p font-dir)
+      (url-copy-file url zip-file t)
+      (make-directory font-dir t)
+      (let ((output-buffer (generate-new-buffer "*unzip-output*")))
+        (unwind-protect
+            (call-process "unzip" nil output-buffer nil "-j" zip-file "-d" font-dir)
+          (kill-buffer output-buffer)))
+      (call-process "fc-cache" nil nil nil "-fv")
+      (delete-file zip-file)
+      (message "JetBrains Mono Nerd Font installed successfully.")))
+#+end_src
+*** Set font faces
+#+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
+  ;;; show list of installed fonts:
+  ;;(font-family-list)
+  ;;; show default font:
+  ;;(face-attribute 'default :font)
+  ;;; Set default font faces:
+  ;; M-x my/custom-settings    :: font-settings group:
+  (defgroup my/font-settings nil
+    "My custom font settings"
+      :group 'my/custom-settings)
+  (defcustom my/font-family-default "JetBrainsMono Nerd Font"
+    "Default font family"
+    :type 'string
+    :group 'my/font-settings)
+  (defcustom my/font-size-default 120
+    "Default font size"
+    :type 'string
+    :group 'my/font-settings)
+  (defun my/font-settings-apply ()
+    "Set the default font based on `my/font-family-default` and `my/font-size-default`."
+    (set-face-attribute 'default nil
+                        :family my/font-family-default
+                        :height my/font-size-default)
+    t)
+  (my/font-settings-apply)
+  (add-hook 'after-init-hook #'my/font-settings-apply)
+  (advice-add 'custom-save-all :after (lambda ()
+              "Re-apply custom settings after saving customizations."
+              (my/font-settings-apply)))
+
+  ;; Use nerd icons
+  (use-package nerd-icons
+    :custom
+    (nerd-icons-font-family "JetBrainsMono Nerd Font"))
+#+end_src
+
+Run =M-x my/custom-settings= and go to the font customize sub-menu.
+Choose your default font family and font size for your machine. Use
+=M-x describe-char= and =M-x describe-font= to help debug font
+selection.
+
+*** Preview fonts
+
+[[https://protesilaos.com/emacs/show-font][show-font]]
+
+#+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
+  (use-package show-font)
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq show-font-pangram (concat "A wizard’s job is to vex chumps quickly in fog.\n\t٩(-̮̮̃-̃)۶ ٩(●̮̮̃•̃)۶ ٩(͡๏̯͡๏)۶ ٩(-̮̮̃•̃).\n\tΣὲ γνωρίζω ἀπὸ τὴν κόψη"))
+  (show-font-list)
+#+end_src
+
 ** General keybindings manager (label =general=)
 
 See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.el]]
@@ -791,6 +875,62 @@ make org-mode syntax easier to type: ===, =/=, =~=.
                              ))
 #+end_src
 
+** Completion (label =completion=)
+#+begin_src emacs-lisp :tangle "modules/completion/completion.el" :mkdirp yes
+    ;; Allow minibuffers to stack:
+    (setq-default enable-recursive-minibuffers t)
+    ;; Filter command completions to only include commands
+    ;; applicable to the current major mode:
+    (setq-default read-extended-command-predicate
+                  #'command-completion-default-include-p)
+    ;; Add custom prompt when asking for multiple values as (comma) separated list:
+    (advice-add #'completing-read-multiple :filter-args
+                (lambda (args)
+                  (cons (format "[CRM%s] %s"
+                                (replace-regexp-in-string
+                                 "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                                 crm-separator)
+                                (car args))
+                        (cdr args))))
+    ;; Do not allow the cursor in the minibuffer prompt
+    (setq minibuffer-prompt-properties
+          '(read-only t cursor-intangible t face minibuffer-prompt))
+    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+    (use-package vertico
+      :custom
+      (vertico-scroll-margin 2)
+      (vertico-count 10)
+      (vertico-resize 'grow-only)
+      (vertico-cycle nil)
+      :init
+      ;(keymap-set vertico-map "?" #'minibuffer-completion-help)
+      ;(keymap-set vertico-map "M-TAB" #'vertico-insert)
+      ;(keymap-set vertico-map "TAB" #'minibuffer-complete)
+      (vertico-mode))
+
+    (use-package orderless
+      :custom
+      ;; Configure a custom style dispatcher (see the Consult wiki)
+      ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
+      ;; (orderless-component-separator #'orderless-escapable-split-on-space)
+      (completion-styles '(orderless basic))
+      (completion-category-defaults nil)
+      (completion-category-overrides '((file (styles partial-completion)))))
+
+    (use-package marginalia
+      :hook
+      ((marginalia-mode . all-the-icons-completion-marginalia-setup))
+      :bind (:map minibuffer-local-map
+                  ("M-A" . marginalia-cycle))
+      :init
+      (marginalia-mode))
+
+    (use-package nerd-icons-completion
+      :init
+      (nerd-icons-completion-mode))
+
+#+end_src
 ** Vterm
 
 #+begin_src emacs-lisp :tangle "modules/vterm/vterm.el" :mkdirp yes
@@ -850,114 +990,8 @@ make org-mode syntax easier to type: ===, =/=, =~=.
     (setq magit-display-buffer-function
           #'magit-display-buffer-fullframe-status-v1))
 #+end_src
-** Fonts (label =fonts=)
-
-https://protesilaos.com/codelog/2024-01-16-customize-emacs-fonts/
-
-*** List installed font families
-#+begin_src emacs-lisp :results replace
-  (mapconcat (lambda (x) (format "- %s" x)) (delete-dups (sort (font-family-list) #'string<)) "\n")
-#+end_src
-
-*** Install font: JetBrains Mono
-
-[[https://www.jetbrains.com/lp/mono/][JetBrains Mono typeface]]
-
-#+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
-  ;;; Download JetBrains Mono typeface
-  (let* ((url "https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip")
-         (zip-file (expand-file-name "JetBrainsMono.zip" temporary-file-directory))
-         (font-dir (expand-file-name "~/.local/share/fonts/JetBrainsMono/"))
-         (default-directory temporary-file-directory))
-    (unless (file-directory-p font-dir)
-      (url-copy-file url zip-file t)
-      (make-directory font-dir t)
-      (let ((output-buffer (generate-new-buffer "*unzip-output*")))
-        (unwind-protect
-            (call-process "unzip" nil output-buffer nil "-j" zip-file "-d" font-dir)
-          (kill-buffer output-buffer)))
-      (call-process "fc-cache" nil nil nil "-fv")
-      (delete-file zip-file)
-      (message "JetBrains Mono font installed successfully.")))
-#+end_src
-*** Set font faces
-#+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
-  ;;; show list of installed fonts:
-  ;;(font-family-list)
-  ;;; show default font:
-  ;;(face-attribute 'default :font)
-  ;;; Set default font faces:
-  ;; M-x my/custom-settings    :: font-settings group:
-  (defgroup my/font-settings nil
-    "My custom font settings"
-      :group 'my/custom-settings)
-  (defcustom my/font-family-default "JetBrains Mono"
-    "Default font family"
-    :type 'string
-    :group 'my/font-settings)
-  (defcustom my/font-size-default 120
-    "Default font size"
-    :type 'string
-    :group 'my/font-settings)
-  (defun my/font-settings-apply ()
-    "Set the default font based on `my/font-family-default` and `my/font-size-default`."
-    (set-face-attribute 'default nil
-                        :family my/font-family-default
-                        :height my/font-size-default)
-    t)
-  (my/font-settings-apply)
-  (add-hook 'after-init-hook #'my/font-settings-apply)
-  (advice-add 'custom-save-all :after (lambda ()
-              "Re-apply custom settings after saving customizations."
-              (my/font-settings-apply)))
-#+end_src
-
-Run =M-x my/custom-settings= and go to the font customize sub-menu.
-Choose your default font family and font size for your machine. Use
-=M-x describe-char= and =M-x describe-font= to help debug font
-selection.
-
-*** Preview fonts
-
-[[https://protesilaos.com/emacs/show-font][show-font]]
-
-#+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
-  (use-package show-font)
-#+end_src
-
-#+begin_src emacs-lisp
-  (setq show-font-pangram (concat "A wizard’s job is to vex chumps quickly in fog.\n\t٩(-̮̮̃-̃)۶ ٩(●̮̮̃•̃)۶ ٩(͡๏̯͡๏)۶ ٩(-̮̮̃•̃).\n\tΣὲ γνωρίζω ἀπὸ τὴν κόψη"))
-  (show-font-list)
-#+end_src
-
-*** all-the-icons
-
-[[https://github.com/domtronn/all-the-icons.el?tab=readme-ov-file][all-the-icons]] provides several fonts for displaying icons:
-
-#+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
-  ;;; Install all the icons:
-  (use-package
-   all-the-icons
-   :if (display-graphic-p)
-   :init
-   (let ((font-file
-          (expand-file-name "~/.local/share/fonts/all-the-icons.ttf")))
-     (unless (file-exists-p font-file)
-       (message "Installing all-the-icons fonts...")
-       (all-the-icons-install-fonts t))))
-#+end_src
-
-Example icons:
-
-#+begin_src emacs-lisp :results replace :exports results
-(all-the-icons-faicon "cogs")
-#+end_src
-
-#+RESULTS:
-: 
-
-*** Scale fonts uniformly in all buffers
-#+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
+** Scale text uniformly in all buffers
+#+begin_src emacs-lisp :tangle "modules/text-scale/text-scale.el" :mkdirp yes
   (defun my/default-text-scale-reset nil
     (setq default-text-scale--complement 0)
     (set-face-attribute 'default
@@ -983,21 +1017,6 @@ Example icons:
            (default-text-scale-decrease)))))
     :init (setq default-text-scale-amount 5))
 #+end_src
-** Ivy completion / Counsel (label =councel=)
-
-[[https://github.com/abo-abo/swiper][Ivy / Councel]]
-
-#+begin_src emacs-lisp :tangle "modules/counsel/counsel.el" :mkdirp yes
-  ;; Ivy / counsel (list-completion) :: https://oremacs.com/swiper/#introduction
-  (use-package
-    counsel
-    :general ("M-y" 'counsel-yank-pop)
-    :init
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-use-selectable-prompt t))
-#+end_src
-
 ** Justfile mode (label =just=)
 
 #+begin_src emacs-lisp :tangle "modules/just/just.el" :mkdirp yes
@@ -1016,7 +1035,7 @@ in =~/.config/machine-labels=):
 
 #+begin_src emacs-lisp :tangle "init.el"
   (defvar my/modules-dir (expand-file-name "modules/" user-emacs-directory))
-  (defvar my/module-priority-list '("general") "List of prioritized modules to install first.")
+  (defvar my/module-priority-list '("general" "fonts") "List of prioritized modules to install first.")
   (defun my/load-modules (requested-modules)
     "Load user-requested modules in a priority order.
     REQUESTED-MODULES is a list of module names to load."

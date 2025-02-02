@@ -138,7 +138,7 @@ If the buffer already exists, delete it and recreate it."
                         (directory-files modules-dir t "^[^.]" t))) #'string<)))
 
 (defvar my/modules-dir (expand-file-name "modules/" user-emacs-directory))
-(defvar my/module-priority-list '("general") "List of prioritized modules to install first.")
+(defvar my/module-priority-list '("general" "fonts") "List of prioritized modules to install first.")
 (defun my/load-modules (requested-modules)
   "Load user-requested modules in a priority order.
   REQUESTED-MODULES is a list of module names to load."

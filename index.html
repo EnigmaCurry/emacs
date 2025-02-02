@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-01 Sat 22:39 -->
+<!-- 2025-02-02 Sun 00:23 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -244,33 +244,32 @@
 <li><a href="#Per-machine_labels_enable_opt-in_features">8. Per-machine labels enable opt-in features</a></li>
 <li><a href="#Modules">9. Modules</a>
 <ul>
-<li><a href="#General_keybindings_manager_%28label_%3Dgeneral%3D%29">9.1. General keybindings manager (label <code>general</code>)</a></li>
-<li><a href="#Org_mode_%28label_%3Dorg%3D%29">9.2. Org mode (label <code>org</code>)</a>
+<li><a href="#Fonts_%28label_%3Dfonts%3D%29">9.1. Fonts (label <code>fonts</code>)</a>
 <ul>
-<li><a href="#Tangle_Emacs_config_and_write_HTML_document">9.2.1. Tangle Emacs config and write HTML document</a></li>
-<li><a href="#Local_HTTP_server_for_displaying_exported_HTML">9.2.2. Local HTTP server for displaying exported HTML</a></li>
-<li><a href="#Enable_syntax_highlighting_in_HTML_export">9.2.3. Enable syntax highlighting in HTML export</a></li>
-<li><a href="#Org-Tempo_code_block_snippets">9.2.4. Org-Tempo code block snippets</a></li>
-<li><a href="#Use_org_headings_as_HTML_anchors">9.2.5. Use org headings as HTML anchors</a></li>
-<li><a href="#Electric_pairs">9.2.6. Electric pairs</a></li>
+<li><a href="#List_installed_font_families">9.1.1. List installed font families</a></li>
+<li><a href="#Install_font%3A_JetBrains_Mono_Nerdfont">9.1.2. Install font: JetBrains Mono Nerdfont</a></li>
+<li><a href="#Set_font_faces">9.1.3. Set font faces</a></li>
+<li><a href="#Preview_fonts">9.1.4. Preview fonts</a></li>
 </ul>
 </li>
-<li><a href="#Vterm">9.3. Vterm</a></li>
-<li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">9.4. Markdown mode (label <code>markdown</code>)</a></li>
-<li><a href="#SSH_agent_%28label_%3Dssh-agent%3D%29">9.5. SSH agent (label <code>ssh-agent</code>)</a></li>
-<li><a href="#Magit_%28label_%3Dmagit%3D%29">9.6. Magit (label <code>magit</code>)</a></li>
-<li><a href="#Fonts_%28label_%3Dfonts%3D%29">9.7. Fonts (label <code>fonts</code>)</a>
+<li><a href="#General_keybindings_manager_%28label_%3Dgeneral%3D%29">9.2. General keybindings manager (label <code>general</code>)</a></li>
+<li><a href="#Org_mode_%28label_%3Dorg%3D%29">9.3. Org mode (label <code>org</code>)</a>
 <ul>
-<li><a href="#List_installed_font_families">9.7.1. List installed font families</a></li>
-<li><a href="#Install_font%3A_JetBrains_Mono">9.7.2. Install font: JetBrains Mono</a></li>
-<li><a href="#Set_font_faces">9.7.3. Set font faces</a></li>
-<li><a href="#Preview_fonts">9.7.4. Preview fonts</a></li>
-<li><a href="#all-the-icons">9.7.5. all-the-icons</a></li>
-<li><a href="#Scale_fonts_uniformly_in_all_buffers">9.7.6. Scale fonts uniformly in all buffers</a></li>
+<li><a href="#Tangle_Emacs_config_and_write_HTML_document">9.3.1. Tangle Emacs config and write HTML document</a></li>
+<li><a href="#Local_HTTP_server_for_displaying_exported_HTML">9.3.2. Local HTTP server for displaying exported HTML</a></li>
+<li><a href="#Enable_syntax_highlighting_in_HTML_export">9.3.3. Enable syntax highlighting in HTML export</a></li>
+<li><a href="#Org-Tempo_code_block_snippets">9.3.4. Org-Tempo code block snippets</a></li>
+<li><a href="#Use_org_headings_as_HTML_anchors">9.3.5. Use org headings as HTML anchors</a></li>
+<li><a href="#Electric_pairs">9.3.6. Electric pairs</a></li>
 </ul>
 </li>
-<li><a href="#Ivy_completion_%2F_Counsel_%28label_%3Dcouncel%3D%29">9.8. Ivy completion / Counsel (label <code>councel</code>)</a></li>
-<li><a href="#Justfile_mode_%28label_%3Djust%3D%29">9.9. Justfile mode (label <code>just</code>)</a></li>
+<li><a href="#Completion_%28label_%3Dcompletion%3D%29">9.4. Completion (label <code>completion</code>)</a></li>
+<li><a href="#Vterm">9.5. Vterm</a></li>
+<li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">9.6. Markdown mode (label <code>markdown</code>)</a></li>
+<li><a href="#SSH_agent_%28label_%3Dssh-agent%3D%29">9.7. SSH agent (label <code>ssh-agent</code>)</a></li>
+<li><a href="#Magit_%28label_%3Dmagit%3D%29">9.8. Magit (label <code>magit</code>)</a></li>
+<li><a href="#Scale_text_uniformly_in_all_buffers">9.9. Scale text uniformly in all buffers</a></li>
+<li><a href="#Justfile_mode_%28label_%3Djust%3D%29">9.10. Justfile mode (label <code>just</code>)</a></li>
 </ul>
 </li>
 <li><a href="#Load_modules">10. Load modules</a>
@@ -927,8 +926,8 @@ Modules are optional and they extend the base config.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example">
-- counsel
+<pre class="example" id="org57ff337">
+- completion
 - fonts
 - general
 - just
@@ -936,9 +935,9 @@ Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/mod
 - markdown
 - org
 - ssh-agent
+- text-scale
 - vterm
 </pre>
-
 
 <p>
 <b>All modules are disabled by default! You must customize
@@ -1005,9 +1004,118 @@ You should restart Emacs to reload the configured modules from
 <code>custom.el</code>.
 </p>
 </div>
-<div id="outline-container-General_keybindings_manager_%28label_%3Dgeneral%3D%29" class="outline-3">
-<h3 id="General_keybindings_manager_%28label_%3Dgeneral%3D%29"><span class="section-number-3">9.1.</span> General keybindings manager (label <code>general</code>)</h3>
+<div id="outline-container-Fonts_%28label_%3Dfonts%3D%29" class="outline-3">
+<h3 id="Fonts_%28label_%3Dfonts%3D%29"><span class="section-number-3">9.1.</span> Fonts (label <code>fonts</code>)</h3>
 <div class="outline-text-3" id="text-9-1">
+</div>
+<div id="outline-container-List_installed_font_families" class="outline-4">
+<h4 id="List_installed_font_families"><span class="section-number-4">9.1.1.</span> List installed font families</h4>
+<div class="outline-text-4" id="text-9-1-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(mapconcat (<span style="color: #b6a0ff;">lambda</span> (x) (format <span style="color: #79a8ff;">"- %s"</span> x)) (delete-dups (sort (font-family-list) #'string&lt;)) <span style="color: #79a8ff;">"\n"</span>)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Install_font%3A_JetBrains_Mono_Nerdfont" class="outline-4">
+<h4 id="Install_font%3A_JetBrains_Mono_Nerdfont"><span class="section-number-4">9.1.2.</span> Install font: JetBrains Mono Nerdfont</h4>
+<div class="outline-text-4" id="text-9-1-2">
+<p>
+<a href="https://www.jetbrains.com/lp/mono/">JetBrains Mono typeface</a>
+<a href="https://www.nerdfonts.com/font-downloads">Nerd Fonts</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Download JetBrains Mono typeface</span>
+(<span style="color: #b6a0ff;">let*</span> ((url <span style="color: #79a8ff;">"https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip"</span>)
+       (zip-file (expand-file-name <span style="color: #79a8ff;">"JetBrainsMono.zip"</span> temporary-file-directory))
+       (font-dir (expand-file-name <span style="color: #79a8ff;">"~/.local/share/fonts/JetBrainsMonoNerdFont/"</span>))
+       (default-directory temporary-file-directory))
+  (<span style="color: #b6a0ff;">unless</span> (file-directory-p font-dir)
+    (url-copy-file url zip-file t)
+    (make-directory font-dir t)
+    (<span style="color: #b6a0ff;">let</span> ((output-buffer (generate-new-buffer <span style="color: #79a8ff;">"*unzip-output*"</span>)))
+      (<span style="color: #b6a0ff;">unwind-protect</span>
+          (call-process <span style="color: #79a8ff;">"unzip"</span> nil output-buffer nil <span style="color: #79a8ff;">"-j"</span> zip-file <span style="color: #79a8ff;">"-d"</span> font-dir)
+        (kill-buffer output-buffer)))
+    (call-process <span style="color: #79a8ff;">"fc-cache"</span> nil nil nil <span style="color: #79a8ff;">"-fv"</span>)
+    (delete-file zip-file)
+    (message <span style="color: #79a8ff;">"JetBrains Mono Nerd Font installed successfully."</span>)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Set_font_faces" class="outline-4">
+<h4 id="Set_font_faces"><span class="section-number-4">9.1.3.</span> Set font faces</h4>
+<div class="outline-text-4" id="text-9-1-3">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">show list of installed fonts:</span>
+<span style="color: #a8a8a8;">;;</span><span style="color: #a8a8a8;">(font-family-list)</span>
+<span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">show default font:</span>
+<span style="color: #a8a8a8;">;;</span><span style="color: #a8a8a8;">(face-attribute 'default :font)</span>
+<span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Set default font faces:</span>
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">M-x my/custom-settings    :: font-settings group:</span>
+(<span style="color: #b6a0ff;">defgroup</span> <span style="color: #6ae4b9;">my/font-settings</span> nil
+  <span style="color: #b0d6f5;">"My custom font settings"</span>
+    <span style="color: #f78fe7;">:group</span> 'my/custom-settings)
+(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-family-default</span> <span style="color: #79a8ff;">"JetBrainsMono Nerd Font"</span>
+  <span style="color: #b0d6f5;">"Default font family"</span>
+  <span style="color: #f78fe7;">:type</span> 'string
+  <span style="color: #f78fe7;">:group</span> 'my/font-settings)
+(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-size-default</span> 120
+  <span style="color: #b0d6f5;">"Default font size"</span>
+  <span style="color: #f78fe7;">:type</span> 'string
+  <span style="color: #f78fe7;">:group</span> 'my/font-settings)
+(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/font-settings-apply</span> ()
+  <span style="color: #b0d6f5;">"Set the default font based on `my/font-family-default` and `my/font-size-default`."</span>
+  (set-face-attribute 'default nil
+                      <span style="color: #f78fe7;">:family</span> my/font-family-default
+                      <span style="color: #f78fe7;">:height</span> my/font-size-default)
+  t)
+(my/font-settings-apply)
+(add-hook 'after-init-hook #'my/font-settings-apply)
+(advice-add 'custom-save-all <span style="color: #f78fe7;">:after</span> (<span style="color: #b6a0ff;">lambda</span> ()
+            <span style="color: #b0d6f5;">"Re-apply custom settings after saving customizations."</span>
+            (my/font-settings-apply)))
+
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Use nerd icons</span>
+(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">nerd-icons</span>
+  <span style="color: #f78fe7;">:custom</span>
+  (nerd-icons-font-family <span style="color: #79a8ff;">"JetBrainsMono Nerd Font"</span>))
+</pre>
+</div>
+
+<p>
+Run <code>M-x my/custom-settings</code> and go to the font customize sub-menu.
+Choose your default font family and font size for your machine. Use
+<code>M-x describe-char</code> and <code>M-x describe-font</code> to help debug font
+selection.
+</p>
+</div>
+</div>
+<div id="outline-container-Preview_fonts" class="outline-4">
+<h4 id="Preview_fonts"><span class="section-number-4">9.1.4.</span> Preview fonts</h4>
+<div class="outline-text-4" id="text-9-1-4">
+<p>
+<a href="https://protesilaos.com/emacs/show-font">show-font</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">show-font</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">setq</span> show-font-pangram (concat <span style="color: #79a8ff;">"A wizard&#8217;s job is to vex chumps quickly in fog.\n\t&#1641;(-&#814;&#814;&#771;-&#771;)&#1782; &#1641;(&#9679;&#814;&#814;&#771;&#8226;&#771;)&#1782; &#1641;(&#865;&#3663;&#815;&#865;&#3663;)&#1782; &#1641;(-&#814;&#814;&#771;&#8226;&#771;).\n\t&#931;&#8050; &#947;&#957;&#969;&#961;&#8055;&#950;&#969; &#7936;&#960;&#8056; &#964;&#8052;&#957; &#954;&#8057;&#968;&#951;"</span>))
+(show-font-list)
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-General_keybindings_manager_%28label_%3Dgeneral%3D%29" class="outline-3">
+<h3 id="General_keybindings_manager_%28label_%3Dgeneral%3D%29"><span class="section-number-3">9.2.</span> General keybindings manager (label <code>general</code>)</h3>
+<div class="outline-text-3" id="text-9-2">
 <p>
 See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">general.el</a>
 </p>
@@ -1050,8 +1158,8 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
 </div>
 </div>
 <div id="outline-container-Org_mode_%28label_%3Dorg%3D%29" class="outline-3">
-<h3 id="Org_mode_%28label_%3Dorg%3D%29"><span class="section-number-3">9.2.</span> Org mode (label <code>org</code>)</h3>
-<div class="outline-text-3" id="text-9-2">
+<h3 id="Org_mode_%28label_%3Dorg%3D%29"><span class="section-number-3">9.3.</span> Org mode (label <code>org</code>)</h3>
+<div class="outline-text-3" id="text-9-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">org</span>
   <span style="color: #f78fe7;">:hook</span> ((org-mode . flyspell-mode)
@@ -1070,8 +1178,8 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
 </div>
 </div>
 <div id="outline-container-Tangle_Emacs_config_and_write_HTML_document" class="outline-4">
-<h4 id="Tangle_Emacs_config_and_write_HTML_document"><span class="section-number-4">9.2.1.</span> Tangle Emacs config and write HTML document</h4>
-<div class="outline-text-4" id="text-9-2-1">
+<h4 id="Tangle_Emacs_config_and_write_HTML_document"><span class="section-number-4">9.3.1.</span> Tangle Emacs config and write HTML document</h4>
+<div class="outline-text-4" id="text-9-3-1">
 <p>
 This function tangles this file (<code>emacs.org</code>) and exports an HTML page
 (<code>emacs.html</code>):
@@ -1112,8 +1220,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Local_HTTP_server_for_displaying_exported_HTML" class="outline-4">
-<h4 id="Local_HTTP_server_for_displaying_exported_HTML"><span class="section-number-4">9.2.2.</span> Local HTTP server for displaying exported HTML</h4>
-<div class="outline-text-4" id="text-9-2-2">
+<h4 id="Local_HTTP_server_for_displaying_exported_HTML"><span class="section-number-4">9.3.2.</span> Local HTTP server for displaying exported HTML</h4>
+<div class="outline-text-4" id="text-9-3-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(my/cargo-dependency <span style="color: #79a8ff;">"live-server"</span>) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">declares but defers install of live-server Rust crate</span>
 (<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/emacs-org-html-server-host</span> <span style="color: #79a8ff;">"127.0.0.1"</span>) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">Set to 0.0.0.0 to serve publicly</span>
@@ -1159,8 +1267,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Enable_syntax_highlighting_in_HTML_export" class="outline-4">
-<h4 id="Enable_syntax_highlighting_in_HTML_export"><span class="section-number-4">9.2.3.</span> Enable syntax highlighting in HTML export</h4>
-<div class="outline-text-4" id="text-9-2-3">
+<h4 id="Enable_syntax_highlighting_in_HTML_export"><span class="section-number-4">9.3.3.</span> Enable syntax highlighting in HTML export</h4>
+<div class="outline-text-4" id="text-9-3-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">htmlize</span>)
 </pre>
@@ -1168,8 +1276,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Org-Tempo_code_block_snippets" class="outline-4">
-<h4 id="Org-Tempo_code_block_snippets"><span class="section-number-4">9.2.4.</span> Org-Tempo code block snippets</h4>
-<div class="outline-text-4" id="text-9-2-4">
+<h4 id="Org-Tempo_code_block_snippets"><span class="section-number-4">9.3.4.</span> Org-Tempo code block snippets</h4>
+<div class="outline-text-4" id="text-9-3-4">
 <p>
 See the Org-Mode manual for <a href="https://orgmode.org/manual/Structure-Templates.html">Structure Templates</a>.
 </p>
@@ -1188,8 +1296,8 @@ library:
 </div>
 </div>
 <div id="outline-container-Use_org_headings_as_HTML_anchors" class="outline-4">
-<h4 id="Use_org_headings_as_HTML_anchors"><span class="section-number-4">9.2.5.</span> Use org headings as HTML anchors</h4>
-<div class="outline-text-4" id="text-9-2-5">
+<h4 id="Use_org_headings_as_HTML_anchors"><span class="section-number-4">9.3.5.</span> Use org headings as HTML anchors</h4>
+<div class="outline-text-4" id="text-9-3-5">
 <p>
 <a href="https://github.com/alphapapa/unpackaged.el/tree/master?tab=readme-ov-file#export-to-html-with-useful-anchors">unpackaged.el: Export to HTML with useful anchors</a>
 </p>
@@ -1288,8 +1396,8 @@ library:
 </div>
 </div>
 <div id="outline-container-Electric_pairs" class="outline-4">
-<h4 id="Electric_pairs"><span class="section-number-4">9.2.6.</span> Electric pairs</h4>
-<div class="outline-text-4" id="text-9-2-6">
+<h4 id="Electric_pairs"><span class="section-number-4">9.3.6.</span> Electric pairs</h4>
+<div class="outline-text-4" id="text-9-3-6">
 <p>
 This makes it so certain characters are duplicated automatically to
 make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</code>.
@@ -1306,9 +1414,70 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 </div>
+<div id="outline-container-Completion_%28label_%3Dcompletion%3D%29" class="outline-3">
+<h3 id="Completion_%28label_%3Dcompletion%3D%29"><span class="section-number-3">9.4.</span> Completion (label <code>completion</code>)</h3>
+<div class="outline-text-3" id="text-9-4">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Allow minibuffers to stack:</span>
+(<span style="color: #b6a0ff;">setq-default</span> enable-recursive-minibuffers t)
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Filter command completions to only include commands</span>
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">applicable to the current major mode:</span>
+(<span style="color: #b6a0ff;">setq-default</span> read-extended-command-predicate
+              #'command-completion-default-include-p)
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Add custom prompt when asking for multiple values as (comma) separated list:</span>
+(advice-add #'completing-read-multiple <span style="color: #f78fe7;">:filter-args</span>
+            (<span style="color: #b6a0ff;">lambda</span> (args)
+              (cons (format <span style="color: #79a8ff;">"[CRM%s] %s"</span>
+                            (replace-regexp-in-string
+                             <span style="color: #79a8ff;">"\\`\\[</span><span style="color: #00bcff;">.*?</span><span style="color: #79a8ff;">]\\*</span><span style="color: #abab00;">\\</span><span style="color: #e7a59a;">|</span><span style="color: #79a8ff;">\\[</span><span style="color: #00bcff;">.*?</span><span style="color: #79a8ff;">]\\*\\'"</span> <span style="color: #79a8ff;">""</span>
+                             crm-separator)
+                            (car args))
+                    (cdr args))))
+<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Do not allow the cursor in the minibuffer prompt</span>
+(<span style="color: #b6a0ff;">setq</span> minibuffer-prompt-properties
+      '(read-only t cursor-intangible t face minibuffer-prompt))
+(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">vertico</span>
+  <span style="color: #f78fe7;">:custom</span>
+  (vertico-scroll-margin 2)
+  (vertico-count 10)
+  (vertico-resize 'grow-only)
+  (vertico-cycle nil)
+  <span style="color: #f78fe7;">:init</span>
+  <span style="color: #a8a8a8;">;</span><span style="color: #a8a8a8;">(keymap-set vertico-map "?" #'minibuffer-completion-help)</span>
+  <span style="color: #a8a8a8;">;</span><span style="color: #a8a8a8;">(keymap-set vertico-map "M-TAB" #'vertico-insert)</span>
+  <span style="color: #a8a8a8;">;</span><span style="color: #a8a8a8;">(keymap-set vertico-map "TAB" #'minibuffer-complete)</span>
+  (vertico-mode))
+
+(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">orderless</span>
+  <span style="color: #f78fe7;">:custom</span>
+  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Configure a custom style dispatcher (see the Consult wiki)</span>
+  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">(orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))</span>
+  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">(orderless-component-separator #'orderless-escapable-split-on-space)</span>
+  (completion-styles '(orderless basic))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles partial-completion)))))
+
+(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">marginalia</span>
+  <span style="color: #f78fe7;">:hook</span>
+  ((marginalia-mode . all-the-icons-completion-marginalia-setup))
+  <span style="color: #f78fe7;">:bind</span> (<span style="color: #f78fe7;">:map</span> minibuffer-local-map
+              (<span style="color: #79a8ff;">"M-A"</span> . marginalia-cycle))
+  <span style="color: #f78fe7;">:init</span>
+  (marginalia-mode))
+
+(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">nerd-icons-completion</span>
+  <span style="color: #f78fe7;">:init</span>
+  (nerd-icons-completion-mode))
+
+</pre>
+</div>
+</div>
+</div>
 <div id="outline-container-Vterm" class="outline-3">
-<h3 id="Vterm"><span class="section-number-3">9.3.</span> Vterm</h3>
-<div class="outline-text-3" id="text-9-3">
+<h3 id="Vterm"><span class="section-number-3">9.5.</span> Vterm</h3>
+<div class="outline-text-3" id="text-9-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">vterm (terminal emulator) :: https://github.com/akermu/emacs-libvterm</span>
 <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Configure BASH to work with vterm: https://github.com/akermu/emacs-libvterm#vterm-clear-scrollback</span>
@@ -1336,8 +1505,8 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 <div id="outline-container-Markdown_mode_%28label_%3Dmarkdown%3D%29" class="outline-3">
-<h3 id="Markdown_mode_%28label_%3Dmarkdown%3D%29"><span class="section-number-3">9.4.</span> Markdown mode (label <code>markdown</code>)</h3>
-<div class="outline-text-3" id="text-9-4">
+<h3 id="Markdown_mode_%28label_%3Dmarkdown%3D%29"><span class="section-number-3">9.6.</span> Markdown mode (label <code>markdown</code>)</h3>
+<div class="outline-text-3" id="text-9-6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">markdown-mode</span>)
 </pre>
@@ -1345,8 +1514,8 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 <div id="outline-container-SSH_agent_%28label_%3Dssh-agent%3D%29" class="outline-3">
-<h3 id="SSH_agent_%28label_%3Dssh-agent%3D%29"><span class="section-number-3">9.5.</span> SSH agent (label <code>ssh-agent</code>)</h3>
-<div class="outline-text-3" id="text-9-5">
+<h3 id="SSH_agent_%28label_%3Dssh-agent%3D%29"><span class="section-number-3">9.7.</span> SSH agent (label <code>ssh-agent</code>)</h3>
+<div class="outline-text-3" id="text-9-7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load SSH / GPG keys from keychain agent</span>
 (<span style="color: #b6a0ff;">use-package</span>
@@ -1363,8 +1532,8 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 <div id="outline-container-Magit_%28label_%3Dmagit%3D%29" class="outline-3">
-<h3 id="Magit_%28label_%3Dmagit%3D%29"><span class="section-number-3">9.6.</span> Magit (label <code>magit</code>)</h3>
-<div class="outline-text-3" id="text-9-6">
+<h3 id="Magit_%28label_%3Dmagit%3D%29"><span class="section-number-3">9.8.</span> Magit (label <code>magit</code>)</h3>
+<div class="outline-text-3" id="text-9-8">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Magit (git version control system) :: https://magit.vc/</span>
 (<span style="color: #b6a0ff;">use-package</span>
@@ -1378,144 +1547,9 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 </div>
-<div id="outline-container-Fonts_%28label_%3Dfonts%3D%29" class="outline-3">
-<h3 id="Fonts_%28label_%3Dfonts%3D%29"><span class="section-number-3">9.7.</span> Fonts (label <code>fonts</code>)</h3>
-<div class="outline-text-3" id="text-9-7">
-<p>
-<a href="https://protesilaos.com/codelog/2024-01-16-customize-emacs-fonts/">https://protesilaos.com/codelog/2024-01-16-customize-emacs-fonts/</a>
-</p>
-</div>
-<div id="outline-container-List_installed_font_families" class="outline-4">
-<h4 id="List_installed_font_families"><span class="section-number-4">9.7.1.</span> List installed font families</h4>
-<div class="outline-text-4" id="text-9-7-1">
-<div class="org-src-container">
-<pre class="src src-emacs-lisp">(mapconcat (<span style="color: #b6a0ff;">lambda</span> (x) (format <span style="color: #79a8ff;">"- %s"</span> x)) (delete-dups (sort (font-family-list) #'string&lt;)) <span style="color: #79a8ff;">"\n"</span>)
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-Install_font%3A_JetBrains_Mono" class="outline-4">
-<h4 id="Install_font%3A_JetBrains_Mono"><span class="section-number-4">9.7.2.</span> Install font: JetBrains Mono</h4>
-<div class="outline-text-4" id="text-9-7-2">
-<p>
-<a href="https://www.jetbrains.com/lp/mono/">JetBrains Mono typeface</a>
-</p>
-
-<div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Download JetBrains Mono typeface</span>
-(<span style="color: #b6a0ff;">let*</span> ((url <span style="color: #79a8ff;">"https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip"</span>)
-       (zip-file (expand-file-name <span style="color: #79a8ff;">"JetBrainsMono.zip"</span> temporary-file-directory))
-       (font-dir (expand-file-name <span style="color: #79a8ff;">"~/.local/share/fonts/JetBrainsMono/"</span>))
-       (default-directory temporary-file-directory))
-  (<span style="color: #b6a0ff;">unless</span> (file-directory-p font-dir)
-    (url-copy-file url zip-file t)
-    (make-directory font-dir t)
-    (<span style="color: #b6a0ff;">let</span> ((output-buffer (generate-new-buffer <span style="color: #79a8ff;">"*unzip-output*"</span>)))
-      (<span style="color: #b6a0ff;">unwind-protect</span>
-          (call-process <span style="color: #79a8ff;">"unzip"</span> nil output-buffer nil <span style="color: #79a8ff;">"-j"</span> zip-file <span style="color: #79a8ff;">"-d"</span> font-dir)
-        (kill-buffer output-buffer)))
-    (call-process <span style="color: #79a8ff;">"fc-cache"</span> nil nil nil <span style="color: #79a8ff;">"-fv"</span>)
-    (delete-file zip-file)
-    (message <span style="color: #79a8ff;">"JetBrains Mono font installed successfully."</span>)))
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-Set_font_faces" class="outline-4">
-<h4 id="Set_font_faces"><span class="section-number-4">9.7.3.</span> Set font faces</h4>
-<div class="outline-text-4" id="text-9-7-3">
-<div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">show list of installed fonts:</span>
-<span style="color: #a8a8a8;">;;</span><span style="color: #a8a8a8;">(font-family-list)</span>
-<span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">show default font:</span>
-<span style="color: #a8a8a8;">;;</span><span style="color: #a8a8a8;">(face-attribute 'default :font)</span>
-<span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Set default font faces:</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">M-x my/custom-settings    :: font-settings group:</span>
-(<span style="color: #b6a0ff;">defgroup</span> <span style="color: #6ae4b9;">my/font-settings</span> nil
-  <span style="color: #b0d6f5;">"My custom font settings"</span>
-    <span style="color: #f78fe7;">:group</span> 'my/custom-settings)
-(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-family-default</span> <span style="color: #79a8ff;">"JetBrains Mono"</span>
-  <span style="color: #b0d6f5;">"Default font family"</span>
-  <span style="color: #f78fe7;">:type</span> 'string
-  <span style="color: #f78fe7;">:group</span> 'my/font-settings)
-(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-size-default</span> 120
-  <span style="color: #b0d6f5;">"Default font size"</span>
-  <span style="color: #f78fe7;">:type</span> 'string
-  <span style="color: #f78fe7;">:group</span> 'my/font-settings)
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/font-settings-apply</span> ()
-  <span style="color: #b0d6f5;">"Set the default font based on `my/font-family-default` and `my/font-size-default`."</span>
-  (set-face-attribute 'default nil
-                      <span style="color: #f78fe7;">:family</span> my/font-family-default
-                      <span style="color: #f78fe7;">:height</span> my/font-size-default)
-  t)
-(my/font-settings-apply)
-(add-hook 'after-init-hook #'my/font-settings-apply)
-(advice-add 'custom-save-all <span style="color: #f78fe7;">:after</span> (<span style="color: #b6a0ff;">lambda</span> ()
-            <span style="color: #b0d6f5;">"Re-apply custom settings after saving customizations."</span>
-            (my/font-settings-apply)))
-</pre>
-</div>
-
-<p>
-Run <code>M-x my/custom-settings</code> and go to the font customize sub-menu.
-Choose your default font family and font size for your machine. Use
-<code>M-x describe-char</code> and <code>M-x describe-font</code> to help debug font
-selection.
-</p>
-</div>
-</div>
-<div id="outline-container-Preview_fonts" class="outline-4">
-<h4 id="Preview_fonts"><span class="section-number-4">9.7.4.</span> Preview fonts</h4>
-<div class="outline-text-4" id="text-9-7-4">
-<p>
-<a href="https://protesilaos.com/emacs/show-font">show-font</a>
-</p>
-
-<div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">show-font</span>)
-</pre>
-</div>
-
-<div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">setq</span> show-font-pangram (concat <span style="color: #79a8ff;">"A wizard&#8217;s job is to vex chumps quickly in fog.\n\t&#1641;(-&#814;&#814;&#771;-&#771;)&#1782; &#1641;(&#9679;&#814;&#814;&#771;&#8226;&#771;)&#1782; &#1641;(&#865;&#3663;&#815;&#865;&#3663;)&#1782; &#1641;(-&#814;&#814;&#771;&#8226;&#771;).\n\t&#931;&#8050; &#947;&#957;&#969;&#961;&#8055;&#950;&#969; &#7936;&#960;&#8056; &#964;&#8052;&#957; &#954;&#8057;&#968;&#951;"</span>))
-(show-font-list)
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-all-the-icons" class="outline-4">
-<h4 id="all-the-icons"><span class="section-number-4">9.7.5.</span> all-the-icons</h4>
-<div class="outline-text-4" id="text-9-7-5">
-<p>
-<a href="https://github.com/domtronn/all-the-icons.el?tab=readme-ov-file">all-the-icons</a> provides several fonts for displaying icons:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Install all the icons:</span>
-(<span style="color: #b6a0ff;">use-package</span>
- all-the-icons
- <span style="color: #f78fe7;">:if</span> (display-graphic-p)
- <span style="color: #f78fe7;">:init</span>
- (<span style="color: #b6a0ff;">let</span> ((font-file
-        (expand-file-name <span style="color: #79a8ff;">"~/.local/share/fonts/all-the-icons.ttf"</span>)))
-   (<span style="color: #b6a0ff;">unless</span> (file-exists-p font-file)
-     (message <span style="color: #79a8ff;">"Installing all-the-icons fonts..."</span>)
-     (all-the-icons-install-fonts t))))
-</pre>
-</div>
-
-<p>
-Example icons:
-</p>
-
-<pre class="example">
-
-</pre>
-</div>
-</div>
-<div id="outline-container-Scale_fonts_uniformly_in_all_buffers" class="outline-4">
-<h4 id="Scale_fonts_uniformly_in_all_buffers"><span class="section-number-4">9.7.6.</span> Scale fonts uniformly in all buffers</h4>
-<div class="outline-text-4" id="text-9-7-6">
+<div id="outline-container-Scale_text_uniformly_in_all_buffers" class="outline-3">
+<h3 id="Scale_text_uniformly_in_all_buffers"><span class="section-number-3">9.9.</span> Scale text uniformly in all buffers</h3>
+<div class="outline-text-3" id="text-9-9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/default-text-scale-reset</span> nil
   (<span style="color: #b6a0ff;">setq</span> default-text-scale--complement 0)
@@ -1545,30 +1579,9 @@ Example icons:
 </div>
 </div>
 </div>
-</div>
-<div id="outline-container-Ivy_completion_%2F_Counsel_%28label_%3Dcouncel%3D%29" class="outline-3">
-<h3 id="Ivy_completion_%2F_Counsel_%28label_%3Dcouncel%3D%29"><span class="section-number-3">9.8.</span> Ivy completion / Counsel (label <code>councel</code>)</h3>
-<div class="outline-text-3" id="text-9-8">
-<p>
-<a href="https://github.com/abo-abo/swiper">Ivy / Councel</a>
-</p>
-
-<div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Ivy / counsel (list-completion) :: https://oremacs.com/swiper/#introduction</span>
-(<span style="color: #b6a0ff;">use-package</span>
-  counsel
-  <span style="color: #f78fe7;">:general</span> (<span style="color: #79a8ff;">"M-y"</span> 'counsel-yank-pop)
-  <span style="color: #f78fe7;">:init</span>
-  (ivy-mode 1)
-  (<span style="color: #b6a0ff;">setq</span> ivy-use-virtual-buffers t)
-  (<span style="color: #b6a0ff;">setq</span> ivy-use-selectable-prompt t))
-</pre>
-</div>
-</div>
-</div>
 <div id="outline-container-Justfile_mode_%28label_%3Djust%3D%29" class="outline-3">
-<h3 id="Justfile_mode_%28label_%3Djust%3D%29"><span class="section-number-3">9.9.</span> Justfile mode (label <code>just</code>)</h3>
-<div class="outline-text-3" id="text-9-9">
+<h3 id="Justfile_mode_%28label_%3Djust%3D%29"><span class="section-number-3">9.10.</span> Justfile mode (label <code>just</code>)</h3>
+<div class="outline-text-3" id="text-9-10">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">just-mode</span>
 (<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">just-mode</span>)
@@ -1592,7 +1605,7 @@ in <code>~/.config/machine-labels</code>):
 <div class="outline-text-3" id="text-10-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/modules-dir</span> (expand-file-name <span style="color: #79a8ff;">"modules/"</span> user-emacs-directory))
-(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/module-priority-list</span> '(<span style="color: #79a8ff;">"general"</span>) <span style="color: #b0d6f5;">"List of prioritized modules to install first."</span>)
+(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/module-priority-list</span> '(<span style="color: #79a8ff;">"general"</span> <span style="color: #79a8ff;">"fonts"</span>) <span style="color: #b0d6f5;">"List of prioritized modules to install first."</span>)
 (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/load-modules</span> (requested-modules)
   <span style="color: #b0d6f5;">"Load user-requested modules in a priority order.</span>
 <span style="color: #b0d6f5;">  REQUESTED-MODULES is a list of module names to load."</span>
@@ -1649,7 +1662,7 @@ in <code>~/.config/machine-labels</code>):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-02-01 Sat 22:39</p>
+<p class="date">Created: 2025-02-02 Sun 00:23</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
