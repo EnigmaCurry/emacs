@@ -15,36 +15,6 @@
    '((python . t) (scheme . t) (shell . t) (ditaa . t)))
   )
 
-(setq org-html-template
-      (lambda (contents info)
-        "Custom HTML export template for Org mode. CONTENTS holds the content of the document. INFO is a plist holding export options."
-        (concat
-         "<!DOCTYPE html>\n"
-         "<html lang=\"en\">\n"
-         "<head>\n"
-         (org-html--build-meta-info info)
-         (org-html--build-head info)
-         "</head>\n"
-         "<body>\n"
-         "<div id=\"content\">\n"
-         ;; Title
-         (format "<h1 class=\"title\">%s</h1>\n" (org-export-data (plist-get info :title) info))
-         ;; Author and Date (Metadata)
-         (when (plist-get info :with-author)
-           (format "<p class=\"author\">Author: %s</p>\n"
-                   (mapconcat #'identity (plist-get info :author) ", ")))
-         (when (plist-get info :with-date)
-           (format "<p class=\"date\">Created: %s</p>\n"
-                   (org-export-data (plist-get info :date) info)))
-         ;; Table of Contents
-         (when (plist-get info :with-toc)
-           (org-html-toc info))
-         ;; Document contents
-         contents
-         "</div>\n"
-         "</body>\n"
-         "</html>\n")))
-
 (defun my/emacs-org-tangle ()
   "Tangle all code blocks in 'emacs.org' and export this document to HTML."
   (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))

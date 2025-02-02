@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-02 Sun 10:58 -->
+<!-- 2025-02-02 Sun 11:14 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -304,8 +304,8 @@ committed into the git repository so that it can be cloned and
 loaded directly without invoking org-mode. <a href="https://orgmode.org/worg/org-contrib/babel/intro.html#emacs-initialization">org-babel-load-file</a> is
 <b>NOT</b> used.</li>
 <li>All custom elisp functions and variables should have the namespace
-prefix <code>my/</code>, which being non-proprietary promotes code adoption by
-others (meme: <a href="https://ec-share.nyc3.digitaloceanspaces.com/i-made-this-1.jpg">"I made this"</a>).</li>
+prefix <code>my/</code>, which is non-proprietary and promotes code adoption
+by others (meme: <a href="https://ec-share.nyc3.digitaloceanspaces.com/i-made-this-1.jpg">"I made this"</a>).</li>
 <li>Basic Emacs functionality should work without needing to download
 any third party libraries.</li>
 <li>Multi-platform support for Linux CLI, Wayland, and Android.</li>
@@ -938,7 +938,7 @@ Modules are optional and they extend the base config.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="orgaad8402">
+<pre class="example" id="orge4c2e29">
 - completion
 - dashboard
 - fonts
@@ -1197,37 +1197,7 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">setq</span> org-html-template
-      (<span style="color: #b6a0ff;">lambda</span> (contents info)
-        <span style="color: #b0d6f5;">"Custom HTML export template for Org mode. CONTENTS holds the content of the document. INFO is a plist holding export options."</span>
-        (concat
-         <span style="color: #79a8ff;">"&lt;!DOCTYPE html&gt;\n"</span>
-         <span style="color: #79a8ff;">"&lt;html lang=\"en\"&gt;\n"</span>
-         <span style="color: #79a8ff;">"&lt;head&gt;\n"</span>
-         (org-html--build-meta-info info)
-         (org-html--build-head info)
-         <span style="color: #79a8ff;">"&lt;/head&gt;\n"</span>
-         <span style="color: #79a8ff;">"&lt;body&gt;\n"</span>
-         <span style="color: #79a8ff;">"&lt;div id=\"content\"&gt;\n"</span>
-         <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Title</span>
-         (format <span style="color: #79a8ff;">"&lt;h1 class=\"title\"&gt;%s&lt;/h1&gt;\n"</span> (org-export-data (plist-get info <span style="color: #f78fe7;">:title</span>) info))
-         <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Author and Date (Metadata)</span>
-         (<span style="color: #b6a0ff;">when</span> (plist-get info <span style="color: #f78fe7;">:with-author</span>)
-           (format <span style="color: #79a8ff;">"&lt;p class=\"author\"&gt;Author: %s&lt;/p&gt;\n"</span>
-                   (mapconcat #'identity (plist-get info <span style="color: #f78fe7;">:author</span>) <span style="color: #79a8ff;">", "</span>)))
-         (<span style="color: #b6a0ff;">when</span> (plist-get info <span style="color: #f78fe7;">:with-date</span>)
-           (format <span style="color: #79a8ff;">"&lt;p class=\"date\"&gt;Created: %s&lt;/p&gt;\n"</span>
-                   (org-export-data (plist-get info <span style="color: #f78fe7;">:date</span>) info)))
-         <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Table of Contents</span>
-         (<span style="color: #b6a0ff;">when</span> (plist-get info <span style="color: #f78fe7;">:with-toc</span>)
-           (org-html-toc info))
-         <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Document contents</span>
-         contents
-         <span style="color: #79a8ff;">"&lt;/div&gt;\n"</span>
-         <span style="color: #79a8ff;">"&lt;/body&gt;\n"</span>
-         <span style="color: #79a8ff;">"&lt;/html&gt;\n"</span>)))
-
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/emacs-org-tangle</span> ()
+<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/emacs-org-tangle</span> ()
   <span style="color: #b0d6f5;">"Tangle all code blocks in '</span><span style="color: #00bcff;">emacs.org</span><span style="color: #b0d6f5;">' and export this document to HTML."</span>
   (<span style="color: #b6a0ff;">let*</span> ((org-file (expand-file-name <span style="color: #79a8ff;">"emacs.org"</span> user-emacs-directory))
          (modules-dir (expand-file-name <span style="color: #79a8ff;">"modules"</span> user-emacs-directory))
@@ -1412,7 +1382,7 @@ library:
                                          eos)
                                      ,place)
                        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">HACK: `</span><span style="color: #00bcff;">s1</span><span style="color: #a8a8a8;">' instead of a gensym.</span>
-                       (<span style="color: #b6a0ff;">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
+                       (-let* (((s1 suffix) (list (match-string 1 ,place)
                                                   (match-string 2 ,place)))
                                (suffix (<span style="color: #b6a0ff;">if</span> suffix
                                            (string-to-number suffix)
@@ -1768,7 +1738,7 @@ enabled):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-02-02 Sun 10:58</p>
+<p class="date">Created: 2025-02-02 Sun 11:14</p>
 </div>
 </body>
 </html>
