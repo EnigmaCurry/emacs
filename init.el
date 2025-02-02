@@ -146,7 +146,8 @@ If the buffer already exists, delete it and recreate it."
         (customize-save-customized)))))
 
 (defvar my/modules-dir (expand-file-name "modules/" user-emacs-directory))
-(defvar my/module-priority-list '("general" "fonts") "List of prioritized modules to install first.")
+(defvar my/module-priority-list '("general" "fonts")
+  "List of prioritized modules to install first.")
 (defun my/load-modules (requested-modules)
   "Load user-requested modules in a priority order.
   REQUESTED-MODULES is a list of module names to load."
@@ -160,16 +161,23 @@ If the buffer already exists, delete it and recreate it."
             (load file nil 'nomessage)
           (error (message "Error loading %s: %s" file err))))))
   ;; Prioritize and install the requested third party / optional modules:
-  (let ((prioritized-modules (seq-filter (lambda (mod) (member mod my/module-priority-list)) requested-modules))
-        (remaining-modules (seq-remove (lambda (mod) (member mod my/module-priority-list)) requested-modules)))
+  (let ((prioritized-modules
+         (seq-filter (lambda (mod) (member mod my/module-priority-list))
+                     requested-modules))
+        (remaining-modules
+         (seq-remove (lambda (mod) (member mod my/module-priority-list))
+                     requested-modules)))
     ;; Sort prioritized modules based on `my/module-priority-list`
     (setq prioritized-modules
           (sort prioritized-modules
                 (lambda (a b)
-                  (< (or (cl-position a my/module-priority-list) most-positive-fixnum)
-                     (or (cl-position b my/module-priority-list) most-positive-fixnum)))))
+                  (< (or (cl-position a my/module-priority-list)
+                         most-positive-fixnum)
+                     (or (cl-position b my/module-priority-list)
+                         most-positive-fixnum)))))
     ;; Combine prioritized and remaining modules
-    (let ((ordered-modules (append prioritized-modules remaining-modules)))
+    (let ((ordered-modules (append prioritized-modules
+                                   remaining-modules)))
       (dolist (mod ordered-modules)
         (let ((mod-path (expand-file-name mod my/modules-dir)))
           (if (file-directory-p mod-path)

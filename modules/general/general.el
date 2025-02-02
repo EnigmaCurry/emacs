@@ -13,7 +13,8 @@
    "s-o"       'browse-url
    "C-;"       'comment-region ; C-u C-; to uncomment
    "s-<down-mouse-1>"       'mouse-drag-region-rectangle)
-  ;;; Put the Emacs default keybindings you want included in general-describe-keybindings here:
+  ;;; Put the Emacs default keybindings you want included
+  ;;;   in general-describe-keybindings here:
   ;;; Its useful to duplicate these simply as a way of documentation:
   (general-define-key
    "M-SPC"     'cycle-spacing ; If you document it, you will use it.

@@ -8,7 +8,8 @@
     (make-directory font-dir t)
     (let ((output-buffer (generate-new-buffer "*unzip-output*")))
       (unwind-protect
-          (call-process "unzip" nil output-buffer nil "-j" zip-file "-d" font-dir)
+          (call-process "unzip"
+                        nil output-buffer nil "-j" zip-file "-d" font-dir)
         (kill-buffer output-buffer)))
     (call-process "fc-cache" nil nil nil "-fv")
     (delete-file zip-file)
@@ -32,7 +33,8 @@
   :type 'string
   :group 'my/font-settings)
 (defun my/font-settings-apply ()
-  "Set the default font based on `my/font-family-default` and `my/font-size-default`."
+  "Set the default font based on
+    `my/font-family-default` and `my/font-size-default`."
   (set-face-attribute 'default nil
                       :family my/font-family-default
                       :height my/font-size-default)

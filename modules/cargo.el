@@ -24,15 +24,18 @@ PROGRAMS can be a single string (with space-separated programs) or a list of str
   (let ((to-install (seq-remove #'my/cargo-package-installed-p programs)))
     (if (null to-install)
         (message "All specified programs are already installed")
-      (let* ((buffer-name (concat "*cargo install " (string-join to-install " ") "*"))
+      (let* ((buffer-name (concat "*cargo install "
+                                  (string-join to-install " ") "*"))
              (existing-buffer (get-buffer buffer-name)))
         (if (and existing-buffer (get-buffer-process existing-buffer))
-            (user-error "Cargo install already in progress for programs: %s" (string-join to-install ", "))
+            (user-error "Cargo install already in progress for programs: %s"
+                        (string-join to-install ", "))
           (when existing-buffer
             (kill-buffer existing-buffer))
           (let ((buffer (get-buffer-create buffer-name)))
             (start-process "cargo-install" buffer
-                           "/bin/bash" "-c" (concat "cargo install " (string-join to-install " ")))
+                           "/bin/bash" "-c" (concat "cargo install "
+                                            (string-join to-install " ")))
             (display-buffer buffer)
             (with-current-buffer buffer
               (comint-mode)

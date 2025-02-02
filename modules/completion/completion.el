@@ -25,15 +25,16 @@
   (vertico-resize 'grow-only)
   (vertico-cycle nil)
   :init
-  ;(keymap-set vertico-map "?" #'minibuffer-completion-help)
-  ;(keymap-set vertico-map "M-TAB" #'vertico-insert)
-  ;(keymap-set vertico-map "TAB" #'minibuffer-complete)
+                                        ;(keymap-set vertico-map "?" #'minibuffer-completion-help)
+                                        ;(keymap-set vertico-map "M-TAB" #'vertico-insert)
+                                        ;(keymap-set vertico-map "TAB" #'minibuffer-complete)
   (vertico-mode))
 
 (use-package orderless
   :custom
   ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
+  ;; (orderless-style-dispatchers
+  ;;   '(+orderless-consult-dispatch orderless-affix-dispatch))
   ;; (orderless-component-separator #'orderless-escapable-split-on-space)
   (completion-styles '(orderless basic))
   (completion-category-defaults nil)

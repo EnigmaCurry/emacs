@@ -45,7 +45,7 @@
 (add-to-list 'safe-local-variable-values
              '(org-confirm-babel-evaluate))
 
-(my/cargo-dependency "live-server") ; declares but defers install of live-server Rust crate
+(my/cargo-dependency "live-server") ; defers install of live-server Rust crate
 (defvar my/emacs-org-html-server-host "127.0.0.1") ; Set to 0.0.0.0 to serve publicly
 (defvar my/emacs-org-html-server-port "7776")
 (defun my/emacs-org-html-server ()
