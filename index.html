@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-30 Thu 22:29 -->
+<!-- 2025-02-01 Sat 22:39 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -269,6 +269,8 @@
 <li><a href="#Scale_fonts_uniformly_in_all_buffers">9.7.6. Scale fonts uniformly in all buffers</a></li>
 </ul>
 </li>
+<li><a href="#Ivy_completion_%2F_Counsel_%28label_%3Dcouncel%3D%29">9.8. Ivy completion / Counsel (label <code>councel</code>)</a></li>
+<li><a href="#Justfile_mode_%28label_%3Djust%3D%29">9.9. Justfile mode (label <code>just</code>)</a></li>
 </ul>
 </li>
 <li><a href="#Load_modules">10. Load modules</a>
@@ -349,8 +351,8 @@ sudo dnf install emacs
 </div>
 
 <pre class="example">
-GNU Emacs 29.4 (build 1, x86_64-redhat-linux-gnu, GTK+ Version 3.24.43, cairo version 1.18.0)
- of 2024-10-10
+GNU Emacs 29.4 (build 1, x86_64-redhat-linux-gnu, GTK+ Version 3.24.42, cairo version 1.18.0)
+ of 2024-07-16
 </pre>
 </div>
 </div>
@@ -926,6 +928,7 @@ Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/mod
 </p>
 
 <pre class="example">
+- counsel
 - fonts
 - general
 - just
@@ -1260,7 +1263,7 @@ library:
                                          eos)
                                      ,place)
                        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">HACK: `</span><span style="color: #00bcff;">s1</span><span style="color: #a8a8a8;">' instead of a gensym.</span>
-                       (-let* (((s1 suffix) (list (match-string 1 ,place)
+                       (<span style="color: #b6a0ff;">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
                                                   (match-string 2 ,place)))
                                (suffix (<span style="color: #b6a0ff;">if</span> suffix
                                            (string-to-number suffix)
@@ -1543,6 +1546,36 @@ Example icons:
 </div>
 </div>
 </div>
+<div id="outline-container-Ivy_completion_%2F_Counsel_%28label_%3Dcouncel%3D%29" class="outline-3">
+<h3 id="Ivy_completion_%2F_Counsel_%28label_%3Dcouncel%3D%29"><span class="section-number-3">9.8.</span> Ivy completion / Counsel (label <code>councel</code>)</h3>
+<div class="outline-text-3" id="text-9-8">
+<p>
+<a href="https://github.com/abo-abo/swiper">Ivy / Councel</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Ivy / counsel (list-completion) :: https://oremacs.com/swiper/#introduction</span>
+(<span style="color: #b6a0ff;">use-package</span>
+  counsel
+  <span style="color: #f78fe7;">:general</span> (<span style="color: #79a8ff;">"M-y"</span> 'counsel-yank-pop)
+  <span style="color: #f78fe7;">:init</span>
+  (ivy-mode 1)
+  (<span style="color: #b6a0ff;">setq</span> ivy-use-virtual-buffers t)
+  (<span style="color: #b6a0ff;">setq</span> ivy-use-selectable-prompt t))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Justfile_mode_%28label_%3Djust%3D%29" class="outline-3">
+<h3 id="Justfile_mode_%28label_%3Djust%3D%29"><span class="section-number-3">9.9.</span> Justfile mode (label <code>just</code>)</h3>
+<div class="outline-text-3" id="text-9-9">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">just-mode</span>
+(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">just-mode</span>)
+</pre>
+</div>
+</div>
+</div>
 </div>
 <div id="outline-container-Load_modules" class="outline-2">
 <h2 id="Load_modules"><span class="section-number-2">10.</span> Load modules</h2>
@@ -1616,7 +1649,7 @@ in <code>~/.config/machine-labels</code>):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-01-30 Thu 22:29</p>
+<p class="date">Created: 2025-02-01 Sat 22:39</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

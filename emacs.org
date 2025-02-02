@@ -983,8 +983,9 @@ Example icons:
            (default-text-scale-decrease)))))
     :init (setq default-text-scale-amount 5))
 #+end_src
+** Ivy completion / Counsel (label =councel=)
 
-** Counsel / Ivy (label =council=)
+[[https://github.com/abo-abo/swiper][Ivy / Councel]]
 
 #+begin_src emacs-lisp :tangle "modules/counsel/counsel.el" :mkdirp yes
   ;; Ivy / counsel (list-completion) :: https://oremacs.com/swiper/#introduction
