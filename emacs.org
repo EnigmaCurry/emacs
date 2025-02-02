@@ -985,6 +985,26 @@ Example icons:
     :init (setq default-text-scale-amount 5))
 #+end_src
 
+** Counsel / Ivy (label =council=)
+
+#+begin_src emacs-lisp :tangle "modules/counsel/counsel.el" :mkdirp yes
+  ;; Ivy / counsel (list-completion) :: https://oremacs.com/swiper/#introduction
+  (use-package
+    counsel
+    :general ("M-y" 'counsel-yank-pop)
+    :init
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-use-selectable-prompt t))
+#+end_src
+
+** Justfile mode (label =just=)
+
+#+begin_src emacs-lisp :tangle "modules/just/just.el" :mkdirp yes
+  ;; just-mode
+  (use-package just-mode)
+#+end_src
+
 * Load modules
 
 The code-blocks in this file are tangled to separate categorized files
