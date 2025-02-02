@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-02 Sun 00:29 -->
+<!-- 2025-02-02 Sun 00:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -293,14 +293,13 @@ This is a new attempt at writing a literate and modular Emacs config:
 <ul class="org-ul">
 <li>All Emacs config (elisp) is written in Org Mode and it goes in this file
 (<a href="emacs.html">emacs.org</a>) [<a href="https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1">Source on GitHub</a>].</li>
-<li>All configuration is displayed (exported) as a single HTML page on
-the web. A single page is easy to search and requires no
-JavaScript.</li>
-<li>All Org-Babel code blocks are tangled into normal elisp files that
-are split by category. These elisp files are directly committed
-into the git repository so that it can be cloned and loaded
-directly without invoking org-mode. <a href="https://orgmode.org/worg/org-contrib/babel/intro.html#emacs-initialization">org-babel-load-file</a> is <b>NOT</b>
-used.</li>
+<li>All configuration is displayed (exported) as a single HTML page,
+which is easy to search and requires no JavaScript.</li>
+<li>All Org-Babel code blocks are "tangled" into normal elisp files
+that are split by category. These elisp files are directly
+committed into the git repository so that it can be cloned and
+loaded directly without invoking org-mode. <a href="https://orgmode.org/worg/org-contrib/babel/intro.html#emacs-initialization">org-babel-load-file</a> is
+<b>NOT</b> used.</li>
 <li>All custom elisp functions and variables should have the namespace
 prefix <code>my/</code>, which being non-proprietary promotes code adoption by
 others (meme: <a href="https://ec-share.nyc3.digitaloceanspaces.com/i-made-this-1.jpg">"I made this"</a>).</li>
@@ -906,8 +905,16 @@ that become enabled by adding labels on a per-machine basis.
   <span style="color: #b0d6f5;">"List all available machine labels"</span>
   (<span style="color: #b6a0ff;">let</span> ((modules-dir (expand-file-name <span style="color: #79a8ff;">"modules"</span> user-emacs-directory)))
     (cl-sort (mapcar #'file-name-nondirectory
-            (seq-filter #'file-directory-p
-                        (directory-files modules-dir t <span style="color: #79a8ff;">"^[</span><span style="color: #d0bc00;">^</span><span style="color: #79a8ff;">.]"</span> t))) <span style="color: #d0bc00;">#'string&lt;)))</span>
+                     (seq-filter #'file-directory-p
+                                 (directory-files modules-dir t <span style="color: #79a8ff;">"^[</span><span style="color: #d0bc00;">^</span><span style="color: #79a8ff;">.]"</span> t))) <span style="color: #d0bc00;">#'string&lt;)))</span>
+(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/machine-labels-enable-all</span> nil
+  <span style="color: #b0d6f5;">"Adds ALL existing machine labels to the custom my/machine-labels"</span>
+  (<span style="color: #b6a0ff;">interactive</span>)
+  (<span style="color: #b6a0ff;">let</span> ((modules-dir (expand-file-name <span style="color: #79a8ff;">"modules"</span> user-emacs-directory)))
+    (<span style="color: #b6a0ff;">when</span> (y-or-n-p (format <span style="color: #79a8ff;">"Do you want to enable ALL Emacs modules from %s? "</span> modules-dir))
+      (<span style="color: #b6a0ff;">progn</span>
+        (customize-set-variable 'my/machine-labels (my/machine-labels-available))
+        (customize-save-customized)))))
 </pre>
 </div>
 
@@ -928,7 +935,7 @@ Modules are optional and they extend the base config.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="orgd17353c">
+<pre class="example" id="org260d129">
 - completion
 - dashboard
 - fonts
@@ -985,18 +992,12 @@ When done, press <code>C-x C-s</code> to save the settings.
 </p>
 
 <p>
-If you want to enable ALL of the modules, you can evaluate this elisp
-(the result will be saved in <code>custom.el</code>):
+If you want to enable ALL existing modules, you can run <code>M-x
+my/machine-labels-enable-all</code> (the result will be saved in
+<code>custom.el</code>). (If new modules are added to the git repository, they
+will not be enabled until you run this again, or by customizing
+<code>my/machine-labels</code>.)
 </p>
-
-<div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">This is an elisp alternative to using the customize interface shown above:</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Example to enable the custom labels: general, org, and markdown:</span>
-(<span style="color: #b6a0ff;">progn</span>
-  (customize-set-variable 'my/machine-labels (my/machine-labels-available))
-  (customize-save-customized))
-</pre>
-</div>
 
 <p>
 You can then remove any of the modules you don't want, the same way as
@@ -1661,6 +1662,17 @@ in <code>~/.config/machine-labels</code>):
 <div id="outline-container-Prioritize_and_load_requested_modules" class="outline-3">
 <h3 id="Prioritize_and_load_requested_modules"><span class="section-number-3">10.1.</span> Prioritize and load requested modules</h3>
 <div class="outline-text-3" id="text-10-1">
+<p>
+Here is the list of prioritized modules that must be loaded first (if
+enabled):
+</p>
+
+<pre class="example">
+- general
+- fonts
+</pre>
+
+
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/modules-dir</span> (expand-file-name <span style="color: #79a8ff;">"modules/"</span> user-emacs-directory))
 (<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/module-priority-list</span> '(<span style="color: #79a8ff;">"general"</span> <span style="color: #79a8ff;">"fonts"</span>) <span style="color: #b0d6f5;">"List of prioritized modules to install first."</span>)
@@ -1720,7 +1732,7 @@ in <code>~/.config/machine-labels</code>):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Created: 2025-02-02 Sun 00:29</p>
+<p class="date">Created: 2025-02-02 Sun 00:51</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

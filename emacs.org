@@ -9,14 +9,13 @@ This is a new attempt at writing a literate and modular Emacs config:
 
  * All Emacs config (elisp) is written in Org Mode and it goes in this file
    ([[file:emacs.org][emacs.org]]) [[[https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1][Source on GitHub]]].
- * All configuration is displayed (exported) as a single HTML page on
-   the web. A single page is easy to search and requires no
-   JavaScript.
- * All Org-Babel code blocks are tangled into normal elisp files that
-   are split by category. These elisp files are directly committed
-   into the git repository so that it can be cloned and loaded
-   directly without invoking org-mode. [[https://orgmode.org/worg/org-contrib/babel/intro.html#emacs-initialization][org-babel-load-file]] is *NOT*
-   used.
+ * All configuration is displayed (exported) as a single HTML page,
+   which is easy to search and requires no JavaScript.
+ * All Org-Babel code blocks are "tangled" into normal elisp files
+   that are split by category. These elisp files are directly
+   committed into the git repository so that it can be cloned and
+   loaded directly without invoking org-mode. [[https://orgmode.org/worg/org-contrib/babel/intro.html#emacs-initialization][org-babel-load-file]] is
+   *NOT* used.
  * All custom elisp functions and variables should have the namespace
    prefix =my/=, which being non-proprietary promotes code adoption by
    others (meme: [[https://ec-share.nyc3.digitaloceanspaces.com/i-made-this-1.jpg]["I made this"]]).
@@ -483,8 +482,16 @@ that become enabled by adding labels on a per-machine basis.
     "List all available machine labels"
     (let ((modules-dir (expand-file-name "modules" user-emacs-directory)))
       (cl-sort (mapcar #'file-name-nondirectory
-              (seq-filter #'file-directory-p
-                          (directory-files modules-dir t "^[^.]" t))) #'string<)))
+                       (seq-filter #'file-directory-p
+                                   (directory-files modules-dir t "^[^.]" t))) #'string<)))
+  (defun my/machine-labels-enable-all nil
+    "Adds ALL existing machine labels to the custom my/machine-labels"
+    (interactive)
+    (let ((modules-dir (expand-file-name "modules" user-emacs-directory)))
+      (when (y-or-n-p (format "Do you want to enable ALL Emacs modules from %s? " modules-dir))
+        (progn
+          (customize-set-variable 'my/machine-labels (my/machine-labels-available))
+          (customize-save-customized)))))
 #+end_src
 
 =my/machine-has-label= is used automatically by =my/load-modules=
@@ -524,16 +531,11 @@ INS
 
 When done, press =C-x C-s= to save the settings.
 
-If you want to enable ALL of the modules, you can evaluate this elisp
-(the result will be saved in =custom.el=):
-
-#+begin_src emacs-lisp
-  ;; This is an elisp alternative to using the customize interface shown above:
-  ;; Example to enable the custom labels: general, org, and markdown:
-  (progn
-    (customize-set-variable 'my/machine-labels (my/machine-labels-available))
-    (customize-save-customized))
-#+end_src
+If you want to enable ALL existing modules, you can run =M-x
+my/machine-labels-enable-all= (the result will be saved in
+=custom.el=). (If new modules are added to the git repository, they
+will not be enabled until you run this again, or by customizing
+=my/machine-labels=.)
 
 You can then remove any of the modules you don't want, the same way as
 before: =M-x my/custom-settings=.
@@ -1074,6 +1076,14 @@ basis based on =my/machine-has-label= (and per-machine labels stored
 in =~/.config/machine-labels=):
 
 ** Prioritize and load requested modules
+
+
+Here is the list of prioritized modules that must be loaded first (if
+enabled):
+
+#+begin_src emacs-lisp :results value replace :exports results
+  (mapconcat (lambda (x) (format "- %s" x)) my/module-priority-list "\n")
+#+end_src
 
 #+begin_src emacs-lisp :tangle "init.el"
   (defvar my/modules-dir (expand-file-name "modules/" user-emacs-directory))

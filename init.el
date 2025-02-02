@@ -134,8 +134,16 @@ If the buffer already exists, delete it and recreate it."
   "List all available machine labels"
   (let ((modules-dir (expand-file-name "modules" user-emacs-directory)))
     (cl-sort (mapcar #'file-name-nondirectory
-            (seq-filter #'file-directory-p
-                        (directory-files modules-dir t "^[^.]" t))) #'string<)))
+                     (seq-filter #'file-directory-p
+                                 (directory-files modules-dir t "^[^.]" t))) #'string<)))
+(defun my/machine-labels-enable-all nil
+  "Adds ALL existing machine labels to the custom my/machine-labels"
+  (interactive)
+  (let ((modules-dir (expand-file-name "modules" user-emacs-directory)))
+    (when (y-or-n-p (format "Do you want to enable ALL Emacs modules from %s? " modules-dir))
+      (progn
+        (customize-set-variable 'my/machine-labels (my/machine-labels-available))
+        (customize-save-customized)))))
 
 (defvar my/modules-dir (expand-file-name "modules/" user-emacs-directory))
 (defvar my/module-priority-list '("general" "fonts") "List of prioritized modules to install first.")
