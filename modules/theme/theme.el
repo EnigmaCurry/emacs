@@ -1,0 +1,28 @@
+(defgroup my/theme-settings nil
+  "My custom theme settings"
+  :group 'my/custom-settings)
+(defcustom my/theme 'deep-thought
+  "Emacs Theme"
+  :type 'symbol
+  :group 'my/theme-settings)
+
+(defun my/theme-update (theme-fn)
+  "Update the `my/theme` variable with the new theme and call THEME-FN."
+  (interactive)
+  (let ((current-theme (car custom-enabled-themes)))
+    (funcall theme-fn)
+    (customize-set-variable 'my/theme (car custom-enabled-themes))
+    (customize-save-customized)
+    (message "Theme changed to: %s" my/theme)))
+
+(use-package
+  deep-thought-theme
+  :straight
+  (deep-thought-theme :type git :host github :repo "emacsfodder/emacs-deep-thought-theme"))
+(use-package solaire-mode :init (solaire-global-mode +1))
+(use-package theme-looper
+  :general
+  ("C-<f11>" (lambda () (interactive) (my/theme-update 'theme-looper-enable-previous-theme)))
+  ("C-<f12>"  (lambda () (interactive) (my/theme-update 'theme-looper-enable-next-theme))))
+
+(load-theme my/theme t)

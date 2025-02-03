@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-02 Sun 16:45 -->
+<!-- 2025-02-02 Sun 22:30 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular Literate GNU Emacs Configuration</title>
@@ -194,7 +194,7 @@
   .org-svg { }
 </style>
 <style type="text/css">
-body{margin:0;background:#121212;color:#e0e0e0;font-family:"Bitstream Vera Sans",Verdana,sans-serif;}code{color:#ffd269;font-weight:bold;font-size:1.5em;margin:0 0.25em 0 0.25em;}div#content{border:1px solid #666;background:#1e1e1e;padding:2em;}a{color:#62afff;text-decoration:none;padding:1px}a:hover{color:#ff5370}#table-of-contents{margin:1em 0;padding:.1em}div#content div#org-div-home-and-up{background:#2b6ca3;color:#fff}div#org-div-home-and-up a:link,div#org-div-home-and-up a:visited{color:#fff;background:#2b6ca3}div#org-div-home-and-up a:hover{color:#ff5370}div.title{margin:-1em -1em 0;font-size:200%;font-weight:bold;background:#2b6ca3;color:#fff;padding:.75em 1em;font-family:"BitStream Vera Sans",Verdana;letter-spacing:.1em}h1{background:#2b6ca3;color:#fff;font-size:200%;font-weight:bold;letter-spacing:.1em;margin:-1em -1em .2em;padding:.75em 1em}h2{font-size:180%;border-bottom:1px solid #555;padding:.2em}h3,h4{font-size:120%;border-bottom:1px solid #444}tt{color:#39f}.verbatim{margin:.5em 0}pre{border:1px solid #e89797;background:#1e1e1e;padding:1em;color:#e0e0e0;margin:0;margin-top:1em;padding:5pt;color:#e0e0e0;font-family:courier,monospace;font-size:0.8em;border-radius:9px;background:#001324;min-width:95%;width:max-content;}.verbatim-caption{border:1px solid #555;background:#222;display:block;font-size:80%;padding:.2em}div#postamble{text-align:left;color:#999;font-size:80%;padding:0;margin:0}div#postamble a{color:#62afff}div#postamble a:hover{color:#ff5370}table{font-size:100%;border-collapse:collapse;margin:.5em 0;color:#e0e0e0}th,td{border:1px solid #555;padding:.3em;margin:2px}th{background:#333}span.underline{text-decoration:underline}.fixme{background:#ff9800;font-weight:bold}.ra{text-align:right}.sidebar{float:right;width:25em;background-color:#6a1b9a;color:#fff;margin:2em -2em 2em 2em;padding:1em}.sidebar a{border:none}.sidebar a:link{color:#80deea}.sidebar a:visited{color:#26c6da}.sidebar a:hover{color:#ffcc80}.sidebar a:active{color:#ff5370}.title{text-align:center}.todo{color:#f44336}.done{color:#4caf50}.timestamp{color:#9e9e9e}.timestamp-kwd{color:#f48fb1}.tag{background-color:#1e88e5;font-weight:normal}.target{background-color:#8e24aa}pre.src{overflow:visible;width:max-content;}@media screen and (max-width:768px){div#content{padding:0em;h1.title{padding-top:1.5em;}}
+body{margin:0;background:#121212;color:#e0e0e0;font-family:"Bitstream Vera Sans",Verdana,sans-serif;}code{color:#ffd269;font-weight:bold;font-size:1.5em;margin:0 0.25em 0 0.25em;}div#content{border:1px solid #666;background:#1e1e1e;padding:2em;}a{color:#62afff;text-decoration:none;padding:1px}a:hover{color:#ff5370}#table-of-contents{margin:1em 0;padding:.1em}div#content div#org-div-home-and-up{background:#001323;color:#fff}div#org-div-home-and-up a:link,div#org-div-home-and-up a:visited{color:#fff;background:#001323}div#org-div-home-and-up a:hover{color:#ff5370}div.title{margin:-1em -1em 0;font-size:200%;font-weight:bold;background:#001323;color:#fff;padding:.75em 1em;font-family:"BitStream Vera Sans",Verdana;letter-spacing:.1em}h1{background:#001323;color:#fff;font-size:200%;font-weight:bold;letter-spacing:.1em;margin:-1em -1em .2em;padding:.75em 1em}h2{font-size:180%;border-bottom:1px solid #555;padding:.2em}h3,h4{font-size:120%;border-bottom:1px solid #444}tt{color:#39f}.verbatim{margin:.5em 0}pre{border:1px solid #e89797;background:#1e1e1e;padding:1em;color:#e0e0e0;margin:0;margin-top:1em;padding:5pt;color:#e0e0e0;font-family:courier,monospace;font-size:0.8em;border-radius:9px;background:#001324;min-width:95%;width:max-content;}.verbatim-caption{border:1px solid #555;background:#222;display:block;font-size:80%;padding:.2em}div#postamble{text-align:left;color:#999;font-size:80%;padding:0;margin:0}div#postamble a{color:#62afff}div#postamble a:hover{color:#ff5370}table{font-size:100%;border-collapse:collapse;margin:.5em 0;color:#e0e0e0}th,td{border:1px solid #555;padding:.3em;margin:2px}th{background:#333}span.underline{text-decoration:underline}.fixme{background:#ff9800;font-weight:bold}.ra{text-align:right}.sidebar{float:right;width:25em;background-color:#6a1b9a;color:#fff;margin:2em -2em 2em 2em;padding:1em}.sidebar a{border:none}.sidebar a:link{color:#80deea}.sidebar a:visited{color:#26c6da}.sidebar a:hover{color:#ffcc80}.sidebar a:active{color:#ff5370}.title{text-align:center}.todo{color:#f44336}.done{color:#4caf50}.timestamp{color:#9e9e9e}.timestamp-kwd{color:#f48fb1}.tag{background-color:#1e88e5;font-weight:normal}.target{background-color:#8e24aa}pre.src{overflow:visible;width:max-content;}@media screen and (max-width:768px){div#content{padding:0em;h1.title{padding-top:1.5em;}}
 </style>
 </head>
 <body>
@@ -209,7 +209,7 @@ body{margin:0;background:#121212;color:#e0e0e0;font-family:"Bitstream Vera Sans"
 <li><a href="#Dependencies">3. Dependencies</a>
 <ul>
 <li><a href="#Emacs">3.1. Emacs</a></li>
-<li><a href="#Rustup">3.2. Rustup</a></li>
+<li><a href="#Rustup_and_Cargo">3.2. Rustup and Cargo</a></li>
 <li><a href="#Git">3.3. Git</a></li>
 <li><a href="#Create_your_Emacs_config_directory">3.4. Create your Emacs config directory</a></li>
 </ul>
@@ -247,34 +247,35 @@ body{margin:0;background:#121212;color:#e0e0e0;font-family:"Bitstream Vera Sans"
 <li><a href="#Per-machine_labels_enable_opt-in_features">8. Per-machine labels enable opt-in features</a></li>
 <li><a href="#Modules">9. Modules</a>
 <ul>
-<li><a href="#Fonts_%28label_%3Dfonts%3D%29">9.1. Fonts (label <code>fonts</code>)</a>
+<li><a href="#Theme_%28label_%3Dtheme%3D%29">9.1. Theme (label <code>theme</code>)</a></li>
+<li><a href="#Fonts_%28label_%3Dfonts%3D%29">9.2. Fonts (label <code>fonts</code>)</a>
 <ul>
-<li><a href="#List_installed_font_families">9.1.1. List installed font families</a></li>
-<li><a href="#Install_font%3A_JetBrains_Mono_Nerdfont">9.1.2. Install font: JetBrains Mono Nerdfont</a></li>
-<li><a href="#Set_font_faces">9.1.3. Set font faces</a></li>
-<li><a href="#Preview_fonts">9.1.4. Preview fonts</a></li>
+<li><a href="#List_installed_font_families">9.2.1. List installed font families</a></li>
+<li><a href="#Install_font%3A_JetBrains_Mono_Nerdfont">9.2.2. Install font: JetBrains Mono Nerdfont</a></li>
+<li><a href="#Set_font_faces">9.2.3. Set font faces</a></li>
+<li><a href="#Preview_fonts">9.2.4. Preview fonts</a></li>
 </ul>
 </li>
-<li><a href="#General_keybindings_manager_%28label_%3Dgeneral%3D%29">9.2. General keybindings manager (label <code>general</code>)</a></li>
-<li><a href="#Org_mode_%28label_%3Dorg%3D%29">9.3. Org mode (label <code>org</code>)</a>
+<li><a href="#General_keybindings_manager_%28label_%3Dgeneral%3D%29">9.3. General keybindings manager (label <code>general</code>)</a></li>
+<li><a href="#Org_mode_%28label_%3Dorg%3D%29">9.4. Org mode (label <code>org</code>)</a>
 <ul>
-<li><a href="#Tangle_Emacs_config_and_write_HTML_document">9.3.1. Tangle Emacs config and write HTML document</a></li>
-<li><a href="#Local_HTTP_server_for_displaying_exported_HTML">9.3.2. Local HTTP server for displaying exported HTML</a></li>
-<li><a href="#Enable_syntax_highlighting_in_HTML_export">9.3.3. Enable syntax highlighting in HTML export</a></li>
-<li><a href="#Org-Tempo_code_block_snippets">9.3.4. Org-Tempo code block snippets</a></li>
-<li><a href="#Use_org_headings_as_HTML_anchors">9.3.5. Use org headings as HTML anchors</a></li>
-<li><a href="#Electric_pairs">9.3.6. Electric pairs</a></li>
+<li><a href="#Tangle_Emacs_config_and_write_HTML_document">9.4.1. Tangle Emacs config and write HTML document</a></li>
+<li><a href="#Local_HTTP_server_for_displaying_exported_HTML">9.4.2. Local HTTP server for displaying exported HTML</a></li>
+<li><a href="#Enable_syntax_highlighting_in_HTML_export">9.4.3. Enable syntax highlighting in HTML export</a></li>
+<li><a href="#Org-Tempo_code_block_snippets">9.4.4. Org-Tempo code block snippets</a></li>
+<li><a href="#Use_org_headings_as_HTML_anchors">9.4.5. Use org headings as HTML anchors</a></li>
+<li><a href="#Electric_pairs">9.4.6. Electric pairs</a></li>
 </ul>
 </li>
-<li><a href="#Completion_%28label_%3Dcompletion%3D%29">9.4. Completion (label <code>completion</code>)</a></li>
-<li><a href="#Vterm_%28label_%3Dvterm%3D%29">9.5. Vterm (label <code>vterm</code>)</a></li>
-<li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">9.6. Markdown mode (label <code>markdown</code>)</a></li>
-<li><a href="#SSH_agent_%28label_%3Dssh-agent%3D%29">9.7. SSH agent (label <code>ssh-agent</code>)</a></li>
-<li><a href="#Magit_%28label_%3Dmagit%3D%29">9.8. Magit (label <code>magit</code>)</a></li>
-<li><a href="#Scale_text_uniformly_in_all_buffers_%28label_%3Dtext-scale%3D%29">9.9. Scale text uniformly in all buffers (label <code>text-scale</code>)</a></li>
-<li><a href="#Justfile_mode_%28label_%3Djust%3D%29">9.10. Justfile mode (label <code>just</code>)</a></li>
-<li><a href="#Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29">9.11. Latin words dictionary and word of the day (label <code>latin-words</code>)</a></li>
-<li><a href="#Dashboard_%28label_%3Ddashboard%3D%29">9.12. Dashboard (label <code>dashboard</code>)</a></li>
+<li><a href="#Completion_%28label_%3Dcompletion%3D%29">9.5. Completion (label <code>completion</code>)</a></li>
+<li><a href="#Vterm_%28label_%3Dvterm%3D%29">9.6. Vterm (label <code>vterm</code>)</a></li>
+<li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">9.7. Markdown mode (label <code>markdown</code>)</a></li>
+<li><a href="#SSH_agent_%28label_%3Dssh-agent%3D%29">9.8. SSH agent (label <code>ssh-agent</code>)</a></li>
+<li><a href="#Magit_%28label_%3Dmagit%3D%29">9.9. Magit (label <code>magit</code>)</a></li>
+<li><a href="#Scale_text_uniformly_in_all_buffers_%28label_%3Dtext-scale%3D%29">9.10. Scale text uniformly in all buffers (label <code>text-scale</code>)</a></li>
+<li><a href="#Justfile_mode_%28label_%3Djust%3D%29">9.11. Justfile mode (label <code>just</code>)</a></li>
+<li><a href="#Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29">9.12. Latin words dictionary and word of the day (label <code>latin-words</code>)</a></li>
+<li><a href="#Dashboard_%28label_%3Ddashboard%3D%29">9.13. Dashboard (label <code>dashboard</code>)</a></li>
 </ul>
 </li>
 <li><a href="#Load_modules">10. Load modules</a>
@@ -348,7 +349,7 @@ on Fedora:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell"><span style="color: #a8a8a8;">#</span><span style="color: #a8a8a8;">e.g., Fedora:</span>
+<pre class="src src-shell"><span style="color: #1078a2; font-style: italic;">#</span><span style="color: #105f89; font-style: italic;">e.g., Fedora:</span>
 sudo dnf install emacs
 </pre>
 </div>
@@ -364,8 +365,8 @@ GNU Emacs 29.4 (build 1, x86_64-redhat-linux-gnu, GTK+ Version 3.24.42, cairo ve
 </pre>
 </div>
 </div>
-<div id="outline-container-Rustup" class="outline-3">
-<h3 id="Rustup"><span class="section-number-3">3.2.</span> Rustup</h3>
+<div id="outline-container-Rustup_and_Cargo" class="outline-3">
+<h3 id="Rustup_and_Cargo"><span class="section-number-3">3.2.</span> Rustup and Cargo</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 <a href="https://rustup.rs/">Rustup</a> is a tool that installs the latest versions of <a href="https://www.rust-lang.org/">Rust</a> and <a href="https://doc.rust-lang.org/cargo/">Cargo</a>
@@ -381,7 +382,7 @@ manager and install it that way:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell"><span style="color: #a8a8a8;"># </span><span style="color: #a8a8a8;">e.g., Fedora:</span>
+<pre class="src src-shell"><span style="color: #1078a2; font-style: italic;"># </span><span style="color: #105f89; font-style: italic;">e.g., Fedora:</span>
 sudo dnf install rustup
 rustup-init
 </pre>
@@ -392,7 +393,7 @@ But you can also <a href="https://rustup.rs/">install it</a> the "curl bomb" way
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell">curl --proto <span style="color: #79a8ff;">'=https'</span> --tlsv1.2 -sSf https://sh.rustup.rs | sh
+<pre class="src src-shell">curl --proto <span style="color: #10adee;">'=https'</span> --tlsv1.2 -sSf https://sh.rustup.rs | sh
 </pre>
 </div>
 
@@ -401,9 +402,9 @@ Cargo packages are declared by Emacs modules themselves:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">this example declares the "just" crate needs to be installed.</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">(the actual install is deferred until later):</span>
-(my/cargo-dependency <span style="color: #79a8ff;">"just"</span>)
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">this example declares the "just" crate needs to be installed.</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">(the actual install is deferred until later):</span>
+(my/cargo-dependency <span style="color: #10adee;">"just"</span>)
 </pre>
 </div>
 
@@ -421,7 +422,7 @@ Install <code>git</code> via your package manager:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell"><span style="color: #a8a8a8;">#</span><span style="color: #a8a8a8;">e.g., Fedora:</span>
+<pre class="src src-shell"><span style="color: #1078a2; font-style: italic;">#</span><span style="color: #105f89; font-style: italic;">e.g., Fedora:</span>
 sudo dnf install git
 </pre>
 </div>
@@ -431,7 +432,7 @@ Clone this git repository:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell">git clone https://github.com/EnigmaCurry/emacs.git <span style="color: #79a8ff;">\</span>
+<pre class="src src-shell">git clone https://github.com/EnigmaCurry/emacs.git <span style="color: #10adee;">\</span>
     ~/git/vendor/enigmacurry/emacs
 </pre>
 </div>
@@ -486,34 +487,34 @@ found in the git repository.
 <div class="outline-text-2" id="text-4">
 <p>
 The <a href="early-init.el">early-init.el</a> is the first config file that is loaded on
-Emacs startup. It is used to set the visual look and feel before the
-GUI is initialized, so that it doesn't have a jarring visual change
-during startup. Additionally, early debug options are set here.
+Emacs startup. It is used to set an initial visual look and feel
+before the GUI is initialized, including an initial dark theme.
+Additionally, early debug options are set here.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load modus-vivendi which is a builtin dark mode theme:</span>
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Load an initial theme (will be overriden later in modules/theme/theme.el)</span>
 (load-theme 'modus-vivendi)
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Set a larger default font size (150 = 15 pt size):</span>
-(<span style="color: #b6a0ff;">setq</span> my/default-text-height 150)
-(set-face-attribute 'default nil <span style="color: #f78fe7;">:height</span> my/default-text-height)
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Turn off GUI distractions:</span>
-(menu-bar-mode -1) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">Press F10 to bring up the menu if you still need it.</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Set a larger default font size (150 = 15 pt size):</span>
+(<span style="color: #1a8da7;">setq</span> my/default-text-height 150)
+(set-face-attribute 'default nil <span style="color: #106590;">:height</span> my/default-text-height)
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Turn off GUI distractions:</span>
+(menu-bar-mode -1) <span style="color: #1078a2; font-style: italic;">; </span><span style="color: #105f89; font-style: italic;">Press F10 to bring up the menu if you still need it.</span>
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(<span style="color: #b6a0ff;">setq</span> inhibit-startup-screen t)
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Don't resize the frame when adjusting the font size:</span>
-(<span style="color: #b6a0ff;">setq</span> window-resize-pixelwise t)
-(<span style="color: #b6a0ff;">setq</span> frame-resize-pixelwise t)
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Disable package.el in favor of straight.el</span>
-(<span style="color: #b6a0ff;">setq</span> package-enable-at-startup nil)
+(<span style="color: #1a8da7;">setq</span> inhibit-startup-screen t)
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Don't resize the frame when adjusting the font size:</span>
+(<span style="color: #1a8da7;">setq</span> window-resize-pixelwise t)
+(<span style="color: #1a8da7;">setq</span> frame-resize-pixelwise t)
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Disable package.el in favor of straight.el</span>
+(<span style="color: #1a8da7;">setq</span> package-enable-at-startup nil)
 
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Debug options:</span>
-<span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Start Emacs with the `--debug-init` argument, to debug errors during startup.</span>
-<span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Enter debugger on specific logger regex (see *Messages* buffer):</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">(setq debug-on-message "Example log message to trace")</span>
-<span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">M-x toggle-debug-on-error</span>
-(<span style="color: #b6a0ff;">setq</span> debug-on-error t)
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Debug options:</span>
+<span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">Start Emacs with the `--debug-init` argument, to debug errors during startup.</span>
+<span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">Enter debugger on specific logger regex (see *Messages* buffer):</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">(setq debug-on-message "Example log message to trace")</span>
+<span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">M-x toggle-debug-on-error</span>
+(<span style="color: #1a8da7;">setq</span> debug-on-error t)
 </pre>
 </div>
 </div>
@@ -530,8 +531,8 @@ environments. Only Emacs builtins will be allowed here:
 <h3 id="Core_libraries"><span class="section-number-3">5.1.</span> Core libraries</h3>
 <div class="outline-text-3" id="text-5-1">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">core libraries</span>
-(<span style="color: #b6a0ff;">require</span> '<span style="color: #00bcff;">cl-lib</span>)
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">core libraries</span>
+(<span style="color: #1a8da7;">require</span> '<span style="color: #1a99e7;">cl-lib</span>)
 </pre>
 </div>
 </div>
@@ -540,20 +541,20 @@ environments. Only Emacs builtins will be allowed here:
 <h3 id="Nice_defaults"><span class="section-number-3">5.2.</span> Nice defaults</h3>
 <div class="outline-text-3" id="text-5-2">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Nice defaults</span>
-(<span style="color: #b6a0ff;">setq-default</span> confirm-kill-emacs #'yes-or-no-p)
-(<span style="color: #b6a0ff;">setq-default</span> vc-follow-symlinks t)
-(<span style="color: #b6a0ff;">setq-default</span> show-trailing-whitespace t)
-(<span style="color: #b6a0ff;">setq-default</span> indicate-empty-lines t)
-(<span style="color: #b6a0ff;">setq-default</span> indicate-buffer-boundaries 'left)
-(<span style="color: #b6a0ff;">setq-default</span> sentence-end-double-space nil)
-(<span style="color: #b6a0ff;">setq-default</span> indent-tabs-mode nil)
-(<span style="color: #b6a0ff;">setq-default</span> tab-width 4)
-(<span style="color: #b6a0ff;">setq-default</span> visible-bell t)
-(<span style="color: #b6a0ff;">setq-default</span> dired-listing-switches <span style="color: #79a8ff;">"-al --group-directories-first"</span>)
-(<span style="color: #b6a0ff;">setq-default</span> tramp-default-method <span style="color: #79a8ff;">"ssh"</span>)
-(<span style="color: #b6a0ff;">setq-default</span> native-comp-deferred-compilation-deny-list nil)
-(<span style="color: #b6a0ff;">setq-default</span> browse-url-browser-function 'browse-url-firefox)
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Nice defaults</span>
+(<span style="color: #1a8da7;">setq-default</span> confirm-kill-emacs #'yes-or-no-p)
+(<span style="color: #1a8da7;">setq-default</span> vc-follow-symlinks t)
+(<span style="color: #1a8da7;">setq-default</span> show-trailing-whitespace t)
+(<span style="color: #1a8da7;">setq-default</span> indicate-empty-lines t)
+(<span style="color: #1a8da7;">setq-default</span> indicate-buffer-boundaries 'left)
+(<span style="color: #1a8da7;">setq-default</span> sentence-end-double-space nil)
+(<span style="color: #1a8da7;">setq-default</span> indent-tabs-mode nil)
+(<span style="color: #1a8da7;">setq-default</span> tab-width 4)
+(<span style="color: #1a8da7;">setq-default</span> visible-bell t)
+(<span style="color: #1a8da7;">setq-default</span> dired-listing-switches <span style="color: #10adee;">"-al --group-directories-first"</span>)
+(<span style="color: #1a8da7;">setq-default</span> tramp-default-method <span style="color: #10adee;">"ssh"</span>)
+(<span style="color: #1a8da7;">setq-default</span> native-comp-deferred-compilation-deny-list nil)
+(<span style="color: #1a8da7;">setq-default</span> browse-url-browser-function 'browse-url-firefox)
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
@@ -574,24 +575,24 @@ idle buffers into the auto-save directory.</li>
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Backups and auto-save</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Reference: https://www.emacswiki.org/emacs/BackupDirectory</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Reference: https://www.emacswiki.org/emacs/ForceBackups</span>
-(<span style="color: #b6a0ff;">setq</span> backup-by-copying t)
-(<span style="color: #b6a0ff;">setq</span> backup-directory-alist
-      `((<span style="color: #79a8ff;">"."</span> . ,(expand-file-name <span style="color: #79a8ff;">"backup"</span> user-emacs-directory))))
-(<span style="color: #b6a0ff;">setq</span> delete-old-versions t)
-(<span style="color: #b6a0ff;">setq</span> kept-new-versions 6)
-(<span style="color: #b6a0ff;">setq</span> kept-old-versions 2)
-(<span style="color: #b6a0ff;">setq</span> version-control t)
-(<span style="color: #b6a0ff;">setq</span> vc-make-backup-files t)
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Backups and auto-save</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Reference: https://www.emacswiki.org/emacs/BackupDirectory</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Reference: https://www.emacswiki.org/emacs/ForceBackups</span>
+(<span style="color: #1a8da7;">setq</span> backup-by-copying t)
+(<span style="color: #1a8da7;">setq</span> backup-directory-alist
+      `((<span style="color: #10adee;">"."</span> . ,(expand-file-name <span style="color: #10adee;">"backup"</span> user-emacs-directory))))
+(<span style="color: #1a8da7;">setq</span> delete-old-versions t)
+(<span style="color: #1a8da7;">setq</span> kept-new-versions 6)
+(<span style="color: #1a8da7;">setq</span> kept-old-versions 2)
+(<span style="color: #1a8da7;">setq</span> version-control t)
+(<span style="color: #1a8da7;">setq</span> vc-make-backup-files t)
 (add-hook 'before-save-hook
-          (<span style="color: #b6a0ff;">lambda</span> () (<span style="color: #b6a0ff;">setq</span> buffer-backed-up nil)))
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">autosaves go in a separate directory</span>
-(<span style="color: #b6a0ff;">let</span> ((auto-save-dir (expand-file-name <span style="color: #79a8ff;">"auto-save"</span> user-emacs-directory)))
+          (<span style="color: #1a8da7;">lambda</span> () (<span style="color: #1a8da7;">setq</span> buffer-backed-up nil)))
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">autosaves go in a separate directory</span>
+(<span style="color: #1a8da7;">let</span> ((auto-save-dir (expand-file-name <span style="color: #10adee;">"auto-save"</span> user-emacs-directory)))
   (make-directory auto-save-dir t)
-  (<span style="color: #b6a0ff;">setq</span> auto-save-file-name-transforms
-        `((<span style="color: #79a8ff;">".*"</span> ,auto-save-dir t))))
+  (<span style="color: #1a8da7;">setq</span> auto-save-file-name-transforms
+        `((<span style="color: #10adee;">".*"</span> ,auto-save-dir t))))
 </pre>
 </div>
 </div>
@@ -600,19 +601,20 @@ idle buffers into the auto-save directory.</li>
 <h3 id="Customization"><span class="section-number-3">5.4.</span> Customization</h3>
 <div class="outline-text-3" id="text-5-4">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Store customizations in custom.el</span>
-(<span style="color: #b6a0ff;">setq</span> custom-file (locate-user-emacs-file <span style="color: #79a8ff;">"custom.el"</span>))
-(<span style="color: #b6a0ff;">when</span> (file-exists-p custom-file)
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Store customizations in custom.el</span>
+(<span style="color: #1a8da7;">setq</span> custom-file (locate-user-emacs-file <span style="color: #10adee;">"custom.el"</span>))
+(<span style="color: #1a8da7;">when</span> (file-exists-p custom-file)
   (load custom-file))
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Store all customizations under my/custom-settings group</span>
-(<span style="color: #b6a0ff;">defgroup</span> <span style="color: #6ae4b9;">my/custom-settings</span> nil
-  <span style="color: #b0d6f5;">"My custom Emacs settings"</span>
-  <span style="color: #f78fe7;">:group</span> 'emacs)
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Shortcut to open custom settings:</span>
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/custom-settings</span> ()
-  <span style="color: #b0d6f5;">"Open the Emacs customization interface for my custom settings."</span>
-  (<span style="color: #b6a0ff;">interactive</span>)
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Store all customizations under my/custom-settings group</span>
+(<span style="color: #1a8da7;">defgroup</span> <span style="color: #1f5e8a;">my/custom-settings</span> nil
+  <span style="color: #10adee;">"My custom Emacs settings"</span>
+  <span style="color: #106590;">:group</span> 'emacs)
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Shortcut to open custom settings:</span>
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/custom-settings</span> ()
+  <span style="color: #10adee;">"Open the Emacs customization interface for my custom settings."</span>
+  (<span style="color: #1a8da7;">interactive</span>)
   (customize-group 'my/custom-settings))
+(<span style="color: #1a8da7;">defalias</span> '<span style="color: #1083be;">my/settings</span> 'my/custom-settings)
 </pre>
 </div>
 </div>
@@ -621,12 +623,12 @@ idle buffers into the auto-save directory.</li>
 <h3 id="Builtin_minor_modes_to_activate_everywhere"><span class="section-number-3">5.5.</span> Builtin minor modes to activate everywhere</h3>
 <div class="outline-text-3" id="text-5-5">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Global minor modes</span>
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Global minor modes</span>
 (column-number-mode)
 (save-place-mode t)
 (savehist-mode t)
 (recentf-mode t)
-<span style="color: #a8a8a8;">;</span><span style="color: #a8a8a8;">(electric-pair-mode t)</span>
+<span style="color: #1078a2; font-style: italic;">;</span><span style="color: #105f89; font-style: italic;">(electric-pair-mode t)</span>
 </pre>
 </div>
 </div>
@@ -635,11 +637,11 @@ idle buffers into the auto-save directory.</li>
 <h3 id="PATH_setup"><span class="section-number-3">5.6.</span> PATH setup</h3>
 <div class="outline-text-3" id="text-5-6">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Function to add a directory to PATH and exec-path</span>
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/add-exec-path</span> (dir)
-  <span style="color: #b0d6f5;">"Add DIR to the environment PATH and exec-path if not already present."</span>
-  (<span style="color: #b6a0ff;">unless</span> (member dir exec-path)
-    (setenv <span style="color: #79a8ff;">"PATH"</span> (concat dir path-separator (getenv <span style="color: #79a8ff;">"PATH"</span>)))
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Function to add a directory to PATH and exec-path</span>
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/add-exec-path</span> (dir)
+  <span style="color: #10adee;">"Add DIR to the environment PATH and exec-path if not already present."</span>
+  (<span style="color: #1a8da7;">unless</span> (member dir exec-path)
+    (setenv <span style="color: #10adee;">"PATH"</span> (concat dir path-separator (getenv <span style="color: #10adee;">"PATH"</span>)))
     (add-to-list 'exec-path dir)))
 </pre>
 </div>
@@ -649,9 +651,9 @@ idle buffers into the auto-save directory.</li>
 <h3 id="Programming_mode"><span class="section-number-3">5.7.</span> Programming mode</h3>
 <div class="outline-text-3" id="text-5-7">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Basic programming mode settings</span>
-(<span style="color: #b6a0ff;">setq-default</span> display-fill-column-indicator-column 80)
-(add-hook 'prog-mode-hook (<span style="color: #b6a0ff;">lambda</span> ()
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Basic programming mode settings</span>
+(<span style="color: #1a8da7;">setq-default</span> display-fill-column-indicator-column 80)
+(add-hook 'prog-mode-hook (<span style="color: #1a8da7;">lambda</span> ()
                             (display-fill-column-indicator-mode 1)
                             (display-line-numbers-mode 1)))
 </pre>
@@ -677,11 +679,12 @@ are accessed via the prefix: <code>C-x r j</code> (register jump):
 </p>
 
 <ul class="org-ul">
-<li><code>C-x r j e</code> - open the Emacs config file buffer</li>
+<li><code>C-&lt;f1&gt;</code> or <code>C-x r j e</code> - open the Emacs config file buffer</li>
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(set-register ?e '(file . <span style="color: #79a8ff;">"~/git/vendor/enigmacurry/emacs-new/emacs.org"</span>))
+<pre class="src src-emacs-lisp">(set-register ?e '(file . <span style="color: #10adee;">"~/git/vendor/enigmacurry/emacs-new/emacs.org"</span>))
+(global-set-key (kbd <span style="color: #10adee;">"C-&lt;f1&gt;"</span>) (<span style="color: #1a8da7;">lambda</span> () (<span style="color: #1a8da7;">interactive</span>) (jump-to-register ?e)))
 </pre>
 </div>
 </div>
@@ -691,6 +694,9 @@ are accessed via the prefix: <code>C-x r j</code> (register jump):
 <div id="outline-container-Cargo" class="outline-2">
 <h2 id="Cargo"><span class="section-number-2">6.</span> Cargo</h2>
 <div class="outline-text-2" id="text-6">
+<p>
+<a href="https://doc.rust-lang.org/cargo/">Cargo</a> is used to install some system programs automatically.
+</p>
 </div>
 <div id="outline-container-Set_cargo_binary_PATH" class="outline-3">
 <h3 id="Set_cargo_binary_PATH"><span class="section-number-3">6.1.</span> Set cargo binary PATH</h3>
@@ -702,9 +708,9 @@ Ensure that this path is set (because Emacs might not have read
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(my/add-exec-path <span style="color: #79a8ff;">"~/.cargo/bin"</span>)
-(<span style="color: #b6a0ff;">unless</span> (executable-find <span style="color: #79a8ff;">"cargo"</span>)
-  (message <span style="color: #79a8ff;">"cargo binary NOT found."</span>))
+<pre class="src src-emacs-lisp">(my/add-exec-path <span style="color: #10adee;">"~/.cargo/bin"</span>)
+(<span style="color: #1a8da7;">unless</span> (executable-find <span style="color: #10adee;">"cargo"</span>)
+  (message <span style="color: #10adee;">"cargo binary NOT found."</span>))
 </pre>
 </div>
 </div>
@@ -713,50 +719,50 @@ Ensure that this path is set (because Emacs might not have read
 <h3 id="Cargo_functions"><span class="section-number-3">6.2.</span> Cargo functions</h3>
 <div class="outline-text-3" id="text-6-2">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/cargo-package-installed-p</span> (package)
-  <span style="color: #b0d6f5;">"Check if a Cargo PACKAGE is installed."</span>
-  (<span style="color: #b6a0ff;">with-temp-buffer</span>
-    (<span style="color: #b6a0ff;">let</span> ((exit-code (call-process <span style="color: #79a8ff;">"cargo"</span> nil t nil <span style="color: #79a8ff;">"install"</span> <span style="color: #79a8ff;">"--list"</span>)))
-      (<span style="color: #b6a0ff;">if</span> (zerop exit-code)
-          (<span style="color: #b6a0ff;">progn</span>
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/cargo-package-installed-p</span> (package)
+  <span style="color: #10adee;">"Check if a Cargo PACKAGE is installed."</span>
+  (<span style="color: #1a8da7;">with-temp-buffer</span>
+    (<span style="color: #1a8da7;">let</span> ((exit-code (call-process <span style="color: #10adee;">"cargo"</span> nil t nil <span style="color: #10adee;">"install"</span> <span style="color: #10adee;">"--list"</span>)))
+      (<span style="color: #1a8da7;">if</span> (zerop exit-code)
+          (<span style="color: #1a8da7;">progn</span>
             (goto-char (point-min))
             (search-forward package nil t))
-        (<span style="color: #d0bc00;">error</span> <span style="color: #79a8ff;">"Failed to run 'cargo install --list'"</span>)))))
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/cargo-install</span> (programs)
-  <span style="color: #b0d6f5;">"Install a list of PROGRAMS via `cargo install`, skipping those already installed.</span>
-<span style="color: #b0d6f5;">PROGRAMS can be a single string (with space-separated programs) or a list of strings."</span>
-  (<span style="color: #b6a0ff;">unless</span> programs
-    (<span style="color: #d0bc00;">user-error</span> <span style="color: #79a8ff;">"No programs specified for cargo install"</span>))
-  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Handle single string: split by spaces and convert to list</span>
-  (<span style="color: #b6a0ff;">setq</span> programs (<span style="color: #b6a0ff;">if</span> (stringp programs)
-                     (split-string programs) <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Split a single string into a list</span>
+        (<span style="color: #FF0000; font-weight: bold;">error</span> <span style="color: #10adee;">"Failed to run 'cargo install --list'"</span>)))))
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/cargo-install</span> (programs)
+  <span style="color: #10adee;">"Install a list of PROGRAMS via `cargo install`, skipping those already installed.</span>
+<span style="color: #10adee;">PROGRAMS can be a single string (with space-separated programs) or a list of strings."</span>
+  (<span style="color: #1a8da7;">unless</span> programs
+    (<span style="color: #FF0000; font-weight: bold;">user-error</span> <span style="color: #10adee;">"No programs specified for cargo install"</span>))
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Handle single string: split by spaces and convert to list</span>
+  (<span style="color: #1a8da7;">setq</span> programs (<span style="color: #1a8da7;">if</span> (stringp programs)
+                     (split-string programs) <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Split a single string into a list</span>
                    programs))
-  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Filter out installed packages</span>
-  (<span style="color: #b6a0ff;">let</span> ((to-install (seq-remove #'my/cargo-package-installed-p programs)))
-    (<span style="color: #b6a0ff;">if</span> (null to-install)
-        (message <span style="color: #79a8ff;">"All specified programs are already installed"</span>)
-      (<span style="color: #b6a0ff;">let*</span> ((buffer-name (concat <span style="color: #79a8ff;">"*cargo install "</span>
-                                  (string-join to-install <span style="color: #79a8ff;">" "</span>) <span style="color: #79a8ff;">"*"</span>))
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Filter out installed packages</span>
+  (<span style="color: #1a8da7;">let</span> ((to-install (seq-remove #'my/cargo-package-installed-p programs)))
+    (<span style="color: #1a8da7;">if</span> (null to-install)
+        (message <span style="color: #10adee;">"All specified programs are already installed"</span>)
+      (<span style="color: #1a8da7;">let*</span> ((buffer-name (concat <span style="color: #10adee;">"*cargo install "</span>
+                                  (string-join to-install <span style="color: #10adee;">" "</span>) <span style="color: #10adee;">"*"</span>))
              (existing-buffer (get-buffer buffer-name)))
-        (<span style="color: #b6a0ff;">if</span> (<span style="color: #b6a0ff;">and</span> existing-buffer (get-buffer-process existing-buffer))
-            (<span style="color: #d0bc00;">user-error</span> <span style="color: #79a8ff;">"Cargo install already in progress for programs: %s"</span>
-                        (string-join to-install <span style="color: #79a8ff;">", "</span>))
-          (<span style="color: #b6a0ff;">when</span> existing-buffer
+        (<span style="color: #1a8da7;">if</span> (<span style="color: #1a8da7;">and</span> existing-buffer (get-buffer-process existing-buffer))
+            (<span style="color: #FF0000; font-weight: bold;">user-error</span> <span style="color: #10adee;">"Cargo install already in progress for programs: %s"</span>
+                        (string-join to-install <span style="color: #10adee;">", "</span>))
+          (<span style="color: #1a8da7;">when</span> existing-buffer
             (kill-buffer existing-buffer))
-          (<span style="color: #b6a0ff;">let</span> ((buffer (get-buffer-create buffer-name)))
-            (start-process <span style="color: #79a8ff;">"cargo-install"</span> buffer
-                           <span style="color: #79a8ff;">"/bin/bash"</span> <span style="color: #79a8ff;">"-c"</span> (concat <span style="color: #79a8ff;">"cargo install "</span>
-                                            (string-join to-install <span style="color: #79a8ff;">" "</span>)))
+          (<span style="color: #1a8da7;">let</span> ((buffer (get-buffer-create buffer-name)))
+            (start-process <span style="color: #10adee;">"cargo-install"</span> buffer
+                           <span style="color: #10adee;">"/bin/bash"</span> <span style="color: #10adee;">"-c"</span> (concat <span style="color: #10adee;">"cargo install "</span>
+                                            (string-join to-install <span style="color: #10adee;">" "</span>)))
             (display-buffer buffer)
-            (<span style="color: #b6a0ff;">with-current-buffer</span> buffer
+            (<span style="color: #1a8da7;">with-current-buffer</span> buffer
               (comint-mode)
               (goto-char (point-min)))))))))
-(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/cargo-dependencies</span> nil
-  <span style="color: #b0d6f5;">"A list of Rust crate dependencies to be installed."</span>)
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/cargo-dependency</span> (crate)
-  <span style="color: #b0d6f5;">"Add a Rust CRATE to the list of dependencies."</span>
-  (<span style="color: #b6a0ff;">unless</span> (member crate my/cargo-dependencies)
-    (<span style="color: #b6a0ff;">setq</span> my/cargo-dependencies (cons crate my/cargo-dependencies))))
+(<span style="color: #1a8da7;">defvar</span> <span style="color: #1e8eb8;">my/cargo-dependencies</span> nil
+  <span style="color: #10adee;">"A list of Rust crate dependencies to be installed."</span>)
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/cargo-dependency</span> (crate)
+  <span style="color: #10adee;">"Add a Rust CRATE to the list of dependencies."</span>
+  (<span style="color: #1a8da7;">unless</span> (member crate my/cargo-dependencies)
+    (<span style="color: #1a8da7;">setq</span> my/cargo-dependencies (cons crate my/cargo-dependencies))))
 </pre>
 </div>
 </div>
@@ -769,9 +775,9 @@ Ensure that this path is set (because Emacs might not have read
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">depend on the just crate so its installed automatically</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">you must add "just" to the list of my/machine-labels for this to work:</span>
-(my/cargo-dependency <span style="color: #79a8ff;">"just"</span>)
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">depend on the just crate so its installed automatically</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">you must add "just" to the list of my/machine-labels for this to work:</span>
+(my/cargo-dependency <span style="color: #10adee;">"just"</span>)
 </pre>
 </div>
 
@@ -827,27 +833,27 @@ Emacs builtin macro that enables declarative package configuration.
 <h3 id="Lazy-load_straight.el"><span class="section-number-3">7.1.</span> Lazy-load straight.el</h3>
 <div class="outline-text-3" id="text-7-1">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/bootstrap-straight</span> (<span style="color: #6ae4b9;">&amp;rest</span> _)
-  <span style="color: #b0d6f5;">"Bootstrap straight.el only if it's not already installed."</span>
-  (<span style="color: #b6a0ff;">unless</span> (<span style="color: #b6a0ff;">bound-and-true-p</span> straight--build-dir)
-    (<span style="color: #b6a0ff;">let</span> ((bootstrap-file
-           (expand-file-name <span style="color: #79a8ff;">"straight/repos/straight.el/bootstrap.el"</span>
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/bootstrap-straight</span> (<span style="color: #1f5e8a;">&amp;rest</span> _)
+  <span style="color: #10adee;">"Bootstrap straight.el only if it's not already installed."</span>
+  (<span style="color: #1a8da7;">unless</span> (<span style="color: #1a8da7;">bound-and-true-p</span> straight--build-dir)
+    (<span style="color: #1a8da7;">let</span> ((bootstrap-file
+           (expand-file-name <span style="color: #10adee;">"straight/repos/straight.el/bootstrap.el"</span>
                              user-emacs-directory))
           (bootstrap-version 5))
-      (<span style="color: #b6a0ff;">unless</span> (file-exists-p bootstrap-file)
-        (<span style="color: #b6a0ff;">with-current-buffer</span>
+      (<span style="color: #1a8da7;">unless</span> (file-exists-p bootstrap-file)
+        (<span style="color: #1a8da7;">with-current-buffer</span>
             (url-retrieve-synchronously
-             <span style="color: #79a8ff;">"https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"</span>
+             <span style="color: #10adee;">"https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"</span>
              'silent
              'inhibit-cookies)
           (goto-char (point-max))
           (eval-print-last-sexp)
           ))
       (load bootstrap-file nil 'nomessage)
-      (<span style="color: #b6a0ff;">setq</span> straight-use-package-by-default t)
+      (<span style="color: #1a8da7;">setq</span> straight-use-package-by-default t)
       (straight-use-package 'use-package))))
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Advise `use-package` to initialize straight.el when first called</span>
-(advice-add 'use-package <span style="color: #f78fe7;">:before</span> #'my/bootstrap-straight)
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Advise `use-package` to initialize straight.el when first called</span>
+(advice-add 'use-package <span style="color: #106590;">:before</span> #'my/bootstrap-straight)
 </pre>
 </div>
 </div>
@@ -856,33 +862,33 @@ Emacs builtin macro that enables declarative package configuration.
 <h3 id="Track_packages_added_via_use-package"><span class="section-number-3">7.2.</span> Track packages added via use-package</h3>
 <div class="outline-text-3" id="text-7-2">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/use-package-tracked-list</span> nil
-  <span style="color: #b0d6f5;">"A list to track the names of packages declared via `use-package`."</span>)
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/use-package-tracked-list</span> ()
-  <span style="color: #b0d6f5;">"Display the tracked `use-package` packages in a new buffer, one per line.</span>
-<span style="color: #b0d6f5;">If the buffer already exists, delete it and recreate it."</span>
-  (<span style="color: #b6a0ff;">interactive</span>)
-  (<span style="color: #b6a0ff;">let</span> ((buffer-name <span style="color: #79a8ff;">"*Tracked Packages*"</span>))
-    (<span style="color: #b6a0ff;">when</span> (get-buffer buffer-name)
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">defvar</span> <span style="color: #1e8eb8;">my/use-package-tracked-list</span> nil
+  <span style="color: #10adee;">"A list to track the names of packages declared via `use-package`."</span>)
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/use-package-tracked-list</span> ()
+  <span style="color: #10adee;">"Display the tracked `use-package` packages in a new buffer, one per line.</span>
+<span style="color: #10adee;">If the buffer already exists, delete it and recreate it."</span>
+  (<span style="color: #1a8da7;">interactive</span>)
+  (<span style="color: #1a8da7;">let</span> ((buffer-name <span style="color: #10adee;">"*Tracked Packages*"</span>))
+    (<span style="color: #1a8da7;">when</span> (get-buffer buffer-name)
       (kill-buffer buffer-name))
-    (<span style="color: #b6a0ff;">let</span> ((buffer (get-buffer-create buffer-name)))
-      (<span style="color: #b6a0ff;">with-current-buffer</span> buffer
+    (<span style="color: #1a8da7;">let</span> ((buffer (get-buffer-create buffer-name)))
+      (<span style="color: #1a8da7;">with-current-buffer</span> buffer
         (erase-buffer)
-        (insert <span style="color: #79a8ff;">"# Packages tracked via use-package:\n"</span>)
-        (<span style="color: #b6a0ff;">if</span> my/use-package-tracked-list
-            (<span style="color: #b6a0ff;">dolist</span> (pkg (sort my/use-package-tracked-list #'string&lt;))
-              (insert (format <span style="color: #79a8ff;">"%s\n"</span> pkg)))
-          (insert <span style="color: #79a8ff;">"No packages tracked.\n"</span>))
+        (insert <span style="color: #10adee;">"# Packages tracked via use-package:\n"</span>)
+        (<span style="color: #1a8da7;">if</span> my/use-package-tracked-list
+            (<span style="color: #1a8da7;">dolist</span> (pkg (sort my/use-package-tracked-list #'string&lt;))
+              (insert (format <span style="color: #10adee;">"%s\n"</span> pkg)))
+          (insert <span style="color: #10adee;">"No packages tracked.\n"</span>))
         (read-only-mode 1))
       (pop-to-buffer buffer))))
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/use-package-advice</span> (orig-fun <span style="color: #6ae4b9;">&amp;rest</span> args)
-  <span style="color: #b0d6f5;">"Advice around `</span><span style="color: #00bcff;">use-package</span><span style="color: #b0d6f5;">' to track package names."</span>
-  (<span style="color: #b6a0ff;">when</span> (symbolp (car args))
-    (<span style="color: #b6a0ff;">push</span> (symbol-name (car args)) my/use-package-tracked-list)
-    (<span style="color: #b6a0ff;">setq</span> my/use-package-tracked-list (delete-dups my/use-package-tracked-list)))
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/use-package-advice</span> (orig-fun <span style="color: #1f5e8a;">&amp;rest</span> args)
+  <span style="color: #10adee;">"Advice around `</span><span style="color: #1a99e7;">use-package</span><span style="color: #10adee;">' to track package names."</span>
+  (<span style="color: #1a8da7;">when</span> (symbolp (car args))
+    (<span style="color: #1a8da7;">push</span> (symbol-name (car args)) my/use-package-tracked-list)
+    (<span style="color: #1a8da7;">setq</span> my/use-package-tracked-list (delete-dups my/use-package-tracked-list)))
   (apply orig-fun args))
 
-(advice-add 'use-package <span style="color: #f78fe7;">:around</span> #'my/use-package-advice)
+(advice-add 'use-package <span style="color: #106590;">:around</span> #'my/use-package-advice)
 </pre>
 </div>
 </div>
@@ -899,32 +905,32 @@ that become enabled by adding labels on a per-machine basis.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Customize which emacs config modules to load per-machine:</span>
-(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/machine-labels</span> '()
-  <span style="color: #b0d6f5;">"List of machine-specific labels to configure which modules to load."</span>
-  <span style="color: #f78fe7;">:type</span> '(repeat string)
-  <span style="color: #f78fe7;">:group</span> 'my/custom-settings)
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/machine-labels</span> ()
-  <span style="color: #b0d6f5;">"Return the list of machine-specific labels."</span>
-  (<span style="color: #b6a0ff;">interactive</span>)
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Customize which emacs config modules to load per-machine:</span>
+(<span style="color: #1a8da7;">defcustom</span> <span style="color: #1e8eb8;">my/machine-labels</span> '()
+  <span style="color: #10adee;">"List of machine-specific labels to configure which modules to load."</span>
+  <span style="color: #106590;">:type</span> '(repeat string)
+  <span style="color: #106590;">:group</span> 'my/custom-settings)
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/machine-labels</span> ()
+  <span style="color: #10adee;">"Return the list of machine-specific labels."</span>
+  (<span style="color: #1a8da7;">interactive</span>)
   my/machine-labels)
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/machine-has-label</span> (label)
-  <span style="color: #b0d6f5;">"Check if the current machine is labeled with LABEL."</span>
-  (<span style="color: #b6a0ff;">if</span> (member label my/machine-labels)
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/machine-has-label</span> (label)
+  <span style="color: #10adee;">"Check if the current machine is labeled with LABEL."</span>
+  (<span style="color: #1a8da7;">if</span> (member label my/machine-labels)
       t
     nil))
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/machine-labels-available</span> ()
-  <span style="color: #b0d6f5;">"List all available machine labels"</span>
-  (<span style="color: #b6a0ff;">let</span> ((modules-dir (expand-file-name <span style="color: #79a8ff;">"modules"</span> user-emacs-directory)))
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/machine-labels-available</span> ()
+  <span style="color: #10adee;">"List all available machine labels"</span>
+  (<span style="color: #1a8da7;">let</span> ((modules-dir (expand-file-name <span style="color: #10adee;">"modules"</span> user-emacs-directory)))
     (cl-sort (mapcar #'file-name-nondirectory
                      (seq-filter #'file-directory-p
-                                 (directory-files modules-dir t <span style="color: #79a8ff;">"^[</span><span style="color: #d0bc00;">^</span><span style="color: #79a8ff;">.]"</span> t))) <span style="color: #d0bc00;">#'string&lt;)))</span>
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/machine-labels-enable-all</span> nil
-  <span style="color: #b0d6f5;">"Adds ALL existing machine labels to the custom my/machine-labels"</span>
-  (<span style="color: #b6a0ff;">interactive</span>)
-  (<span style="color: #b6a0ff;">let</span> ((modules-dir (expand-file-name <span style="color: #79a8ff;">"modules"</span> user-emacs-directory)))
-    (<span style="color: #b6a0ff;">when</span> (y-or-n-p (format <span style="color: #79a8ff;">"Do you want to enable ALL Emacs modules from %s? "</span> modules-dir))
-      (<span style="color: #b6a0ff;">progn</span>
+                                 (directory-files modules-dir t <span style="color: #10adee;">"^[</span><span style="color: #FF0000; font-weight: bold;">^</span><span style="color: #10adee;">.]"</span> t))) <span style="color: #FF0000; font-weight: bold;">#'string&lt;)))</span>
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/machine-labels-enable-all</span> nil
+  <span style="color: #10adee;">"Adds ALL existing machine labels to the custom my/machine-labels"</span>
+  (<span style="color: #1a8da7;">interactive</span>)
+  (<span style="color: #1a8da7;">let</span> ((modules-dir (expand-file-name <span style="color: #10adee;">"modules"</span> user-emacs-directory)))
+    (<span style="color: #1a8da7;">when</span> (y-or-n-p (format <span style="color: #10adee;">"Do you want to enable ALL Emacs modules from %s? "</span> modules-dir))
+      (<span style="color: #1a8da7;">progn</span>
         (customize-set-variable 'my/machine-labels (my/machine-labels-available))
         (customize-save-customized)))))
 </pre>
@@ -947,7 +953,7 @@ Modules are optional and they extend the base config.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="orgecd8318">
+<pre class="example" id="orga77fa67">
 - completion
 - dashboard
 - fonts
@@ -959,6 +965,7 @@ Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/mod
 - org
 - ssh-agent
 - text-scale
+- theme
 - vterm
 </pre>
 
@@ -1021,87 +1028,135 @@ You should restart Emacs to reload the configured modules from
 <code>custom.el</code>.
 </p>
 </div>
-<div id="outline-container-Fonts_%28label_%3Dfonts%3D%29" class="outline-3">
-<h3 id="Fonts_%28label_%3Dfonts%3D%29"><span class="section-number-3">9.1.</span> Fonts (label <code>fonts</code>)</h3>
+<div id="outline-container-Theme_%28label_%3Dtheme%3D%29" class="outline-3">
+<h3 id="Theme_%28label_%3Dtheme%3D%29"><span class="section-number-3">9.1.</span> Theme (label <code>theme</code>)</h3>
 <div class="outline-text-3" id="text-9-1">
+<ul class="org-ul">
+<li><a href="https://github.com/myTerminal/theme-looper">theme-looper</a></li>
+<li><a href="https://github.com/hlissner/emacs-solaire-mode">solaire-mode</a></li>
+<li><a href="https://github.com/emacsfodder/emacs-deep-thought-theme">deep-thought</a></li>
+</ul>
+
+<p>
+You can cycle the current theme via <code>C-&lt;f11&gt;</code> and <code>C-&lt;f12&gt;</code>. As you do
+this, the theme will be made persistent by automatically customizing
+<code>my/theme</code> which is loaded on startup.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">defgroup</span> <span style="color: #1f5e8a;">my/theme-settings</span> nil
+  <span style="color: #10adee;">"My custom theme settings"</span>
+  <span style="color: #106590;">:group</span> 'my/custom-settings)
+(<span style="color: #1a8da7;">defcustom</span> <span style="color: #1e8eb8;">my/theme</span> 'deep-thought
+  <span style="color: #10adee;">"Emacs Theme"</span>
+  <span style="color: #106590;">:type</span> 'symbol
+  <span style="color: #106590;">:group</span> 'my/theme-settings)
+
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/theme-update</span> (theme-fn)
+  <span style="color: #10adee;">"Update the `my/theme` variable with the new theme and call THEME-FN."</span>
+  (<span style="color: #1a8da7;">interactive</span>)
+  (<span style="color: #1a8da7;">let</span> ((current-theme (car custom-enabled-themes)))
+    (funcall theme-fn)
+    (customize-set-variable 'my/theme (car custom-enabled-themes))
+    (customize-save-customized)
+    (message <span style="color: #10adee;">"Theme changed to: %s"</span> my/theme)))
+
+(<span style="color: #1a8da7;">use-package</span>
+  deep-thought-theme
+  <span style="color: #106590;">:straight</span>
+  (deep-thought-theme <span style="color: #106590;">:type</span> git <span style="color: #106590;">:host</span> github <span style="color: #106590;">:repo</span> <span style="color: #10adee;">"emacsfodder/emacs-deep-thought-theme"</span>))
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">solaire-mode</span> <span style="color: #106590;">:init</span> (solaire-global-mode +1))
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">theme-looper</span>
+  <span style="color: #106590;">:general</span>
+  (<span style="color: #10adee;">"C-&lt;f11&gt;"</span> (<span style="color: #1a8da7;">lambda</span> () (<span style="color: #1a8da7;">interactive</span>) (my/theme-update 'theme-looper-enable-previous-theme)))
+  (<span style="color: #10adee;">"C-&lt;f12&gt;"</span>  (<span style="color: #1a8da7;">lambda</span> () (<span style="color: #1a8da7;">interactive</span>) (my/theme-update 'theme-looper-enable-next-theme))))
+
+(load-theme my/theme t)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Fonts_%28label_%3Dfonts%3D%29" class="outline-3">
+<h3 id="Fonts_%28label_%3Dfonts%3D%29"><span class="section-number-3">9.2.</span> Fonts (label <code>fonts</code>)</h3>
+<div class="outline-text-3" id="text-9-2">
 </div>
 <div id="outline-container-List_installed_font_families" class="outline-4">
-<h4 id="List_installed_font_families"><span class="section-number-4">9.1.1.</span> List installed font families</h4>
-<div class="outline-text-4" id="text-9-1-1">
+<h4 id="List_installed_font_families"><span class="section-number-4">9.2.1.</span> List installed font families</h4>
+<div class="outline-text-4" id="text-9-2-1">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(mapconcat (<span style="color: #b6a0ff;">lambda</span> (x) (format <span style="color: #79a8ff;">"- %s"</span> x))
-           (delete-dups (sort (font-family-list) #'string&lt;)) <span style="color: #79a8ff;">"\n"</span>)
+<pre class="src src-emacs-lisp">(mapconcat (<span style="color: #1a8da7;">lambda</span> (x) (format <span style="color: #10adee;">"- %s"</span> x))
+           (delete-dups (sort (font-family-list) #'string&lt;)) <span style="color: #10adee;">"\n"</span>)
 </pre>
 </div>
 </div>
 </div>
 <div id="outline-container-Install_font%3A_JetBrains_Mono_Nerdfont" class="outline-4">
-<h4 id="Install_font%3A_JetBrains_Mono_Nerdfont"><span class="section-number-4">9.1.2.</span> Install font: JetBrains Mono Nerdfont</h4>
-<div class="outline-text-4" id="text-9-1-2">
+<h4 id="Install_font%3A_JetBrains_Mono_Nerdfont"><span class="section-number-4">9.2.2.</span> Install font: JetBrains Mono Nerdfont</h4>
+<div class="outline-text-4" id="text-9-2-2">
 <p>
 <a href="https://www.jetbrains.com/lp/mono/">JetBrains Mono typeface</a>
 <a href="https://www.nerdfonts.com/font-downloads">Nerd Fonts</a>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Download JetBrains Mono typeface</span>
-(<span style="color: #b6a0ff;">let*</span> ((url <span style="color: #79a8ff;">"https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip"</span>)
-       (zip-file (expand-file-name <span style="color: #79a8ff;">"JetBrainsMono.zip"</span> temporary-file-directory))
-       (font-dir (expand-file-name <span style="color: #79a8ff;">"~/.local/share/fonts/JetBrainsMonoNerdFont/"</span>))
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">Download JetBrains Mono typeface</span>
+(<span style="color: #1a8da7;">let*</span> ((url <span style="color: #10adee;">"https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip"</span>)
+       (zip-file (expand-file-name <span style="color: #10adee;">"JetBrainsMono.zip"</span> temporary-file-directory))
+       (font-dir (expand-file-name <span style="color: #10adee;">"~/.local/share/fonts/JetBrainsMonoNerdFont/"</span>))
        (default-directory temporary-file-directory))
-  (<span style="color: #b6a0ff;">unless</span> (file-directory-p font-dir)
+  (<span style="color: #1a8da7;">unless</span> (file-directory-p font-dir)
     (url-copy-file url zip-file t)
     (make-directory font-dir t)
-    (<span style="color: #b6a0ff;">let</span> ((output-buffer (generate-new-buffer <span style="color: #79a8ff;">"*unzip-output*"</span>)))
-      (<span style="color: #b6a0ff;">unwind-protect</span>
-          (call-process <span style="color: #79a8ff;">"unzip"</span>
-                        nil output-buffer nil <span style="color: #79a8ff;">"-j"</span> zip-file <span style="color: #79a8ff;">"-d"</span> font-dir)
+    (<span style="color: #1a8da7;">let</span> ((output-buffer (generate-new-buffer <span style="color: #10adee;">"*unzip-output*"</span>)))
+      (<span style="color: #1a8da7;">unwind-protect</span>
+          (call-process <span style="color: #10adee;">"unzip"</span>
+                        nil output-buffer nil <span style="color: #10adee;">"-j"</span> zip-file <span style="color: #10adee;">"-d"</span> font-dir)
         (kill-buffer output-buffer)))
-    (call-process <span style="color: #79a8ff;">"fc-cache"</span> nil nil nil <span style="color: #79a8ff;">"-fv"</span>)
+    (call-process <span style="color: #10adee;">"fc-cache"</span> nil nil nil <span style="color: #10adee;">"-fv"</span>)
     (delete-file zip-file)
-    (message <span style="color: #79a8ff;">"JetBrains Mono Nerd Font installed successfully."</span>)))
+    (message <span style="color: #10adee;">"JetBrains Mono Nerd Font installed successfully."</span>)))
 </pre>
 </div>
 </div>
 </div>
 <div id="outline-container-Set_font_faces" class="outline-4">
-<h4 id="Set_font_faces"><span class="section-number-4">9.1.3.</span> Set font faces</h4>
-<div class="outline-text-4" id="text-9-1-3">
+<h4 id="Set_font_faces"><span class="section-number-4">9.2.3.</span> Set font faces</h4>
+<div class="outline-text-4" id="text-9-2-3">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">show list of installed fonts:</span>
-<span style="color: #a8a8a8;">;;</span><span style="color: #a8a8a8;">(font-family-list)</span>
-<span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">show default font:</span>
-<span style="color: #a8a8a8;">;;</span><span style="color: #a8a8a8;">(face-attribute 'default :font)</span>
-<span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Set default font faces:</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">M-x my/custom-settings    :: font-settings group:</span>
-(<span style="color: #b6a0ff;">defgroup</span> <span style="color: #6ae4b9;">my/font-settings</span> nil
-  <span style="color: #b0d6f5;">"My custom font settings"</span>
-    <span style="color: #f78fe7;">:group</span> 'my/custom-settings)
-(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-family-default</span> <span style="color: #79a8ff;">"JetBrainsMono Nerd Font"</span>
-  <span style="color: #b0d6f5;">"Default font family"</span>
-  <span style="color: #f78fe7;">:type</span> 'string
-  <span style="color: #f78fe7;">:group</span> 'my/font-settings)
-(<span style="color: #b6a0ff;">defcustom</span> <span style="color: #00d3d0;">my/font-size-default</span> 120
-  <span style="color: #b0d6f5;">"Default font size"</span>
-  <span style="color: #f78fe7;">:type</span> 'string
-  <span style="color: #f78fe7;">:group</span> 'my/font-settings)
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/font-settings-apply</span> ()
-  <span style="color: #b0d6f5;">"Set the default font based on</span>
-<span style="color: #b0d6f5;">    `my/font-family-default` and `my/font-size-default`."</span>
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">show list of installed fonts:</span>
+<span style="color: #1078a2; font-style: italic;">;;</span><span style="color: #105f89; font-style: italic;">(font-family-list)</span>
+<span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">show default font:</span>
+<span style="color: #1078a2; font-style: italic;">;;</span><span style="color: #105f89; font-style: italic;">(face-attribute 'default :font)</span>
+<span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">Set default font faces:</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">M-x my/custom-settings    :: font-settings group:</span>
+(<span style="color: #1a8da7;">defgroup</span> <span style="color: #1f5e8a;">my/font-settings</span> nil
+  <span style="color: #10adee;">"My custom font settings"</span>
+    <span style="color: #106590;">:group</span> 'my/custom-settings)
+(<span style="color: #1a8da7;">defcustom</span> <span style="color: #1e8eb8;">my/font-family-default</span> <span style="color: #10adee;">"JetBrainsMono Nerd Font"</span>
+  <span style="color: #10adee;">"Default font family"</span>
+  <span style="color: #106590;">:type</span> 'string
+  <span style="color: #106590;">:group</span> 'my/font-settings)
+(<span style="color: #1a8da7;">defcustom</span> <span style="color: #1e8eb8;">my/font-size-default</span> 120
+  <span style="color: #10adee;">"Default font size"</span>
+  <span style="color: #106590;">:type</span> 'string
+  <span style="color: #106590;">:group</span> 'my/font-settings)
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/font-settings-apply</span> ()
+  <span style="color: #10adee;">"Set the default font based on</span>
+<span style="color: #10adee;">    `my/font-family-default` and `my/font-size-default`."</span>
   (set-face-attribute 'default nil
-                      <span style="color: #f78fe7;">:family</span> my/font-family-default
-                      <span style="color: #f78fe7;">:height</span> my/font-size-default)
+                      <span style="color: #106590;">:family</span> my/font-family-default
+                      <span style="color: #106590;">:height</span> my/font-size-default)
   t)
 (my/font-settings-apply)
 (add-hook 'after-init-hook #'my/font-settings-apply)
-(advice-add 'custom-save-all <span style="color: #f78fe7;">:after</span> (<span style="color: #b6a0ff;">lambda</span> ()
-            <span style="color: #b0d6f5;">"Re-apply custom settings after saving customizations."</span>
+(advice-add 'custom-save-all <span style="color: #106590;">:after</span> (<span style="color: #1a8da7;">lambda</span> ()
+            <span style="color: #10adee;">"Re-apply custom settings after saving customizations."</span>
             (my/font-settings-apply)))
 
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Use nerd icons</span>
-(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">nerd-icons</span>
-  <span style="color: #f78fe7;">:custom</span>
-  (nerd-icons-font-family <span style="color: #79a8ff;">"JetBrainsMono Nerd Font"</span>))
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Use nerd icons</span>
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">nerd-icons</span>
+  <span style="color: #106590;">:custom</span>
+  (nerd-icons-font-family <span style="color: #10adee;">"JetBrainsMono Nerd Font"</span>))
 </pre>
 </div>
 
@@ -1114,22 +1169,22 @@ selection.
 </div>
 </div>
 <div id="outline-container-Preview_fonts" class="outline-4">
-<h4 id="Preview_fonts"><span class="section-number-4">9.1.4.</span> Preview fonts</h4>
-<div class="outline-text-4" id="text-9-1-4">
+<h4 id="Preview_fonts"><span class="section-number-4">9.2.4.</span> Preview fonts</h4>
+<div class="outline-text-4" id="text-9-2-4">
 <p>
 <a href="https://protesilaos.com/emacs/show-font">show-font</a>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">show-font</span>)
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">show-font</span>)
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">setq</span> show-font-pangram
-      (concat <span style="color: #79a8ff;">"A wizard&#8217;s job is to vex chumps quickly in fog."</span>
-              <span style="color: #79a8ff;">"\n\t&#1641;(-&#814;&#814;&#771;-&#771;)&#1782; &#1641;(&#9679;&#814;&#814;&#771;&#8226;&#771;)&#1782; &#1641;(&#865;&#3663;&#815;&#865;&#3663;)&#1782; &#1641;(-&#814;&#814;&#771;&#8226;&#771;)."</span>
-              <span style="color: #79a8ff;">"\n\t&#931;&#8050; &#947;&#957;&#969;&#961;&#8055;&#950;&#969; &#7936;&#960;&#8056; &#964;&#8052;&#957; &#954;&#8057;&#968;&#951;"</span>))
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">setq</span> show-font-pangram
+      (concat <span style="color: #10adee;">"A wizard&#8217;s job is to vex chumps quickly in fog."</span>
+              <span style="color: #10adee;">"\n\t&#1641;(-&#814;&#814;&#771;-&#771;)&#1782; &#1641;(&#9679;&#814;&#814;&#771;&#8226;&#771;)&#1782; &#1641;(&#865;&#3663;&#815;&#865;&#3663;)&#1782; &#1641;(-&#814;&#814;&#771;&#8226;&#771;)."</span>
+              <span style="color: #10adee;">"\n\t&#931;&#8050; &#947;&#957;&#969;&#961;&#8055;&#950;&#969; &#7936;&#960;&#8056; &#964;&#8052;&#957; &#954;&#8057;&#968;&#951;"</span>))
 (show-font-list)
 </pre>
 </div>
@@ -1137,75 +1192,78 @@ selection.
 </div>
 </div>
 <div id="outline-container-General_keybindings_manager_%28label_%3Dgeneral%3D%29" class="outline-3">
-<h3 id="General_keybindings_manager_%28label_%3Dgeneral%3D%29"><span class="section-number-3">9.2.</span> General keybindings manager (label <code>general</code>)</h3>
-<div class="outline-text-3" id="text-9-2">
+<h3 id="General_keybindings_manager_%28label_%3Dgeneral%3D%29"><span class="section-number-3">9.3.</span> General keybindings manager (label <code>general</code>)</h3>
+<div class="outline-text-3" id="text-9-3">
 <p>
 See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">general.el</a>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span>
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">use-package</span>
   general
-  <span style="color: #f78fe7;">:init</span>
-  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Switch between two most recent buffers:</span>
+  <span style="color: #106590;">:init</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Switch between two most recent buffers:</span>
   (fset 'quick-switch-buffer [?\C-x ?b return])
-  <span style="color: #f78fe7;">:config</span>
-   <span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Custom global bindings:</span>
+  <span style="color: #106590;">:config</span>
+   <span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">Custom global bindings:</span>
   (general-define-key
-   <span style="color: #79a8ff;">"C-h B"</span>     'general-describe-keybindings
-   <span style="color: #79a8ff;">"s-b"</span>       'quick-switch-buffer
-   <span style="color: #79a8ff;">"s-B"</span>       'buffer-menu-other-window
-   <span style="color: #79a8ff;">"C-x B"</span>     'buffer-menu-other-window
-   <span style="color: #79a8ff;">"s-o"</span>       'browse-url
-   <span style="color: #79a8ff;">"C-;"</span>       'comment-region <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">C-u C-; to uncomment</span>
-   <span style="color: #79a8ff;">"s-&lt;down-mouse-1&gt;"</span>       'mouse-drag-region-rectangle)
-  <span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Put the Emacs default keybindings you want included</span>
-  <span style="color: #a8a8a8;">;;;   </span><span style="color: #a8a8a8;">in general-describe-keybindings here:</span>
-  <span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Its useful to duplicate these simply as a way of documentation:</span>
+   <span style="color: #10adee;">"C-h B"</span>     'general-describe-keybindings
+   <span style="color: #10adee;">"s-b"</span>       'quick-switch-buffer
+   <span style="color: #10adee;">"s-B"</span>       'buffer-menu-other-window
+   <span style="color: #10adee;">"C-x B"</span>     'buffer-menu-other-window
+   <span style="color: #10adee;">"s-o"</span>       'browse-url
+   <span style="color: #10adee;">"C-;"</span>       'comment-region <span style="color: #1078a2; font-style: italic;">; </span><span style="color: #105f89; font-style: italic;">C-u C-; to uncomment</span>
+   <span style="color: #10adee;">"s-&lt;down-mouse-1&gt;"</span>       'mouse-drag-region-rectangle)
+  <span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">Put the Emacs default keybindings you want included</span>
+  <span style="color: #1078a2; font-style: italic;">;;;   </span><span style="color: #105f89; font-style: italic;">in general-describe-keybindings here:</span>
+  <span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">Its useful to duplicate these simply as a way of documentation:</span>
   (general-define-key
-   <span style="color: #79a8ff;">"M-SPC"</span>     'cycle-spacing <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">If you document it, you will use it.</span>
-   <span style="color: #79a8ff;">"M-h"</span>       'mark-paragraph <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">C-h B is like your personal cheat sheet.</span>
-   <span style="color: #79a8ff;">"C-h b"</span>     'describe-bindings <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">default binding for documentation purpose</span>
-   <span style="color: #79a8ff;">"C-x 4 c"</span>   'clone-indirect-buffer-other-window <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">default binding</span>
+   <span style="color: #10adee;">"M-SPC"</span>     'cycle-spacing <span style="color: #1078a2; font-style: italic;">; </span><span style="color: #105f89; font-style: italic;">If you document it, you will use it.</span>
+   <span style="color: #10adee;">"M-h"</span>       'mark-paragraph <span style="color: #1078a2; font-style: italic;">; </span><span style="color: #105f89; font-style: italic;">C-h B is like your personal cheat sheet.</span>
+   <span style="color: #10adee;">"C-h b"</span>     'describe-bindings <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">default binding for documentation purpose</span>
+   <span style="color: #10adee;">"C-x 4 c"</span>   'clone-indirect-buffer-other-window <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">default binding</span>
    )
-  <span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">Define bindings for specific builtin (non use-package) modes:</span>
-  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Emacs Lisp mode bindings:</span>
+  <span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">Define bindings for specific builtin (non use-package) modes:</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Emacs Lisp mode bindings:</span>
   (general-define-key
-   <span style="color: #f78fe7;">:keymaps</span> 'emacs-lisp-mode-map
-   <span style="color: #79a8ff;">"s-e"</span> 'eval-defun <span style="color: #a8a8a8;">;</span><span style="color: #a8a8a8;">eval top-level form</span>
-   <span style="color: #79a8ff;">"M-;"</span> 'paredit-comment-dwim)
-  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Dired mode bindings:</span>
+   <span style="color: #106590;">:keymaps</span> 'emacs-lisp-mode-map
+   <span style="color: #10adee;">"s-e"</span> 'eval-defun <span style="color: #1078a2; font-style: italic;">;</span><span style="color: #105f89; font-style: italic;">eval top-level form</span>
+   <span style="color: #10adee;">"M-;"</span> 'paredit-comment-dwim)
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Dired mode bindings:</span>
   (general-define-key
-   <span style="color: #f78fe7;">:keymaps</span> 'dired-mode-map <span style="color: #79a8ff;">"C-c C-q"</span> 'dired-toggle-read-only))
+   <span style="color: #106590;">:keymaps</span> 'dired-mode-map <span style="color: #10adee;">"C-c C-q"</span> 'dired-toggle-read-only))
 </pre>
 </div>
 </div>
 </div>
 <div id="outline-container-Org_mode_%28label_%3Dorg%3D%29" class="outline-3">
-<h3 id="Org_mode_%28label_%3Dorg%3D%29"><span class="section-number-3">9.3.</span> Org mode (label <code>org</code>)</h3>
-<div class="outline-text-3" id="text-9-3">
+<h3 id="Org_mode_%28label_%3Dorg%3D%29"><span class="section-number-3">9.4.</span> Org mode (label <code>org</code>)</h3>
+<div class="outline-text-3" id="text-9-4">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">org</span>
-  <span style="color: #f78fe7;">:hook</span> ((org-mode . flyspell-mode)
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">org</span>
+  <span style="color: #106590;">:hook</span> ((org-mode . flyspell-mode)
          (org-mode . unpackaged/org-export-html-with-useful-ids-mode))
-  <span style="color: #f78fe7;">:custom</span>
+  <span style="color: #106590;">:custom</span>
   (org-html-validation-link nil)
   (org-html-use-infojs nil)
   (org-html-postamble 'auto)
   (org-export-with-author t)
+  (org-export-with-date t)
+  (org-export-with-creator t)
+  (org-export-with-email t)
   (org-export-timestamp-file t)
-  <span style="color: #f78fe7;">:general</span>
-  (<span style="color: #79a8ff;">"s-&lt;up&gt;"</span> 'org-previous-visible-heading)
-  (<span style="color: #79a8ff;">"s-&lt;down&gt;"</span> 'org-next-visible-heading)
-  (<span style="color: #79a8ff;">"C-c o k"</span> 'org-babel-remove-result)
-  <span style="color: #f78fe7;">:config</span>
-  (<span style="color: #b6a0ff;">setq</span> org-startup-folded t)
-  (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my-org-html--translate</span> (original-function keyword info)
-    <span style="color: #b0d6f5;">"Custom advice to translate the keyword '</span><span style="color: #00bcff;">Created</span><span style="color: #b0d6f5;">' to 'Last Modified'."</span>
-    (<span style="color: #b6a0ff;">if</span> (string-equal keyword <span style="color: #79a8ff;">"Created"</span>)
-        <span style="color: #79a8ff;">"Last Modified"</span>
+  <span style="color: #106590;">:general</span>
+  (<span style="color: #10adee;">"s-&lt;up&gt;"</span> 'org-previous-visible-heading)
+  (<span style="color: #10adee;">"s-&lt;down&gt;"</span> 'org-next-visible-heading)
+  (<span style="color: #10adee;">"C-c o k"</span> 'org-babel-remove-result)
+  <span style="color: #106590;">:config</span>
+  (<span style="color: #1a8da7;">setq</span> org-startup-folded t)
+  (<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my-org-html--translate</span> (original-function keyword info)
+    <span style="color: #10adee;">"Custom advice to translate the keyword '</span><span style="color: #1a99e7;">Created</span><span style="color: #10adee;">' to 'Last Modified'."</span>
+    (<span style="color: #1a8da7;">if</span> (string-equal keyword <span style="color: #10adee;">"Created"</span>)
+        <span style="color: #10adee;">"Last Modified"</span>
       (funcall original-function keyword info)))
-  (advice-add 'org-html--translate <span style="color: #f78fe7;">:around</span> #'my-org-html--translate)
+  (advice-add 'org-html--translate <span style="color: #106590;">:around</span> #'my-org-html--translate)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((python . t) (scheme . t) (shell . t) (ditaa . t)))
@@ -1214,39 +1272,39 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
 </div>
 </div>
 <div id="outline-container-Tangle_Emacs_config_and_write_HTML_document" class="outline-4">
-<h4 id="Tangle_Emacs_config_and_write_HTML_document"><span class="section-number-4">9.3.1.</span> Tangle Emacs config and write HTML document</h4>
-<div class="outline-text-4" id="text-9-3-1">
+<h4 id="Tangle_Emacs_config_and_write_HTML_document"><span class="section-number-4">9.4.1.</span> Tangle Emacs config and write HTML document</h4>
+<div class="outline-text-4" id="text-9-4-1">
 <p>
 This function tangles this file (<code>emacs.org</code>) and exports an HTML page
 (<code>emacs.html</code>):
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/emacs-org-tangle</span> ()
-  <span style="color: #b0d6f5;">"Tangle all code blocks in '</span><span style="color: #00bcff;">emacs.org</span><span style="color: #b0d6f5;">' and export this document to HTML."</span>
-  (<span style="color: #b6a0ff;">let*</span> ((org-file (expand-file-name <span style="color: #79a8ff;">"emacs.org"</span> user-emacs-directory))
-         (modules-dir (expand-file-name <span style="color: #79a8ff;">"modules"</span> user-emacs-directory))
-         (export-dir (expand-file-name <span style="color: #79a8ff;">"export"</span> user-emacs-directory))
-         (export-file (expand-file-name <span style="color: #79a8ff;">"index.html"</span> user-emacs-directory)))
-    (<span style="color: #b6a0ff;">when</span> (file-exists-p org-file)
-      (<span style="color: #b6a0ff;">with-current-buffer</span> (find-file-noselect org-file)
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/emacs-org-tangle</span> ()
+  <span style="color: #10adee;">"Tangle all code blocks in '</span><span style="color: #1a99e7;">emacs.org</span><span style="color: #10adee;">' and export this document to HTML."</span>
+  (<span style="color: #1a8da7;">let*</span> ((org-file (expand-file-name <span style="color: #10adee;">"emacs.org"</span> user-emacs-directory))
+         (modules-dir (expand-file-name <span style="color: #10adee;">"modules"</span> user-emacs-directory))
+         (export-dir (expand-file-name <span style="color: #10adee;">"export"</span> user-emacs-directory))
+         (export-file (expand-file-name <span style="color: #10adee;">"index.html"</span> user-emacs-directory)))
+    (<span style="color: #1a8da7;">when</span> (file-exists-p org-file)
+      (<span style="color: #1a8da7;">with-current-buffer</span> (find-file-noselect org-file)
         (delete-directory modules-dir t)
         (org-babel-tangle)
         (org-export-to-file 'html export-file)
-        (<span style="color: #b6a0ff;">unless</span> (file-directory-p export-dir)
+        (<span style="color: #1a8da7;">unless</span> (file-directory-p export-dir)
           (make-directory export-dir))
-        (make-symbolic-link <span style="color: #79a8ff;">"index.html"</span> <span style="color: #79a8ff;">"emacs.html"</span> t)
-        (make-symbolic-link <span style="color: #79a8ff;">"../index.html"</span> <span style="color: #79a8ff;">"export/index.html"</span> t)
-        (make-symbolic-link <span style="color: #79a8ff;">"../index.html"</span> <span style="color: #79a8ff;">"export/emacs.html"</span> t)
-        (make-symbolic-link <span style="color: #79a8ff;">"../modules"</span> <span style="color: #79a8ff;">"export/modules"</span> t)
-        (make-symbolic-link <span style="color: #79a8ff;">"../LICENSE.txt"</span> <span style="color: #79a8ff;">"export/LICENSE.txt"</span> t)
-        (make-symbolic-link <span style="color: #79a8ff;">"../early-init.el"</span> <span style="color: #79a8ff;">"export/early-init.el"</span> t)
-        (make-symbolic-link <span style="color: #79a8ff;">"../init.el"</span> <span style="color: #79a8ff;">"export/init.el"</span> t)
-        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">No reason to save the buffer again, but maybe in the future,</span>
-        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">we will want to run code blocks automatically and capture output?</span>
-        <span style="color: #a8a8a8;">;;</span><span style="color: #a8a8a8;">(save-buffer)</span>
+        (make-symbolic-link <span style="color: #10adee;">"index.html"</span> <span style="color: #10adee;">"emacs.html"</span> t)
+        (make-symbolic-link <span style="color: #10adee;">"../index.html"</span> <span style="color: #10adee;">"export/index.html"</span> t)
+        (make-symbolic-link <span style="color: #10adee;">"../index.html"</span> <span style="color: #10adee;">"export/emacs.html"</span> t)
+        (make-symbolic-link <span style="color: #10adee;">"../modules"</span> <span style="color: #10adee;">"export/modules"</span> t)
+        (make-symbolic-link <span style="color: #10adee;">"../LICENSE.txt"</span> <span style="color: #10adee;">"export/LICENSE.txt"</span> t)
+        (make-symbolic-link <span style="color: #10adee;">"../early-init.el"</span> <span style="color: #10adee;">"export/early-init.el"</span> t)
+        (make-symbolic-link <span style="color: #10adee;">"../init.el"</span> <span style="color: #10adee;">"export/init.el"</span> t)
+        <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">No reason to save the buffer again, but maybe in the future,</span>
+        <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">we will want to run code blocks automatically and capture output?</span>
+        <span style="color: #1078a2; font-style: italic;">;;</span><span style="color: #105f89; font-style: italic;">(save-buffer)</span>
         ))))
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Tell Emacs to trust this code in all buffer local vars:</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Tell Emacs to trust this code in all buffer local vars:</span>
 (add-to-list 'safe-local-variable-values
              '(eval add-hook 'after-save-hook 'my/emacs-org-tangle nil t))
 (add-to-list 'safe-local-variable-values
@@ -1256,30 +1314,30 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Local_HTTP_server_for_displaying_exported_HTML" class="outline-4">
-<h4 id="Local_HTTP_server_for_displaying_exported_HTML"><span class="section-number-4">9.3.2.</span> Local HTTP server for displaying exported HTML</h4>
-<div class="outline-text-4" id="text-9-3-2">
+<h4 id="Local_HTTP_server_for_displaying_exported_HTML"><span class="section-number-4">9.4.2.</span> Local HTTP server for displaying exported HTML</h4>
+<div class="outline-text-4" id="text-9-4-2">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(my/cargo-dependency <span style="color: #79a8ff;">"live-server"</span>) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">defers install of live-server Rust crate</span>
-(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/emacs-org-html-server-host</span> <span style="color: #79a8ff;">"127.0.0.1"</span>) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">Set to 0.0.0.0 to serve publicly</span>
-(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/emacs-org-html-server-port</span> <span style="color: #79a8ff;">"7776"</span>)
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/emacs-org-html-server</span> ()
-  <span style="color: #b0d6f5;">"Start a local live-server for the Emacs org HTML export."</span>
-  (<span style="color: #b6a0ff;">interactive</span>)
-  (<span style="color: #b6a0ff;">let</span> ((live-server-path (executable-find <span style="color: #79a8ff;">"live-server"</span>))
-        (log-buffer-name <span style="color: #79a8ff;">"*my/emacs/org-html-server*"</span>))
-    (<span style="color: #b6a0ff;">with-current-buffer</span> (get-buffer-create log-buffer-name)
-      (<span style="color: #b6a0ff;">if</span> live-server-path
-          (<span style="color: #b6a0ff;">progn</span>
-            (message <span style="color: #79a8ff;">"live-server found at: %s"</span> live-server-path)
-            (<span style="color: #b6a0ff;">let</span> ((host <span style="color: #79a8ff;">"127.0.0.1"</span>)  <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">Set to "0.0.0.0" to serve publicly</span>
-                  (port <span style="color: #79a8ff;">"7776"</span>)
-                  (html-file <span style="color: #79a8ff;">"index.html"</span>)
-                  (export-dir (expand-file-name <span style="color: #79a8ff;">"export"</span> user-emacs-directory)))
-              (start-process <span style="color: #79a8ff;">"live-server"</span> log-buffer-name <span style="color: #79a8ff;">"live-server"</span>
-                             <span style="color: #79a8ff;">"-H"</span> host <span style="color: #79a8ff;">"-p"</span> port <span style="color: #79a8ff;">"-o"</span> <span style="color: #79a8ff;">""</span> export-dir)
-              (message <span style="color: #79a8ff;">"Started live-server on http://%s:%s"</span> host port)))
-        (<span style="color: #b6a0ff;">unless</span> (executable-find <span style="color: #79a8ff;">"live-server"</span>)
-          (message <span style="color: #79a8ff;">"live-server NOT found - please run: cargo install live-server"</span>))))))
+<pre class="src src-emacs-lisp">(my/cargo-dependency <span style="color: #10adee;">"live-server"</span>) <span style="color: #1078a2; font-style: italic;">; </span><span style="color: #105f89; font-style: italic;">defers install of live-server Rust crate</span>
+(<span style="color: #1a8da7;">defvar</span> <span style="color: #1e8eb8;">my/emacs-org-html-server-host</span> <span style="color: #10adee;">"127.0.0.1"</span>) <span style="color: #1078a2; font-style: italic;">; </span><span style="color: #105f89; font-style: italic;">Set to 0.0.0.0 to serve publicly</span>
+(<span style="color: #1a8da7;">defvar</span> <span style="color: #1e8eb8;">my/emacs-org-html-server-port</span> <span style="color: #10adee;">"7776"</span>)
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/emacs-org-html-server</span> ()
+  <span style="color: #10adee;">"Start a local live-server for the Emacs org HTML export."</span>
+  (<span style="color: #1a8da7;">interactive</span>)
+  (<span style="color: #1a8da7;">let</span> ((live-server-path (executable-find <span style="color: #10adee;">"live-server"</span>))
+        (log-buffer-name <span style="color: #10adee;">"*my/emacs/org-html-server*"</span>))
+    (<span style="color: #1a8da7;">with-current-buffer</span> (get-buffer-create log-buffer-name)
+      (<span style="color: #1a8da7;">if</span> live-server-path
+          (<span style="color: #1a8da7;">progn</span>
+            (message <span style="color: #10adee;">"live-server found at: %s"</span> live-server-path)
+            (<span style="color: #1a8da7;">let</span> ((host <span style="color: #10adee;">"127.0.0.1"</span>)  <span style="color: #1078a2; font-style: italic;">; </span><span style="color: #105f89; font-style: italic;">Set to "0.0.0.0" to serve publicly</span>
+                  (port <span style="color: #10adee;">"7776"</span>)
+                  (html-file <span style="color: #10adee;">"index.html"</span>)
+                  (export-dir (expand-file-name <span style="color: #10adee;">"export"</span> user-emacs-directory)))
+              (start-process <span style="color: #10adee;">"live-server"</span> log-buffer-name <span style="color: #10adee;">"live-server"</span>
+                             <span style="color: #10adee;">"-H"</span> host <span style="color: #10adee;">"-p"</span> port <span style="color: #10adee;">"-o"</span> <span style="color: #10adee;">""</span> export-dir)
+              (message <span style="color: #10adee;">"Started live-server on http://%s:%s"</span> host port)))
+        (<span style="color: #1a8da7;">unless</span> (executable-find <span style="color: #10adee;">"live-server"</span>)
+          (message <span style="color: #10adee;">"live-server NOT found - please run: cargo install live-server"</span>))))))
 </pre>
 </div>
 
@@ -1303,17 +1361,17 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Enable_syntax_highlighting_in_HTML_export" class="outline-4">
-<h4 id="Enable_syntax_highlighting_in_HTML_export"><span class="section-number-4">9.3.3.</span> Enable syntax highlighting in HTML export</h4>
-<div class="outline-text-4" id="text-9-3-3">
+<h4 id="Enable_syntax_highlighting_in_HTML_export"><span class="section-number-4">9.4.3.</span> Enable syntax highlighting in HTML export</h4>
+<div class="outline-text-4" id="text-9-4-3">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">htmlize</span>)
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">htmlize</span>)
 </pre>
 </div>
 </div>
 </div>
 <div id="outline-container-Org-Tempo_code_block_snippets" class="outline-4">
-<h4 id="Org-Tempo_code_block_snippets"><span class="section-number-4">9.3.4.</span> Org-Tempo code block snippets</h4>
-<div class="outline-text-4" id="text-9-3-4">
+<h4 id="Org-Tempo_code_block_snippets"><span class="section-number-4">9.4.4.</span> Org-Tempo code block snippets</h4>
+<div class="outline-text-4" id="text-9-4-4">
 <p>
 See the Org-Mode manual for <a href="https://orgmode.org/manual/Structure-Templates.html">Structure Templates</a>.
 </p>
@@ -1325,109 +1383,109 @@ library:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">require</span> '<span style="color: #00bcff;">org-tempo</span>) <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">required for Structure Templates</span>
-                     <span style="color: #a8a8a8;">; </span><span style="color: #a8a8a8;">See https://orgmode.org/manual/Structure-Templates.html</span>
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">require</span> '<span style="color: #1a99e7;">org-tempo</span>) <span style="color: #1078a2; font-style: italic;">; </span><span style="color: #105f89; font-style: italic;">required for Structure Templates</span>
+                     <span style="color: #1078a2; font-style: italic;">; </span><span style="color: #105f89; font-style: italic;">See https://orgmode.org/manual/Structure-Templates.html</span>
 </pre>
 </div>
 </div>
 </div>
 <div id="outline-container-Use_org_headings_as_HTML_anchors" class="outline-4">
-<h4 id="Use_org_headings_as_HTML_anchors"><span class="section-number-4">9.3.5.</span> Use org headings as HTML anchors</h4>
-<div class="outline-text-4" id="text-9-3-5">
+<h4 id="Use_org_headings_as_HTML_anchors"><span class="section-number-4">9.4.5.</span> Use org headings as HTML anchors</h4>
+<div class="outline-text-4" id="text-9-4-5">
 <p>
 <a href="https://github.com/alphapapa/unpackaged.el/tree/master?tab=readme-ov-file#export-to-html-with-useful-anchors">unpackaged.el: Export to HTML with useful anchors</a>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">This is a modified portion of unpackaged.el</span>
-<span style="color: #a8a8a8;">;;</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Copyright (C) 2018  Adam Porter</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">URL: https://github.com/alphapapa/unpackaged.el</span>
-<span style="color: #a8a8a8;">;;</span>
-  <span style="color: #a8a8a8;">;;; </span><span style="color: #a8a8a8;">License:</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">This program is free software; you can redistribute it and/or modify</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">it under the terms of the GNU General Public License as published by</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">the Free Software Foundation, either version 3 of the License, or</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">(at your option) any later version.</span>
-<span style="color: #a8a8a8;">;;</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">This program is distributed in the hope that it will be useful,</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">GNU General Public License for more details.</span>
-<span style="color: #a8a8a8;">;;</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">You should have received a copy of the GNU General Public License</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">along with this program.  If not, see <a href="https://www.gnu.org/licenses/">&lt;https://www.gnu.org/licenses/&gt;</a>.</span>
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">This is a modified portion of unpackaged.el</span>
+<span style="color: #1078a2; font-style: italic;">;;</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Copyright (C) 2018  Adam Porter</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">URL: https://github.com/alphapapa/unpackaged.el</span>
+<span style="color: #1078a2; font-style: italic;">;;</span>
+  <span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">License:</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">This program is free software; you can redistribute it and/or modify</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">it under the terms of the GNU General Public License as published by</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">the Free Software Foundation, either version 3 of the License, or</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">(at your option) any later version.</span>
+<span style="color: #1078a2; font-style: italic;">;;</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">This program is distributed in the hope that it will be useful,</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">GNU General Public License for more details.</span>
+<span style="color: #1078a2; font-style: italic;">;;</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">You should have received a copy of the GNU General Public License</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">along with this program.  If not, see <a href="https://www.gnu.org/licenses/">&lt;https://www.gnu.org/licenses/&gt;</a>.</span>
 
-(<span style="color: #b6a0ff;">require</span> '<span style="color: #00bcff;">cl-lib</span>)
-(<span style="color: #b6a0ff;">define-minor-mode</span> <span style="color: #feacd0;">unpackaged/org-export-html-with-useful-ids-mode</span>
-  <span style="color: #b0d6f5;">"Attempt to export Org as HTML with useful link IDs.</span>
-<span style="color: #b0d6f5;">  Instead of random IDs like \"#orga1b2c3\", use heading titles,</span>
-<span style="color: #b0d6f5;">  made unique when necessary."</span>
-  <span style="color: #f78fe7;">:global</span> t
-  (<span style="color: #b6a0ff;">if</span> unpackaged/org-export-html-with-useful-ids-mode
-      (advice-add #'org-export-get-reference <span style="color: #f78fe7;">:override</span>
+(<span style="color: #1a8da7;">require</span> '<span style="color: #1a99e7;">cl-lib</span>)
+(<span style="color: #1a8da7;">define-minor-mode</span> <span style="color: #1083be;">unpackaged/org-export-html-with-useful-ids-mode</span>
+  <span style="color: #10adee;">"Attempt to export Org as HTML with useful link IDs.</span>
+<span style="color: #10adee;">  Instead of random IDs like \"#orga1b2c3\", use heading titles,</span>
+<span style="color: #10adee;">  made unique when necessary."</span>
+  <span style="color: #106590;">:global</span> t
+  (<span style="color: #1a8da7;">if</span> unpackaged/org-export-html-with-useful-ids-mode
+      (advice-add #'org-export-get-reference <span style="color: #106590;">:override</span>
                   #'unpackaged/org-export-get-reference)
     (advice-remove #'org-export-get-reference
                    #'unpackaged/org-export-get-reference)))
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">unpackaged/org-export-get-reference</span> (datum info)
-  <span style="color: #b0d6f5;">"Like `</span><span style="color: #00bcff;">org-export-get-reference</span><span style="color: #b0d6f5;">',</span>
-<span style="color: #b0d6f5;">        except uses heading titles instead of random numbers."</span>
-  (<span style="color: #b6a0ff;">let</span> ((cache (plist-get info <span style="color: #f78fe7;">:internal-references</span>)))
-    (<span style="color: #b6a0ff;">or</span> (car (rassq datum cache))
-        (<span style="color: #b6a0ff;">let*</span> ((crossrefs (plist-get info <span style="color: #f78fe7;">:crossrefs</span>))
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">unpackaged/org-export-get-reference</span> (datum info)
+  <span style="color: #10adee;">"Like `</span><span style="color: #1a99e7;">org-export-get-reference</span><span style="color: #10adee;">',</span>
+<span style="color: #10adee;">        except uses heading titles instead of random numbers."</span>
+  (<span style="color: #1a8da7;">let</span> ((cache (plist-get info <span style="color: #106590;">:internal-references</span>)))
+    (<span style="color: #1a8da7;">or</span> (car (rassq datum cache))
+        (<span style="color: #1a8da7;">let*</span> ((crossrefs (plist-get info <span style="color: #106590;">:crossrefs</span>))
                (cells (org-export-search-cells datum))
-               <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Preserve any pre-existing association between</span>
-               <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">a search cell and a reference.</span>
-               (new (<span style="color: #b6a0ff;">or</span> (cl-some
-                         (<span style="color: #b6a0ff;">lambda</span> (cell)
-                           (<span style="color: #b6a0ff;">let</span> ((stored (cdr (assoc cell crossrefs))))
-                             (<span style="color: #b6a0ff;">when</span> stored
-                               (<span style="color: #b6a0ff;">let</span> ((old (org-export-format-reference stored)))
-                                 (<span style="color: #b6a0ff;">and</span> (not (assoc old cache)) stored)))))
+               <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Preserve any pre-existing association between</span>
+               <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">a search cell and a reference.</span>
+               (new (<span style="color: #1a8da7;">or</span> (cl-some
+                         (<span style="color: #1a8da7;">lambda</span> (cell)
+                           (<span style="color: #1a8da7;">let</span> ((stored (cdr (assoc cell crossrefs))))
+                             (<span style="color: #1a8da7;">when</span> stored
+                               (<span style="color: #1a8da7;">let</span> ((old (org-export-format-reference stored)))
+                                 (<span style="color: #1a8da7;">and</span> (not (assoc old cache)) stored)))))
                          cells)
-                        (<span style="color: #b6a0ff;">when</span> (org-element-property <span style="color: #f78fe7;">:raw-value</span> datum)
-                          <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Heading with a title</span>
+                        (<span style="color: #1a8da7;">when</span> (org-element-property <span style="color: #106590;">:raw-value</span> datum)
+                          <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Heading with a title</span>
                           (unpackaged/org-export-new-title-reference datum cache))
-                        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Generate new reference</span>
+                        <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Generate new reference</span>
                         (org-export-format-reference
                          (org-export-new-reference cache))))
-               (reference-string (replace-regexp-in-string <span style="color: #79a8ff;">"%20"</span> <span style="color: #79a8ff;">"_"</span> new)))
-          <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Cache contains both data already associated to</span>
-          <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">a reference and in-use internal references, so as to make</span>
-          <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">unique references.</span>
-          (<span style="color: #b6a0ff;">dolist</span> (cell cells) (<span style="color: #b6a0ff;">push</span> (cons cell new) cache))
-          <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Retain a direct association between reference string and DATUM.</span>
-          (<span style="color: #b6a0ff;">push</span> (cons reference-string datum) cache)
-          (plist-put info <span style="color: #f78fe7;">:internal-references</span> cache)
+               (reference-string (replace-regexp-in-string <span style="color: #10adee;">"%20"</span> <span style="color: #10adee;">"_"</span> new)))
+          <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Cache contains both data already associated to</span>
+          <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">a reference and in-use internal references, so as to make</span>
+          <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">unique references.</span>
+          (<span style="color: #1a8da7;">dolist</span> (cell cells) (<span style="color: #1a8da7;">push</span> (cons cell new) cache))
+          <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Retain a direct association between reference string and DATUM.</span>
+          (<span style="color: #1a8da7;">push</span> (cons reference-string datum) cache)
+          (plist-put info <span style="color: #106590;">:internal-references</span> cache)
           reference-string))))
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">unpackaged/org-export-new-title-reference</span> (datum cache)
-  <span style="color: #b0d6f5;">"Return new reference for DATUM that is unique in CACHE."</span>
-  (<span style="color: #b6a0ff;">cl-macrolet</span> ((inc-suffixf (place)
-                  `(<span style="color: #b6a0ff;">progn</span>
-                     (string-match (<span style="color: #b6a0ff;">rx</span> bos
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">unpackaged/org-export-new-title-reference</span> (datum cache)
+  <span style="color: #10adee;">"Return new reference for DATUM that is unique in CACHE."</span>
+  (<span style="color: #1a8da7;">cl-macrolet</span> ((inc-suffixf (place)
+                  `(<span style="color: #1a8da7;">progn</span>
+                     (string-match (<span style="color: #1a8da7;">rx</span> bos
                                        (minimal-match (group (1+ anything)))
-                                       (optional <span style="color: #79a8ff;">"--"</span> (group (1+ digit)))
+                                       (optional <span style="color: #10adee;">"--"</span> (group (1+ digit)))
                                        eos)
                                    ,place)
-                     <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">HACK: `</span><span style="color: #00bcff;">s1</span><span style="color: #a8a8a8;">' instead of a gensym.</span>
-                     (<span style="color: #b6a0ff;">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
+                     <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">HACK: `</span><span style="color: #1a99e7; font-style: italic;">s1</span><span style="color: #105f89; font-style: italic;">' instead of a gensym.</span>
+                     (-let* (((s1 suffix) (list (match-string 1 ,place)
                                                 (match-string 2 ,place)))
-                             (suffix (<span style="color: #b6a0ff;">if</span> suffix
+                             (suffix (<span style="color: #1a8da7;">if</span> suffix
                                          (string-to-number suffix)
                                        0)))
-                            (<span style="color: #b6a0ff;">setf</span> ,place (format <span style="color: #79a8ff;">"%s--%s"</span> s1 (<span style="color: #b6a0ff;">cl-incf</span> suffix)))))))
-    (<span style="color: #b6a0ff;">let*</span> ((title (org-element-property <span style="color: #f78fe7;">:raw-value</span> datum))
+                            (<span style="color: #1a8da7;">setf</span> ,place (format <span style="color: #10adee;">"%s--%s"</span> s1 (<span style="color: #1a8da7;">cl-incf</span> suffix)))))))
+    (<span style="color: #1a8da7;">let*</span> ((title (org-element-property <span style="color: #106590;">:raw-value</span> datum))
            (ref (url-hexify-string (substring-no-properties title)))
-           (parent (org-element-property <span style="color: #f78fe7;">:parent</span> datum)))
-      (<span style="color: #b6a0ff;">while</span> (cl-some (<span style="color: #b6a0ff;">lambda</span> (it) (equal ref (car it))) cache)
-        <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Title not unique: make it so.</span>
-        (<span style="color: #b6a0ff;">if</span> parent
-            <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Append ancestor title.</span>
-            (<span style="color: #b6a0ff;">setf</span> title (concat (org-element-property <span style="color: #f78fe7;">:raw-value</span> parent)
-                                <span style="color: #79a8ff;">"--"</span> title)
+           (parent (org-element-property <span style="color: #106590;">:parent</span> datum)))
+      (<span style="color: #1a8da7;">while</span> (cl-some (<span style="color: #1a8da7;">lambda</span> (it) (equal ref (car it))) cache)
+        <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Title not unique: make it so.</span>
+        (<span style="color: #1a8da7;">if</span> parent
+            <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Append ancestor title.</span>
+            (<span style="color: #1a8da7;">setf</span> title (concat (org-element-property <span style="color: #106590;">:raw-value</span> parent)
+                                <span style="color: #10adee;">"--"</span> title)
                   ref (url-hexify-string (substring-no-properties title))
-                  parent (org-element-property <span style="color: #f78fe7;">:parent</span> parent))
-          <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">No more ancestors: add and increment a number.</span>
+                  parent (org-element-property <span style="color: #106590;">:parent</span> parent))
+          <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">No more ancestors: add and increment a number.</span>
           (inc-suffixf ref)))
       ref)))
 </pre>
@@ -1435,18 +1493,18 @@ library:
 </div>
 </div>
 <div id="outline-container-Electric_pairs" class="outline-4">
-<h4 id="Electric_pairs"><span class="section-number-4">9.3.6.</span> Electric pairs</h4>
-<div class="outline-text-4" id="text-9-3-6">
+<h4 id="Electric_pairs"><span class="section-number-4">9.4.6.</span> Electric pairs</h4>
+<div class="outline-text-4" id="text-9-4-6">
 <p>
 This makes it so certain characters are duplicated automatically to
 make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</code>.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(add-hook 'org-mode-hook (<span style="color: #b6a0ff;">lambda</span> ()
-                           (modify-syntax-entry ?/ <span style="color: #79a8ff;">"$/"</span> org-mode-syntax-table)
-                           (modify-syntax-entry ?~ <span style="color: #79a8ff;">"$~"</span> org-mode-syntax-table)
-                           (modify-syntax-entry ?= <span style="color: #79a8ff;">"$="</span> org-mode-syntax-table)
+<pre class="src src-emacs-lisp">(add-hook 'org-mode-hook (<span style="color: #1a8da7;">lambda</span> ()
+                           (modify-syntax-entry ?/ <span style="color: #10adee;">"$/"</span> org-mode-syntax-table)
+                           (modify-syntax-entry ?~ <span style="color: #10adee;">"$~"</span> org-mode-syntax-table)
+                           (modify-syntax-entry ?= <span style="color: #10adee;">"$="</span> org-mode-syntax-table)
                            ))
 </pre>
 </div>
@@ -1454,61 +1512,67 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 <div id="outline-container-Completion_%28label_%3Dcompletion%3D%29" class="outline-3">
-<h3 id="Completion_%28label_%3Dcompletion%3D%29"><span class="section-number-3">9.4.</span> Completion (label <code>completion</code>)</h3>
-<div class="outline-text-3" id="text-9-4">
+<h3 id="Completion_%28label_%3Dcompletion%3D%29"><span class="section-number-3">9.5.</span> Completion (label <code>completion</code>)</h3>
+<div class="outline-text-3" id="text-9-5">
+<ul class="org-ul">
+<li><a href="https://github.com/minad/vertico">vertico</a></li>
+<li><a href="https://github.com/oantolin/orderless">orderless</a></li>
+<li><a href="https://github.com/minad/marginalia">marginalia</a></li>
+</ul>
+
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Allow minibuffers to stack:</span>
-(<span style="color: #b6a0ff;">setq-default</span> enable-recursive-minibuffers t)
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Filter command completions to only include commands</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">applicable to the current major mode:</span>
-(<span style="color: #b6a0ff;">setq-default</span> read-extended-command-predicate
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Allow minibuffers to stack:</span>
+(<span style="color: #1a8da7;">setq-default</span> enable-recursive-minibuffers t)
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Filter command completions to only include commands</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">applicable to the current major mode:</span>
+(<span style="color: #1a8da7;">setq-default</span> read-extended-command-predicate
               #'command-completion-default-include-p)
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Add custom prompt when asking for multiple values as (comma) separated list:</span>
-(advice-add #'completing-read-multiple <span style="color: #f78fe7;">:filter-args</span>
-            (<span style="color: #b6a0ff;">lambda</span> (args)
-              (cons (format <span style="color: #79a8ff;">"[CRM%s] %s"</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Add custom prompt when asking for multiple values as (comma) separated list:</span>
+(advice-add #'completing-read-multiple <span style="color: #106590;">:filter-args</span>
+            (<span style="color: #1a8da7;">lambda</span> (args)
+              (cons (format <span style="color: #10adee;">"[CRM%s] %s"</span>
                             (replace-regexp-in-string
-                             <span style="color: #79a8ff;">"\\`\\[</span><span style="color: #00bcff;">.*?</span><span style="color: #79a8ff;">]\\*</span><span style="color: #abab00;">\\</span><span style="color: #e7a59a;">|</span><span style="color: #79a8ff;">\\[</span><span style="color: #00bcff;">.*?</span><span style="color: #79a8ff;">]\\*\\'"</span> <span style="color: #79a8ff;">""</span>
+                             <span style="color: #10adee;">"\\`\\[</span><span style="color: #1a99e7;">.*?</span><span style="color: #10adee;">]\\*</span><span style="color: #10adee; font-weight: bold;">\\</span><span style="color: #10adee; font-weight: bold;">|</span><span style="color: #10adee;">\\[</span><span style="color: #1a99e7;">.*?</span><span style="color: #10adee;">]\\*\\'"</span> <span style="color: #10adee;">""</span>
                              crm-separator)
                             (car args))
                     (cdr args))))
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Do not allow the cursor in the minibuffer prompt</span>
-(<span style="color: #b6a0ff;">setq</span> minibuffer-prompt-properties
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Do not allow the cursor in the minibuffer prompt</span>
+(<span style="color: #1a8da7;">setq</span> minibuffer-prompt-properties
       '(read-only t cursor-intangible t face minibuffer-prompt))
 (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
-(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">vertico</span>
-  <span style="color: #f78fe7;">:custom</span>
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">vertico</span>
+  <span style="color: #106590;">:custom</span>
   (vertico-scroll-margin 2)
   (vertico-count 10)
   (vertico-resize 'grow-only)
   (vertico-cycle nil)
-  <span style="color: #f78fe7;">:init</span>
-                                        <span style="color: #a8a8a8;">;</span><span style="color: #a8a8a8;">(keymap-set vertico-map "?" #'minibuffer-completion-help)</span>
-                                        <span style="color: #a8a8a8;">;</span><span style="color: #a8a8a8;">(keymap-set vertico-map "M-TAB" #'vertico-insert)</span>
-                                        <span style="color: #a8a8a8;">;</span><span style="color: #a8a8a8;">(keymap-set vertico-map "TAB" #'minibuffer-complete)</span>
+  <span style="color: #106590;">:init</span>
+                                        <span style="color: #1078a2; font-style: italic;">;</span><span style="color: #105f89; font-style: italic;">(keymap-set vertico-map "?" #'minibuffer-completion-help)</span>
+                                        <span style="color: #1078a2; font-style: italic;">;</span><span style="color: #105f89; font-style: italic;">(keymap-set vertico-map "M-TAB" #'vertico-insert)</span>
+                                        <span style="color: #1078a2; font-style: italic;">;</span><span style="color: #105f89; font-style: italic;">(keymap-set vertico-map "TAB" #'minibuffer-complete)</span>
   (vertico-mode))
 
-(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">orderless</span>
-  <span style="color: #f78fe7;">:custom</span>
-  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Configure a custom style dispatcher (see the Consult wiki)</span>
-  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">(orderless-style-dispatchers</span>
-  <span style="color: #a8a8a8;">;;   </span><span style="color: #a8a8a8;">'(+orderless-consult-dispatch orderless-affix-dispatch))</span>
-  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">(orderless-component-separator #'orderless-escapable-split-on-space)</span>
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">orderless</span>
+  <span style="color: #106590;">:custom</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Configure a custom style dispatcher (see the Consult wiki)</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">(orderless-style-dispatchers</span>
+  <span style="color: #1078a2; font-style: italic;">;;   </span><span style="color: #105f89; font-style: italic;">'(+orderless-consult-dispatch orderless-affix-dispatch))</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">(orderless-component-separator #'orderless-escapable-split-on-space)</span>
   (completion-styles '(orderless basic))
   (completion-category-defaults nil)
   (completion-category-overrides '((file (styles partial-completion)))))
 
-(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">marginalia</span>
-  <span style="color: #f78fe7;">:hook</span>
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">marginalia</span>
+  <span style="color: #106590;">:hook</span>
   ((marginalia-mode . all-the-icons-completion-marginalia-setup))
-  <span style="color: #f78fe7;">:bind</span> (<span style="color: #f78fe7;">:map</span> minibuffer-local-map
-              (<span style="color: #79a8ff;">"M-A"</span> . marginalia-cycle))
-  <span style="color: #f78fe7;">:init</span>
+  <span style="color: #106590;">:bind</span> (<span style="color: #106590;">:map</span> minibuffer-local-map
+              (<span style="color: #10adee;">"M-A"</span> . marginalia-cycle))
+  <span style="color: #106590;">:init</span>
   (marginalia-mode))
 
-(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">nerd-icons-completion</span>
-  <span style="color: #f78fe7;">:init</span>
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">nerd-icons-completion</span>
+  <span style="color: #106590;">:init</span>
   (nerd-icons-completion-mode))
 
 </pre>
@@ -1516,30 +1580,30 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 <div id="outline-container-Vterm_%28label_%3Dvterm%3D%29" class="outline-3">
-<h3 id="Vterm_%28label_%3Dvterm%3D%29"><span class="section-number-3">9.5.</span> Vterm (label <code>vterm</code>)</h3>
-<div class="outline-text-3" id="text-9-5">
+<h3 id="Vterm_%28label_%3Dvterm%3D%29"><span class="section-number-3">9.6.</span> Vterm (label <code>vterm</code>)</h3>
+<div class="outline-text-3" id="text-9-6">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">vterm (terminal emulator) ::</span>
-<span style="color: #a8a8a8;">;;  </span><span style="color: #a8a8a8;">https://github.com/akermu/emacs-libvterm</span>
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Configure BASH to work with vterm:</span>
-<span style="color: #a8a8a8;">;;  </span><span style="color: #a8a8a8;">https://github.com/akermu/emacs-libvterm#vterm-clear-scrollback</span>
-(<span style="color: #b6a0ff;">use-package</span>
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">vterm (terminal emulator) ::</span>
+<span style="color: #1078a2; font-style: italic;">;;  </span><span style="color: #105f89; font-style: italic;">https://github.com/akermu/emacs-libvterm</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Configure BASH to work with vterm:</span>
+<span style="color: #1078a2; font-style: italic;">;;  </span><span style="color: #105f89; font-style: italic;">https://github.com/akermu/emacs-libvterm#vterm-clear-scrollback</span>
+(<span style="color: #1a8da7;">use-package</span>
   vterm
-  <span style="color: #f78fe7;">:custom</span> (vterm-always-compile-module t)
-  <span style="color: #f78fe7;">:general</span> (<span style="color: #79a8ff;">"C-c t"</span> 'my/vterm-toggle)
-  <span style="color: #f78fe7;">:config</span> (define-key vterm-mode-map (kbd <span style="color: #79a8ff;">"&lt;f5&gt;"</span>) nil)
-  <span style="color: #f78fe7;">:init</span>
-  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">shell-pop for vterm :: https://github.com/jixiuf/vterm-toggle</span>
-  (<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">vterm-toggle</span>)
-  (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/vterm-toggle</span> (<span style="color: #6ae4b9;">&amp;optional</span> args)
-    <span style="color: #b0d6f5;">"Customized vterm-toggle wrapper- this fixes the universal</span>
-<span style="color: #b0d6f5;">    argument (C-u) to always create a new terminal"</span>
-    (<span style="color: #b6a0ff;">interactive</span> <span style="color: #79a8ff;">"P"</span>)
-    (<span style="color: #b6a0ff;">if</span> (not
-         (<span style="color: #b6a0ff;">or</span> (derived-mode-p 'vterm-mode)
-             (<span style="color: #b6a0ff;">and</span> (vterm-toggle--get-window)
+  <span style="color: #106590;">:custom</span> (vterm-always-compile-module t)
+  <span style="color: #106590;">:general</span> (<span style="color: #10adee;">"C-c t"</span> 'my/vterm-toggle)
+  <span style="color: #106590;">:config</span> (define-key vterm-mode-map (kbd <span style="color: #10adee;">"&lt;f5&gt;"</span>) nil)
+  <span style="color: #106590;">:init</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">shell-pop for vterm :: https://github.com/jixiuf/vterm-toggle</span>
+  (<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">vterm-toggle</span>)
+  (<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/vterm-toggle</span> (<span style="color: #1f5e8a;">&amp;optional</span> args)
+    <span style="color: #10adee;">"Customized vterm-toggle wrapper- this fixes the universal</span>
+<span style="color: #10adee;">    argument (C-u) to always create a new terminal"</span>
+    (<span style="color: #1a8da7;">interactive</span> <span style="color: #10adee;">"P"</span>)
+    (<span style="color: #1a8da7;">if</span> (not
+         (<span style="color: #1a8da7;">or</span> (derived-mode-p 'vterm-mode)
+             (<span style="color: #1a8da7;">and</span> (vterm-toggle--get-window)
                   vterm-toggle-hide-method)))
-        (<span style="color: #b6a0ff;">if</span> (equal current-prefix-arg '(4))
+        (<span style="color: #1a8da7;">if</span> (equal current-prefix-arg '(4))
             (vterm-toggle--new args)
           (vterm-toggle args))
       (vterm-toggle args))))
@@ -1548,121 +1612,121 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 </div>
 </div>
 <div id="outline-container-Markdown_mode_%28label_%3Dmarkdown%3D%29" class="outline-3">
-<h3 id="Markdown_mode_%28label_%3Dmarkdown%3D%29"><span class="section-number-3">9.6.</span> Markdown mode (label <code>markdown</code>)</h3>
-<div class="outline-text-3" id="text-9-6">
+<h3 id="Markdown_mode_%28label_%3Dmarkdown%3D%29"><span class="section-number-3">9.7.</span> Markdown mode (label <code>markdown</code>)</h3>
+<div class="outline-text-3" id="text-9-7">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">markdown-mode</span>)
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">markdown-mode</span>)
 </pre>
 </div>
 </div>
 </div>
 <div id="outline-container-SSH_agent_%28label_%3Dssh-agent%3D%29" class="outline-3">
-<h3 id="SSH_agent_%28label_%3Dssh-agent%3D%29"><span class="section-number-3">9.7.</span> SSH agent (label <code>ssh-agent</code>)</h3>
-<div class="outline-text-3" id="text-9-7">
+<h3 id="SSH_agent_%28label_%3Dssh-agent%3D%29"><span class="section-number-3">9.8.</span> SSH agent (label <code>ssh-agent</code>)</h3>
+<div class="outline-text-3" id="text-9-8">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Load SSH / GPG keys from keychain agent</span>
-(<span style="color: #b6a0ff;">use-package</span>
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Load SSH / GPG keys from keychain agent</span>
+(<span style="color: #1a8da7;">use-package</span>
   keychain-environment
-  <span style="color: #f78fe7;">:straight</span>
+  <span style="color: #106590;">:straight</span>
   (keychain-environment
-   <span style="color: #f78fe7;">:type</span> git
-   <span style="color: #f78fe7;">:files</span> (<span style="color: #f78fe7;">:defaults</span> <span style="color: #79a8ff;">"keychain-environment"</span>)
-   <span style="color: #f78fe7;">:host</span> github
-   <span style="color: #f78fe7;">:repo</span> <span style="color: #79a8ff;">"tarsius/keychain-environment"</span>)
-  <span style="color: #f78fe7;">:init</span> (keychain-refresh-environment))
+   <span style="color: #106590;">:type</span> git
+   <span style="color: #106590;">:files</span> (<span style="color: #106590;">:defaults</span> <span style="color: #10adee;">"keychain-environment"</span>)
+   <span style="color: #106590;">:host</span> github
+   <span style="color: #106590;">:repo</span> <span style="color: #10adee;">"tarsius/keychain-environment"</span>)
+  <span style="color: #106590;">:init</span> (keychain-refresh-environment))
 </pre>
 </div>
 </div>
 </div>
 <div id="outline-container-Magit_%28label_%3Dmagit%3D%29" class="outline-3">
-<h3 id="Magit_%28label_%3Dmagit%3D%29"><span class="section-number-3">9.8.</span> Magit (label <code>magit</code>)</h3>
-<div class="outline-text-3" id="text-9-8">
+<h3 id="Magit_%28label_%3Dmagit%3D%29"><span class="section-number-3">9.9.</span> Magit (label <code>magit</code>)</h3>
+<div class="outline-text-3" id="text-9-9">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Magit (git version control system) :: https://magit.vc/</span>
-(<span style="color: #b6a0ff;">use-package</span>
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Magit (git version control system) :: https://magit.vc/</span>
+(<span style="color: #1a8da7;">use-package</span>
   magit
-  <span style="color: #f78fe7;">:general</span> (<span style="color: #79a8ff;">"C-c g"</span> 'magit-status)
-  <span style="color: #f78fe7;">:config</span>
-  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">open magit in a full frame always:</span>
-  (<span style="color: #b6a0ff;">setq</span> magit-display-buffer-function
+  <span style="color: #106590;">:general</span> (<span style="color: #10adee;">"C-c g"</span> 'magit-status)
+  <span style="color: #106590;">:config</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">open magit in a full frame always:</span>
+  (<span style="color: #1a8da7;">setq</span> magit-display-buffer-function
         #'magit-display-buffer-fullframe-status-v1))
 </pre>
 </div>
 </div>
 </div>
 <div id="outline-container-Scale_text_uniformly_in_all_buffers_%28label_%3Dtext-scale%3D%29" class="outline-3">
-<h3 id="Scale_text_uniformly_in_all_buffers_%28label_%3Dtext-scale%3D%29"><span class="section-number-3">9.9.</span> Scale text uniformly in all buffers (label <code>text-scale</code>)</h3>
-<div class="outline-text-3" id="text-9-9">
+<h3 id="Scale_text_uniformly_in_all_buffers_%28label_%3Dtext-scale%3D%29"><span class="section-number-3">9.10.</span> Scale text uniformly in all buffers (label <code>text-scale</code>)</h3>
+<div class="outline-text-3" id="text-9-10">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/default-text-scale-reset</span> nil
-  (<span style="color: #b6a0ff;">setq</span> default-text-scale--complement 0)
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/default-text-scale-reset</span> nil
+  (<span style="color: #1a8da7;">setq</span> default-text-scale--complement 0)
   (set-face-attribute 'default
                       nil
-                      <span style="color: #f78fe7;">:height</span> my/default-text-height)
-  (message <span style="color: #79a8ff;">"Text height reset: %d"</span> my/default-text-height)
+                      <span style="color: #106590;">:height</span> my/default-text-height)
+  (message <span style="color: #10adee;">"Text height reset: %d"</span> my/default-text-height)
   )
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Scale text sizes in all buffers :: https://github.com/purcell/default-text-scale</span>
-(<span style="color: #b6a0ff;">use-package</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Scale text sizes in all buffers :: https://github.com/purcell/default-text-scale</span>
+(<span style="color: #1a8da7;">use-package</span>
   default-text-scale
-  <span style="color: #f78fe7;">:general</span>
-  (<span style="color: #79a8ff;">"C-="</span>
+  <span style="color: #106590;">:general</span>
+  (<span style="color: #10adee;">"C-="</span>
    'default-text-scale-increase
-   <span style="color: #79a8ff;">"C--"</span>
-   (<span style="color: #b6a0ff;">lambda</span> ()
-     <span style="color: #b0d6f5;">"Reset text scale if C-u is used, otherwise decrease it."</span>
-     (<span style="color: #b6a0ff;">interactive</span>)
-     (<span style="color: #b6a0ff;">let</span> ((prefix current-prefix-arg))
-       <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Intercept and clear the prefix argument before calling the function</span>
-       (<span style="color: #b6a0ff;">setq</span> current-prefix-arg nil)
-       (<span style="color: #b6a0ff;">if</span> prefix
+   <span style="color: #10adee;">"C--"</span>
+   (<span style="color: #1a8da7;">lambda</span> ()
+     <span style="color: #10adee;">"Reset text scale if C-u is used, otherwise decrease it."</span>
+     (<span style="color: #1a8da7;">interactive</span>)
+     (<span style="color: #1a8da7;">let</span> ((prefix current-prefix-arg))
+       <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Intercept and clear the prefix argument before calling the function</span>
+       (<span style="color: #1a8da7;">setq</span> current-prefix-arg nil)
+       (<span style="color: #1a8da7;">if</span> prefix
            (my/default-text-scale-reset)
          (default-text-scale-decrease)))))
-  <span style="color: #f78fe7;">:init</span> (<span style="color: #b6a0ff;">setq</span> default-text-scale-amount 5))
+  <span style="color: #106590;">:init</span> (<span style="color: #1a8da7;">setq</span> default-text-scale-amount 5))
 </pre>
 </div>
 </div>
 </div>
 <div id="outline-container-Justfile_mode_%28label_%3Djust%3D%29" class="outline-3">
-<h3 id="Justfile_mode_%28label_%3Djust%3D%29"><span class="section-number-3">9.10.</span> Justfile mode (label <code>just</code>)</h3>
-<div class="outline-text-3" id="text-9-10">
+<h3 id="Justfile_mode_%28label_%3Djust%3D%29"><span class="section-number-3">9.11.</span> Justfile mode (label <code>just</code>)</h3>
+<div class="outline-text-3" id="text-9-11">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">just-mode</span>
-(<span style="color: #b6a0ff;">use-package</span> <span style="color: #00bcff;">just-mode</span>)
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">just-mode</span>
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">just-mode</span>)
 </pre>
 </div>
 </div>
 </div>
 <div id="outline-container-Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29" class="outline-3">
-<h3 id="Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29"><span class="section-number-3">9.11.</span> Latin words dictionary and word of the day (label <code>latin-words</code>)</h3>
-<div class="outline-text-3" id="text-9-11">
+<h3 id="Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29"><span class="section-number-3">9.12.</span> Latin words dictionary and word of the day (label <code>latin-words</code>)</h3>
+<div class="outline-text-3" id="text-9-12">
 <p>
 This package requires the system dependency <a href="https://jqlang.github.io/jq/download/">jq</a>.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span>
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">use-package</span>
   latin-words
-  <span style="color: #f78fe7;">:straight</span>
-  (latin-words <span style="color: #f78fe7;">:type</span> git <span style="color: #f78fe7;">:host</span> github <span style="color: #f78fe7;">:repo</span> <span style="color: #79a8ff;">"enigmacurry/latin-words"</span>)
-  <span style="color: #f78fe7;">:custom</span>
+  <span style="color: #106590;">:straight</span>
+  (latin-words <span style="color: #106590;">:type</span> git <span style="color: #106590;">:host</span> github <span style="color: #106590;">:repo</span> <span style="color: #10adee;">"enigmacurry/latin-words"</span>)
+  <span style="color: #106590;">:custom</span>
   (latin-words-directory
-   (expand-file-name <span style="color: #79a8ff;">"~/.emacs.d/straight/repos/latin-words/data"</span>)))
+   (expand-file-name <span style="color: #10adee;">"~/.emacs.d/straight/repos/latin-words/data"</span>)))
 </pre>
 </div>
 </div>
 </div>
 <div id="outline-container-Dashboard_%28label_%3Ddashboard%3D%29" class="outline-3">
-<h3 id="Dashboard_%28label_%3Ddashboard%3D%29"><span class="section-number-3">9.12.</span> Dashboard (label <code>dashboard</code>)</h3>
-<div class="outline-text-3" id="text-9-12">
+<h3 id="Dashboard_%28label_%3Ddashboard%3D%29"><span class="section-number-3">9.13.</span> Dashboard (label <code>dashboard</code>)</h3>
+<div class="outline-text-3" id="text-9-13">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">use-package</span>
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">use-package</span>
   dashboard
-  <span style="color: #f78fe7;">:init</span>
-  (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my-dashboard-insert-vocabulary</span> (list-size)
-    (<span style="color: #b6a0ff;">when</span> (fboundp 'latin-word-of-the-day)
-      (dashboard-insert-heading <span style="color: #79a8ff;">"Word of the day:"</span> nil)
-      (insert <span style="color: #79a8ff;">"\n"</span>)
-      (<span style="color: #b6a0ff;">let*</span> ((char-limit 100000)
+  <span style="color: #106590;">:init</span>
+  (<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my-dashboard-insert-vocabulary</span> (list-size)
+    (<span style="color: #1a8da7;">when</span> (fboundp 'latin-word-of-the-day)
+      (dashboard-insert-heading <span style="color: #10adee;">"Word of the day:"</span> nil)
+      (insert <span style="color: #10adee;">"\n"</span>)
+      (<span style="color: #1a8da7;">let*</span> ((char-limit 100000)
              (word (latin-word-of-the-day))
              (description (latin-word-get-description word)))
         (insert
@@ -1670,12 +1734,12 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
                     0
                     (min char-limit (length description)))))))
   (dashboard-setup-startup-hook)
-  <span style="color: #f78fe7;">:custom</span>
+  <span style="color: #106590;">:custom</span>
   (dashboard-center-content t)
   (dashboard-set-heading-icons nil)
   (dashboard-set-file-icons nil)
   (dashboard-icon-type nil)
-  (dashboard-footer-messages (list <span style="color: #79a8ff;">"    "</span>))
+  (dashboard-footer-messages (list <span style="color: #10adee;">"    "</span>))
   (dashboard-items '((recents . 5) (bookmarks . 5) (vocabulary)))
   (dashboard-startup-banner (+ 1 (random 3)))
   (dashboard-item-generators
@@ -1711,52 +1775,52 @@ enabled):
 
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/modules-dir</span> (expand-file-name <span style="color: #79a8ff;">"modules/"</span> user-emacs-directory))
-(<span style="color: #b6a0ff;">defvar</span> <span style="color: #00d3d0;">my/module-priority-list</span> '(<span style="color: #79a8ff;">"general"</span> <span style="color: #79a8ff;">"fonts"</span>)
-  <span style="color: #b0d6f5;">"List of prioritized modules to install first."</span>)
-(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/load-modules</span> (requested-modules)
-  <span style="color: #b0d6f5;">"Load user-requested modules in a priority order.</span>
-<span style="color: #b0d6f5;">  REQUESTED-MODULES is a list of module names to load."</span>
-  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Find and load all single file modules and load them regardless of any config</span>
-  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">(these onesshouldn't have any extra dependencies)</span>
-  (<span style="color: #b6a0ff;">when</span> (file-directory-p my/modules-dir)
-    (<span style="color: #b6a0ff;">let</span> ((files (directory-files my/modules-dir t <span style="color: #79a8ff;">"\\.el\\'"</span>)))
-      (<span style="color: #b6a0ff;">dolist</span> (file (sort files #'string&lt;))
-        (message <span style="color: #79a8ff;">"Loading module: %s"</span> file)
-        (<span style="color: #b6a0ff;">condition-case</span> err
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">defvar</span> <span style="color: #1e8eb8;">my/modules-dir</span> (expand-file-name <span style="color: #10adee;">"modules/"</span> user-emacs-directory))
+(<span style="color: #1a8da7;">defvar</span> <span style="color: #1e8eb8;">my/module-priority-list</span> '(<span style="color: #10adee;">"general"</span> <span style="color: #10adee;">"fonts"</span>)
+  <span style="color: #10adee;">"List of prioritized modules to install first."</span>)
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/load-modules</span> (requested-modules)
+  <span style="color: #10adee;">"Load user-requested modules in a priority order.</span>
+<span style="color: #10adee;">  REQUESTED-MODULES is a list of module names to load."</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Find and load all single file modules and load them regardless of any config</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">(these onesshouldn't have any extra dependencies)</span>
+  (<span style="color: #1a8da7;">when</span> (file-directory-p my/modules-dir)
+    (<span style="color: #1a8da7;">let</span> ((files (directory-files my/modules-dir t <span style="color: #10adee;">"\\.el\\'"</span>)))
+      (<span style="color: #1a8da7;">dolist</span> (file (sort files #'string&lt;))
+        (message <span style="color: #10adee;">"Loading module: %s"</span> file)
+        (<span style="color: #1a8da7;">condition-case</span> err
             (load file nil 'nomessage)
-          (<span style="color: #d0bc00;">error</span> (message <span style="color: #79a8ff;">"Error loading %s: %s"</span> file err))))))
-  <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Prioritize and install the requested third party / optional modules:</span>
-  (<span style="color: #b6a0ff;">let</span> ((prioritized-modules
-         (seq-filter (<span style="color: #b6a0ff;">lambda</span> (mod) (member mod my/module-priority-list))
+          (<span style="color: #FF0000; font-weight: bold;">error</span> (message <span style="color: #10adee;">"Error loading %s: %s"</span> file err))))))
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Prioritize and install the requested third party / optional modules:</span>
+  (<span style="color: #1a8da7;">let</span> ((prioritized-modules
+         (seq-filter (<span style="color: #1a8da7;">lambda</span> (mod) (member mod my/module-priority-list))
                      requested-modules))
         (remaining-modules
-         (seq-remove (<span style="color: #b6a0ff;">lambda</span> (mod) (member mod my/module-priority-list))
+         (seq-remove (<span style="color: #1a8da7;">lambda</span> (mod) (member mod my/module-priority-list))
                      requested-modules)))
-    <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Sort prioritized modules based on `my/module-priority-list`</span>
-    (<span style="color: #b6a0ff;">setq</span> prioritized-modules
+    <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Sort prioritized modules based on `my/module-priority-list`</span>
+    (<span style="color: #1a8da7;">setq</span> prioritized-modules
           (sort prioritized-modules
-                (<span style="color: #b6a0ff;">lambda</span> (a b)
-                  (&lt; (<span style="color: #b6a0ff;">or</span> (cl-position a my/module-priority-list)
+                (<span style="color: #1a8da7;">lambda</span> (a b)
+                  (&lt; (<span style="color: #1a8da7;">or</span> (cl-position a my/module-priority-list)
                          most-positive-fixnum)
-                     (<span style="color: #b6a0ff;">or</span> (cl-position b my/module-priority-list)
+                     (<span style="color: #1a8da7;">or</span> (cl-position b my/module-priority-list)
                          most-positive-fixnum)))))
-    <span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Combine prioritized and remaining modules</span>
-    (<span style="color: #b6a0ff;">let</span> ((ordered-modules (append prioritized-modules
+    <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Combine prioritized and remaining modules</span>
+    (<span style="color: #1a8da7;">let</span> ((ordered-modules (append prioritized-modules
                                    remaining-modules)))
-      (<span style="color: #b6a0ff;">dolist</span> (mod ordered-modules)
-        (<span style="color: #b6a0ff;">let</span> ((mod-path (expand-file-name mod my/modules-dir)))
-          (<span style="color: #b6a0ff;">if</span> (file-directory-p mod-path)
-              (<span style="color: #b6a0ff;">progn</span>
-                (message <span style="color: #79a8ff;">"Loading module: %s"</span> mod)
-                (<span style="color: #b6a0ff;">let</span> ((files (directory-files mod-path t <span style="color: #79a8ff;">"\\.el\\'"</span>)))
-                  (<span style="color: #b6a0ff;">dolist</span> (file (sort files #'string&lt;))
-                    (<span style="color: #b6a0ff;">condition-case</span> err
+      (<span style="color: #1a8da7;">dolist</span> (mod ordered-modules)
+        (<span style="color: #1a8da7;">let</span> ((mod-path (expand-file-name mod my/modules-dir)))
+          (<span style="color: #1a8da7;">if</span> (file-directory-p mod-path)
+              (<span style="color: #1a8da7;">progn</span>
+                (message <span style="color: #10adee;">"Loading module: %s"</span> mod)
+                (<span style="color: #1a8da7;">let</span> ((files (directory-files mod-path t <span style="color: #10adee;">"\\.el\\'"</span>)))
+                  (<span style="color: #1a8da7;">dolist</span> (file (sort files #'string&lt;))
+                    (<span style="color: #1a8da7;">condition-case</span> err
                         (load file nil 'nomessage)
-                      (<span style="color: #d0bc00;">error</span> (message <span style="color: #79a8ff;">"Error loading %s: %s"</span> file err))))))
-            (message <span style="color: #79a8ff;">"Skipping module: %s (not found)"</span> mod)))))))
+                      (<span style="color: #FF0000; font-weight: bold;">error</span> (message <span style="color: #10adee;">"Error loading %s: %s"</span> file err))))))
+            (message <span style="color: #10adee;">"Skipping module: %s (not found)"</span> mod)))))))
 
-<span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">load the modules configured for this macchine</span>
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">load the modules configured for this macchine</span>
 (my/load-modules my/machine-labels)
 </pre>
 </div>
@@ -1766,8 +1830,8 @@ enabled):
 <h3 id="cargo-install-my-cargo-dependencies"><span class="section-number-3">10.2.</span> Install rust helper programs declared by module</h3>
 <div class="outline-text-3" id="text-cargo-install-my-cargo-dependencies">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #a8a8a8;">;; </span><span style="color: #a8a8a8;">Install rust dependencies that were declared by modules</span>
-(<span style="color: #b6a0ff;">when</span> my/cargo-dependencies
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Install rust dependencies that were declared by modules</span>
+(<span style="color: #1a8da7;">when</span> my/cargo-dependencies
   (my/cargo-install my/cargo-dependencies))
 </pre>
 </div>
@@ -1777,7 +1841,9 @@ enabled):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2025-02-02 Sun 16:45</p>
+<p class="email">Email: <a href="mailto:ryan@enigmacurry.com">ryan@enigmacurry.com</a></p>
+<p class="date">Last Modified: 2025-02-02 Sun 22:30</p>
+<p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.8-pre)</p>
 </div>
 </body>
 </html>

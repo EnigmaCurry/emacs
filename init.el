@@ -51,6 +51,7 @@
   "Open the Emacs customization interface for my custom settings."
   (interactive)
   (customize-group 'my/custom-settings))
+(defalias 'my/settings 'my/custom-settings)
 
 ;; Global minor modes
 (column-number-mode)

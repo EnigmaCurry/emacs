@@ -1,5 +1,6 @@
 #+TITLE: Modular Literate GNU Emacs Configuration
 #+AUTHOR: EnigmaCurry
+#+EMAIL: ryan@enigmacurry.com
 #+LANGUAGE: en
 #+PROPERTY: header-args :results none :eval yes
 #+SETUPFILE: theme/simple_dark.theme
@@ -59,7 +60,7 @@ on Fedora:
 (message (emacs-version))
 #+end_src
 
-** Rustup
+** Rustup and Cargo
 
 [[https://rustup.rs/][Rustup]] is a tool that installs the latest versions of [[https://www.rust-lang.org/][Rust]] and [[https://doc.rust-lang.org/cargo/][Cargo]]
 /in your home directory/. Cargo is a user-space source-package manager
@@ -146,12 +147,12 @@ found in the git repository.
 * Early Init
 
 The [[file:early-init.el]] is the first config file that is loaded on
-Emacs startup. It is used to set the visual look and feel before the
-GUI is initialized, so that it doesn't have a jarring visual change
-during startup. Additionally, early debug options are set here.
+Emacs startup. It is used to set an initial visual look and feel
+before the GUI is initialized, including an initial dark theme.
+Additionally, early debug options are set here.
 
 #+begin_src emacs-lisp :tangle "early-init.el"
-  ;; Load modus-vivendi which is a builtin dark mode theme:
+  ;; Load an initial theme (will be overriden later in modules/theme/theme.el)
   (load-theme 'modus-vivendi)
   ;; Set a larger default font size (150 = 15 pt size):
   (setq my/default-text-height 150)
@@ -242,19 +243,20 @@ environments. Only Emacs builtins will be allowed here:
 ** Customization
 
 #+begin_src emacs-lisp :tangle "init.el"
-      ;; Store customizations in custom.el
-      (setq custom-file (locate-user-emacs-file "custom.el"))
-      (when (file-exists-p custom-file)
-        (load custom-file))
-      ;; Store all customizations under my/custom-settings group
-      (defgroup my/custom-settings nil
-        "My custom Emacs settings"
-        :group 'emacs)
-      ;; Shortcut to open custom settings:
-      (defun my/custom-settings ()
-        "Open the Emacs customization interface for my custom settings."
-        (interactive)
-        (customize-group 'my/custom-settings))
+  ;; Store customizations in custom.el
+  (setq custom-file (locate-user-emacs-file "custom.el"))
+  (when (file-exists-p custom-file)
+    (load custom-file))
+  ;; Store all customizations under my/custom-settings group
+  (defgroup my/custom-settings nil
+    "My custom Emacs settings"
+    :group 'emacs)
+  ;; Shortcut to open custom settings:
+  (defun my/custom-settings ()
+    "Open the Emacs customization interface for my custom settings."
+    (interactive)
+    (customize-group 'my/custom-settings))
+  (defalias 'my/settings 'my/custom-settings)
 #+end_src
 
 ** Builtin minor modes to activate everywhere
@@ -298,13 +300,17 @@ There are some files that I want to have easy access to via
 [[info:emacs#Position Registers][Position Registers]]. These registers
 are accessed via the prefix: =C-x r j= (register jump):
 
- * =C-x r j e= - open the Emacs config file buffer
+ * =C-<f1>= or =C-x r j e= - open the Emacs config file buffer
 
 #+begin_src emacs-lisp :tangle "modules/registers.el"
   (set-register ?e '(file . "~/git/vendor/enigmacurry/emacs-new/emacs.org"))
+  (global-set-key (kbd "C-<f1>") (lambda () (interactive) (jump-to-register ?e)))
 #+end_src
 
 * Cargo
+
+[[https://doc.rust-lang.org/cargo/][Cargo]] is used to install some system programs automatically.
+
 ** Set cargo binary PATH
 
 Cargo and all of the helper programs you install go in =~/.cargo/bin=.
@@ -545,6 +551,46 @@ before: =M-x my/custom-settings=.
 You should restart Emacs to reload the configured modules from
 =custom.el=.
 
+** Theme (label =theme=)
+
+ * [[https://github.com/myTerminal/theme-looper][theme-looper]]
+ * [[https://github.com/hlissner/emacs-solaire-mode][solaire-mode]]
+ * [[https://github.com/emacsfodder/emacs-deep-thought-theme][deep-thought]]
+
+You can cycle the current theme via =C-<f11>= and =C-<f12>=. As you do
+this, the theme will be made persistent by automatically customizing
+=my/theme= which is loaded on startup.
+
+#+begin_src emacs-lisp :tangle "modules/theme/theme.el" :mkdirp yes
+  (defgroup my/theme-settings nil
+    "My custom theme settings"
+    :group 'my/custom-settings)
+  (defcustom my/theme 'deep-thought
+    "Emacs Theme"
+    :type 'symbol
+    :group 'my/theme-settings)
+
+  (defun my/theme-update (theme-fn)
+    "Update the `my/theme` variable with the new theme and call THEME-FN."
+    (interactive)
+    (let ((current-theme (car custom-enabled-themes)))
+      (funcall theme-fn)
+      (customize-set-variable 'my/theme (car custom-enabled-themes))
+      (customize-save-customized)
+      (message "Theme changed to: %s" my/theme)))
+
+  (use-package
+    deep-thought-theme
+    :straight
+    (deep-thought-theme :type git :host github :repo "emacsfodder/emacs-deep-thought-theme"))
+  (use-package solaire-mode :init (solaire-global-mode +1))
+  (use-package theme-looper
+    :general
+    ("C-<f11>" (lambda () (interactive) (my/theme-update 'theme-looper-enable-previous-theme)))
+    ("C-<f12>"  (lambda () (interactive) (my/theme-update 'theme-looper-enable-next-theme))))
+
+  (load-theme my/theme t)
+#+end_src
 ** Fonts (label =fonts=)
 *** List installed font families
 #+begin_src emacs-lisp :results replace
@@ -683,6 +729,9 @@ See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.e
     (org-html-use-infojs nil)
     (org-html-postamble 'auto)
     (org-export-with-author t)
+    (org-export-with-date t)
+    (org-export-with-creator t)
+    (org-export-with-email t)
     (org-export-timestamp-file t)
     :general
     ("s-<up>" 'org-previous-visible-heading)
@@ -900,6 +949,11 @@ make org-mode syntax easier to type: ===, =/=, =~=.
 #+end_src
 
 ** Completion (label =completion=)
+
+ * [[https://github.com/minad/vertico][vertico]]
+ * [[https://github.com/oantolin/orderless][orderless]]
+ * [[https://github.com/minad/marginalia][marginalia]]
+
 #+begin_src emacs-lisp :tangle "modules/completion/completion.el" :mkdirp yes
   ;; Allow minibuffers to stack:
   (setq-default enable-recursive-minibuffers t)

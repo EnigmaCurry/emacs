@@ -6,6 +6,9 @@
   (org-html-use-infojs nil)
   (org-html-postamble 'auto)
   (org-export-with-author t)
+  (org-export-with-date t)
+  (org-export-with-creator t)
+  (org-export-with-email t)
   (org-export-timestamp-file t)
   :general
   ("s-<up>" 'org-previous-visible-heading)

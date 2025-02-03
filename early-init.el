@@ -1,4 +1,4 @@
-;; Load modus-vivendi which is a builtin dark mode theme:
+;; Load an initial theme (will be overriden later in modules/theme/theme.el)
 (load-theme 'modus-vivendi)
 ;; Set a larger default font size (150 = 15 pt size):
 (setq my/default-text-height 150)
