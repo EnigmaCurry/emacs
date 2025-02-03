@@ -12,7 +12,16 @@
    "C-x B"     'buffer-menu-other-window
    "s-o"       'browse-url
    "C-;"       'comment-region ; C-u C-; to uncomment
-   "s-<down-mouse-1>"       'mouse-drag-region-rectangle)
+   "s-<down-mouse-1>"       'mouse-drag-region-rectangle
+   "C-<f1>"    'my/register-jump-f1
+   "M-<f1>"    'my/register-save-f1
+   "C-<f2>"    'my/register-jump-f2
+   "M-<f2>"    'my/register-save-f2
+   "C-<f3>"    'my/register-jump-f3
+   "M-<f3>"    'my/register-save-f3
+   "C-<f4>"    'my/register-jump-f4
+   "M-<f4>"    'my/register-save-f4
+   )
   ;;; Put the Emacs default keybindings you want included
   ;;;   in general-describe-keybindings here:
   ;;; Its useful to duplicate these simply as a way of documentation:

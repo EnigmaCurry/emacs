@@ -296,15 +296,35 @@ configs, etc.
 
 *** Position registers
 
-There are some files that I want to have easy access to via
-[[info:emacs#Position Registers][Position Registers]]. These registers
-are accessed via the prefix: =C-x r j= (register jump):
+[[info:emacs#Position Registers][Position Registers]] store the point position of buffers, so you can
+quickly come back to it from anywhere.
 
- * =C-<f1>= or =C-x r j e= - open the Emacs config file buffer
+ * =C-x r j e= or =C-c j e=    open the Emacs config file buffer
 
 #+begin_src emacs-lisp :tangle "modules/registers.el"
-  (set-register ?e '(file . "~/git/vendor/enigmacurry/emacs-new/emacs.org"))
-  (global-set-key (kbd "C-<f1>") (lambda () (interactive) (jump-to-register ?e)))
+  (set-register ?e `(file . ,(expand-file-name "emacs.org" user-emacs-directory)))
+#+end_src
+
+The =F1=, =F2=, =F3=, and =F4= keys store temporary positions:
+
+ * =C-<f1>= jump to register stored in the F1 register.
+ * =C-<f2>= jump to register stored in the F2 register.
+ * =C-<f3>= jump to register stored in the F3 register.
+ * =C-<f4>= jump to register stored in the F4 register.
+ * =M-<f1>= store the current point into the F1 register.
+ * =M-<f2>= store the current point into the F2 register.
+ * =M-<f3>= store the current point into the F3 register.
+ * =M-<f4>= store the current point into the F4 register.
+
+#+begin_src emacs-lisp :tangle "modules/registers.el"
+  (defun my/register-save-f1 () (interactive) (point-to-register 'my/register-f1))
+  (defun my/register-jump-f1 () (interactive) (jump-to-register 'my/register-f1))
+  (defun my/register-save-f2 () (interactive) (point-to-register 'my/register-f2))
+  (defun my/register-jump-f2 () (interactive) (jump-to-register 'my/register-f2))
+  (defun my/register-save-f3 () (interactive) (point-to-register 'my/register-f3))
+  (defun my/register-jump-f3 () (interactive) (jump-to-register 'my/register-f3))
+  (defun my/register-save-f4 () (interactive) (point-to-register 'my/register-f4))
+  (defun my/register-jump-f4 () (interactive) (jump-to-register 'my/register-f4))
 #+end_src
 
 * Cargo
@@ -572,17 +592,17 @@ this, the theme will be made persistent by automatically customizing
 
   (defun my/theme-update (theme-fn)
     "Update the `my/theme` variable with the new theme and call THEME-FN."
-    (interactive)
     (let ((current-theme (car custom-enabled-themes)))
       (funcall theme-fn)
       (customize-set-variable 'my/theme (car custom-enabled-themes))
       (customize-save-customized)
       (message "Theme changed to: %s" my/theme)))
 
+  ;; Install themes directly from a git repository:
   (use-package
     deep-thought-theme
     :straight
-    (deep-thought-theme :type git :host github :repo "emacsfodder/emacs-deep-thought-theme"))
+    (deep-thought-theme :type git :repo "https://github.com/emacsfodder/emacs-deep-thought-theme.git"))
   (use-package solaire-mode :init (solaire-global-mode +1))
   (use-package theme-looper
     :general
@@ -684,39 +704,48 @@ selection.
 See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.el]]
 
 #+begin_src emacs-lisp :tangle "modules/general/general.el" :mkdirp yes
-    (use-package
-      general
-      :init
-      ;; Switch between two most recent buffers:
-      (fset 'quick-switch-buffer [?\C-x ?b return])
-      :config
-       ;;; Custom global bindings:
-      (general-define-key
-       "C-h B"     'general-describe-keybindings
-       "s-b"       'quick-switch-buffer
-       "s-B"       'buffer-menu-other-window
-       "C-x B"     'buffer-menu-other-window
-       "s-o"       'browse-url
-       "C-;"       'comment-region ; C-u C-; to uncomment
-       "s-<down-mouse-1>"       'mouse-drag-region-rectangle)
-      ;;; Put the Emacs default keybindings you want included
-      ;;;   in general-describe-keybindings here:
-      ;;; Its useful to duplicate these simply as a way of documentation:
-      (general-define-key
-       "M-SPC"     'cycle-spacing ; If you document it, you will use it.
-       "M-h"       'mark-paragraph ; C-h B is like your personal cheat sheet.
-       "C-h b"     'describe-bindings ;; default binding for documentation purpose
-       "C-x 4 c"   'clone-indirect-buffer-other-window ;; default binding
-       )
-      ;;; Define bindings for specific builtin (non use-package) modes:
-      ;; Emacs Lisp mode bindings:
-      (general-define-key
-       :keymaps 'emacs-lisp-mode-map
-       "s-e" 'eval-defun ;eval top-level form
-       "M-;" 'paredit-comment-dwim)
-      ;; Dired mode bindings:
-      (general-define-key
-       :keymaps 'dired-mode-map "C-c C-q" 'dired-toggle-read-only))
+          (use-package
+            general
+            :init
+            ;; Switch between two most recent buffers:
+            (fset 'quick-switch-buffer [?\C-x ?b return])
+            :config
+             ;;; Custom global bindings:
+            (general-define-key
+             "C-h B"     'general-describe-keybindings
+             "s-b"       'quick-switch-buffer
+             "s-B"       'buffer-menu-other-window
+             "C-x B"     'buffer-menu-other-window
+             "s-o"       'browse-url
+             "C-;"       'comment-region ; C-u C-; to uncomment
+             "s-<down-mouse-1>"       'mouse-drag-region-rectangle
+             "C-<f1>"    'my/register-jump-f1
+             "M-<f1>"    'my/register-save-f1
+             "C-<f2>"    'my/register-jump-f2
+             "M-<f2>"    'my/register-save-f2
+             "C-<f3>"    'my/register-jump-f3
+             "M-<f3>"    'my/register-save-f3
+             "C-<f4>"    'my/register-jump-f4
+             "M-<f4>"    'my/register-save-f4
+             )
+            ;;; Put the Emacs default keybindings you want included
+            ;;;   in general-describe-keybindings here:
+            ;;; Its useful to duplicate these simply as a way of documentation:
+            (general-define-key
+             "M-SPC"     'cycle-spacing ; If you document it, you will use it.
+             "M-h"       'mark-paragraph ; C-h B is like your personal cheat sheet.
+             "C-h b"     'describe-bindings ;; default binding for documentation purpose
+             "C-x 4 c"   'clone-indirect-buffer-other-window ;; default binding
+             )
+            ;;; Define bindings for specific builtin (non use-package) modes:
+            ;; Emacs Lisp mode bindings:
+            (general-define-key
+             :keymaps 'emacs-lisp-mode-map
+             "s-e" 'eval-defun ;eval top-level form
+             "M-;" 'paredit-comment-dwim)
+            ;; Dired mode bindings:
+            (general-define-key
+             :keymaps 'dired-mode-map "C-c C-q" 'dired-toggle-read-only))
 #+end_src
 ** Org mode (label =org=)
 

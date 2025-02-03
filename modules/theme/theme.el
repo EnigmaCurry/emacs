@@ -8,17 +8,17 @@
 
 (defun my/theme-update (theme-fn)
   "Update the `my/theme` variable with the new theme and call THEME-FN."
-  (interactive)
   (let ((current-theme (car custom-enabled-themes)))
     (funcall theme-fn)
     (customize-set-variable 'my/theme (car custom-enabled-themes))
     (customize-save-customized)
     (message "Theme changed to: %s" my/theme)))
 
+;; Install themes directly from a git repository:
 (use-package
   deep-thought-theme
   :straight
-  (deep-thought-theme :type git :host github :repo "emacsfodder/emacs-deep-thought-theme"))
+  (deep-thought-theme :type git :repo "https://github.com/emacsfodder/emacs-deep-thought-theme.git"))
 (use-package solaire-mode :init (solaire-global-mode +1))
 (use-package theme-looper
   :general

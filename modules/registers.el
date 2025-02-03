@@ -1,2 +1,10 @@
-(set-register ?e '(file . "~/git/vendor/enigmacurry/emacs-new/emacs.org"))
-(global-set-key (kbd "C-<f1>") (lambda () (interactive) (jump-to-register ?e)))
+(set-register ?e `(file . ,(expand-file-name "emacs.org" user-emacs-directory)))
+
+(defun my/register-save-f1 () (interactive) (point-to-register 'my/register-f1))
+(defun my/register-jump-f1 () (interactive) (jump-to-register 'my/register-f1))
+(defun my/register-save-f2 () (interactive) (point-to-register 'my/register-f2))
+(defun my/register-jump-f2 () (interactive) (jump-to-register 'my/register-f2))
+(defun my/register-save-f3 () (interactive) (point-to-register 'my/register-f3))
+(defun my/register-jump-f3 () (interactive) (jump-to-register 'my/register-f3))
+(defun my/register-save-f4 () (interactive) (point-to-register 'my/register-f4))
+(defun my/register-jump-f4 () (interactive) (jump-to-register 'my/register-f4))
