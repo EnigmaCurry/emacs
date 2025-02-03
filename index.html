@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-03 Mon 01:21 -->
+<!-- 2025-02-03 Mon 13:57 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -963,7 +963,7 @@ Modules are optional and they extend the base config.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org4824985">
+<pre class="example" id="org27d3bf9">
 - completion
 - dashboard
 - fonts
@@ -1578,7 +1578,7 @@ library:
                                        eos)
                                    ,place)
                      <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">HACK: `</span><span style="color: #1a99e7; font-style: italic;">s1</span><span style="color: #105f89; font-style: italic;">' instead of a gensym.</span>
-                     (<span style="color: #1a8da7;">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
+                     (-let* (((s1 suffix) (list (match-string 1 ,place)
                                                 (match-string 2 ,place)))
                              (suffix (<span style="color: #1a8da7;">if</span> suffix
                                          (string-to-number suffix)
@@ -1702,6 +1702,7 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
   <span style="color: #106590;">:custom</span> (vterm-always-compile-module t)
   <span style="color: #106590;">:general</span> (<span style="color: #10adee;">"C-c t"</span> 'my/vterm-toggle)
   <span style="color: #106590;">:config</span> (define-key vterm-mode-map (kbd <span style="color: #10adee;">"&lt;f5&gt;"</span>) nil)
+  <span style="color: #106590;">:hook</span> ((vterm-mode . (<span style="color: #1a8da7;">lambda</span> () (<span style="color: #1a8da7;">setq-local</span> show-trailing-whitespace nil))))
   <span style="color: #106590;">:init</span>
   <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">shell-pop for vterm :: https://github.com/jixiuf/vterm-toggle</span>
   (<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">vterm-toggle</span>)
@@ -1844,6 +1845,8 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
                     0
                     (min char-limit (length description)))))))
   (dashboard-setup-startup-hook)
+  <span style="color: #106590;">:hook</span>
+  ((dashboard-mode . (<span style="color: #1a8da7;">lambda</span> () (<span style="color: #1a8da7;">setq-local</span> show-trailing-whitespace nil))))
   <span style="color: #106590;">:custom</span>
   (dashboard-center-content t)
   (dashboard-set-heading-icons nil)
@@ -1952,7 +1955,7 @@ enabled):
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
 <p class="email">Email: <a href="mailto:ryan@enigmacurry.com">ryan@enigmacurry.com</a></p>
-<p class="date">Last Modified: 2025-02-03 Mon 01:21</p>
+<p class="date">Last Modified: 2025-02-03 Mon 13:57</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.8-pre)</p>
 </div>
 </body>

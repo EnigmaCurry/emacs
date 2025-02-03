@@ -13,6 +13,8 @@
                     0
                     (min char-limit (length description)))))))
   (dashboard-setup-startup-hook)
+  :hook
+  ((dashboard-mode . (lambda () (setq-local show-trailing-whitespace nil))))
   :custom
   (dashboard-center-content t)
   (dashboard-set-heading-icons nil)
