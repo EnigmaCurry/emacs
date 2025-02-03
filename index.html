@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-03 Mon 13:57 -->
+<!-- 2025-02-03 Mon 14:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -276,6 +276,7 @@ body{margin:0;background:#121212;color:#e0e0e0;font-family:"Bitstream Vera Sans"
 <li><a href="#Justfile_mode_%28label_%3Djust%3D%29">9.12. Justfile mode (label <code>just</code>)</a></li>
 <li><a href="#Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29">9.13. Latin words dictionary and word of the day (label <code>latin-words</code>)</a></li>
 <li><a href="#Dashboard_%28label_%3Ddashboard%3D%29">9.14. Dashboard (label <code>dashboard</code>)</a></li>
+<li><a href="#GPTel_%28label_%3Dgptel%3D%29">9.15. GPTel (label <code>gptel</code>)</a></li>
 </ul>
 </li>
 <li><a href="#Load_modules">10. Load modules</a>
@@ -344,6 +345,10 @@ per-machine labels that opt-in to loading additional modules.</li>
 <div class="outline-text-2" id="text-2">
 <p>
 See <a href="LICENSE.txt">LICENSE.txt</a>
+</p>
+
+<p>
+See <a href="LICENSE_GPLv3.txt">LICENSE_GPLv3.txt</a>
 </p>
 
 <p>
@@ -963,11 +968,12 @@ Modules are optional and they extend the base config.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org27d3bf9">
+<pre class="example" id="orgaf17561">
 - completion
 - dashboard
 - fonts
 - general
+- gptel
 - just
 - latin-words
 - magit
@@ -1408,6 +1414,7 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
         (make-symbolic-link <span style="color: #10adee;">"../index.html"</span> <span style="color: #10adee;">"export/emacs.html"</span> t)
         (make-symbolic-link <span style="color: #10adee;">"../modules"</span> <span style="color: #10adee;">"export/modules"</span> t)
         (make-symbolic-link <span style="color: #10adee;">"../LICENSE.txt"</span> <span style="color: #10adee;">"export/LICENSE.txt"</span> t)
+        (make-symbolic-link <span style="color: #10adee;">"../LICENSE_GPLv3.txt"</span> <span style="color: #10adee;">"export/LICENSE_GPLv3.txt"</span> t)
         (make-symbolic-link <span style="color: #10adee;">"../early-init.el"</span> <span style="color: #10adee;">"export/early-init.el"</span> t)
         (make-symbolic-link <span style="color: #10adee;">"../init.el"</span> <span style="color: #10adee;">"export/init.el"</span> t)
         <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">No reason to save the buffer again, but maybe in the future,</span>
@@ -1578,7 +1585,7 @@ library:
                                        eos)
                                    ,place)
                      <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">HACK: `</span><span style="color: #1a99e7; font-style: italic;">s1</span><span style="color: #105f89; font-style: italic;">' instead of a gensym.</span>
-                     (-let* (((s1 suffix) (list (match-string 1 ,place)
+                     (<span style="color: #1a8da7;">-let*</span> (((s1 suffix) (list (match-string 1 ,place)
                                                 (match-string 2 ,place)))
                              (suffix (<span style="color: #1a8da7;">if</span> suffix
                                          (string-to-number suffix)
@@ -1863,6 +1870,72 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
 </div>
 </div>
 </div>
+<div id="outline-container-GPTel_%28label_%3Dgptel%3D%29" class="outline-3">
+<h3 id="GPTel_%28label_%3Dgptel%3D%29"><span class="section-number-3">9.15.</span> GPTel (label <code>gptel</code>)</h3>
+<div class="outline-text-3" id="text-9-15">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">use-package</span>
+  gptel
+  <span style="color: #106590;">:general</span>
+  (<span style="color: #10adee;">"C-c C-g"</span> 'gptel-menu)
+  (<span style="color: #106590;">:keymaps</span> 'gptel-mode-map <span style="color: #10adee;">"C-c C-c"</span> 'gptel-send)
+  <span style="color: #106590;">:config</span> (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+                                        <span style="color: #1078a2; font-style: italic;">;</span><span style="color: #105f89; font-style: italic;">(add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)</span>
+  (<span style="color: #1a8da7;">setq</span> gptel-org-branching-context t)
+  <span style="color: #106590;">:init</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">LM-studio offers an OpenAI compatible API</span>
+  (<span style="color: #1a8da7;">setq</span>
+   gptel-model 'test
+   gptel-backend
+   (gptel-make-openai
+    <span style="color: #10adee;">"lm-studio"</span>
+    <span style="color: #106590;">:stream</span> t
+    <span style="color: #106590;">:protocol</span> <span style="color: #10adee;">"http"</span>
+    <span style="color: #106590;">:host</span> <span style="color: #10adee;">"localhost:1234"</span>
+    <span style="color: #106590;">:models</span> '(test)))
+  (<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my-gptel-deepseek-wrap-think-block</span> (beg end)
+    <span style="color: #b0d6f5;">"Wrap '</span><span style="color: #1a99e7;">&lt;think&gt;</span><span style="color: #b0d6f5;">' blocks in an Org-mode drawer if not already wrapped."</span>
+    (<span style="color: #1a8da7;">when</span> (derived-mode-p 'org-mode)
+      (<span style="color: #1a8da7;">save-excursion</span>
+        (goto-char beg)
+        <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Find all occurrences of &lt;think&gt; blocks</span>
+        (<span style="color: #1a8da7;">while</span> (re-search-forward <span style="color: #10adee;">"^&lt;think&gt;"</span> end t)
+          (<span style="color: #1a8da7;">let</span> ((start (line-beginning-position)))
+            <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Check if the block is already wrapped</span>
+            (<span style="color: #1a8da7;">unless</span> (<span style="color: #1a8da7;">save-excursion</span>
+                      (forward-line -4)
+                      (looking-at <span style="color: #10adee;">"^:THINKING:$"</span>))
+              <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Insert Org-mode drawer start</span>
+              (goto-char start)
+              (kill-region (point) (line-end-position))
+              (insert-and-inherit <span style="color: #10adee;">":THINKING:\n"</span>)
+              (insert-and-inherit
+               <span style="color: #10adee;">"#+attr_shortcode: :title Thinking ...\n"</span>)
+              (insert-and-inherit <span style="color: #10adee;">"#+begin_expand\n"</span>)
+              (insert-and-inherit <span style="color: #10adee;">"&lt;pre&gt;"</span>)
+              (forward-line 4)
+              <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Find the closing tag again after insertion</span>
+              (<span style="color: #1a8da7;">when</span> (re-search-forward <span style="color: #10adee;">"&lt;/think&gt;"</span> nil t)
+                (end-of-line)
+                (kill-region (line-beginning-position) (point))
+                (insert-and-inherit <span style="color: #10adee;">"&lt;/pre&gt;"</span>)
+                (end-of-line)
+                <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Ensure we don't add duplicate :END:</span>
+                (<span style="color: #1a8da7;">unless</span> (looking-at <span style="color: #10adee;">"\n#+end_expand"</span>)
+                  (insert-and-inherit <span style="color: #10adee;">"\n#+end_expand\n"</span>)
+                  (insert-and-inherit <span style="color: #10adee;">":END:\n"</span>))
+                <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Move back to the start of the drawer for org-cycle</span>
+                (goto-char start)
+                (org-cycle)))))))
+    (message <span style="color: #10adee;">"Think blocks wrapped and folded."</span>))
+
+  (add-hook
+   'gptel-post-response-functions
+   #'my-gptel-deepseek-wrap-think-block))
+</pre>
+</div>
+</div>
+</div>
 </div>
 <div id="outline-container-Load_modules" class="outline-2">
 <h2 id="Load_modules"><span class="section-number-2">10.</span> Load modules</h2>
@@ -1955,7 +2028,7 @@ enabled):
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
 <p class="email">Email: <a href="mailto:ryan@enigmacurry.com">ryan@enigmacurry.com</a></p>
-<p class="date">Last Modified: 2025-02-03 Mon 13:57</p>
+<p class="date">Last Modified: 2025-02-03 Mon 14:51</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.8-pre)</p>
 </div>
 </body>

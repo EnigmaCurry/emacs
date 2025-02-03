@@ -12,3 +12,4 @@
 .gitignore
 /export/hello.txt
 /transient/
+\#*

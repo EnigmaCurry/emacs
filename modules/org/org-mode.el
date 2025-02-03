@@ -45,6 +45,7 @@
         (make-symbolic-link "../index.html" "export/emacs.html" t)
         (make-symbolic-link "../modules" "export/modules" t)
         (make-symbolic-link "../LICENSE.txt" "export/LICENSE.txt" t)
+        (make-symbolic-link "../LICENSE_GPLv3.txt" "export/LICENSE_GPLv3.txt" t)
         (make-symbolic-link "../early-init.el" "export/early-init.el" t)
         (make-symbolic-link "../init.el" "export/init.el" t)
         ;; No reason to save the buffer again, but maybe in the future,
