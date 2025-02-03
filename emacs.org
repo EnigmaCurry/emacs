@@ -1,4 +1,4 @@
-#+TITLE: Modular Literate GNU Emacs Configuration
+#+TITLE: Modular GNU Emacs Configuration
 #+AUTHOR: EnigmaCurry
 #+EMAIL: ryan@enigmacurry.com
 #+LANGUAGE: en
@@ -7,37 +7,45 @@
 
 * Goals
 
-This is a new attempt at writing a literate and modular Emacs config:
+This is a new attempt at writing a depersonalized, copyable, literate,
+and modular Emacs config:
 
- * All Emacs config (elisp) is written in Org Mode and it goes in this file
-   ([[file:emacs.org][emacs.org]]) [[[https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1][Source on GitHub]]].
- * All configuration is displayed (exported) as a single HTML page,
-   which is easy to search and requires no JavaScript.
- * All Org-Babel code blocks are "tangled" into normal elisp files
-   that are split by category. These elisp files are directly
-   committed into the git repository so that it can be cloned and
-   loaded directly without invoking org-mode. [[https://orgmode.org/worg/org-contrib/babel/intro.html#emacs-initialization][org-babel-load-file]] is
-   *NOT* used.
+ * All Emacs config (elisp) is written in a single Org Mode file.
+   * ([[file:emacs.org][emacs.org]]) [[[https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1][Source on GitHub]]].
+ * Your configuration is displayed (exported) as a single HTML page.
+   * This is easy to search and requires no JavaScript.
+ * All Org-Babel code blocks are [[https://orgmode.org/manual/Extracting-Source-Code.html]["tangled"]] into normal elisp files in
+   this git repository.
+    * You can [[https://github.com/EnigmaCurry/emacs/tree/literate-new][clone the repository]] and have Emacs load the files
+      directly without invoking org-mode.
+ * Code blocks should be kept tidy, medium size, and of related
+   context.
+   * Avoid having lots of little code blocks and excessive prose
+     explanations.
  * All custom elisp functions and variables should have the namespace
-   prefix =my/=, which is non-proprietary and promotes code adoption
-   by others (meme: [[https://ec-share.nyc3.digitaloceanspaces.com/i-made-this-1.jpg]["I made this"]]).
- * Basic Emacs functionality should work without needing to download
+   prefix =my/=.
+    * Configuration should be generic and and non-proprietary to
+      promote code adoption by others (meme: [[https://ec-share.nyc3.digitaloceanspaces.com/i-made-this-1.jpg]["I made this"]]).
+ * The config should support multiple Linux platforms: CLI, Wayland,
+   and Android.
+ * Most configuration should be customizable by the user without
+   needing to edit this file.
+   * Run =M-x my/custom-settings= to open the configuration menu for
+     this config and save settings on a per-installation basis.
+ * The default configuration should work without needing to download
    any third party libraries.
- * Multi-platform support for Linux CLI, Wayland, and Android.
- * Create custom variable =my/machine-labels= to set per-machine
-   labels that opt-in to load additional modules.
- * Keep code blocks tidy and of medium size. Avoid having lots of
-   little code blocks and excessive structures.
+   * The custom variable =my/machine-labels= is used to set
+     per-machine labels that opt-in to loading additional modules.
 
 * LICENSE
 
 See [[file:LICENSE.txt]]
 
-This distribution has a mixed license (0BSD and GPLv3). Everything
+This distribution has a *mixed license* (0BSD and GPLv3). Everything
 here that has not been identified in the comments as having been taken
 from somewhere else, is licensed/dedicated to you as public domain
 (0BSD). Some code has been copied from other sources that are licensed
-GPLv3 and so I have identified these as such in the code block
+GPLv3 and so these have been identified as such in the code block
 comments. As long as these additional sources are included in this
 distribution, this repository is effectively (infectively) licensed as
 GPLv3.
@@ -48,11 +56,10 @@ GPLv3.
 
 * Dependencies
 ** Emacs
-You will need a recent version of Emacs. I am using the latest version
-on Fedora:
+You will need a recent version of Emacs.
 
 #+begin_src shell
-  #e.g., Fedora:
+  #e.g., on Fedora:
   sudo dnf install emacs
 #+end_src
 
@@ -72,7 +79,7 @@ You may be able to find the =rustup= tool in your system package
 manager and install it that way:
 
 #+begin_src shell
-  # e.g., Fedora:
+  # e.g., on Fedora:
   sudo dnf install rustup
   rustup-init
 #+end_src
@@ -242,6 +249,19 @@ environments. Only Emacs builtins will be allowed here:
 
 ** Customization
 
+Emacs has a powerful [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Easy-Customization.html][customization feature]] and this configuration uses
+it for all the user and machine specific settings.
+
+Enter the interactive customization menu for this config: =M-x
+my/custom-settings=
+
+There are several sub-menus of settings for different modules. You can
+change the values for any of the settings and then press =C-x C-s=
+(custom-save), and it will save the custom values in
+=~/.emacs.d/custom.el=. This file is ignored by the git repository,
+and it is used to store persistent custom values for a specific
+machine only.
+
 #+begin_src emacs-lisp :tangle "init.el"
   ;; Store customizations in custom.el
   (setq custom-file (locate-user-emacs-file "custom.el"))
@@ -286,45 +306,6 @@ environments. Only Emacs builtins will be allowed here:
   (add-hook 'prog-mode-hook (lambda ()
                               (display-fill-column-indicator-mode 1)
                               (display-line-numbers-mode 1)))
-#+end_src
-
-** Registers
-
-Registers are storage comparments in Emacs, which can hold several
-different types of things: strings, numbers, buffer positions, frame
-configs, etc.
-
-*** Position registers
-
-[[info:emacs#Position Registers][Position Registers]] store the point position of buffers, so you can
-quickly come back to it from anywhere.
-
- * =C-x r j e= or =C-c j e=    open the Emacs config file buffer
-
-#+begin_src emacs-lisp :tangle "modules/registers.el"
-  (set-register ?e `(file . ,(expand-file-name "emacs.org" user-emacs-directory)))
-#+end_src
-
-The =F1=, =F2=, =F3=, and =F4= keys store temporary positions:
-
- * =C-<f1>= jump to register stored in the F1 register.
- * =C-<f2>= jump to register stored in the F2 register.
- * =C-<f3>= jump to register stored in the F3 register.
- * =C-<f4>= jump to register stored in the F4 register.
- * =M-<f1>= store the current point into the F1 register.
- * =M-<f2>= store the current point into the F2 register.
- * =M-<f3>= store the current point into the F3 register.
- * =M-<f4>= store the current point into the F4 register.
-
-#+begin_src emacs-lisp :tangle "modules/registers.el"
-  (defun my/register-save-f1 () (interactive) (point-to-register 'my/register-f1))
-  (defun my/register-jump-f1 () (interactive) (jump-to-register 'my/register-f1))
-  (defun my/register-save-f2 () (interactive) (point-to-register 'my/register-f2))
-  (defun my/register-jump-f2 () (interactive) (jump-to-register 'my/register-f2))
-  (defun my/register-save-f3 () (interactive) (point-to-register 'my/register-f3))
-  (defun my/register-jump-f3 () (interactive) (jump-to-register 'my/register-f3))
-  (defun my/register-save-f4 () (interactive) (point-to-register 'my/register-f4))
-  (defun my/register-jump-f4 () (interactive) (jump-to-register 'my/register-f4))
 #+end_src
 
 * Cargo
@@ -571,6 +552,74 @@ before: =M-x my/custom-settings=.
 You should restart Emacs to reload the configured modules from
 =custom.el=.
 
+** Registers (label =registers=)
+
+Registers are storage compartments in Emacs, which can hold several
+different types of things: strings, numbers, buffer positions, frame
+configs, etc.
+
+*** Position registers
+
+[[info:emacs#Position Registers][Position Registers]] store the point position of buffers, so you can
+quickly come back to it from anywhere.
+
+ * =C-c j e=    jump to the Emacs config file (=emacs.org=)
+ * =C-c j g= open the user's git directory (You must customize =my/git-user-directory=)
+ * =C-c j v= open the vendor git directory (You may customize =my/git-vendor-directory=)
+ * =C-c j d=    open the [[https://github.com/EnigmaCurry/d.rymcg.tech][d.rymcg.tech]] directory
+
+Some of the default values are tailored for the author (EnigmaCurry).
+You should change these values to suit your own environment by running
+=M-x my/custom-settings=. Enter the =My Path Settings= sub-menu, and
+change the following settings:
+
+ * =my/git-vendor-directory= Set this to where you clone git
+   repositories (not necessarily your own. e.g., =~/git/vendor=).
+ * =my/git-user-directory= Set this to the directory where you store
+   your /personal/ git repositories (e.g.,
+   =~/git/vendor/YOUR_USERNAME=).
+
+#+begin_src emacs-lisp :tangle "modules/registers/registers.el" :mkdirp yes
+  (defgroup my/path-settings nil
+    "My custom path settings"
+    :group 'my/custom-settings)
+  (defcustom my/git-vendor-directory "~/git/vendor"
+    "My git vendor directory"
+    :type 'string
+    :group 'my/path-settings)
+  (defcustom my/git-user-directory "~/git/vendor/enigmacurry"
+    "My personal git repositories directory"
+    :type 'string
+    :group 'my/path-settings)
+
+  (set-register ?e `(file . ,(expand-file-name "emacs.org" user-emacs-directory)))
+  (set-register ?g `(file . ,my/git-user-directory))
+  (set-register ?d `(file . ,(expand-file-name "enigmacurry/d.rymcg.tech/" my/git-vendor-directory)))
+  (set-register ?v `(file . ,my/git-vendor-directory))
+#+end_src
+
+The =F1=, =F2=, =F3=, and =F4= keys store temporary positions:
+
+ * =C-<f1>= jump to register stored in the F1 register.
+ * =C-<f2>= jump to register stored in the F2 register.
+ * =C-<f3>= jump to register stored in the F3 register.
+ * =C-<f4>= jump to register stored in the F4 register.
+ * =M-<f1>= store the current point into the F1 register.
+ * =M-<f2>= store the current point into the F2 register.
+ * =M-<f3>= store the current point into the F3 register.
+ * =M-<f4>= store the current point into the F4 register.
+
+#+begin_src emacs-lisp :tangle "modules/registers/registers.el" :mkdirp yes
+  (defun my/register-save-f1 () (interactive) (point-to-register 'my/register-f1))
+  (defun my/register-jump-f1 () (interactive) (jump-to-register 'my/register-f1))
+  (defun my/register-save-f2 () (interactive) (point-to-register 'my/register-f2))
+  (defun my/register-jump-f2 () (interactive) (jump-to-register 'my/register-f2))
+  (defun my/register-save-f3 () (interactive) (point-to-register 'my/register-f3))
+  (defun my/register-jump-f3 () (interactive) (jump-to-register 'my/register-f3))
+  (defun my/register-save-f4 () (interactive) (point-to-register 'my/register-f4))
+  (defun my/register-jump-f4 () (interactive) (jump-to-register 'my/register-f4))
+#+end_src
+
 ** Theme (label =theme=)
 
  * [[https://github.com/myTerminal/theme-looper][theme-looper]]
@@ -704,48 +753,50 @@ selection.
 See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.el]]
 
 #+begin_src emacs-lisp :tangle "modules/general/general.el" :mkdirp yes
-          (use-package
-            general
-            :init
-            ;; Switch between two most recent buffers:
-            (fset 'quick-switch-buffer [?\C-x ?b return])
-            :config
-             ;;; Custom global bindings:
-            (general-define-key
-             "C-h B"     'general-describe-keybindings
-             "s-b"       'quick-switch-buffer
-             "s-B"       'buffer-menu-other-window
-             "C-x B"     'buffer-menu-other-window
-             "s-o"       'browse-url
-             "C-;"       'comment-region ; C-u C-; to uncomment
-             "s-<down-mouse-1>"       'mouse-drag-region-rectangle
-             "C-<f1>"    'my/register-jump-f1
-             "M-<f1>"    'my/register-save-f1
-             "C-<f2>"    'my/register-jump-f2
-             "M-<f2>"    'my/register-save-f2
-             "C-<f3>"    'my/register-jump-f3
-             "M-<f3>"    'my/register-save-f3
-             "C-<f4>"    'my/register-jump-f4
-             "M-<f4>"    'my/register-save-f4
-             )
-            ;;; Put the Emacs default keybindings you want included
-            ;;;   in general-describe-keybindings here:
-            ;;; Its useful to duplicate these simply as a way of documentation:
-            (general-define-key
-             "M-SPC"     'cycle-spacing ; If you document it, you will use it.
-             "M-h"       'mark-paragraph ; C-h B is like your personal cheat sheet.
-             "C-h b"     'describe-bindings ;; default binding for documentation purpose
-             "C-x 4 c"   'clone-indirect-buffer-other-window ;; default binding
-             )
-            ;;; Define bindings for specific builtin (non use-package) modes:
-            ;; Emacs Lisp mode bindings:
-            (general-define-key
-             :keymaps 'emacs-lisp-mode-map
-             "s-e" 'eval-defun ;eval top-level form
-             "M-;" 'paredit-comment-dwim)
-            ;; Dired mode bindings:
-            (general-define-key
-             :keymaps 'dired-mode-map "C-c C-q" 'dired-toggle-read-only))
+  (use-package
+    general
+    :init
+    ;; Switch between two most recent buffers:
+    (fset 'quick-switch-buffer [?\C-x ?b return])
+    :config
+     ;;; Custom global bindings:
+    (general-define-key
+     "C-h B"     'general-describe-keybindings
+     "s-b"       'quick-switch-buffer
+     "s-B"       'buffer-menu-other-window
+     "C-x B"     'buffer-menu-other-window
+     "s-o"       'browse-url
+     "C-;"       'comment-region ; C-u C-; to uncomment
+     "s-<down-mouse-1>"       'mouse-drag-region-rectangle
+     "C-x j"     'jump-to-register
+     "C-c j"     'jump-to-register
+     "C-<f1>"    'my/register-jump-f1
+     "M-<f1>"    'my/register-save-f1
+     "C-<f2>"    'my/register-jump-f2
+     "M-<f2>"    'my/register-save-f2
+     "C-<f3>"    'my/register-jump-f3
+     "M-<f3>"    'my/register-save-f3
+     "C-<f4>"    'my/register-jump-f4
+     "M-<f4>"    'my/register-save-f4
+     )
+    ;;; Put the Emacs default keybindings you want included
+    ;;;   in general-describe-keybindings here:
+    ;;; Its useful to duplicate these simply as a way of documentation:
+    (general-define-key
+     "M-SPC"     'cycle-spacing ; If you document it, you will use it.
+     "M-h"       'mark-paragraph ; C-h B is like your personal cheat sheet.
+     "C-h b"     'describe-bindings ;; default binding for documentation purpose
+     "C-x 4 c"   'clone-indirect-buffer-other-window ;; default binding
+     )
+    ;;; Define bindings for specific builtin (non use-package) modes:
+    ;; Emacs Lisp mode bindings:
+    (general-define-key
+     :keymaps 'emacs-lisp-mode-map
+     "s-e" 'eval-defun ;eval top-level form
+     "M-;" 'paredit-comment-dwim)
+    ;; Dired mode bindings:
+    (general-define-key
+     :keymaps 'dired-mode-map "C-c C-q" 'dired-toggle-read-only))
 #+end_src
 ** Org mode (label =org=)
 

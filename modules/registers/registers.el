@@ -1,4 +1,19 @@
+(defgroup my/path-settings nil
+  "My custom path settings"
+  :group 'my/custom-settings)
+(defcustom my/git-vendor-directory "~/git/vendor"
+  "My git vendor directory"
+  :type 'string
+  :group 'my/path-settings)
+(defcustom my/git-user-directory "~/git/vendor/enigmacurry"
+  "My personal git repositories directory"
+  :type 'string
+  :group 'my/path-settings)
+
 (set-register ?e `(file . ,(expand-file-name "emacs.org" user-emacs-directory)))
+(set-register ?g `(file . ,my/git-user-directory))
+(set-register ?d `(file . ,(expand-file-name "enigmacurry/d.rymcg.tech/" my/git-vendor-directory)))
+(set-register ?v `(file . ,my/git-vendor-directory))
 
 (defun my/register-save-f1 () (interactive) (point-to-register 'my/register-f1))
 (defun my/register-jump-f1 () (interactive) (jump-to-register 'my/register-f1))

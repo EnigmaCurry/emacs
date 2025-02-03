@@ -13,6 +13,8 @@
    "s-o"       'browse-url
    "C-;"       'comment-region ; C-u C-; to uncomment
    "s-<down-mouse-1>"       'mouse-drag-region-rectangle
+   "C-x j"     'jump-to-register
+   "C-c j"     'jump-to-register
    "C-<f1>"    'my/register-jump-f1
    "M-<f1>"    'my/register-save-f1
    "C-<f2>"    'my/register-jump-f2
