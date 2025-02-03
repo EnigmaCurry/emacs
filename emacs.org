@@ -566,7 +566,7 @@ quickly come back to it from anywhere.
  * =C-c j e=    jump to the Emacs config file (=emacs.org=)
  * =C-c j g= open the user's git directory (You must customize =my/git-user-directory=)
  * =C-c j v= open the vendor git directory (You may customize =my/git-vendor-directory=)
- * =C-c j d=    open the [[https://github.com/EnigmaCurry/d.rymcg.tech][d.rymcg.tech]] directory
+ * =C-c j d=    open the Docker projects directory ([[https://github.com/EnigmaCurry/d.rymcg.tech][d.rymcg.tech]])
 
 Some of the default values are tailored for the author (EnigmaCurry).
 You should change these values to suit your own environment by running
