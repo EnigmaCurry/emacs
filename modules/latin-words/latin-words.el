@@ -4,4 +4,4 @@
   (latin-words :type git :host github :repo "enigmacurry/latin-words")
   :custom
   (latin-words-directory
-   (expand-file-name "~/.emacs.d/straight/repos/latin-words/data")))
+   (expand-file-name "straight/repos/latin-words/data" user-emacs-directory)))

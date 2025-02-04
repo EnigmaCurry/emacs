@@ -2,17 +2,47 @@
 #+LANGUAGE: en
 #+PROPERTY: header-args :results none :eval yes
 #+SETUPFILE: theme/simple_dark.theme
+#+OPTIONS: noweb:t
 
-# If you making this config your own, personalize these variables:
-# Your name and email:
+* Configure your personal links                                    :noexport:
+
+If you are making this config your own, you must personalize all of
+the details in this section. There is some redundancy of values here,
+make sure you edit *all* of the forms in this section.
+
+(Note: this section is not exported to the HTML, it is only present in
+the emacs.org source.)
+
+# Enter your name and email:
 #+AUTHOR: EnigmaCurry
 #+EMAIL: ryan@enigmacurry.com
-# Your URL to the HTML export of this config:
+# Enter your URL to the HTML export of this config:
 #+LINK: web https://emacs.rymcg.tech
-# Your public git forge page for this config:
-#+LINK: git-repo https://github.com/EnigmaCurry/emacs
-# Your branch specific file blob URL for this config:
-#+LINK: git-blob https://github.com/EnigmaCurry/emacs/blob/literate-new
+# Enter your public git forge page for this config:
+#+LINK:  git-repo https://github.com/EnigmaCurry/emacs
+# Enter your branch specific file blob URL for this config:
+#+LINK:  git-blob https://github.com/EnigmaCurry/emacs/blob/literate-new
+
+(See the GitHub docs for the file blob URL standard:
+https://docs.github.com/en/repositories/working-with-files/using-files/getting-permanent-links-to-file)
+
+Enter your git repository here (again):
+#+name: git-repo
+#+begin_src
+https://github.com/EnigmaCurry/emacs
+#+end_src
+
+Enter just your git username in lower case:
+#+name: git-user-name
+#+begin_src
+enigmacurry
+#+end_src
+
+Enter just the repository name:
+#+name: git-repo-name
+#+begin_src
+emacs
+#+end_src
 
 * Goals
 
@@ -170,9 +200,9 @@ Install =git= via your package manager:
 
 Clone this git repository:
 
-#+begin_src shell
-  git clone https://github.com/EnigmaCurry/emacs.git \
-      ~/git/vendor/enigmacurry/emacs
+#+begin_src shell :noweb yes
+  git clone <<git-repo>>.git \
+      ~/git/vendor/<<git-user-name>>/<<git-repo-name>>
 #+end_src
 
 Switch to the right branch:
@@ -192,8 +222,8 @@ You can try this config out without modifying your existing config.
 The following command tells Emacs to load config directly (ignoring
 your existing config):
 
-#+begin_src shell
-  emacs --init-directory ~/git/vendor/enigmacurry/emacs
+#+begin_src shell :noweb yes
+  emacs --init-directory ~/git/vendor/<<git-user-name>>/<<git-repo-name>>
 #+end_src
 
 If you omit =--init-directory=, the default location Emacs looks for
@@ -202,8 +232,8 @@ your config is =~/.emacs.d=
 To set this config as the default, symlink the git repository from
 =~/.emacs.d= :
 
-#+begin_src shell
-  ln -s ~/git/vendor/enigmacurry/emacs ~/.emacs.d
+#+begin_src shell :noweb yes
+  ln -s ~/git/vendor/<<git-user-name>>/<<git-repo-name>> ~/.emacs.d
 #+end_src
 
 Now when you run =emacs= with no arguments it will load the =init.el=
@@ -660,10 +690,9 @@ quickly come back to it from anywhere.
  * =C-c j v= open the vendor git directory (You may customize =my/git-vendor-directory=)
  * =C-c j d=    open the Docker projects directory ([[https://github.com/EnigmaCurry/d.rymcg.tech][d.rymcg.tech]])
 
-Some of the default values are tailored for the author (EnigmaCurry).
-You should change these values to suit your own environment by running
-=M-x my/custom-settings=. Enter the =My Path Settings= sub-menu, and
-change the following settings:
+You should change the following values to suit your own environment by
+running =M-x my/custom-settings=. Enter the =My Path Settings=
+sub-menu, and change the following settings:
 
  * =my/git-vendor-directory= Set this to where you clone git
    repositories (not necessarily your own. e.g., =~/git/vendor=).
@@ -671,7 +700,7 @@ change the following settings:
    your /personal/ git repositories (e.g.,
    =~/git/vendor/YOUR_USERNAME=).
 
-#+begin_src emacs-lisp :tangle "modules/registers/registers.el" :mkdirp yes
+#+begin_src emacs-lisp :noweb yes :tangle "modules/registers/registers.el" :mkdirp yes
   (defgroup my/path-settings nil
     "My custom path settings"
     :group 'my/custom-settings)
@@ -679,7 +708,7 @@ change the following settings:
     "My git vendor directory"
     :type 'string
     :group 'my/path-settings)
-  (defcustom my/git-user-directory "~/git/vendor/enigmacurry"
+  (defcustom my/git-user-directory "~/git/vendor/<<git-user-name>>"
     "My personal git repositories directory"
     :type 'string
     :group 'my/path-settings)
@@ -1293,7 +1322,7 @@ This package requires the system dependency [[https://jqlang.github.io/jq/downlo
     (latin-words :type git :host github :repo "enigmacurry/latin-words")
     :custom
     (latin-words-directory
-     (expand-file-name "~/.emacs.d/straight/repos/latin-words/data")))
+     (expand-file-name "straight/repos/latin-words/data" user-emacs-directory)))
 #+end_src
 ** Dashboard (label =dashboard=)
 #+begin_src emacs-lisp :tangle "modules/dashboard/dashboard.el" :mkdirp yes
