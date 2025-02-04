@@ -1,39 +1,57 @@
 #+TITLE: Modular GNU Emacs Configuration
-#+AUTHOR: EnigmaCurry
-#+EMAIL: ryan@enigmacurry.com
 #+LANGUAGE: en
 #+PROPERTY: header-args :results none :eval yes
 #+SETUPFILE: theme/simple_dark.theme
 
+# If you making this config your own, personalize these variables:
+# Your name and email:
+#+AUTHOR: EnigmaCurry
+#+EMAIL: ryan@enigmacurry.com
+# Your URL to the HTML export of this config:
+#+LINK: web https://emacs.rymcg.tech
+# Your public git forge page for this config:
+#+LINK: git-repo https://github.com/EnigmaCurry/emacs
+# Your branch specific file blob URL for this config:
+#+LINK: git-blob https://github.com/EnigmaCurry/emacs/blob/literate-new
+
 * Goals
 
-This is a new attempt at writing a depersonalized, copyable, literate,
-and modular Emacs config:
+This is a new attempt at writing a depersonalized, copyable, and
+modular Emacs config:
 
- * All Emacs config (elisp) is written in a single Org Mode file.
-   * ([[file:emacs.org][emacs.org]]) [[[https://github.com/EnigmaCurry/emacs/blob/literate-new/emacs.org?plain=1][Source on GitHub]]].
- * Your configuration is displayed (exported) as a single HTML page.
-   * This is easy to search and requires no JavaScript.
- * All Org-Babel code blocks are [[https://orgmode.org/manual/Extracting-Source-Code.html]["tangled"]] into normal elisp files in
-   this git repository.
-    * You can [[https://github.com/EnigmaCurry/emacs/tree/literate-new][clone the repository]] and have Emacs load the files
-      directly without invoking org-mode.
- * Code blocks should be kept tidy, medium size, and of related
-   context.
-   * Avoid having lots of little code blocks and excessive prose
-     explanations.
+ * All Emacs config (elisp) is written in a single Org Mode file:
+   * Config repository: [[git-repo]]
+   * Org source file: [[git-blob:/emacs.org?plain=1][emacs.org]]
+   * You may [[git-repo:/fork][fork this repository]] to make it your own.
+     * In case this config is already a fork, you may want to start
+       with the original [[https://emacs.rymcg.tech][emacs.rymcg.tech]] instead.
+ * Your configuration is displayed (exported) as a single HTML page:
+   * Config page: [[web]]
+   * This page is easy to search and requires no JavaScript.
+ * All Org-Babel code blocks are [[https://orgmode.org/manual/Extracting-Source-Code.html]["tangled"]] into normal elisp files and
+   published to the git repository:
+   * [[git-blob:/emacs.org?plain=1][emacs.org]] remains the single "source of truth" of this config.
+   * However, it is the tangled elisp files ([[git-blob:/init.el][init.el]], [[git-blob:/modules][modules/*]]) that
+     Emacs loads on startup, not emacs.org.
+   * All of the other files in the repository will be overwritten each
+     time emacs.org is re-tangled.
+ * Code blocks should be of medium size, grouping related functions:
+   * There should be more code here than prose. Avoid having lots of
+     little code blocks and excessive explanations.
  * All custom elisp functions and variables should have the namespace
-   prefix =my/=.
-    * Configuration should be generic and and non-proprietary to
-      promote code adoption by others (meme: [[https://ec-share.nyc3.digitaloceanspaces.com/i-made-this-1.jpg]["I made this"]]).
- * The config should support multiple Linux platforms: CLI, Wayland,
-   and Android.
+   prefix =my/= :
+    * This configuration is non-proprietary to promote code adoption
+      by others.
+    * Meme: [[https://ec-share.nyc3.digitaloceanspaces.com/i-made-this-1.jpg]["I made this"]].
+ * This config should support multiple platforms: Linux
+   CLI, Wayland, Android...
  * Most configuration should be customizable by the user without
-   needing to edit this file.
-   * Run =M-x my/custom-settings= to open the configuration menu for
-     this config and save settings on a per-installation basis.
- * The default configuration should work without needing to download
-   any third party libraries.
+   needing to edit this file:
+   * Run =M-x my/custom-settings= to open the configuration menu to
+     save settings on a per-installation basis in
+     =~/.emacs.d/custom.el= (and it is =.gitignore= 'd).
+ * The base config should work without needing to download any third
+   party libraries:
    * The custom variable =my/machine-labels= is used to set
      per-machine labels that opt-in to loading additional modules.
 
