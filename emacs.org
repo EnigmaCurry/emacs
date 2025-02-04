@@ -348,6 +348,23 @@ machine only.
                               (display-line-numbers-mode 1)))
 #+end_src
 
+** Shell processes
+#+begin_src emacs-lisp :tangle "init.el"
+  (defun my/shell-execute (command &optional interactive)
+    "Run a given shell COMMAND in a new buffer and display its output."
+    (interactive)
+    (let* ((command-name (car (split-string command)))
+           (buffer-name (generate-new-buffer-name (concat "*" command-name " Output*")))
+           (buffer (get-buffer-create buffer-name)))
+      (with-current-buffer buffer
+        (erase-buffer)
+        (insert "## Running shell process ...\n"))
+      (start-process-shell-command
+       command
+       buffer
+       command)
+      (pop-to-buffer buffer)))
+#+end_src
 * Cargo
 
 [[https://doc.rust-lang.org/cargo/][Cargo]] is used to install some system programs automatically.
@@ -367,50 +384,72 @@ Ensure that this path is set (because Emacs might not have read
 ** Cargo functions
 
 #+begin_src emacs-lisp :tangle "modules/cargo.el"
-      (defun my/cargo-package-installed-p (package)
-        "Check if a Cargo PACKAGE is installed."
-        (with-temp-buffer
-          (let ((exit-code (call-process "cargo" nil t nil "install" "--list")))
-            (if (zerop exit-code)
-                (progn
-                  (goto-char (point-min))
-                  (search-forward package nil t))
-              (error "Failed to run 'cargo install --list'")))))
-      (defun my/cargo-install (programs)
-        "Install a list of PROGRAMS via `cargo install`, skipping those already installed.
-      PROGRAMS can be a single string (with space-separated programs) or a list of strings."
-        (unless programs
-          (user-error "No programs specified for cargo install"))
-        ;; Handle single string: split by spaces and convert to list
-        (setq programs (if (stringp programs)
-                           (split-string programs) ;; Split a single string into a list
-                         programs))
-        ;; Filter out installed packages
-        (let ((to-install (seq-remove #'my/cargo-package-installed-p programs)))
-          (if (null to-install)
-              (message "All specified programs are already installed")
-            (let* ((buffer-name (concat "*cargo install "
-                                        (string-join to-install " ") "*"))
-                   (existing-buffer (get-buffer buffer-name)))
-              (if (and existing-buffer (get-buffer-process existing-buffer))
-                  (user-error "Cargo install already in progress for programs: %s"
-                              (string-join to-install ", "))
-                (when existing-buffer
-                  (kill-buffer existing-buffer))
-                (let ((buffer (get-buffer-create buffer-name)))
-                  (start-process "cargo-install" buffer
-                                 "/bin/bash" "-c" (concat "cargo install "
-                                                  (string-join to-install " ")))
-                  (display-buffer buffer)
-                  (with-current-buffer buffer
-                    (comint-mode)
-                    (goto-char (point-min)))))))))
-      (defvar my/cargo-dependencies nil
-        "A list of Rust crate dependencies to be installed.")
-      (defun my/cargo-dependency (crate)
-        "Add a Rust CRATE to the list of dependencies."
-        (unless (member crate my/cargo-dependencies)
-          (setq my/cargo-dependencies (cons crate my/cargo-dependencies))))
+  (require 'seq)
+  (require 'comint)
+
+  (defun my/cargo-package-installed-p (package)
+    "Check if a given cargo PACKAGE is installed.
+        PACKAGE can be either a string or a cons cell (CRATE . GIT-URL).
+        In either case, this function uses the crate name for the check."
+    (let ((pkg (if (consp package) (car package) package)))
+      (with-temp-buffer
+        (when (eq 0 (call-process "cargo" nil t nil "install" "--list"))
+          (goto-char (point-min))
+          (search-forward pkg nil t)))))
+ (defun my/cargo-install (programs)
+    "Install a list of PROGRAMS via `cargo install`, skipping those already installed.
+  PROGRAMS can be:
+  - a single string (with space-separated program names),
+  - a list of strings,
+  - or a list where some elements are cons cells (CRATE . GIT-REPO).
+
+  For cons cell entries, Cargo is invoked with the --git flag."
+    (unless programs
+      (user-error "No programs specified for cargo install"))
+    ;; If PROGRAMS is a string, split it into a list.
+    (setq programs (if (stringp programs)
+                       (split-string programs)
+                     programs))
+    ;; Remove already installed programs.
+    (setq programs (seq-remove #'my/cargo-package-installed-p programs))
+    ;; Separate into two groups:
+    ;;   - crates from crates.io (plain strings or cons cells treated as a name only)
+    ;;   - git dependencies (explicit cons cells)
+    (let ((crate-names (mapcar (lambda (dep)
+                                 (if (consp dep)
+                                     (car dep)
+                                   dep))
+                               (seq-filter (lambda (dep)
+                                             (not (consp dep)))
+                                           programs)))
+          (git-deps (seq-filter #'consp programs)))
+      ;; Install crates from crates.io in one command, if any.
+      (when crate-names
+        (let ((command (concat "cargo install " (string-join crate-names " "))))
+          (my/shell-execute command)))
+      ;; Install each git dependency separately.
+      (dolist (dep git-deps)
+        (let* ((crate (car dep))
+               (git-repo (cdr dep))
+               (command (format "cargo install %s --git %s" crate git-repo)))
+          (my/shell-execute command)))))
+  (defvar my/cargo-dependencies nil
+    "A list of Rust crate dependencies to be installed.
+          Each dependency is either a crate name (a symbol or string) or a cons cell
+          of the form (CRATE . GIT-REPO).")
+
+  (defun my/cargo-dependency (crate &optional git-repo)
+    "Add a Rust CRATE to the list of dependencies.
+          If GIT-REPO is provided, the dependency is stored as (CRATE . GIT-REPO).
+          Otherwise, only CRATE is stored.
+          If the dependency (by crate name) already exists, do nothing."
+    (unless (cl-find crate my/cargo-dependencies
+                     :test (lambda (d c)
+                             (if (consp d)
+                                 (equal (car d) c)
+                               (equal d c))))
+      (push (if git-repo (cons crate git-repo) crate)
+            my/cargo-dependencies)))
 #+end_src
 ** Justfile
 
@@ -506,15 +545,15 @@ Emacs builtin macro that enables declarative package configuration.
   (advice-add 'use-package :around #'my/use-package-advice)
 #+end_src
 
-* Per-machine labels enable opt-in features
+* Configure which modules to load
 
-This is a modular Emacs configuration designed to run in several
-different environments and serving different roles. Each machine will
-use the base config, but it may also opt-in to additional features
-that become enabled by adding labels on a per-machine basis.
+A modular Emacs configuration is designed to serve various roles
+running in several different environments. The base config is kept
+lean, without any third party modules loaded. Each machine may be
+labeled with the names of additional modules to load.
 
 #+begin_src emacs-lisp :tangle "init.el"
-  ;; Customize which emacs config modules to load per-machine:
+  ;; Customize which emacs config modules to load on a per-machine basis:
   (defcustom my/machine-labels '()
     "List of machine-specific labels to configure which modules to load."
     :type '(repeat string)
@@ -543,12 +582,6 @@ that become enabled by adding labels on a per-machine basis.
           (customize-set-variable 'my/machine-labels (my/machine-labels-available))
           (customize-save-customized)))))
 #+end_src
-
-=my/machine-has-label= is used automatically by =my/load-modules=
-described in the next section.
-* Modules
-
-Modules are optional and they extend the base config.
 
 Here are the [[https://github.com/EnigmaCurry/emacs/tree/literate-new/modules][available modules]]:
 
@@ -592,6 +625,7 @@ before: =M-x my/custom-settings=.
 You should restart Emacs to reload the configured modules from
 =custom.el=.
 
+* Modules
 ** Registers (label =registers=)
 
 Registers are storage compartments in Emacs, which can hold several
@@ -1074,62 +1108,64 @@ make org-mode syntax easier to type: ===, =/=, =~=.
  * [[https://github.com/minad/vertico][vertico]]
  * [[https://github.com/oantolin/orderless][orderless]]
  * [[https://github.com/minad/marginalia][marginalia]]
-
+ * [[https://company-mode.github.io/][company-mode]]
+   
 #+begin_src emacs-lisp :tangle "modules/completion/completion.el" :mkdirp yes
-  ;; Allow minibuffers to stack:
-  (setq-default enable-recursive-minibuffers t)
-  ;; Filter command completions to only include commands
-  ;; applicable to the current major mode:
-  (setq-default read-extended-command-predicate
-                #'command-completion-default-include-p)
-  ;; Add custom prompt when asking for multiple values as (comma) separated list:
-  (advice-add #'completing-read-multiple :filter-args
-              (lambda (args)
-                (cons (format "[CRM%s] %s"
-                              (replace-regexp-in-string
-                               "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-                               crm-separator)
-                              (car args))
-                      (cdr args))))
-  ;; Do not allow the cursor in the minibuffer prompt
-  (setq minibuffer-prompt-properties
-        '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+    ;; Allow minibuffers to stack:
+    (setq-default enable-recursive-minibuffers t)
+    ;; Filter command completions to only include commands
+    ;; applicable to the current major mode:
+    (setq-default read-extended-command-predicate
+                  #'command-completion-default-include-p)
+    ;; Add custom prompt when asking for multiple values as (comma) separated list:
+    (advice-add #'completing-read-multiple :filter-args
+                (lambda (args)
+                  (cons (format "[CRM%s] %s"
+                                (replace-regexp-in-string
+                                 "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                                 crm-separator)
+                                (car args))
+                        (cdr args))))
+    ;; Do not allow the cursor in the minibuffer prompt
+    (setq minibuffer-prompt-properties
+          '(read-only t cursor-intangible t face minibuffer-prompt))
+    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
-  (use-package vertico
-    :custom
-    (vertico-scroll-margin 2)
-    (vertico-count 10)
-    (vertico-resize 'grow-only)
-    (vertico-cycle nil)
-    :init
-                                          ;(keymap-set vertico-map "?" #'minibuffer-completion-help)
-                                          ;(keymap-set vertico-map "M-TAB" #'vertico-insert)
-                                          ;(keymap-set vertico-map "TAB" #'minibuffer-complete)
-    (vertico-mode))
+    (use-package vertico
+      :custom
+      (vertico-scroll-margin 2)
+      (vertico-count 10)
+      (vertico-resize 'grow-only)
+      (vertico-cycle nil)
+      :init
+                                            ;(keymap-set vertico-map "?" #'minibuffer-completion-help)
+                                            ;(keymap-set vertico-map "M-TAB" #'vertico-insert)
+                                            ;(keymap-set vertico-map "TAB" #'minibuffer-complete)
+      (vertico-mode))
 
-  (use-package orderless
-    :custom
-    ;; Configure a custom style dispatcher (see the Consult wiki)
-    ;; (orderless-style-dispatchers
-    ;;   '(+orderless-consult-dispatch orderless-affix-dispatch))
-    ;; (orderless-component-separator #'orderless-escapable-split-on-space)
-    (completion-styles '(orderless basic))
-    (completion-category-defaults nil)
-    (completion-category-overrides '((file (styles partial-completion)))))
+    (use-package orderless
+      :custom
+      ;; Configure a custom style dispatcher (see the Consult wiki)
+      ;; (orderless-style-dispatchers
+      ;;   '(+orderless-consult-dispatch orderless-affix-dispatch))
+      ;; (orderless-component-separator #'orderless-escapable-split-on-space)
+      (completion-styles '(orderless basic))
+      (completion-category-defaults nil)
+      (completion-category-overrides '((file (styles partial-completion)))))
 
-  (use-package marginalia
-    :hook
-    ((marginalia-mode . all-the-icons-completion-marginalia-setup))
-    :bind (:map minibuffer-local-map
-                ("M-A" . marginalia-cycle))
-    :init
-    (marginalia-mode))
+    (use-package marginalia
+      :hook
+      ((marginalia-mode . all-the-icons-completion-marginalia-setup))
+      :bind (:map minibuffer-local-map
+                  ("M-A" . marginalia-cycle))
+      :init
+      (marginalia-mode))
 
-  (use-package nerd-icons-completion
-    :init
-    (nerd-icons-completion-mode))
+    (use-package nerd-icons-completion
+      :init
+      (nerd-icons-completion-mode))
 
+  (use-package company)
 #+end_src
 ** Vterm (label =vterm=)
 
@@ -1333,6 +1369,90 @@ This package requires the system dependency [[https://jqlang.github.io/jq/downlo
     (add-hook
      'gptel-post-response-functions
      #'my-gptel-deepseek-wrap-think-block))
+#+end_src
+** LSP (label =lsp=)
+#+begin_src emacs-lisp :tangle "modules/lsp/lsp.el" :mkdirp yes
+  ;; LSP mode :: https://emacs-lsp.github.io/lsp-mode/
+  (use-package
+    lsp-mode
+    :init
+    ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+    (setq lsp-keymap-prefix "C-c l")
+    (setq lsp-modeline-diagnostics-scope :workspace)
+   ;;; extra verbose logging of lsp json messages:
+    ;;(setq lsp-log-io t)
+    :hook
+    ((web-mode . lsp)
+     ;(lsp-mode . lsp-enable-which-key-integration)
+     (python-mode . lsp-deferred))
+    :commands lsp
+    :config)
+  (use-package lsp-ui :commands lsp-ui-mode)
+  (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+  (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+  (use-package flycheck)
+
+  ;; LSP debuggers
+  (use-package dap-mode)
+  ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+#+end_src
+** Python (label =python=)
+
+ * [[https://github.com/astral-sh/uv][uv]] - The uv package manager is installed from source when
+   requested. Please be patient while it builds during its initial
+   load.
+
+#+begin_src emacs-lisp :tangle "modules/python/python.el" :mkdirp yes
+  (my/add-exec-path "~/.local/bin")
+  (defun my/python-install-uv-package-manager ()
+    "Install uv package manager via cargo"
+    (my/cargo-install '(("uv" . "https://github.com/astral-sh/uv"))))
+  (defun my/python-uv-execute (command)
+    (my/python-install-uv-package-manager)
+    (my/shell-execute command))
+  (defun my/python-install-ruff ()
+    (unless (executable-find "ruff")
+      (my/python-uv-execute "uv tool install ruff@latest")))
+  (use-package
+    python-mode
+    :general ("s-a" 'lsp-execute-code-action)
+    :init (my/python-install-ruff)
+    :hook
+    (python-mode . pyvenv-mode)
+    (python-mode . flycheck-mode)
+    (python-mode . company-mode)
+    (python-mode . python-black-on-save-mode)
+    :custom (python-shell-interpreter "python3")
+    :config
+    ;; Activate python virtualenv BEFORE opening a python buffer and/or starting pyright server:
+    ;; M-x pyvenv-activate     (~/.virtualenvs/XXX)
+    (use-package
+      pyvenv
+      :init (setenv "WORKON_HOME" "~/.virtualenvs/")
+      :config
+      ;; (pyvenv-mode t)
+      ;; Set correct Python interpreter
+      (setq pyvenv-post-activate-hooks
+            (list
+             (lambda ()
+               (setq python-shell-interpreter
+                     (concat pyvenv-virtual-env "bin/python")))))
+      (setq pyvenv-post-deactivate-hooks
+            (list (lambda () (setq python-shell-interpreter "python3")))))
+    ;; Black (Python code formatter) :: https://github.com/wbolster/emacs-python-black
+    ;; Note: this depends on black being installed in the project virtualenv as a dev dependency
+    (use-package python-black :demand t :after python)
+    ;; Python dev dependencies need to be installed in your project's virtualenv:
+    ;; ruff
+    ;; ruff-lsp
+    ;; black
+   ;;; Add the following to a .dir-locals.el to activate virtualenv automatically:
+    ;; ((python-mode . ((eval . (let ((project-root (locate-dominating-file
+    ;;                              (or (buffer-file-name) default-directory)
+    ;;                                ".dir-locals.el")))
+    ;;               (pyvenv-activate (expand-file-name "virtualenv" project-root)))))))
+    )
+
 #+end_src
 * Load modules
 

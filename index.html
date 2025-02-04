@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-03 Mon 14:51 -->
+<!-- 2025-02-04 Tue 02:01 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -224,6 +224,7 @@ body{margin:0;background:#121212;color:#e0e0e0;font-family:"Bitstream Vera Sans"
 <li><a href="#Builtin_minor_modes_to_activate_everywhere">5.5. Builtin minor modes to activate everywhere</a></li>
 <li><a href="#PATH_setup">5.6. PATH setup</a></li>
 <li><a href="#Programming_mode">5.7. Programming mode</a></li>
+<li><a href="#Shell_processes">5.8. Shell processes</a></li>
 </ul>
 </li>
 <li><a href="#Cargo">6. Cargo</a>
@@ -239,7 +240,7 @@ body{margin:0;background:#121212;color:#e0e0e0;font-family:"Bitstream Vera Sans"
 <li><a href="#Track_packages_added_via_use-package">7.2. Track packages added via use-package</a></li>
 </ul>
 </li>
-<li><a href="#Per-machine_labels_enable_opt-in_features">8. Per-machine labels enable opt-in features</a></li>
+<li><a href="#Configure_which_modules_to_load">8. Configure which modules to load</a></li>
 <li><a href="#Modules">9. Modules</a>
 <ul>
 <li><a href="#Registers_%28label_%3Dregisters%3D%29">9.1. Registers (label <code>registers</code>)</a>
@@ -277,6 +278,8 @@ body{margin:0;background:#121212;color:#e0e0e0;font-family:"Bitstream Vera Sans"
 <li><a href="#Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29">9.13. Latin words dictionary and word of the day (label <code>latin-words</code>)</a></li>
 <li><a href="#Dashboard_%28label_%3Ddashboard%3D%29">9.14. Dashboard (label <code>dashboard</code>)</a></li>
 <li><a href="#GPTel_%28label_%3Dgptel%3D%29">9.15. GPTel (label <code>gptel</code>)</a></li>
+<li><a href="#LSP_%28label_%3Dlsp%3D%29">9.16. LSP (label <code>lsp</code>)</a></li>
+<li><a href="#Python_%28label_%3Dpython%3D%29">9.17. Python (label <code>python</code>)</a></li>
 </ul>
 </li>
 <li><a href="#Load_modules">10. Load modules</a>
@@ -705,6 +708,28 @@ machine only.
 </div>
 </div>
 </div>
+<div id="outline-container-Shell_processes" class="outline-3">
+<h3 id="Shell_processes"><span class="section-number-3">5.8.</span> Shell processes</h3>
+<div class="outline-text-3" id="text-5-8">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/shell-execute</span> (command <span style="color: #1f5e8a;">&amp;optional</span> interactive)
+  <span style="color: #b0d6f5;">"Run a given shell COMMAND in a new buffer and display its output."</span>
+  (<span style="color: #1a8da7;">interactive</span>)
+  (<span style="color: #1a8da7;">let*</span> ((command-name (car (split-string command)))
+         (buffer-name (generate-new-buffer-name (concat <span style="color: #10adee;">"*"</span> command-name <span style="color: #10adee;">" Output*"</span>)))
+         (buffer (get-buffer-create buffer-name)))
+    (<span style="color: #1a8da7;">with-current-buffer</span> buffer
+      (erase-buffer)
+      (insert <span style="color: #10adee;">"## Running shell process ...\n"</span>))
+    (start-process-shell-command
+     command
+     buffer
+     command)
+    (pop-to-buffer buffer)))
+</pre>
+</div>
+</div>
+</div>
 </div>
 <div id="outline-container-Cargo" class="outline-2">
 <h2 id="Cargo"><span class="section-number-2">6.</span> Cargo</h2>
@@ -734,50 +759,72 @@ Ensure that this path is set (because Emacs might not have read
 <h3 id="Cargo_functions"><span class="section-number-3">6.2.</span> Cargo functions</h3>
 <div class="outline-text-3" id="text-6-2">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/cargo-package-installed-p</span> (package)
-  <span style="color: #b0d6f5;">"Check if a Cargo PACKAGE is installed."</span>
-  (<span style="color: #1a8da7;">with-temp-buffer</span>
-    (<span style="color: #1a8da7;">let</span> ((exit-code (call-process <span style="color: #10adee;">"cargo"</span> nil t nil <span style="color: #10adee;">"install"</span> <span style="color: #10adee;">"--list"</span>)))
-      (<span style="color: #1a8da7;">if</span> (zerop exit-code)
-          (<span style="color: #1a8da7;">progn</span>
-            (goto-char (point-min))
-            (search-forward package nil t))
-        (<span style="color: #FF0000; font-weight: bold;">error</span> <span style="color: #10adee;">"Failed to run 'cargo install --list'"</span>)))))
+<pre class="src src-emacs-lisp"> (<span style="color: #1a8da7;">require</span> '<span style="color: #1a99e7;">seq</span>)
+ (<span style="color: #1a8da7;">require</span> '<span style="color: #1a99e7;">comint</span>)
+
+ (<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/cargo-package-installed-p</span> (package)
+   <span style="color: #b0d6f5;">"Check if a given cargo PACKAGE is installed.</span>
+<span style="color: #b0d6f5;">       PACKAGE can be either a string or a cons cell (CRATE . GIT-URL).</span>
+<span style="color: #b0d6f5;">       In either case, this function uses the crate name for the check."</span>
+   (<span style="color: #1a8da7;">let</span> ((pkg (<span style="color: #1a8da7;">if</span> (consp package) (car package) package)))
+     (<span style="color: #1a8da7;">with-temp-buffer</span>
+       (<span style="color: #1a8da7;">when</span> (eq 0 (call-process <span style="color: #10adee;">"cargo"</span> nil t nil <span style="color: #10adee;">"install"</span> <span style="color: #10adee;">"--list"</span>))
+         (goto-char (point-min))
+         (search-forward pkg nil t)))))
 (<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/cargo-install</span> (programs)
-  <span style="color: #b0d6f5;">"Install a list of PROGRAMS via `cargo install`, skipping those already installed.</span>
-<span style="color: #b0d6f5;">PROGRAMS can be a single string (with space-separated programs) or a list of strings."</span>
-  (<span style="color: #1a8da7;">unless</span> programs
-    (<span style="color: #FF0000; font-weight: bold;">user-error</span> <span style="color: #10adee;">"No programs specified for cargo install"</span>))
-  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Handle single string: split by spaces and convert to list</span>
-  (<span style="color: #1a8da7;">setq</span> programs (<span style="color: #1a8da7;">if</span> (stringp programs)
-                     (split-string programs) <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Split a single string into a list</span>
-                   programs))
-  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Filter out installed packages</span>
-  (<span style="color: #1a8da7;">let</span> ((to-install (seq-remove #'my/cargo-package-installed-p programs)))
-    (<span style="color: #1a8da7;">if</span> (null to-install)
-        (message <span style="color: #10adee;">"All specified programs are already installed"</span>)
-      (<span style="color: #1a8da7;">let*</span> ((buffer-name (concat <span style="color: #10adee;">"*cargo install "</span>
-                                  (string-join to-install <span style="color: #10adee;">" "</span>) <span style="color: #10adee;">"*"</span>))
-             (existing-buffer (get-buffer buffer-name)))
-        (<span style="color: #1a8da7;">if</span> (<span style="color: #1a8da7;">and</span> existing-buffer (get-buffer-process existing-buffer))
-            (<span style="color: #FF0000; font-weight: bold;">user-error</span> <span style="color: #10adee;">"Cargo install already in progress for programs: %s"</span>
-                        (string-join to-install <span style="color: #10adee;">", "</span>))
-          (<span style="color: #1a8da7;">when</span> existing-buffer
-            (kill-buffer existing-buffer))
-          (<span style="color: #1a8da7;">let</span> ((buffer (get-buffer-create buffer-name)))
-            (start-process <span style="color: #10adee;">"cargo-install"</span> buffer
-                           <span style="color: #10adee;">"/bin/bash"</span> <span style="color: #10adee;">"-c"</span> (concat <span style="color: #10adee;">"cargo install "</span>
-                                            (string-join to-install <span style="color: #10adee;">" "</span>)))
-            (display-buffer buffer)
-            (<span style="color: #1a8da7;">with-current-buffer</span> buffer
-              (comint-mode)
-              (goto-char (point-min)))))))))
-(<span style="color: #1a8da7;">defvar</span> <span style="color: #1e8eb8;">my/cargo-dependencies</span> nil
-  <span style="color: #b0d6f5;">"A list of Rust crate dependencies to be installed."</span>)
-(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/cargo-dependency</span> (crate)
-  <span style="color: #b0d6f5;">"Add a Rust CRATE to the list of dependencies."</span>
-  (<span style="color: #1a8da7;">unless</span> (member crate my/cargo-dependencies)
-    (<span style="color: #1a8da7;">setq</span> my/cargo-dependencies (cons crate my/cargo-dependencies))))
+   <span style="color: #b0d6f5;">"Install a list of PROGRAMS via `cargo install`, skipping those already installed.</span>
+<span style="color: #b0d6f5;"> PROGRAMS can be:</span>
+<span style="color: #b0d6f5;"> - a single string (with space-separated program names),</span>
+<span style="color: #b0d6f5;"> - a list of strings,</span>
+<span style="color: #b0d6f5;"> - or a list where some elements are cons cells (CRATE . GIT-REPO).</span>
+
+<span style="color: #b0d6f5;"> For cons cell entries, Cargo is invoked with the --git flag."</span>
+   (<span style="color: #1a8da7;">unless</span> programs
+     (<span style="color: #FF0000; font-weight: bold;">user-error</span> <span style="color: #10adee;">"No programs specified for cargo install"</span>))
+   <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">If PROGRAMS is a string, split it into a list.</span>
+   (<span style="color: #1a8da7;">setq</span> programs (<span style="color: #1a8da7;">if</span> (stringp programs)
+                      (split-string programs)
+                    programs))
+   <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Remove already installed programs.</span>
+   (<span style="color: #1a8da7;">setq</span> programs (seq-remove #'my/cargo-package-installed-p programs))
+   <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Separate into two groups:</span>
+   <span style="color: #1078a2; font-style: italic;">;;   </span><span style="color: #105f89; font-style: italic;">- crates from crates.io (plain strings or cons cells treated as a name only)</span>
+   <span style="color: #1078a2; font-style: italic;">;;   </span><span style="color: #105f89; font-style: italic;">- git dependencies (explicit cons cells)</span>
+   (<span style="color: #1a8da7;">let</span> ((crate-names (mapcar (<span style="color: #1a8da7;">lambda</span> (dep)
+                                (<span style="color: #1a8da7;">if</span> (consp dep)
+                                    (car dep)
+                                  dep))
+                              (seq-filter (<span style="color: #1a8da7;">lambda</span> (dep)
+                                            (not (consp dep)))
+                                          programs)))
+         (git-deps (seq-filter #'consp programs)))
+     <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Install crates from crates.io in one command, if any.</span>
+     (<span style="color: #1a8da7;">when</span> crate-names
+       (<span style="color: #1a8da7;">let</span> ((command (concat <span style="color: #10adee;">"cargo install "</span> (string-join crate-names <span style="color: #10adee;">" "</span>))))
+         (my/shell-execute command)))
+     <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Install each git dependency separately.</span>
+     (<span style="color: #1a8da7;">dolist</span> (dep git-deps)
+       (<span style="color: #1a8da7;">let*</span> ((crate (car dep))
+              (git-repo (cdr dep))
+              (command (format <span style="color: #10adee;">"cargo install %s --git %s"</span> crate git-repo)))
+         (my/shell-execute command)))))
+ (<span style="color: #1a8da7;">defvar</span> <span style="color: #1e8eb8;">my/cargo-dependencies</span> nil
+   <span style="color: #b0d6f5;">"A list of Rust crate dependencies to be installed.</span>
+<span style="color: #b0d6f5;">         Each dependency is either a crate name (a symbol or string) or a cons cell</span>
+<span style="color: #b0d6f5;">         of the form (CRATE . GIT-REPO)."</span>)
+
+ (<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/cargo-dependency</span> (crate <span style="color: #1f5e8a;">&amp;optional</span> git-repo)
+   <span style="color: #b0d6f5;">"Add a Rust CRATE to the list of dependencies.</span>
+<span style="color: #b0d6f5;">         If GIT-REPO is provided, the dependency is stored as (CRATE . GIT-REPO).</span>
+<span style="color: #b0d6f5;">         Otherwise, only CRATE is stored.</span>
+<span style="color: #b0d6f5;">         If the dependency (by crate name) already exists, do nothing."</span>
+   (<span style="color: #1a8da7;">unless</span> (cl-find crate my/cargo-dependencies
+                    <span style="color: #106590;">:test</span> (<span style="color: #1a8da7;">lambda</span> (d c)
+                            (<span style="color: #1a8da7;">if</span> (consp d)
+                                (equal (car d) c)
+                              (equal d c))))
+     (<span style="color: #1a8da7;">push</span> (<span style="color: #1a8da7;">if</span> git-repo (cons crate git-repo) crate)
+           my/cargo-dependencies)))
 </pre>
 </div>
 </div>
@@ -909,18 +956,18 @@ Emacs builtin macro that enables declarative package configuration.
 </div>
 </div>
 </div>
-<div id="outline-container-Per-machine_labels_enable_opt-in_features" class="outline-2">
-<h2 id="Per-machine_labels_enable_opt-in_features"><span class="section-number-2">8.</span> Per-machine labels enable opt-in features</h2>
+<div id="outline-container-Configure_which_modules_to_load" class="outline-2">
+<h2 id="Configure_which_modules_to_load"><span class="section-number-2">8.</span> Configure which modules to load</h2>
 <div class="outline-text-2" id="text-8">
 <p>
-This is a modular Emacs configuration designed to run in several
-different environments and serving different roles. Each machine will
-use the base config, but it may also opt-in to additional features
-that become enabled by adding labels on a per-machine basis.
+A modular Emacs configuration is designed to serve various roles
+running in several different environments. The base config is kept
+lean, without any third party modules loaded. Each machine may be
+labeled with the names of additional modules to load.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Customize which emacs config modules to load per-machine:</span>
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Customize which emacs config modules to load on a per-machine basis:</span>
 (<span style="color: #1a8da7;">defcustom</span> <span style="color: #1e8eb8;">my/machine-labels</span> '()
   <span style="color: #b0d6f5;">"List of machine-specific labels to configure which modules to load."</span>
   <span style="color: #106590;">:type</span> '(repeat string)
@@ -952,23 +999,10 @@ that become enabled by adding labels on a per-machine basis.
 </div>
 
 <p>
-<code>my/machine-has-label</code> is used automatically by <code>my/load-modules</code>
-described in the next section.
-</p>
-</div>
-</div>
-<div id="outline-container-Modules" class="outline-2">
-<h2 id="Modules"><span class="section-number-2">9.</span> Modules</h2>
-<div class="outline-text-2" id="text-9">
-<p>
-Modules are optional and they extend the base config.
-</p>
-
-<p>
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="orgaf17561">
+<pre class="example" id="orgbc86645">
 - completion
 - dashboard
 - fonts
@@ -976,9 +1010,11 @@ Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/mod
 - gptel
 - just
 - latin-words
+- lsp
 - magit
 - markdown
 - org
+- python
 - registers
 - ssh-agent
 - text-scale
@@ -1044,6 +1080,11 @@ before: <code>M-x my/custom-settings</code>.
 You should restart Emacs to reload the configured modules from
 <code>custom.el</code>.
 </p>
+</div>
+</div>
+<div id="outline-container-Modules" class="outline-2">
+<h2 id="Modules"><span class="section-number-2">9.</span> Modules</h2>
+<div class="outline-text-2" id="text-9">
 </div>
 <div id="outline-container-Registers_%28label_%3Dregisters%3D%29" class="outline-3">
 <h3 id="Registers_%28label_%3Dregisters%3D%29"><span class="section-number-3">9.1.</span> Registers (label <code>registers</code>)</h3>
@@ -1635,63 +1676,65 @@ make org-mode syntax easier to type: <code>=</code>, <code>/</code>, <code>~</co
 <li><a href="https://github.com/minad/vertico">vertico</a></li>
 <li><a href="https://github.com/oantolin/orderless">orderless</a></li>
 <li><a href="https://github.com/minad/marginalia">marginalia</a></li>
+<li><a href="https://company-mode.github.io/">company-mode</a></li>
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Allow minibuffers to stack:</span>
-(<span style="color: #1a8da7;">setq-default</span> enable-recursive-minibuffers t)
-<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Filter command completions to only include commands</span>
-<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">applicable to the current major mode:</span>
-(<span style="color: #1a8da7;">setq-default</span> read-extended-command-predicate
-              #'command-completion-default-include-p)
-<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Add custom prompt when asking for multiple values as (comma) separated list:</span>
-(advice-add #'completing-read-multiple <span style="color: #106590;">:filter-args</span>
-            (<span style="color: #1a8da7;">lambda</span> (args)
-              (cons (format <span style="color: #10adee;">"[CRM%s] %s"</span>
-                            (replace-regexp-in-string
-                             <span style="color: #10adee;">"\\`\\[</span><span style="color: #1a99e7;">.*?</span><span style="color: #10adee;">]\\*</span><span style="color: #abab00; font-weight: bold;">\\</span><span style="color: #e7a59a; font-weight: bold;">|</span><span style="color: #10adee;">\\[</span><span style="color: #1a99e7;">.*?</span><span style="color: #10adee;">]\\*\\'"</span> <span style="color: #10adee;">""</span>
-                             crm-separator)
-                            (car args))
-                    (cdr args))))
-<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Do not allow the cursor in the minibuffer prompt</span>
-(<span style="color: #1a8da7;">setq</span> minibuffer-prompt-properties
-      '(read-only t cursor-intangible t face minibuffer-prompt))
-(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+<pre class="src src-emacs-lisp">  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Allow minibuffers to stack:</span>
+  (<span style="color: #1a8da7;">setq-default</span> enable-recursive-minibuffers t)
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Filter command completions to only include commands</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">applicable to the current major mode:</span>
+  (<span style="color: #1a8da7;">setq-default</span> read-extended-command-predicate
+                #'command-completion-default-include-p)
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Add custom prompt when asking for multiple values as (comma) separated list:</span>
+  (advice-add #'completing-read-multiple <span style="color: #106590;">:filter-args</span>
+              (<span style="color: #1a8da7;">lambda</span> (args)
+                (cons (format <span style="color: #10adee;">"[CRM%s] %s"</span>
+                              (replace-regexp-in-string
+                               <span style="color: #10adee;">"\\`\\[</span><span style="color: #1a99e7;">.*?</span><span style="color: #10adee;">]\\*</span><span style="color: #abab00; font-weight: bold;">\\</span><span style="color: #e7a59a; font-weight: bold;">|</span><span style="color: #10adee;">\\[</span><span style="color: #1a99e7;">.*?</span><span style="color: #10adee;">]\\*\\'"</span> <span style="color: #10adee;">""</span>
+                               crm-separator)
+                              (car args))
+                      (cdr args))))
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Do not allow the cursor in the minibuffer prompt</span>
+  (<span style="color: #1a8da7;">setq</span> minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
-(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">vertico</span>
-  <span style="color: #106590;">:custom</span>
-  (vertico-scroll-margin 2)
-  (vertico-count 10)
-  (vertico-resize 'grow-only)
-  (vertico-cycle nil)
-  <span style="color: #106590;">:init</span>
-                                        <span style="color: #1078a2; font-style: italic;">;</span><span style="color: #105f89; font-style: italic;">(keymap-set vertico-map "?" #'minibuffer-completion-help)</span>
-                                        <span style="color: #1078a2; font-style: italic;">;</span><span style="color: #105f89; font-style: italic;">(keymap-set vertico-map "M-TAB" #'vertico-insert)</span>
-                                        <span style="color: #1078a2; font-style: italic;">;</span><span style="color: #105f89; font-style: italic;">(keymap-set vertico-map "TAB" #'minibuffer-complete)</span>
-  (vertico-mode))
+  (<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">vertico</span>
+    <span style="color: #106590;">:custom</span>
+    (vertico-scroll-margin 2)
+    (vertico-count 10)
+    (vertico-resize 'grow-only)
+    (vertico-cycle nil)
+    <span style="color: #106590;">:init</span>
+                                          <span style="color: #1078a2; font-style: italic;">;</span><span style="color: #105f89; font-style: italic;">(keymap-set vertico-map "?" #'minibuffer-completion-help)</span>
+                                          <span style="color: #1078a2; font-style: italic;">;</span><span style="color: #105f89; font-style: italic;">(keymap-set vertico-map "M-TAB" #'vertico-insert)</span>
+                                          <span style="color: #1078a2; font-style: italic;">;</span><span style="color: #105f89; font-style: italic;">(keymap-set vertico-map "TAB" #'minibuffer-complete)</span>
+    (vertico-mode))
 
-(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">orderless</span>
-  <span style="color: #106590;">:custom</span>
-  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Configure a custom style dispatcher (see the Consult wiki)</span>
-  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">(orderless-style-dispatchers</span>
-  <span style="color: #1078a2; font-style: italic;">;;   </span><span style="color: #105f89; font-style: italic;">'(+orderless-consult-dispatch orderless-affix-dispatch))</span>
-  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">(orderless-component-separator #'orderless-escapable-split-on-space)</span>
-  (completion-styles '(orderless basic))
-  (completion-category-defaults nil)
-  (completion-category-overrides '((file (styles partial-completion)))))
+  (<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">orderless</span>
+    <span style="color: #106590;">:custom</span>
+    <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Configure a custom style dispatcher (see the Consult wiki)</span>
+    <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">(orderless-style-dispatchers</span>
+    <span style="color: #1078a2; font-style: italic;">;;   </span><span style="color: #105f89; font-style: italic;">'(+orderless-consult-dispatch orderless-affix-dispatch))</span>
+    <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">(orderless-component-separator #'orderless-escapable-split-on-space)</span>
+    (completion-styles '(orderless basic))
+    (completion-category-defaults nil)
+    (completion-category-overrides '((file (styles partial-completion)))))
 
-(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">marginalia</span>
-  <span style="color: #106590;">:hook</span>
-  ((marginalia-mode . all-the-icons-completion-marginalia-setup))
-  <span style="color: #106590;">:bind</span> (<span style="color: #106590;">:map</span> minibuffer-local-map
-              (<span style="color: #10adee;">"M-A"</span> . marginalia-cycle))
-  <span style="color: #106590;">:init</span>
-  (marginalia-mode))
+  (<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">marginalia</span>
+    <span style="color: #106590;">:hook</span>
+    ((marginalia-mode . all-the-icons-completion-marginalia-setup))
+    <span style="color: #106590;">:bind</span> (<span style="color: #106590;">:map</span> minibuffer-local-map
+                (<span style="color: #10adee;">"M-A"</span> . marginalia-cycle))
+    <span style="color: #106590;">:init</span>
+    (marginalia-mode))
 
-(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">nerd-icons-completion</span>
-  <span style="color: #106590;">:init</span>
-  (nerd-icons-completion-mode))
+  (<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">nerd-icons-completion</span>
+    <span style="color: #106590;">:init</span>
+    (nerd-icons-completion-mode))
 
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">company</span>)
 </pre>
 </div>
 </div>
@@ -1936,6 +1979,101 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
 </div>
 </div>
 </div>
+<div id="outline-container-LSP_%28label_%3Dlsp%3D%29" class="outline-3">
+<h3 id="LSP_%28label_%3Dlsp%3D%29"><span class="section-number-3">9.16.</span> LSP (label <code>lsp</code>)</h3>
+<div class="outline-text-3" id="text-9-16">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">LSP mode :: https://emacs-lsp.github.io/lsp-mode/</span>
+(<span style="color: #1a8da7;">use-package</span>
+  lsp-mode
+  <span style="color: #106590;">:init</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")</span>
+  (<span style="color: #1a8da7;">setq</span> lsp-keymap-prefix <span style="color: #10adee;">"C-c l"</span>)
+  (<span style="color: #1a8da7;">setq</span> lsp-modeline-diagnostics-scope <span style="color: #106590;">:workspace</span>)
+ <span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">extra verbose logging of lsp json messages:</span>
+  <span style="color: #1078a2; font-style: italic;">;;</span><span style="color: #105f89; font-style: italic;">(setq lsp-log-io t)</span>
+  <span style="color: #106590;">:hook</span>
+  ((web-mode . lsp)
+   <span style="color: #1078a2; font-style: italic;">;</span><span style="color: #105f89; font-style: italic;">(lsp-mode . lsp-enable-which-key-integration)</span>
+   (python-mode . lsp-deferred))
+  <span style="color: #106590;">:commands</span> lsp
+  <span style="color: #106590;">:config</span>)
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">lsp-ui</span> <span style="color: #106590;">:commands</span> lsp-ui-mode)
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">lsp-ivy</span> <span style="color: #106590;">:commands</span> lsp-ivy-workspace-symbol)
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">lsp-treemacs</span> <span style="color: #106590;">:commands</span> lsp-treemacs-errors-list)
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">flycheck</span>)
+
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">LSP debuggers</span>
+(<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">dap-mode</span>)
+<span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">(use-package dap-LANGUAGE) to load the dap adapter for your language</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Python_%28label_%3Dpython%3D%29" class="outline-3">
+<h3 id="Python_%28label_%3Dpython%3D%29"><span class="section-number-3">9.17.</span> Python (label <code>python</code>)</h3>
+<div class="outline-text-3" id="text-9-17">
+<ul class="org-ul">
+<li><a href="https://github.com/astral-sh/uv">uv</a> - The uv package manager is installed from source when
+requested. Please be patient while it builds during its initial
+load.</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(my/add-exec-path <span style="color: #10adee;">"~/.local/bin"</span>)
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/python-install-uv-package-manager</span> ()
+  <span style="color: #b0d6f5;">"Install uv package manager via cargo"</span>
+  (my/cargo-install '((<span style="color: #10adee;">"uv"</span> . <span style="color: #10adee;">"https://github.com/astral-sh/uv"</span>))))
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/python-uv-execute</span> (command)
+  (my/python-install-uv-package-manager)
+  (my/shell-execute command))
+(<span style="color: #1a8da7;">defun</span> <span style="color: #1083be;">my/python-install-ruff</span> ()
+  (<span style="color: #1a8da7;">unless</span> (executable-find <span style="color: #10adee;">"ruff"</span>)
+    (my/python-uv-execute <span style="color: #10adee;">"uv tool install ruff@latest"</span>)))
+(<span style="color: #1a8da7;">use-package</span>
+  python-mode
+  <span style="color: #106590;">:general</span> (<span style="color: #10adee;">"s-a"</span> 'lsp-execute-code-action)
+  <span style="color: #106590;">:init</span> (my/python-install-ruff)
+  <span style="color: #106590;">:hook</span>
+  (python-mode . pyvenv-mode)
+  (python-mode . flycheck-mode)
+  (python-mode . company-mode)
+  (python-mode . python-black-on-save-mode)
+  <span style="color: #106590;">:custom</span> (python-shell-interpreter <span style="color: #10adee;">"python3"</span>)
+  <span style="color: #106590;">:config</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Activate python virtualenv BEFORE opening a python buffer and/or starting pyright server:</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">M-x pyvenv-activate     (~/.virtualenvs/XXX)</span>
+  (<span style="color: #1a8da7;">use-package</span>
+    pyvenv
+    <span style="color: #106590;">:init</span> (setenv <span style="color: #10adee;">"WORKON_HOME"</span> <span style="color: #10adee;">"~/.virtualenvs/"</span>)
+    <span style="color: #106590;">:config</span>
+    <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">(pyvenv-mode t)</span>
+    <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Set correct Python interpreter</span>
+    (<span style="color: #1a8da7;">setq</span> pyvenv-post-activate-hooks
+          (list
+           (<span style="color: #1a8da7;">lambda</span> ()
+             (<span style="color: #1a8da7;">setq</span> python-shell-interpreter
+                   (concat pyvenv-virtual-env <span style="color: #10adee;">"bin/python"</span>)))))
+    (<span style="color: #1a8da7;">setq</span> pyvenv-post-deactivate-hooks
+          (list (<span style="color: #1a8da7;">lambda</span> () (<span style="color: #1a8da7;">setq</span> python-shell-interpreter <span style="color: #10adee;">"python3"</span>)))))
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Black (Python code formatter) :: https://github.com/wbolster/emacs-python-black</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Note: this depends on black being installed in the project virtualenv as a dev dependency</span>
+  (<span style="color: #1a8da7;">use-package</span> <span style="color: #1a99e7;">python-black</span> <span style="color: #106590;">:demand</span> t <span style="color: #106590;">:after</span> python)
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">Python dev dependencies need to be installed in your project's virtualenv:</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">ruff</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">ruff-lsp</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">black</span>
+ <span style="color: #1078a2; font-style: italic;">;;; </span><span style="color: #105f89; font-style: italic;">Add the following to a .dir-locals.el to activate virtualenv automatically:</span>
+  <span style="color: #1078a2; font-style: italic;">;; </span><span style="color: #105f89; font-style: italic;">((python-mode . ((eval . (let ((project-root (locate-dominating-file</span>
+  <span style="color: #1078a2; font-style: italic;">;;                              </span><span style="color: #105f89; font-style: italic;">(or (buffer-file-name) default-directory)</span>
+  <span style="color: #1078a2; font-style: italic;">;;                                </span><span style="color: #105f89; font-style: italic;">".dir-locals.el")))</span>
+  <span style="color: #1078a2; font-style: italic;">;;               </span><span style="color: #105f89; font-style: italic;">(pyvenv-activate (expand-file-name "virtualenv" project-root)))))))</span>
+  )
+
+</pre>
+</div>
+</div>
+</div>
 </div>
 <div id="outline-container-Load_modules" class="outline-2">
 <h2 id="Load_modules"><span class="section-number-2">10.</span> Load modules</h2>
@@ -2028,7 +2166,7 @@ enabled):
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
 <p class="email">Email: <a href="mailto:ryan@enigmacurry.com">ryan@enigmacurry.com</a></p>
-<p class="date">Last Modified: 2025-02-03 Mon 14:51</p>
+<p class="date">Last Modified: 2025-02-04 Tue 02:01</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.8-pre)</p>
 </div>
 </body>

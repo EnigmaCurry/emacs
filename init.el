@@ -67,6 +67,21 @@
     (setenv "PATH" (concat dir path-separator (getenv "PATH")))
     (add-to-list 'exec-path dir)))
 
+(defun my/shell-execute (command &optional interactive)
+  "Run a given shell COMMAND in a new buffer and display its output."
+  (interactive)
+  (let* ((command-name (car (split-string command)))
+         (buffer-name (generate-new-buffer-name (concat "*" command-name " Output*")))
+         (buffer (get-buffer-create buffer-name)))
+    (with-current-buffer buffer
+      (erase-buffer)
+      (insert "## Running shell process ...\n"))
+    (start-process-shell-command
+     command
+     buffer
+     command)
+    (pop-to-buffer buffer)))
+
 (defun my/bootstrap-straight (&rest _)
   "Bootstrap straight.el only if it's not already installed."
   (unless (bound-and-true-p straight--build-dir)
@@ -117,7 +132,7 @@ If the buffer already exists, delete it and recreate it."
 
 (advice-add 'use-package :around #'my/use-package-advice)
 
-;; Customize which emacs config modules to load per-machine:
+;; Customize which emacs config modules to load on a per-machine basis:
 (defcustom my/machine-labels '()
   "List of machine-specific labels to configure which modules to load."
   :type '(repeat string)

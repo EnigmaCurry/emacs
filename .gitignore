@@ -13,3 +13,5 @@
 /export/hello.txt
 /transient/
 \#*
+/.dap-breakpoints
+/.lsp-session*
