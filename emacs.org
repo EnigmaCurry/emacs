@@ -4,14 +4,14 @@
 #+SETUPFILE: theme/simple_dark.theme
 #+OPTIONS: noweb:t
 
-* Configure your personal links                                    :noexport:
-
-If you are making this config your own, you must personalize all of
-the details in this section. There is some redundancy of values here,
-make sure you edit *all* of the forms in this section.
+* Configure your personal links here                               :noexport:
 
 (Note: this section is not exported to the HTML, it is only present in
 the emacs.org source.)
+
+If you are making this config your own, you must personalize all of
+the details in this section. There is some redundancy of values here!
+Make sure you edit *all* of the forms in this section.
 
 # Enter your name and email:
 #+AUTHOR: EnigmaCurry
