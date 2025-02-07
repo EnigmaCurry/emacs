@@ -216,6 +216,15 @@ Switch to the right branch:
   (defun my/emacs-git-branch ()
     (substring (shell-command-to-string "git branch --show-current") 0 -1))
 #+end_src
+** Tree-sitter
+Tree-sitter is an optional dependency. It adds advanced syntax tree
+parser to language modes.
+
+#+begin_src shell
+  #on e.g., Fedora
+  sudo dnf install libtree-sitter
+#+end_src
+
 ** Create your Emacs config directory
 
 You can try this config out without modifying your existing config.
@@ -1501,6 +1510,55 @@ This package requires the system dependency [[https://jqlang.github.io/jq/downlo
     )
 
 #+end_src
+** Avy (label =avy=)
+
+ * [[https://github.com/abo-abo/avy][avy]] lets you jump to any word you can see in your Emacs frame.
+
+#+begin_src emacs-lisp :tangle "modules/avy/avy.el" :mkdirp yes
+  ;; Avy (like ace-jump) :: https://github.com/abo-abo/avy
+  (use-package
+   avy
+   :general
+   ;;; These are if you want to use avy by itself,
+   ;;; Otherwise these keys will be defined by treesit-jump instead.
+   ("s-s" 'avy-goto-word-1)
+   ("C-c s" 'avy-goto-char)
+   ("C-c S" 'avy-goto-word-1))
+#+end_src
+
+** Treesit (label =treesit=)
+
+Treesit is an Emacs builtin language syntax parser.
+
+ * [[https://www.masteringemacs.org/article/how-to-get-started-tree-sitter][Mastering Emacs: How to Get Started with Tree-Sitter]]
+
+There are several third party modules to configure and enhance it:
+
+ * [[https://github.com/renzmann/treesit-auto][treesit-auto]]
+ * [[https://github.com/dmille56/treesit-jump][treesit-jump]]
+
+#+begin_src emacs-lisp :tangle "modules/treesit/treesit.el" :mkdirp yes
+  (use-package treesit-auto
+    :custom
+    ;;(treesit-auto-langs '(awk bash bibtex blueprint c c-sharp
+    ;; clojure cmake commonlisp cpp css dart dockerfile elixir glsl go
+    ;; gomod heex html janet java javascript json julia kotlin latex
+    ;; lua magik make markdown nix nu org perl proto python r ruby rust
+    ;; scala sql surface toml tsx typescript typst verilog vhdl vue
+    ;; wast wat wgsl yaml))
+    (treesit-auto-install 'prompt)
+    :config
+    (treesit-auto-add-to-auto-mode-alist 'all)
+    (global-treesit-auto-mode))
+
+  (use-package treesit-jump
+    :straight (:host github :repo "dmille56/treesit-jump" :files ("*.el" "treesit-queries"))
+    :config
+    ;; Optional: add some queries to filter out of results (since they can be too cluttered sometimes)
+    ;;(setq treesit-jump-queries-filter-list '("inner" "test" "param"))
+
+#+end_src
+
 * Load modules
 
 The code-blocks in this file are tangled to separate categorized files
