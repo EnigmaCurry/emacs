@@ -4,10 +4,8 @@
 #+SETUPFILE: theme/simple_dark.theme
 #+OPTIONS: noweb:t
 
-* Configure your personal links here                               :noexport:
-
-(Note: this section is not exported to the HTML, it is only present in
-the emacs.org source.)
+* Configure your distribution here :noexport:
+:CUSTOM:
 
 If you are making this config your own, you must personalize all of
 the details in this section. There is some redundancy of values here!
@@ -43,6 +41,8 @@ Enter just the repository name:
 #+begin_src
 emacs
 #+end_src
+
+:END:
 
 * Goals
 
@@ -384,7 +384,7 @@ machine only.
   (save-place-mode t)
   (savehist-mode t)
   (recentf-mode t)
-  ;(electric-pair-mode t)
+  (electric-pair-mode t)
 #+end_src
 ** PATH setup
 #+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
@@ -961,6 +961,16 @@ See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.e
      'org-babel-load-languages
      '((python . t) (scheme . t) (shell . t) (ditaa . t)))
     )
+  (require 'org-tempo) ; required for Structure Templates
+                                          ; See https://orgmode.org/manual/Structure-Templates.html
+  (use-package htmlize) ; required for colorized HTML code blocks
+  (progn ; electic pairs for org-mode
+    (modify-syntax-entry ?/ "\"" org-mode-syntax-table)
+    (modify-syntax-entry ?* "\"" org-mode-syntax-table)
+    (modify-syntax-entry ?= "\"" org-mode-syntax-table)
+    (modify-syntax-entry ?+ "\"" org-mode-syntax-table)
+    (modify-syntax-entry ?_ "\"" org-mode-syntax-table)
+    (modify-syntax-entry ?~ "\"" org-mode-syntax-table))
 #+end_src
 
 *** Tangle Emacs config and write HTML document
@@ -1030,25 +1040,6 @@ This function tangles this file (=emacs.org=) and exports an HTML page
 | Start the html server          |
 |--------------------------------|
 | =M-x my/emacs-org-html-server= |
-
-*** Enable syntax highlighting in HTML export
-
-#+begin_src emacs-lisp :tangle "modules/org/org-mode.el"
-  (use-package htmlize)
-#+end_src
-
-*** Org-Tempo code block snippets
-
-See the Org-Mode manual for [[https://orgmode.org/manual/Structure-Templates.html][Structure Templates]].
-
-To easily create Org source blocks, you can type the keys =<s= +
-TAB. This feature is turned on only if you load the =org-tempo=
-library:
-
-#+begin_src emacs-lisp :tangle "modules/org/org-mode.el"  :mkdirp yes
-  (require 'org-tempo) ; required for Structure Templates
-                       ; See https://orgmode.org/manual/Structure-Templates.html
-#+end_src
 
 *** Use org headings as HTML anchors
 
@@ -1146,19 +1137,6 @@ library:
             ;; No more ancestors: add and increment a number.
             (inc-suffixf ref)))
         ref)))
-#+end_src
-
-*** Electric pairs
-
-This makes it so certain characters are duplicated automatically to
-make org-mode syntax easier to type: ===, =/=, =~=.
-
-#+begin_src emacs-lisp :tangle "modules/org/org-mode.el"  :mkdirp yes
-  (add-hook 'org-mode-hook (lambda ()
-                             (modify-syntax-entry ?/ "$/" org-mode-syntax-table)
-                             (modify-syntax-entry ?~ "$~" org-mode-syntax-table)
-                             (modify-syntax-entry ?= "$=" org-mode-syntax-table)
-                             ))
 #+end_src
 
 ** Completion (label =completion=)
@@ -1558,9 +1536,25 @@ There are several third party modules to configure and enhance it:
     :config
     ;; Optional: add some queries to filter out of results (since they can be too cluttered sometimes)
     ;;(setq treesit-jump-queries-filter-list '("inner" "test" "param"))
-
 #+end_src
 
+** S3-publish (label =s3-publish=)
+
+[[https://github.com/EnigmaCurry/s3-publish.el][s3-publish.el]] is a quick/temporary way to publish Emacs buffers,
+regions, and files to S3 storage and the web.
+
+#+begin_src emacs-lisp :tangle "modules/s3-publish/s3-publish.el" :mkdirp yes
+  (use-package
+    s3-publish
+    :straight
+    (s3-publish
+     :type
+     git
+     :repo
+     "https://github.com/EnigmaCurry/s3-publish.el.git")
+    :general
+    ("C-c p" 's3-publish))
+#+end_src
 * Load modules
 
 The code-blocks in this file are tangled to separate categorized files

@@ -26,6 +26,16 @@
    'org-babel-load-languages
    '((python . t) (scheme . t) (shell . t) (ditaa . t)))
   )
+(require 'org-tempo) ; required for Structure Templates
+                                        ; See https://orgmode.org/manual/Structure-Templates.html
+(use-package htmlize) ; required for colorized HTML code blocks
+(progn ; electic pairs for org-mode
+  (modify-syntax-entry ?/ "\"" org-mode-syntax-table)
+  (modify-syntax-entry ?* "\"" org-mode-syntax-table)
+  (modify-syntax-entry ?= "\"" org-mode-syntax-table)
+  (modify-syntax-entry ?+ "\"" org-mode-syntax-table)
+  (modify-syntax-entry ?_ "\"" org-mode-syntax-table)
+  (modify-syntax-entry ?~ "\"" org-mode-syntax-table))
 
 (defun my/emacs-org-tangle ()
   "Tangle all code blocks in 'emacs.org' and export this document to HTML."
@@ -79,14 +89,3 @@
               (message "Started live-server on http://%s:%s" host port)))
         (unless (executable-find "live-server")
           (message "live-server NOT found - please run: cargo install live-server"))))))
-
-(use-package htmlize)
-
-(require 'org-tempo) ; required for Structure Templates
-                     ; See https://orgmode.org/manual/Structure-Templates.html
-
-(add-hook 'org-mode-hook (lambda ()
-                           (modify-syntax-entry ?/ "$/" org-mode-syntax-table)
-                           (modify-syntax-entry ?~ "$~" org-mode-syntax-table)
-                           (modify-syntax-entry ?= "$=" org-mode-syntax-table)
-                           ))

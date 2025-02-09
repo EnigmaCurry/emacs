@@ -5,7 +5,7 @@
   "My git vendor directory"
   :type 'string
   :group 'my/path-settings)
-(defcustom my/git-user-directory "~/git/vendor/enigmacurry"
+(defcustom my/git-user-directory "~/git/vendor/"
   "My personal git repositories directory"
   :type 'string
   :group 'my/path-settings)

@@ -58,7 +58,7 @@
 (save-place-mode t)
 (savehist-mode t)
 (recentf-mode t)
-;(electric-pair-mode t)
+(electric-pair-mode t)
 
 ;; Function to add a directory to PATH and exec-path
 (defun my/add-exec-path (dir)
