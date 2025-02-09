@@ -1,7 +1,7 @@
 (defgroup my/theme-settings nil
   "My custom theme settings"
   :group 'my/custom-settings)
-(defcustom my/theme 'deep-thought
+(defcustom my/theme 'deeper-blue
   "Emacs Theme"
   :type 'symbol
   :group 'my/theme-settings)
@@ -15,10 +15,12 @@
     (message "Theme changed to: %s" my/theme)))
 
 ;; Install themes directly from a git repository:
-(use-package
-  deep-thought-theme
-  :straight
-  (deep-thought-theme :type git :repo "https://github.com/emacsfodder/emacs-deep-thought-theme.git"))
+;;;NOTE: don't use deep-thought-theme it crashes Emacs 29.4!!
+;;;Keeping this here as an example for loading a theme from git:
+;; (use-package
+;;   deep-thought-theme
+;;   :straight
+;;   (deep-thought-theme :type git :repo "https://github.com/emacsfodder/emacs-deep-thought-theme.git"))
 (use-package solaire-mode :init (solaire-global-mode +1))
 (use-package theme-looper
   :general
