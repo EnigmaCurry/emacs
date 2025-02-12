@@ -10,6 +10,7 @@
   (org-export-with-creator t)
   (org-export-with-email t)
   (org-export-timestamp-file t)
+  (org-export-allow-bind-keywords t)
   :general
   ("s-<up>" 'org-previous-visible-heading)
   ("s-<down>" 'org-next-visible-heading)
@@ -52,8 +53,10 @@
           (make-directory export-dir))
         (make-symbolic-link "index.html" "emacs.html" t)
         (make-symbolic-link "../index.html" "export/index.html" t)
+        (make-symbolic-link "../favicon.ico" "export/favicon.ico" t)
         (make-symbolic-link "../index.html" "export/emacs.html" t)
         (make-symbolic-link "../modules" "export/modules" t)
+        (make-symbolic-link "../theme" "export/theme" t)
         (make-symbolic-link "../LICENSE.txt" "export/LICENSE.txt" t)
         (make-symbolic-link "../LICENSE_GPLv3.txt" "export/LICENSE_GPLv3.txt" t)
         (make-symbolic-link "../early-init.el" "export/early-init.el" t)
@@ -62,6 +65,25 @@
         ;; we will want to run code blocks automatically and capture output?
         ;;(save-buffer)
         ))))
+(with-eval-after-load 'ox-html
+  (defun my/org-html-src-block (orig-fun src-block contents info)
+    "Advice for `org-html-src-block' to add a header showing the tangle file.
+ORIG-FUN is the original function; SRC-BLOCK is the source block;
+INFO is the export options plist."
+    (let* ((parameters (org-element-property :parameters src-block))
+           (header-args (org-babel-parse-header-arguments parameters))
+           (tangle (cdr (assoc :tangle header-args)))
+           (header (if (and tangle (not (string= tangle "no")))
+                       (format "<div class=\"code-block-header\"><span class=\"org-parameter\">:tangle</span> <span class=\"filename\">%s</span></div>\n"
+                               (org-html-encode-plain-text tangle))
+                     ""))
+           (code (funcall orig-fun src-block contents info)))
+      (if (not (string= header ""))
+          ;; Wrap both header and code block in a container.
+          (format "<div class=\"code-block-container\">%s%s</div>" header code)
+        code)))
+  (advice-add 'org-html-src-block :around #'my/org-html-src-block))
+
 ;; Tell Emacs to trust this code in all buffer local vars:
 (add-to-list 'safe-local-variable-values
              '(eval add-hook 'after-save-hook 'my/emacs-org-tangle nil t))

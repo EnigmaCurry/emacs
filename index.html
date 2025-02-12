@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-09 Sun 16:48 -->
+<!-- 2025-02-11 Tue 23:02 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -193,9 +193,7 @@
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { }
 </style>
-<style type="text/css">
-body{margin:0;background:#121212;color:#e0e0e0;font-family:"Bitstream Vera Sans",Verdana,sans-serif;}code{color:#ffd269;font-weight:bold;font-size:1.5em;margin:0 0.25em 0 0.25em;}div#content{border:1px solid #666;background:#1e1e1e;padding:2em;}a{color:#62afff;text-decoration:none;padding:1px}a:hover{color:#ff5370}#table-of-contents{margin:1em 0;padding:.1em}div#content div#org-div-home-and-up{background:#001323;color:#fff}div#org-div-home-and-up a:link,div#org-div-home-and-up a:visited{color:#fff;background:#001323}div#org-div-home-and-up a:hover{color:#ff5370}div.title{margin:-1em -1em 0;font-size:200%;font-weight:bold;background:#001323;color:#fff;padding:.75em 1em;font-family:"BitStream Vera Sans",Verdana;letter-spacing:.1em}h1{background:#001323;color:#fff;font-size:200%;font-weight:bold;letter-spacing:.1em;margin:-1em -1em .2em;padding:.75em 1em}h2{font-size:180%;border-bottom:1px solid #555;padding:.2em}h3,h4{font-size:120%;border-bottom:1px solid #444}tt{color:#39f}.verbatim{margin:.5em 0}pre{font-weight:bolder;border:1px solid #e89797;padding:1em;color:#e0e0e0;margin:0;margin-top:1em;padding:5pt;color:#e0e0e0;font-family:courier,monospace;font-size:0.8em;border-radius:9px;background:#0e2124;min-width:95%;width:max-content;}.verbatim-caption{border:1px solid #555;background:#222;display:block;font-size:80%;padding:.2em}div#postamble{text-align:left;color:#999;font-size:80%;padding:0;margin:0}div#postamble a{color:#62afff}div#postamble a:hover{color:#ff5370}table{font-size:100%;border-collapse:collapse;margin:.5em 0;color:#e0e0e0}th,td{border:1px solid #555;padding:.3em;margin:2px}th{background:#333}span.underline{text-decoration:underline}.fixme{background:#ff9800;font-weight:bold}.ra{text-align:right}.sidebar{float:right;width:25em;background-color:#6a1b9a;color:#fff;margin:2em -2em 2em 2em;padding:1em}.sidebar a{border:none}.sidebar a:link{color:#80deea}.sidebar a:visited{color:#26c6da}.sidebar a:hover{color:#ffcc80}.sidebar a:active{color:#ff5370}.title{text-align:center}.todo{color:#f44336}.done{color:#4caf50}.timestamp{color:#9e9e9e}.timestamp-kwd{color:#f48fb1}.tag{background-color:#1e88e5;font-weight:normal}.target{background-color:#8e24aa}pre.src{overflow:visible;width:max-content;}.org-ul li{padding-top:0.5em;}details{margin: 2em;}@media screen and (max-width:768px){div#content{padding:0 0.5em 0.5em 0.5em; h1.title{margin-top: 0em;}}
-</style>
+<link rel="stylesheet" type="text/css" href="/theme/simple_dark.css"/>
 </head>
 <body>
 <div id="content" class="content">
@@ -548,6 +546,7 @@ before the GUI is initialized, including an initial dark theme.
 Additionally, early debug options are set here.
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">early-init.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Load an initial theme (will be overriden later in modules/theme/theme.el)</span>
 (load-theme 'modus-vivendi)
@@ -572,7 +571,7 @@ Additionally, early debug options are set here.
 <span style="color: #7f7f7f;">;;; </span><span style="color: #7f7f7f;">M-x toggle-debug-on-error</span>
 (<span style="color: #00bfff;">setq</span> debug-on-error t)
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Base_config" class="outline-2">
@@ -586,16 +585,18 @@ environments. Only Emacs builtins will be allowed here:
 <div id="outline-container-Core_libraries" class="outline-3">
 <h3 id="Core_libraries"><span class="section-number-3">5.1.</span> Core libraries</h3>
 <div class="outline-text-3" id="text-5-1">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">core libraries</span>
 (<span style="color: #00bfff;">require</span> '<span style="color: #a2cd5a;">cl-lib</span>)
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Nice_defaults" class="outline-3">
 <h3 id="Nice_defaults"><span class="section-number-3">5.2.</span> Nice defaults</h3>
 <div class="outline-text-3" id="text-5-2">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Nice defaults</span>
 (<span style="color: #00bfff;">setq-default</span> confirm-kill-emacs #'yes-or-no-p)
@@ -615,7 +616,7 @@ environments. Only Emacs builtins will be allowed here:
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Configure_file_backups_and_auto-saves" class="outline-3">
@@ -630,6 +631,7 @@ not to lose your work <i>before</i> you save, by automatically saving
 idle buffers into the auto-save directory.</li>
 </ul>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Backups and auto-save</span>
 <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Reference: https://www.emacswiki.org/emacs/BackupDirectory</span>
@@ -650,7 +652,7 @@ idle buffers into the auto-save directory.</li>
   (<span style="color: #00bfff;">setq</span> auto-save-file-name-transforms
         `((<span style="color: #deb887;">".*"</span> ,auto-save-dir t))))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Customization" class="outline-3">
@@ -675,6 +677,7 @@ and it is used to store persistent custom values for a specific
 machine only.
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Store customizations in custom.el</span>
 (<span style="color: #00bfff;">setq</span> custom-file (locate-user-emacs-file <span style="color: #deb887;">"custom.el"</span>))
@@ -691,12 +694,13 @@ machine only.
   (customize-group 'my/custom-settings))
 (<span style="color: #00bfff;">defalias</span> '<span style="color: #daa520;">my/settings</span> 'my/custom-settings)
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Builtin_minor_modes_to_activate_everywhere" class="outline-3">
 <h3 id="Builtin_minor_modes_to_activate_everywhere"><span class="section-number-3">5.5.</span> Builtin minor modes to activate everywhere</h3>
 <div class="outline-text-3" id="text-5-5">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Global minor modes</span>
 (column-number-mode)
@@ -705,12 +709,13 @@ machine only.
 (recentf-mode t)
 (electric-pair-mode t)
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-PATH_setup" class="outline-3">
 <h3 id="PATH_setup"><span class="section-number-3">5.6.</span> PATH setup</h3>
 <div class="outline-text-3" id="text-5-6">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Function to add a directory to PATH and exec-path</span>
 (<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/add-exec-path</span> (dir)
@@ -719,12 +724,13 @@ machine only.
     (setenv <span style="color: #deb887;">"PATH"</span> (concat dir path-separator (getenv <span style="color: #deb887;">"PATH"</span>)))
     (add-to-list 'exec-path dir)))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Programming_mode" class="outline-3">
 <h3 id="Programming_mode"><span class="section-number-3">5.7.</span> Programming mode</h3>
 <div class="outline-text-3" id="text-5-7">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/programming.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Basic programming mode settings</span>
 (<span style="color: #00bfff;">setq-default</span> display-fill-column-indicator-column 80)
@@ -732,12 +738,13 @@ machine only.
                             (display-fill-column-indicator-mode 1)
                             (display-line-numbers-mode 1)))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Shell_processes" class="outline-3">
 <h3 id="Shell_processes"><span class="section-number-3">5.8.</span> Shell processes</h3>
 <div class="outline-text-3" id="text-5-8">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/shell-execute</span> (command <span style="color: #98f5ff;">&amp;optional</span> interactive)
   <span style="color: #ffe4b5;">"Run a given shell COMMAND in a new buffer and display its output."</span>
@@ -754,7 +761,7 @@ machine only.
      command)
     (pop-to-buffer buffer)))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 </div>
@@ -774,17 +781,19 @@ Ensure that this path is set (because Emacs might not have read
 <code>~/.bashrc</code>):
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/cargo.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(my/add-exec-path <span style="color: #deb887;">"~/.cargo/bin"</span>)
 (<span style="color: #00bfff;">unless</span> (executable-find <span style="color: #deb887;">"cargo"</span>)
   (message <span style="color: #deb887;">"cargo binary NOT found."</span>))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Cargo_functions" class="outline-3">
 <h3 id="Cargo_functions"><span class="section-number-3">6.2.</span> Cargo functions</h3>
 <div class="outline-text-3" id="text-6-2">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/cargo.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"> (<span style="color: #00bfff;">require</span> '<span style="color: #a2cd5a;">seq</span>)
  (<span style="color: #00bfff;">require</span> '<span style="color: #a2cd5a;">comint</span>)
@@ -853,7 +862,7 @@ Ensure that this path is set (because Emacs might not have read
      (<span style="color: #00bfff;">push</span> (<span style="color: #00bfff;">if</span> git-repo (cons crate git-repo) crate)
            my/cargo-dependencies)))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Justfile" class="outline-3">
@@ -863,18 +872,20 @@ Ensure that this path is set (because Emacs might not have read
 <a href="https://github.com/casey/just">Just</a> is better than Make.
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/just/just.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">depend on the just crate so its installed automatically</span>
 <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">you must add "just" to the list of my/machine-labels for this to work:</span>
 (my/cargo-dependency <span style="color: #deb887;">"just"</span>)
 </pre>
-</div>
+</div></div>
 
 <p>
 This <code>Justfile</code> consolidates commands that operate
 on this git repository:
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">Justfile</span></div>
 <div class="org-src-container">
 <pre class="src src-text">set export
 current_dir := `pwd`
@@ -887,7 +898,7 @@ help:
 clean:
     rm -rf straight eln-cache
 </pre>
-</div>
+</div></div>
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -921,6 +932,7 @@ Emacs builtin macro that enables declarative package configuration.
 <div id="outline-container-Lazy-load_straight.el" class="outline-3">
 <h3 id="Lazy-load_straight.el"><span class="section-number-3">7.1.</span> Lazy-load straight.el</h3>
 <div class="outline-text-3" id="text-7-1">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/bootstrap-straight</span> (<span style="color: #98f5ff;">&amp;rest</span> _)
   <span style="color: #ffe4b5;">"Bootstrap straight.el only if it's not already installed."</span>
@@ -944,12 +956,13 @@ Emacs builtin macro that enables declarative package configuration.
 <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Advise `use-package` to initialize straight.el when first called</span>
 (advice-add 'use-package <span style="color: #f08080;">:before</span> #'my/bootstrap-straight)
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Track_packages_added_via_use-package" class="outline-3">
 <h3 id="Track_packages_added_via_use-package"><span class="section-number-3">7.2.</span> Track packages added via use-package</h3>
 <div class="outline-text-3" id="text-7-2">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defvar</span> <span style="color: #4eee94;">my/use-package-tracked-list</span> nil
   <span style="color: #ffe4b5;">"A list to track the names of packages declared via `use-package`."</span>)
@@ -979,7 +992,7 @@ Emacs builtin macro that enables declarative package configuration.
 
 (advice-add 'use-package <span style="color: #f08080;">:around</span> #'my/use-package-advice)
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 </div>
@@ -993,6 +1006,7 @@ lean, without any third party modules loaded. Each machine may be
 labeled with the names of additional modules to load.
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Customize which emacs config modules to load on a per-machine basis:</span>
 (<span style="color: #00bfff;">defcustom</span> <span style="color: #4eee94;">my/machine-labels</span> '()
@@ -1023,13 +1037,13 @@ labeled with the names of additional modules to load.
         (customize-set-variable 'my/machine-labels (my/machine-labels-available))
         (customize-save-customized)))))
 </pre>
-</div>
+</div></div>
 
 <p>
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org7188172">
+<pre class="example" id="org3df035b">
 - avy
 - completion
 - dashboard
@@ -1154,6 +1168,7 @@ your <i>personal</i> git repositories (e.g.,
 <code>~/git/vendor/YOUR_USERNAME</code>).</li>
 </ul>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/registers/registers.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defgroup</span> <span style="color: #98f5ff;">my/path-settings</span> nil
   <span style="color: #ffe4b5;">"My custom path settings"</span>
@@ -1172,7 +1187,7 @@ your <i>personal</i> git repositories (e.g.,
 (set-register ?d `(file . ,(expand-file-name <span style="color: #deb887;">"enigmacurry/d.rymcg.tech/"</span> my/git-vendor-directory)))
 (set-register ?v `(file . ,my/git-vendor-directory))
 </pre>
-</div>
+</div></div>
 
 <p>
 The <code>F1</code>, <code>F2</code>, <code>F3</code>, and <code>F4</code> keys store temporary positions:
@@ -1189,6 +1204,7 @@ The <code>F1</code>, <code>F2</code>, <code>F3</code>, and <code>F4</code> keys 
 <li><code>M-&lt;f4&gt;</code> store the current point into the F4 register.</li>
 </ul>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/registers/registers.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/register-save-f1</span> () (<span style="color: #00bfff;">interactive</span>) (point-to-register 'my/register-f1))
 (<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/register-jump-f1</span> () (<span style="color: #00bfff;">interactive</span>) (jump-to-register 'my/register-f1))
@@ -1199,7 +1215,7 @@ The <code>F1</code>, <code>F2</code>, <code>F3</code>, and <code>F4</code> keys 
 (<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/register-save-f4</span> () (<span style="color: #00bfff;">interactive</span>) (point-to-register 'my/register-f4))
 (<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/register-jump-f4</span> () (<span style="color: #00bfff;">interactive</span>) (jump-to-register 'my/register-f4))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 </div>
@@ -1218,6 +1234,7 @@ this, the theme will be made persistent by automatically customizing
 <code>my/theme</code> which is loaded on startup.
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/theme/theme.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defgroup</span> <span style="color: #98f5ff;">my/theme-settings</span> nil
   <span style="color: #ffe4b5;">"My custom theme settings"</span>
@@ -1250,7 +1267,7 @@ this, the theme will be made persistent by automatically customizing
 
 (load-theme my/theme t)
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Fonts_%28label_%3Dfonts%3D%29" class="outline-3">
@@ -1275,6 +1292,7 @@ this, the theme will be made persistent by automatically customizing
 <a href="https://www.nerdfonts.com/font-downloads">Nerd Fonts</a>
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/fonts/fonts.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;;; </span><span style="color: #7f7f7f;">Download JetBrains Mono typeface</span>
 (<span style="color: #00bfff;">let*</span> ((url <span style="color: #deb887;">"https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip"</span>)
@@ -1293,12 +1311,13 @@ this, the theme will be made persistent by automatically customizing
     (delete-file zip-file)
     (message <span style="color: #deb887;">"JetBrains Mono Nerd Font installed successfully."</span>)))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Set_font_faces" class="outline-4">
 <h4 id="Set_font_faces"><span class="section-number-4">9.3.3.</span> Set font faces</h4>
 <div class="outline-text-4" id="text-9-3-3">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/fonts/fonts.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;;; </span><span style="color: #7f7f7f;">show list of installed fonts:</span>
 <span style="color: #7f7f7f;">;;</span><span style="color: #7f7f7f;">(font-family-list)</span>
@@ -1335,7 +1354,7 @@ this, the theme will be made persistent by automatically customizing
   <span style="color: #f08080;">:custom</span>
   (nerd-icons-font-family <span style="color: #deb887;">"JetBrainsMono Nerd Font"</span>))
 </pre>
-</div>
+</div></div>
 
 <p>
 Run <code>M-x my/custom-settings</code> and go to the font customize sub-menu.
@@ -1352,10 +1371,11 @@ selection.
 <a href="https://protesilaos.com/emacs/show-font">show-font</a>
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/fonts/fonts.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">show-font</span>)
 </pre>
-</div>
+</div></div>
 
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">setq</span> show-font-pangram
@@ -1375,6 +1395,7 @@ selection.
 See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">general.el</a>
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/general/general.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span>
   general
@@ -1421,12 +1442,13 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
   (general-define-key
    <span style="color: #f08080;">:keymaps</span> 'dired-mode-map <span style="color: #deb887;">"C-c C-q"</span> 'dired-toggle-read-only))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Org_mode_%28label_%3Dorg%3D%29" class="outline-3">
 <h3 id="Org_mode_%28label_%3Dorg%3D%29"><span class="section-number-3">9.5.</span> Org mode (label <code>org</code>)</h3>
 <div class="outline-text-3" id="text-9-5">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/org/org-mode.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">org</span>
   <span style="color: #f08080;">:hook</span> ((org-mode . flyspell-mode)
@@ -1440,6 +1462,7 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
   (org-export-with-creator t)
   (org-export-with-email t)
   (org-export-timestamp-file t)
+  (org-export-allow-bind-keywords t)
   <span style="color: #f08080;">:general</span>
   (<span style="color: #deb887;">"s-&lt;up&gt;"</span> 'org-previous-visible-heading)
   (<span style="color: #deb887;">"s-&lt;down&gt;"</span> 'org-next-visible-heading)
@@ -1467,7 +1490,7 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
   (modify-syntax-entry ?_ <span style="color: #deb887;">"\""</span> org-mode-syntax-table)
   (modify-syntax-entry ?~ <span style="color: #deb887;">"\""</span> org-mode-syntax-table))
 </pre>
-</div>
+</div></div>
 </div>
 <div id="outline-container-Tangle_Emacs_config_and_write_HTML_document" class="outline-4">
 <h4 id="Tangle_Emacs_config_and_write_HTML_document"><span class="section-number-4">9.5.1.</span> Tangle Emacs config and write HTML document</h4>
@@ -1477,6 +1500,7 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 (<code>emacs.html</code>):
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/org/org-mode.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/emacs-org-tangle</span> ()
   <span style="color: #ffe4b5;">"Tangle all code blocks in '</span><span style="color: #a2cd5a;">emacs.org</span><span style="color: #ffe4b5;">' and export this document to HTML."</span>
@@ -1493,8 +1517,10 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
           (make-directory export-dir))
         (make-symbolic-link <span style="color: #deb887;">"index.html"</span> <span style="color: #deb887;">"emacs.html"</span> t)
         (make-symbolic-link <span style="color: #deb887;">"../index.html"</span> <span style="color: #deb887;">"export/index.html"</span> t)
+        (make-symbolic-link <span style="color: #deb887;">"../favicon.ico"</span> <span style="color: #deb887;">"export/favicon.ico"</span> t)
         (make-symbolic-link <span style="color: #deb887;">"../index.html"</span> <span style="color: #deb887;">"export/emacs.html"</span> t)
         (make-symbolic-link <span style="color: #deb887;">"../modules"</span> <span style="color: #deb887;">"export/modules"</span> t)
+        (make-symbolic-link <span style="color: #deb887;">"../theme"</span> <span style="color: #deb887;">"export/theme"</span> t)
         (make-symbolic-link <span style="color: #deb887;">"../LICENSE.txt"</span> <span style="color: #deb887;">"export/LICENSE.txt"</span> t)
         (make-symbolic-link <span style="color: #deb887;">"../LICENSE_GPLv3.txt"</span> <span style="color: #deb887;">"export/LICENSE_GPLv3.txt"</span> t)
         (make-symbolic-link <span style="color: #deb887;">"../early-init.el"</span> <span style="color: #deb887;">"export/early-init.el"</span> t)
@@ -1503,18 +1529,38 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
         <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">we will want to run code blocks automatically and capture output?</span>
         <span style="color: #7f7f7f;">;;</span><span style="color: #7f7f7f;">(save-buffer)</span>
         ))))
+(<span style="color: #00bfff;">with-eval-after-load</span> 'ox-html
+  (<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/org-html-src-block</span> (orig-fun src-block contents info)
+    <span style="color: #ffe4b5;">"Advice for `</span><span style="color: #a2cd5a;">org-html-src-block</span><span style="color: #ffe4b5;">' to add a header showing the tangle file.</span>
+<span style="color: #ffe4b5;">ORIG-FUN is the original function; SRC-BLOCK is the source block;</span>
+<span style="color: #ffe4b5;">INFO is the export options plist."</span>
+    (<span style="color: #00bfff;">let*</span> ((parameters (org-element-property <span style="color: #f08080;">:parameters</span> src-block))
+           (header-args (org-babel-parse-header-arguments parameters))
+           (tangle (cdr (assoc <span style="color: #f08080;">:tangle</span> header-args)))
+           (header (<span style="color: #00bfff;">if</span> (<span style="color: #00bfff;">and</span> tangle (not (string= tangle <span style="color: #deb887;">"no"</span>)))
+                       (format <span style="color: #deb887;">"&lt;div class=\"code-block-header\"&gt;&lt;span class=\"org-parameter\"&gt;:tangle&lt;/span&gt; &lt;span class=\"filename\"&gt;%s&lt;/span&gt;&lt;/div&gt;\n"</span>
+                               (org-html-encode-plain-text tangle))
+                     <span style="color: #deb887;">""</span>))
+           (code (funcall orig-fun src-block contents info)))
+      (<span style="color: #00bfff;">if</span> (not (string= header <span style="color: #deb887;">""</span>))
+          <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Wrap both header and code block in a container.</span>
+          (format <span style="color: #deb887;">"&lt;div class=\"code-block-container\"&gt;%s%s&lt;/div&gt;"</span> header code)
+        code)))
+  (advice-add 'org-html-src-block <span style="color: #f08080;">:around</span> #'my/org-html-src-block))
+
 <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Tell Emacs to trust this code in all buffer local vars:</span>
 (add-to-list 'safe-local-variable-values
              '(eval add-hook 'after-save-hook 'my/emacs-org-tangle nil t))
 (add-to-list 'safe-local-variable-values
              '(org-confirm-babel-evaluate))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Local_HTTP_server_for_displaying_exported_HTML" class="outline-4">
 <h4 id="Local_HTTP_server_for_displaying_exported_HTML"><span class="section-number-4">9.5.2.</span> Local HTTP server for displaying exported HTML</h4>
 <div class="outline-text-4" id="text-9-5-2">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/org/org-mode.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(my/cargo-dependency <span style="color: #deb887;">"live-server"</span>) <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">defers install of live-server Rust crate</span>
 (<span style="color: #00bfff;">defvar</span> <span style="color: #4eee94;">my/emacs-org-html-server-host</span> <span style="color: #deb887;">"127.0.0.1"</span>) <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">Set to 0.0.0.0 to serve publicly</span>
@@ -1538,7 +1584,7 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
         (<span style="color: #00bfff;">unless</span> (executable-find <span style="color: #deb887;">"live-server"</span>)
           (message <span style="color: #deb887;">"live-server NOT found - please run: cargo install live-server"</span>))))))
 </pre>
-</div>
+</div></div>
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1566,6 +1612,7 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 <a href="https://github.com/alphapapa/unpackaged.el/tree/master?tab=readme-ov-file#export-to-html-with-useful-anchors">unpackaged.el: Export to HTML with useful anchors</a>
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/org/org-mode-unpackaged.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">This is a modified portion of unpackaged.el</span>
 <span style="color: #7f7f7f;">;;</span>
@@ -1659,7 +1706,7 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
           (inc-suffixf ref)))
       ref)))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 </div>
@@ -1673,6 +1720,7 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 <li><a href="https://company-mode.github.io/">company-mode</a></li>
 </ul>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/completion/completion.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">  <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Allow minibuffers to stack:</span>
   (<span style="color: #00bfff;">setq-default</span> enable-recursive-minibuffers t)
@@ -1730,12 +1778,13 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 
 (<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">company</span>)
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Vterm_%28label_%3Dvterm%3D%29" class="outline-3">
 <h3 id="Vterm_%28label_%3Dvterm%3D%29"><span class="section-number-3">9.7.</span> Vterm (label <code>vterm</code>)</h3>
 <div class="outline-text-3" id="text-9-7">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/vterm/vterm.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">vterm (terminal emulator) ::</span>
 <span style="color: #7f7f7f;">;;  </span><span style="color: #7f7f7f;">https://github.com/akermu/emacs-libvterm</span>
@@ -1763,21 +1812,23 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
           (vterm-toggle args))
       (vterm-toggle args))))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Markdown_mode_%28label_%3Dmarkdown%3D%29" class="outline-3">
 <h3 id="Markdown_mode_%28label_%3Dmarkdown%3D%29"><span class="section-number-3">9.8.</span> Markdown mode (label <code>markdown</code>)</h3>
 <div class="outline-text-3" id="text-9-8">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/markdown/markdown.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">markdown-mode</span>)
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-SSH_agent_%28label_%3Dssh-agent%3D%29" class="outline-3">
 <h3 id="SSH_agent_%28label_%3Dssh-agent%3D%29"><span class="section-number-3">9.9.</span> SSH agent (label <code>ssh-agent</code>)</h3>
 <div class="outline-text-3" id="text-9-9">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/ssh-agent/ssh-agent.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Load SSH / GPG keys from keychain agent</span>
 (<span style="color: #00bfff;">use-package</span>
@@ -1790,12 +1841,13 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
    <span style="color: #f08080;">:repo</span> <span style="color: #deb887;">"tarsius/keychain-environment"</span>)
   <span style="color: #f08080;">:init</span> (keychain-refresh-environment))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Magit_%28label_%3Dmagit%3D%29" class="outline-3">
 <h3 id="Magit_%28label_%3Dmagit%3D%29"><span class="section-number-3">9.10.</span> Magit (label <code>magit</code>)</h3>
 <div class="outline-text-3" id="text-9-10">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/magit/magit.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Magit (git version control system) :: https://magit.vc/</span>
 (<span style="color: #00bfff;">use-package</span>
@@ -1806,12 +1858,13 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
   (<span style="color: #00bfff;">setq</span> magit-display-buffer-function
         #'magit-display-buffer-fullframe-status-v1))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Scale_text_uniformly_in_all_buffers_%28label_%3Dtext-scale%3D%29" class="outline-3">
 <h3 id="Scale_text_uniformly_in_all_buffers_%28label_%3Dtext-scale%3D%29"><span class="section-number-3">9.11.</span> Scale text uniformly in all buffers (label <code>text-scale</code>)</h3>
 <div class="outline-text-3" id="text-9-11">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/text-scale/text-scale.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/default-text-scale-reset</span> nil
   (<span style="color: #00bfff;">setq</span> default-text-scale--complement 0)
@@ -1838,17 +1891,18 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
          (default-text-scale-decrease)))))
   <span style="color: #f08080;">:init</span> (<span style="color: #00bfff;">setq</span> default-text-scale-amount 5))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Justfile_mode_%28label_%3Djust%3D%29" class="outline-3">
 <h3 id="Justfile_mode_%28label_%3Djust%3D%29"><span class="section-number-3">9.12.</span> Justfile mode (label <code>just</code>)</h3>
 <div class="outline-text-3" id="text-9-12">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/just/just.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">just-mode</span>
 (<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">just-mode</span>)
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29" class="outline-3">
@@ -1858,6 +1912,7 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 This package requires the system dependency <a href="https://jqlang.github.io/jq/download/">jq</a>.
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/latin-words/latin-words.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span>
   latin-words
@@ -1867,12 +1922,13 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
   (latin-words-directory
    (expand-file-name <span style="color: #deb887;">"straight/repos/latin-words/data"</span> user-emacs-directory)))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Dashboard_%28label_%3Ddashboard%3D%29" class="outline-3">
 <h3 id="Dashboard_%28label_%3Ddashboard%3D%29"><span class="section-number-3">9.14.</span> Dashboard (label <code>dashboard</code>)</h3>
 <div class="outline-text-3" id="text-9-14">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/dashboard/dashboard.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span>
   dashboard
@@ -1904,12 +1960,13 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
      (recents . dashboard-insert-recents)
      (bookmarks . dashboard-insert-bookmarks))))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-GPTel_%28label_%3Dgptel%3D%29" class="outline-3">
 <h3 id="GPTel_%28label_%3Dgptel%3D%29"><span class="section-number-3">9.15.</span> GPTel (label <code>gptel</code>)</h3>
 <div class="outline-text-3" id="text-9-15">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/gptel/gptel.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span>
   gptel
@@ -1970,12 +2027,13 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
    'gptel-post-response-functions
    #'my-gptel-deepseek-wrap-think-block))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-LSP_%28label_%3Dlsp%3D%29" class="outline-3">
 <h3 id="LSP_%28label_%3Dlsp%3D%29"><span class="section-number-3">9.16.</span> LSP (label <code>lsp</code>)</h3>
 <div class="outline-text-3" id="text-9-16">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/lsp/lsp.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">LSP mode :: https://emacs-lsp.github.io/lsp-mode/</span>
 (<span style="color: #00bfff;">use-package</span>
@@ -2001,7 +2059,7 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
 (<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">dap-mode</span>)
 <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">(use-package dap-LANGUAGE) to load the dap adapter for your language</span>
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Python_%28label_%3Dpython%3D%29" class="outline-3">
@@ -2013,6 +2071,7 @@ requested. Please be patient while it builds during its initial
 load.</li>
 </ul>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/python/python.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(my/add-exec-path <span style="color: #deb887;">"~/.local/bin"</span>)
 (<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/python-install-uv-package-manager</span> ()
@@ -2065,7 +2124,7 @@ load.</li>
   )
 
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Avy_%28label_%3Davy%3D%29" class="outline-3">
@@ -2075,6 +2134,7 @@ load.</li>
 <li><a href="https://github.com/abo-abo/avy">avy</a> lets you jump to any word you can see in your Emacs frame.</li>
 </ul>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/avy/avy.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Avy (like ace-jump) :: https://github.com/abo-abo/avy</span>
 (<span style="color: #00bfff;">use-package</span>
@@ -2086,7 +2146,7 @@ load.</li>
  (<span style="color: #deb887;">"C-c s"</span> 'avy-goto-char)
  (<span style="color: #deb887;">"C-c S"</span> 'avy-goto-word-1))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-Treesit_%28label_%3Dtreesit%3D%29" class="outline-3">
@@ -2109,6 +2169,7 @@ There are several third party modules to configure and enhance it:
 <li><a href="https://github.com/dmille56/treesit-jump">treesit-jump</a></li>
 </ul>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/treesit/treesit.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">treesit-auto</span>
   <span style="color: #f08080;">:custom</span>
@@ -2129,7 +2190,7 @@ There are several third party modules to configure and enhance it:
   <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Optional: add some queries to filter out of results (since they can be too cluttered sometimes)</span>
   <span style="color: #7f7f7f;">;;</span><span style="color: #7f7f7f;">(setq treesit-jump-queries-filter-list '("inner" "test" "param"))</span>
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-S3-publish_%28label_%3Ds3-publish%3D%29" class="outline-3">
@@ -2140,6 +2201,7 @@ There are several third party modules to configure and enhance it:
 regions, and files to S3 storage and the web.
 </p>
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">modules/s3-publish/s3-publish.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span>
   s3-publish
@@ -2152,7 +2214,7 @@ regions, and files to S3 storage and the web.
   <span style="color: #f08080;">:general</span>
   (<span style="color: #deb887;">"C-c p"</span> 's3-publish))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 </div>
@@ -2179,6 +2241,7 @@ enabled):
 </pre>
 
 
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defvar</span> <span style="color: #4eee94;">my/modules-dir</span> (expand-file-name <span style="color: #deb887;">"modules/"</span> user-emacs-directory))
 (<span style="color: #00bfff;">defvar</span> <span style="color: #4eee94;">my/module-priority-list</span> '(<span style="color: #deb887;">"general"</span> <span style="color: #deb887;">"fonts"</span>)
@@ -2228,18 +2291,19 @@ enabled):
 <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">load the modules configured for this macchine</span>
 (my/load-modules my/machine-labels)
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 <div id="outline-container-cargo-install-my-cargo-dependencies" class="outline-3">
 <h3 id="cargo-install-my-cargo-dependencies"><span class="section-number-3">10.2.</span> Install rust helper programs declared by module</h3>
 <div class="outline-text-3" id="text-cargo-install-my-cargo-dependencies">
+<div class="code-block-container"><div class="code-block-header"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Install rust dependencies that were declared by modules</span>
 (<span style="color: #00bfff;">when</span> my/cargo-dependencies
   (my/cargo-install my/cargo-dependencies))
 </pre>
-</div>
+</div></div>
 </div>
 </div>
 </div>
@@ -2247,7 +2311,7 @@ enabled):
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
 <p class="email">Email: <a href="mailto:ryan@enigmacurry.com">ryan@enigmacurry.com</a></p>
-<p class="date">Last Modified: 2025-02-09 Sun 16:48</p>
+<p class="date">Last Modified: 2025-02-11 Tue 23:02</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.8-pre)</p>
 </div>
 </body>
