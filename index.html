@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-11 Tue 23:40 -->
+<!-- 2025-02-12 Wed 01:12 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -257,28 +257,30 @@
 </ul>
 </li>
 <li><a href="#General_keybindings_manager_%28label_%3Dgeneral%3D%29">9.4. General keybindings manager (label <code>general</code>)</a></li>
-<li><a href="#Org_mode_%28label_%3Dorg%3D%29">9.5. Org mode (label <code>org</code>)</a>
+<li><a href="#Which_key_%28label_%3Dwhich-key%3D%29">9.5. Which key (label <code>which-key</code>)</a></li>
+<li><a href="#Org_mode_%28label_%3Dorg%3D%29">9.6. Org mode (label <code>org</code>)</a>
 <ul>
-<li><a href="#Tangle_Emacs_config_and_write_HTML_document">9.5.1. Tangle Emacs config and write HTML document</a></li>
-<li><a href="#Local_HTTP_server_for_displaying_exported_HTML">9.5.2. Local HTTP server for displaying exported HTML</a></li>
-<li><a href="#Use_org_headings_as_HTML_anchors">9.5.3. Use org headings as HTML anchors</a></li>
+<li><a href="#Tangle_Emacs_config_and_write_HTML_document">9.6.1. Tangle Emacs config and write HTML document</a></li>
+<li><a href="#Local_HTTP_server_for_displaying_exported_HTML">9.6.2. Local HTTP server for displaying exported HTML</a></li>
+<li><a href="#Use_org_headings_as_HTML_anchors">9.6.3. Use org headings as HTML anchors</a></li>
+<li><a href="#Template_for_new_org_files">9.6.4. Template for new org files</a></li>
 </ul>
 </li>
-<li><a href="#Completion_%28label_%3Dcompletion%3D%29">9.6. Completion (label <code>completion</code>)</a></li>
-<li><a href="#Vterm_%28label_%3Dvterm%3D%29">9.7. Vterm (label <code>vterm</code>)</a></li>
-<li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">9.8. Markdown mode (label <code>markdown</code>)</a></li>
-<li><a href="#SSH_agent_%28label_%3Dssh-agent%3D%29">9.9. SSH agent (label <code>ssh-agent</code>)</a></li>
-<li><a href="#Magit_%28label_%3Dmagit%3D%29">9.10. Magit (label <code>magit</code>)</a></li>
-<li><a href="#Scale_text_uniformly_in_all_buffers_%28label_%3Dtext-scale%3D%29">9.11. Scale text uniformly in all buffers (label <code>text-scale</code>)</a></li>
-<li><a href="#Justfile_mode_%28label_%3Djust%3D%29">9.12. Justfile mode (label <code>just</code>)</a></li>
-<li><a href="#Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29">9.13. Latin words dictionary and word of the day (label <code>latin-words</code>)</a></li>
-<li><a href="#Dashboard_%28label_%3Ddashboard%3D%29">9.14. Dashboard (label <code>dashboard</code>)</a></li>
-<li><a href="#GPTel_%28label_%3Dgptel%3D%29">9.15. GPTel (label <code>gptel</code>)</a></li>
-<li><a href="#LSP_%28label_%3Dlsp%3D%29">9.16. LSP (label <code>lsp</code>)</a></li>
-<li><a href="#Python_%28label_%3Dpython%3D%29">9.17. Python (label <code>python</code>)</a></li>
-<li><a href="#Avy_%28label_%3Davy%3D%29">9.18. Avy (label <code>avy</code>)</a></li>
-<li><a href="#Treesit_%28label_%3Dtreesit%3D%29">9.19. Treesit (label <code>treesit</code>)</a></li>
-<li><a href="#S3-publish_%28label_%3Ds3-publish%3D%29">9.20. S3-publish (label <code>s3-publish</code>)</a></li>
+<li><a href="#Completion_%28label_%3Dcompletion%3D%29">9.7. Completion (label <code>completion</code>)</a></li>
+<li><a href="#Vterm_%28label_%3Dvterm%3D%29">9.8. Vterm (label <code>vterm</code>)</a></li>
+<li><a href="#Markdown_mode_%28label_%3Dmarkdown%3D%29">9.9. Markdown mode (label <code>markdown</code>)</a></li>
+<li><a href="#SSH_agent_%28label_%3Dssh-agent%3D%29">9.10. SSH agent (label <code>ssh-agent</code>)</a></li>
+<li><a href="#Magit_%28label_%3Dmagit%3D%29">9.11. Magit (label <code>magit</code>)</a></li>
+<li><a href="#Scale_text_uniformly_in_all_buffers_%28label_%3Dtext-scale%3D%29">9.12. Scale text uniformly in all buffers (label <code>text-scale</code>)</a></li>
+<li><a href="#Justfile_mode_%28label_%3Djust%3D%29">9.13. Justfile mode (label <code>just</code>)</a></li>
+<li><a href="#Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29">9.14. Latin words dictionary and word of the day (label <code>latin-words</code>)</a></li>
+<li><a href="#Dashboard_%28label_%3Ddashboard%3D%29">9.15. Dashboard (label <code>dashboard</code>)</a></li>
+<li><a href="#GPTel_%28label_%3Dgptel%3D%29">9.16. GPTel (label <code>gptel</code>)</a></li>
+<li><a href="#LSP_%28label_%3Dlsp%3D%29">9.17. LSP (label <code>lsp</code>)</a></li>
+<li><a href="#Python_%28label_%3Dpython%3D%29">9.18. Python (label <code>python</code>)</a></li>
+<li><a href="#Avy_%28label_%3Davy%3D%29">9.19. Avy (label <code>avy</code>)</a></li>
+<li><a href="#Treesit_%28label_%3Dtreesit%3D%29">9.20. Treesit (label <code>treesit</code>)</a></li>
+<li><a href="#S3-publish_%28label_%3Ds3-publish%3D%29">9.21. S3-publish (label <code>s3-publish</code>)</a></li>
 </ul>
 </li>
 <li><a href="#Load_modules">10. Load modules</a>
@@ -611,7 +613,6 @@ environments. Only Emacs builtins will be allowed here:
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Nice defaults</span>
 (<span style="color: #00bfff;">setq-default</span> confirm-kill-emacs #'yes-or-no-p)
 (<span style="color: #00bfff;">setq-default</span> vc-follow-symlinks t)
-(<span style="color: #00bfff;">setq-default</span> show-trailing-whitespace t)
 (<span style="color: #00bfff;">setq-default</span> indicate-empty-lines t)
 (<span style="color: #00bfff;">setq-default</span> indicate-buffer-boundaries 'left)
 (<span style="color: #00bfff;">setq-default</span> sentence-end-double-space nil)
@@ -745,6 +746,7 @@ machine only.
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Basic programming mode settings</span>
 (<span style="color: #00bfff;">setq-default</span> display-fill-column-indicator-column 80)
 (add-hook 'prog-mode-hook (<span style="color: #00bfff;">lambda</span> ()
+                            (<span style="color: #00bfff;">setq</span> show-trailing-whitespace t)
                             (display-fill-column-indicator-mode 1)
                             (display-line-numbers-mode 1)))
 </pre>
@@ -1053,7 +1055,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org67f7d44">
+<pre class="example" id="org554d06d">
 - avy
 - completion
 - dashboard
@@ -1066,6 +1068,7 @@ Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/mod
 - magit
 - markdown
 - org
+- org-mode
 - python
 - registers
 - s3-publish
@@ -1074,6 +1077,7 @@ Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/mod
 - theme
 - treesit
 - vterm
+- which-key
 </pre>
 
 <p>
@@ -1379,9 +1383,9 @@ selection.
 <div id="outline-container-Preview_fonts" class="outline-4">
 <h4 id="Preview_fonts"><span class="section-number-4">9.3.4.</span> Preview fonts</h4>
 <div class="outline-text-4" id="text-9-3-4">
-<p>
-<a href="https://protesilaos.com/emacs/show-font">show-font</a>
-</p>
+<ul class="org-ul">
+<li><a href="https://protesilaos.com/emacs/show-font">show-font</a></li>
+</ul>
 
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/fonts/fonts.el</span></div>
 <div class="org-src-container">
@@ -1404,9 +1408,9 @@ selection.
 <div id="outline-container-General_keybindings_manager_%28label_%3Dgeneral%3D%29" class="outline-3">
 <h3 id="General_keybindings_manager_%28label_%3Dgeneral%3D%29"><span class="section-number-3">9.4.</span> General keybindings manager (label <code>general</code>)</h3>
 <div class="outline-text-3" id="text-9-4">
-<p>
-See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">general.el</a>
-</p>
+<ul class="org-ul">
+<li><a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">general.el</a></li>
+</ul>
 
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/general/general.el</span></div>
 <div class="org-src-container">
@@ -1458,12 +1462,34 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
 </div></div>
 </div>
 </div>
-<div id="outline-container-Org_mode_%28label_%3Dorg%3D%29" class="outline-3">
-<h3 id="Org_mode_%28label_%3Dorg%3D%29"><span class="section-number-3">9.5.</span> Org mode (label <code>org</code>)</h3>
+<div id="outline-container-Which_key_%28label_%3Dwhich-key%3D%29" class="outline-3">
+<h3 id="Which_key_%28label_%3Dwhich-key%3D%29"><span class="section-number-3">9.5.</span> Which key (label <code>which-key</code>)</h3>
 <div class="outline-text-3" id="text-9-5">
+<ul class="org-ul">
+<li><a href="https://github.com/justbur/emacs-which-key">which-key</a></li>
+</ul>
+
+<div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/which-key/which-key.el</span></div>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">which-key (shows keyboard shortcut completions) :: https://github.com/justbur/emacs-which-key</span>
+(<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">which-key</span> <span style="color: #f08080;">:config</span> (which-key-mode))
+</pre>
+</div></div>
+</div>
+</div>
+<div id="outline-container-Org_mode_%28label_%3Dorg%3D%29" class="outline-3">
+<h3 id="Org_mode_%28label_%3Dorg%3D%29"><span class="section-number-3">9.6.</span> Org mode (label <code>org</code>)</h3>
+<div class="outline-text-3" id="text-9-6">
+<ul class="org-ul">
+<li><a href="https://orgmode.org/">org-mode</a></li>
+</ul>
+
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/org/org-mode.el</span></div>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">org</span>
+<pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">hydra (rapid fire mnemonic keybindings) :: https://github.com/abo-abo/hydra</span>
+(<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">hydra</span>)
+(<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">org</span>
+  <span style="color: #f08080;">:after</span> hydra
   <span style="color: #f08080;">:hook</span> ((org-mode . flyspell-mode)
          (org-mode . unpackaged/org-export-html-with-useful-ids-mode))
   <span style="color: #f08080;">:custom</span>
@@ -1472,10 +1498,11 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
   (org-html-postamble 'auto)
   (org-export-with-author t)
   (org-export-with-date t)
-  (org-export-with-creator t)
+  (org-export-with-creator nil)
   (org-export-with-email t)
   (org-export-timestamp-file t)
   (org-export-allow-bind-keywords t)
+  (org-directory <span style="color: #deb887;">"~/Org"</span>)
   <span style="color: #f08080;">:general</span>
   (<span style="color: #deb887;">"s-&lt;up&gt;"</span> 'org-previous-visible-heading)
   (<span style="color: #deb887;">"s-&lt;down&gt;"</span> 'org-next-visible-heading)
@@ -1491,10 +1518,27 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((python . t) (scheme . t) (shell . t) (ditaa . t)))
+  <span style="color: #f08080;">:init</span>
+  <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Hydra for commonly used org commands:</span>
+  (<span style="color: #00bfff;">defhydra</span>
+    hydra-org
+    (global-map <span style="color: #deb887;">"C-c o"</span> <span style="color: #f08080;">:exit</span> t color pink <span style="color: #f08080;">:hint</span> nil)
+    <span style="color: #ffe4b5;">"Org commands:"</span>
+    (<span style="color: #deb887;">"o"</span> my/open-org-file)
+    (<span style="color: #deb887;">"l"</span> org-store-link <span style="color: #deb887;">"store link"</span>)
+    (<span style="color: #deb887;">"i"</span> org-insert-link <span style="color: #deb887;">"insert link"</span>)
+    (<span style="color: #deb887;">"a"</span> org-agenda <span style="color: #deb887;">"agenda"</span>)
+    (<span style="color: #deb887;">"c"</span> org-capture <span style="color: #deb887;">"capture"</span>)
+    (<span style="color: #deb887;">"m"</span> org-info <span style="color: #deb887;">"read info manual"</span>)
+    (<span style="color: #deb887;">"e"</span> org-export-dispatch <span style="color: #deb887;">"export"</span>)
+    (<span style="color: #deb887;">"p"</span> org-preview-html-mode <span style="color: #deb887;">"toggle preview mode"</span>)
+    (<span style="color: #deb887;">"s"</span> org-insert-source-code-block <span style="color: #deb887;">"insert source code block"</span>))
   )
 (<span style="color: #00bfff;">require</span> '<span style="color: #a2cd5a;">org-tempo</span>) <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">required for Structure Templates</span>
                                         <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">See https://orgmode.org/manual/Structure-Templates.html</span>
 (<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">htmlize</span>) <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">required for colorized HTML code blocks</span>
+(<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">org-preview-html</span> <span style="color: #f08080;">:after</span> org)
+(<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">ob-async</span>)
 (<span style="color: #00bfff;">progn</span> <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">electic pairs for org-mode</span>
   (modify-syntax-entry ?/ <span style="color: #deb887;">"\""</span> org-mode-syntax-table)
   (modify-syntax-entry ?* <span style="color: #deb887;">"\""</span> org-mode-syntax-table)
@@ -1506,8 +1550,8 @@ See <a href="https://github.com/noctuid/general.el?tab=readme-ov-file#readme">ge
 </div></div>
 </div>
 <div id="outline-container-Tangle_Emacs_config_and_write_HTML_document" class="outline-4">
-<h4 id="Tangle_Emacs_config_and_write_HTML_document"><span class="section-number-4">9.5.1.</span> Tangle Emacs config and write HTML document</h4>
-<div class="outline-text-4" id="text-9-5-1">
+<h4 id="Tangle_Emacs_config_and_write_HTML_document"><span class="section-number-4">9.6.1.</span> Tangle Emacs config and write HTML document</h4>
+<div class="outline-text-4" id="text-9-6-1">
 <p>
 This function tangles this file (<code>emacs.org</code>) and exports an HTML page
 (<code>emacs.html</code>):
@@ -1582,8 +1626,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Local_HTTP_server_for_displaying_exported_HTML" class="outline-4">
-<h4 id="Local_HTTP_server_for_displaying_exported_HTML"><span class="section-number-4">9.5.2.</span> Local HTTP server for displaying exported HTML</h4>
-<div class="outline-text-4" id="text-9-5-2">
+<h4 id="Local_HTTP_server_for_displaying_exported_HTML"><span class="section-number-4">9.6.2.</span> Local HTTP server for displaying exported HTML</h4>
+<div class="outline-text-4" id="text-9-6-2">
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/org/org-mode.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(my/cargo-dependency <span style="color: #deb887;">"live-server"</span>) <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">defers install of live-server Rust crate</span>
@@ -1630,8 +1674,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Use_org_headings_as_HTML_anchors" class="outline-4">
-<h4 id="Use_org_headings_as_HTML_anchors"><span class="section-number-4">9.5.3.</span> Use org headings as HTML anchors</h4>
-<div class="outline-text-4" id="text-9-5-3">
+<h4 id="Use_org_headings_as_HTML_anchors"><span class="section-number-4">9.6.3.</span> Use org headings as HTML anchors</h4>
+<div class="outline-text-4" id="text-9-6-3">
 <p>
 <a href="https://github.com/alphapapa/unpackaged.el/tree/master?tab=readme-ov-file#export-to-html-with-useful-anchors">unpackaged.el: Export to HTML with useful anchors</a>
 </p>
@@ -1733,10 +1777,94 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div></div>
 </div>
 </div>
+<div id="outline-container-Template_for_new_org_files" class="outline-4">
+<h4 id="Template_for_new_org_files"><span class="section-number-4">9.6.4.</span> Template for new org files</h4>
+<div class="outline-text-4" id="text-9-6-4">
+<div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/org-mode/org-mode.el</span></div>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defcustom</span> <span style="color: #4eee94;">my/org-template</span>
+  (concat <span style="color: #deb887;">"#+TITLE: {{title}}\n"</span>
+          <span style="color: #deb887;">"#+PROPERTY: header-args :results none :eval yes\n"</span>
+          <span style="color: #deb887;">"#+OPTIONS: noweb:t\n\n"</span>)
+  <span style="color: #ffe4b5;">"My default Org template."</span>)
+
+(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/open-org-file</span> ()
+  <span style="color: #ffe4b5;">"Open a new Org file with the default notes template and create a theme file.</span>
+<span style="color: #ffe4b5;">This function does the following:</span>
+<span style="color: #ffe4b5;">1. Opens a new Org file in the directory &#8216;</span><span style="color: #a2cd5a;">org-directory/notes</span><span style="color: #ffe4b5;">&#8217; and inserts the template</span>
+<span style="color: #ffe4b5;">   (replacing placeholders like {{title}}, {{date}}, etc.).</span>
+<span style="color: #ffe4b5;">2. If the directory &#8216;</span><span style="color: #a2cd5a;">org-directory/notes</span><span style="color: #ffe4b5;">&#8217; does not exist, it is created.</span>
+<span style="color: #ffe4b5;">3. In the same directory, it creates a file named '</span><span style="color: #a2cd5a;">simple_dark.theme</span><span style="color: #ffe4b5;">'. This file</span>
+<span style="color: #ffe4b5;">   is populated with a series of #+HTML_HEAD: lines that wrap the contents of your CSS</span>
+<span style="color: #ffe4b5;">   file (located at `user-emacs-directory/themes/simple_dark.css`) between a starting</span>
+<span style="color: #ffe4b5;">   &lt;style&gt; tag and a closing &lt;/style&gt; tag.</span>
+<span style="color: #ffe4b5;">4. The Org file then includes a line: \"#+SETUPFILE: simple_dark.theme\"</span>
+<span style="color: #ffe4b5;">   so that when you export, Org loads the theme file."</span>
+  (<span style="color: #00bfff;">interactive</span>)
+  (<span style="color: #00bfff;">let*</span> ((formatted-date (format-time-string <span style="color: #deb887;">"%Y-%m-%d"</span>))
+         (user-title (read-string <span style="color: #deb887;">"Title for new note: "</span>))
+         (safe-title (replace-regexp-in-string <span style="color: #deb887;">" "</span> <span style="color: #deb887;">"-"</span> (downcase user-title)))
+         <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Define the notes directory and ensure it exists.</span>
+         (notes-dir (file-name-as-directory (concat org-directory <span style="color: #deb887;">"/notes"</span>)))
+         (_ (<span style="color: #00bfff;">unless</span> (file-directory-p notes-dir)
+              (make-directory notes-dir t)))
+         (filename (format <span style="color: #deb887;">"%s/%s-%s.org"</span>
+                           notes-dir
+                           (format-time-string <span style="color: #deb887;">"%Y-%m-%d-%H-%M-%S"</span>)
+                           safe-title))
+         (section (read-string <span style="color: #deb887;">"Section: "</span> formatted-date))
+         (title-section (mapconcat #'capitalize (split-string section <span style="color: #deb887;">" "</span>) <span style="color: #deb887;">" "</span>)))
+    (find-file filename)
+    (<span style="color: #00bfff;">when</span> (zerop (buffer-size))
+      <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Insert the Org template with placeholders replaced.</span>
+      (insert
+       (replace-regexp-in-string
+        <span style="color: #deb887;">"{{title}}"</span>
+        user-title
+        (replace-regexp-in-string
+         <span style="color: #deb887;">"{{date}}"</span>
+         formatted-date
+         (replace-regexp-in-string
+          <span style="color: #deb887;">"{{section}}"</span>
+          section
+          (replace-regexp-in-string
+           <span style="color: #deb887;">"{{safe-title}}"</span>
+           safe-title
+           (replace-regexp-in-string
+            <span style="color: #deb887;">"{{title-section}}"</span>
+            title-section
+            my/org-template))))))
+      <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Create the theme file.</span>
+      (<span style="color: #00bfff;">let*</span> ((theme-file (expand-file-name <span style="color: #deb887;">"simple_dark.theme"</span>
+                                             (file-name-directory filename)))
+             (css-file (expand-file-name <span style="color: #deb887;">"theme/simple_dark.css"</span>
+                                          user-emacs-directory)))
+        (<span style="color: #00bfff;">with-temp-file</span> theme-file
+          <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Start the CSS block.</span>
+          (insert <span style="color: #deb887;">"#+HTML_HEAD: &lt;style&gt;\n"</span>)
+          (<span style="color: #00bfff;">if</span> (file-exists-p css-file)
+              (<span style="color: #00bfff;">let</span> ((css-content (<span style="color: #00bfff;">with-temp-buffer</span>
+                                   (insert-file-contents css-file)
+                                   (buffer-string))))
+                (<span style="color: #00bfff;">dolist</span> (line (split-string css-content <span style="color: #deb887;">"\n"</span>))
+                  (insert (format <span style="color: #deb887;">"#+HTML_HEAD: %s\n"</span> line))))
+            (insert <span style="color: #deb887;">"#+HTML_HEAD: /* CSS file not found */\n"</span>))
+          <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">End the CSS block.</span>
+          (insert <span style="color: #deb887;">"#+HTML_HEAD: &lt;/style&gt;\n"</span>))
+        (message <span style="color: #deb887;">"Theme file created at: %s"</span> theme-file)
+        <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Insert a reference to the theme file into the Org file.</span>
+        (insert (format <span style="color: #deb887;">"\n#+SETUPFILE: %s\n"</span>
+                        (file-name-nondirectory theme-file)))))))
+
+
+</pre>
+</div></div>
+</div>
+</div>
 </div>
 <div id="outline-container-Completion_%28label_%3Dcompletion%3D%29" class="outline-3">
-<h3 id="Completion_%28label_%3Dcompletion%3D%29"><span class="section-number-3">9.6.</span> Completion (label <code>completion</code>)</h3>
-<div class="outline-text-3" id="text-9-6">
+<h3 id="Completion_%28label_%3Dcompletion%3D%29"><span class="section-number-3">9.7.</span> Completion (label <code>completion</code>)</h3>
+<div class="outline-text-3" id="text-9-7">
 <ul class="org-ul">
 <li><a href="https://github.com/minad/vertico">vertico</a></li>
 <li><a href="https://github.com/oantolin/orderless">orderless</a></li>
@@ -1773,9 +1901,9 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
     (vertico-resize 'grow-only)
     (vertico-cycle nil)
     <span style="color: #f08080;">:init</span>
-                                          <span style="color: #7f7f7f;">;</span><span style="color: #7f7f7f;">(keymap-set vertico-map "?" #'minibuffer-completion-help)</span>
-                                          <span style="color: #7f7f7f;">;</span><span style="color: #7f7f7f;">(keymap-set vertico-map "M-TAB" #'vertico-insert)</span>
-                                          <span style="color: #7f7f7f;">;</span><span style="color: #7f7f7f;">(keymap-set vertico-map "TAB" #'minibuffer-complete)</span>
+    <span style="color: #7f7f7f;">;;</span><span style="color: #7f7f7f;">(keymap-set vertico-map "?" #'minibuffer-completion-help)</span>
+    <span style="color: #7f7f7f;">;;</span><span style="color: #7f7f7f;">(keymap-set vertico-map "M-TAB" #'vertico-insert)</span>
+    <span style="color: #7f7f7f;">;;</span><span style="color: #7f7f7f;">(keymap-set vertico-map "TAB" #'minibuffer-complete)</span>
     (vertico-mode))
 
   (<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">orderless</span>
@@ -1806,8 +1934,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Vterm_%28label_%3Dvterm%3D%29" class="outline-3">
-<h3 id="Vterm_%28label_%3Dvterm%3D%29"><span class="section-number-3">9.7.</span> Vterm (label <code>vterm</code>)</h3>
-<div class="outline-text-3" id="text-9-7">
+<h3 id="Vterm_%28label_%3Dvterm%3D%29"><span class="section-number-3">9.8.</span> Vterm (label <code>vterm</code>)</h3>
+<div class="outline-text-3" id="text-9-8">
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/vterm/vterm.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">vterm (terminal emulator) ::</span>
@@ -1840,8 +1968,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Markdown_mode_%28label_%3Dmarkdown%3D%29" class="outline-3">
-<h3 id="Markdown_mode_%28label_%3Dmarkdown%3D%29"><span class="section-number-3">9.8.</span> Markdown mode (label <code>markdown</code>)</h3>
-<div class="outline-text-3" id="text-9-8">
+<h3 id="Markdown_mode_%28label_%3Dmarkdown%3D%29"><span class="section-number-3">9.9.</span> Markdown mode (label <code>markdown</code>)</h3>
+<div class="outline-text-3" id="text-9-9">
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/markdown/markdown.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">markdown-mode</span>)
@@ -1850,8 +1978,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-SSH_agent_%28label_%3Dssh-agent%3D%29" class="outline-3">
-<h3 id="SSH_agent_%28label_%3Dssh-agent%3D%29"><span class="section-number-3">9.9.</span> SSH agent (label <code>ssh-agent</code>)</h3>
-<div class="outline-text-3" id="text-9-9">
+<h3 id="SSH_agent_%28label_%3Dssh-agent%3D%29"><span class="section-number-3">9.10.</span> SSH agent (label <code>ssh-agent</code>)</h3>
+<div class="outline-text-3" id="text-9-10">
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/ssh-agent/ssh-agent.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Load SSH / GPG keys from keychain agent</span>
@@ -1869,8 +1997,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Magit_%28label_%3Dmagit%3D%29" class="outline-3">
-<h3 id="Magit_%28label_%3Dmagit%3D%29"><span class="section-number-3">9.10.</span> Magit (label <code>magit</code>)</h3>
-<div class="outline-text-3" id="text-9-10">
+<h3 id="Magit_%28label_%3Dmagit%3D%29"><span class="section-number-3">9.11.</span> Magit (label <code>magit</code>)</h3>
+<div class="outline-text-3" id="text-9-11">
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/magit/magit.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Magit (git version control system) :: https://magit.vc/</span>
@@ -1886,8 +2014,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Scale_text_uniformly_in_all_buffers_%28label_%3Dtext-scale%3D%29" class="outline-3">
-<h3 id="Scale_text_uniformly_in_all_buffers_%28label_%3Dtext-scale%3D%29"><span class="section-number-3">9.11.</span> Scale text uniformly in all buffers (label <code>text-scale</code>)</h3>
-<div class="outline-text-3" id="text-9-11">
+<h3 id="Scale_text_uniformly_in_all_buffers_%28label_%3Dtext-scale%3D%29"><span class="section-number-3">9.12.</span> Scale text uniformly in all buffers (label <code>text-scale</code>)</h3>
+<div class="outline-text-3" id="text-9-12">
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/text-scale/text-scale.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/default-text-scale-reset</span> nil
@@ -1919,8 +2047,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Justfile_mode_%28label_%3Djust%3D%29" class="outline-3">
-<h3 id="Justfile_mode_%28label_%3Djust%3D%29"><span class="section-number-3">9.12.</span> Justfile mode (label <code>just</code>)</h3>
-<div class="outline-text-3" id="text-9-12">
+<h3 id="Justfile_mode_%28label_%3Djust%3D%29"><span class="section-number-3">9.13.</span> Justfile mode (label <code>just</code>)</h3>
+<div class="outline-text-3" id="text-9-13">
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/just/just.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">just-mode</span>
@@ -1930,8 +2058,8 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div>
 </div>
 <div id="outline-container-Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29" class="outline-3">
-<h3 id="Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29"><span class="section-number-3">9.13.</span> Latin words dictionary and word of the day (label <code>latin-words</code>)</h3>
-<div class="outline-text-3" id="text-9-13">
+<h3 id="Latin_words_dictionary_and_word_of_the_day_%28label_%3Dlatin-words%3D%29"><span class="section-number-3">9.14.</span> Latin words dictionary and word of the day (label <code>latin-words</code>)</h3>
+<div class="outline-text-3" id="text-9-14">
 <p>
 This package requires the system dependency <a href="https://jqlang.github.io/jq/download/">jq</a>.
 </p>
@@ -1950,8 +2078,8 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
 </div>
 </div>
 <div id="outline-container-Dashboard_%28label_%3Ddashboard%3D%29" class="outline-3">
-<h3 id="Dashboard_%28label_%3Ddashboard%3D%29"><span class="section-number-3">9.14.</span> Dashboard (label <code>dashboard</code>)</h3>
-<div class="outline-text-3" id="text-9-14">
+<h3 id="Dashboard_%28label_%3Ddashboard%3D%29"><span class="section-number-3">9.15.</span> Dashboard (label <code>dashboard</code>)</h3>
+<div class="outline-text-3" id="text-9-15">
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/dashboard/dashboard.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span>
@@ -1988,8 +2116,8 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
 </div>
 </div>
 <div id="outline-container-GPTel_%28label_%3Dgptel%3D%29" class="outline-3">
-<h3 id="GPTel_%28label_%3Dgptel%3D%29"><span class="section-number-3">9.15.</span> GPTel (label <code>gptel</code>)</h3>
-<div class="outline-text-3" id="text-9-15">
+<h3 id="GPTel_%28label_%3Dgptel%3D%29"><span class="section-number-3">9.16.</span> GPTel (label <code>gptel</code>)</h3>
+<div class="outline-text-3" id="text-9-16">
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/gptel/gptel.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span>
@@ -2055,8 +2183,8 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
 </div>
 </div>
 <div id="outline-container-LSP_%28label_%3Dlsp%3D%29" class="outline-3">
-<h3 id="LSP_%28label_%3Dlsp%3D%29"><span class="section-number-3">9.16.</span> LSP (label <code>lsp</code>)</h3>
-<div class="outline-text-3" id="text-9-16">
+<h3 id="LSP_%28label_%3Dlsp%3D%29"><span class="section-number-3">9.17.</span> LSP (label <code>lsp</code>)</h3>
+<div class="outline-text-3" id="text-9-17">
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/lsp/lsp.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">LSP mode :: https://emacs-lsp.github.io/lsp-mode/</span>
@@ -2087,8 +2215,8 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
 </div>
 </div>
 <div id="outline-container-Python_%28label_%3Dpython%3D%29" class="outline-3">
-<h3 id="Python_%28label_%3Dpython%3D%29"><span class="section-number-3">9.17.</span> Python (label <code>python</code>)</h3>
-<div class="outline-text-3" id="text-9-17">
+<h3 id="Python_%28label_%3Dpython%3D%29"><span class="section-number-3">9.18.</span> Python (label <code>python</code>)</h3>
+<div class="outline-text-3" id="text-9-18">
 <ul class="org-ul">
 <li><a href="https://github.com/astral-sh/uv">uv</a> - The uv package manager is installed from source when
 requested. Please be patient while it builds during its initial
@@ -2152,8 +2280,8 @@ load.</li>
 </div>
 </div>
 <div id="outline-container-Avy_%28label_%3Davy%3D%29" class="outline-3">
-<h3 id="Avy_%28label_%3Davy%3D%29"><span class="section-number-3">9.18.</span> Avy (label <code>avy</code>)</h3>
-<div class="outline-text-3" id="text-9-18">
+<h3 id="Avy_%28label_%3Davy%3D%29"><span class="section-number-3">9.19.</span> Avy (label <code>avy</code>)</h3>
+<div class="outline-text-3" id="text-9-19">
 <ul class="org-ul">
 <li><a href="https://github.com/abo-abo/avy">avy</a> lets you jump to any word you can see in your Emacs frame.</li>
 </ul>
@@ -2174,8 +2302,8 @@ load.</li>
 </div>
 </div>
 <div id="outline-container-Treesit_%28label_%3Dtreesit%3D%29" class="outline-3">
-<h3 id="Treesit_%28label_%3Dtreesit%3D%29"><span class="section-number-3">9.19.</span> Treesit (label <code>treesit</code>)</h3>
-<div class="outline-text-3" id="text-9-19">
+<h3 id="Treesit_%28label_%3Dtreesit%3D%29"><span class="section-number-3">9.20.</span> Treesit (label <code>treesit</code>)</h3>
+<div class="outline-text-3" id="text-9-20">
 <p>
 Treesit is an Emacs builtin language syntax parser.
 </p>
@@ -2218,8 +2346,8 @@ There are several third party modules to configure and enhance it:
 </div>
 </div>
 <div id="outline-container-S3-publish_%28label_%3Ds3-publish%3D%29" class="outline-3">
-<h3 id="S3-publish_%28label_%3Ds3-publish%3D%29"><span class="section-number-3">9.20.</span> S3-publish (label <code>s3-publish</code>)</h3>
-<div class="outline-text-3" id="text-9-20">
+<h3 id="S3-publish_%28label_%3Ds3-publish%3D%29"><span class="section-number-3">9.21.</span> S3-publish (label <code>s3-publish</code>)</h3>
+<div class="outline-text-3" id="text-9-21">
 <p>
 <a href="https://github.com/EnigmaCurry/s3-publish.el">s3-publish.el</a> is a quick/temporary way to publish Emacs buffers,
 regions, and files to S3 storage and the web.
@@ -2335,8 +2463,7 @@ enabled):
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
 <p class="email">Email: <a href="mailto:ryan@enigmacurry.com">ryan@enigmacurry.com</a></p>
-<p class="date">Last Modified: 2025-02-11 Tue 23:40</p>
-<p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.8-pre)</p>
+<p class="date">Last Modified: 2025-02-12 Wed 01:12</p>
 </div>
 </body>
 </html>

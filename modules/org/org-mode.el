@@ -1,4 +1,7 @@
+;; hydra (rapid fire mnemonic keybindings) :: https://github.com/abo-abo/hydra
+(use-package hydra)
 (use-package org
+  :after hydra
   :hook ((org-mode . flyspell-mode)
          (org-mode . unpackaged/org-export-html-with-useful-ids-mode))
   :custom
@@ -7,10 +10,11 @@
   (org-html-postamble 'auto)
   (org-export-with-author t)
   (org-export-with-date t)
-  (org-export-with-creator t)
+  (org-export-with-creator nil)
   (org-export-with-email t)
   (org-export-timestamp-file t)
   (org-export-allow-bind-keywords t)
+  (org-directory "~/Org")
   :general
   ("s-<up>" 'org-previous-visible-heading)
   ("s-<down>" 'org-next-visible-heading)
@@ -26,10 +30,27 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((python . t) (scheme . t) (shell . t) (ditaa . t)))
+  :init
+  ;; Hydra for commonly used org commands:
+  (defhydra
+    hydra-org
+    (global-map "C-c o" :exit t color pink :hint nil)
+    "Org commands:"
+    ("o" my/open-org-file)
+    ("l" org-store-link "store link")
+    ("i" org-insert-link "insert link")
+    ("a" org-agenda "agenda")
+    ("c" org-capture "capture")
+    ("m" org-info "read info manual")
+    ("e" org-export-dispatch "export")
+    ("p" org-preview-html-mode "toggle preview mode")
+    ("s" org-insert-source-code-block "insert source code block"))
   )
 (require 'org-tempo) ; required for Structure Templates
                                         ; See https://orgmode.org/manual/Structure-Templates.html
 (use-package htmlize) ; required for colorized HTML code blocks
+(use-package org-preview-html :after org)
+(use-package ob-async)
 (progn ; electic pairs for org-mode
   (modify-syntax-entry ?/ "\"" org-mode-syntax-table)
   (modify-syntax-entry ?* "\"" org-mode-syntax-table)

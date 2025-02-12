@@ -4,7 +4,6 @@
 ;; Nice defaults
 (setq-default confirm-kill-emacs #'yes-or-no-p)
 (setq-default vc-follow-symlinks t)
-(setq-default show-trailing-whitespace t)
 (setq-default indicate-empty-lines t)
 (setq-default indicate-buffer-boundaries 'left)
 (setq-default sentence-end-double-space nil)

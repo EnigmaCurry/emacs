@@ -1,7 +1,6 @@
 #+TITLE: Modular GNU Emacs Configuration
 #+LANGUAGE: en
 #+PROPERTY: header-args :results none :eval yes
-
 #+SETUPFILE: theme/simple_dark.theme
 #+OPTIONS: noweb:t
 
@@ -298,7 +297,6 @@ environments. Only Emacs builtins will be allowed here:
   ;; Nice defaults
   (setq-default confirm-kill-emacs #'yes-or-no-p)
   (setq-default vc-follow-symlinks t)
-  (setq-default show-trailing-whitespace t)
   (setq-default indicate-empty-lines t)
   (setq-default indicate-buffer-boundaries 'left)
   (setq-default sentence-end-double-space nil)
@@ -401,6 +399,7 @@ machine only.
   ;; Basic programming mode settings
   (setq-default display-fill-column-indicator-column 80)
   (add-hook 'prog-mode-hook (lambda ()
+                              (setq show-trailing-whitespace t)
                               (display-fill-column-indicator-mode 1)
                               (display-line-numbers-mode 1)))
 #+end_src
@@ -867,7 +866,7 @@ selection.
 
 *** Preview fonts
 
-[[https://protesilaos.com/emacs/show-font][show-font]]
+ * [[https://protesilaos.com/emacs/show-font][show-font]]
 
 #+begin_src emacs-lisp :tangle "modules/fonts/fonts.el" :mkdirp yes
   (use-package show-font)
@@ -882,7 +881,7 @@ selection.
 #+end_src
 ** General keybindings manager (label =general=)
 
-See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.el]]
+ * [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.el]]
 
 #+begin_src emacs-lisp :tangle "modules/general/general.el" :mkdirp yes
   (use-package
@@ -930,10 +929,23 @@ See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.e
     (general-define-key
      :keymaps 'dired-mode-map "C-c C-q" 'dired-toggle-read-only))
 #+end_src
+** Which key (label =which-key=)
+
+ * [[https://github.com/justbur/emacs-which-key][which-key]]
+
+#+begin_src emacs-lisp :tangle "modules/which-key/which-key.el" :mkdirp yes
+  ;; which-key (shows keyboard shortcut completions) :: https://github.com/justbur/emacs-which-key
+  (use-package which-key :config (which-key-mode))
+#+end_src
 ** Org mode (label =org=)
 
+ * [[https://orgmode.org/][org-mode]]
+   
 #+begin_src emacs-lisp :tangle "modules/org/org-mode.el"
+  ;; hydra (rapid fire mnemonic keybindings) :: https://github.com/abo-abo/hydra
+  (use-package hydra)
   (use-package org
+    :after hydra
     :hook ((org-mode . flyspell-mode)
            (org-mode . unpackaged/org-export-html-with-useful-ids-mode))
     :custom
@@ -942,10 +954,11 @@ See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.e
     (org-html-postamble 'auto)
     (org-export-with-author t)
     (org-export-with-date t)
-    (org-export-with-creator t)
+    (org-export-with-creator nil)
     (org-export-with-email t)
     (org-export-timestamp-file t)
     (org-export-allow-bind-keywords t)
+    (org-directory "~/Org")
     :general
     ("s-<up>" 'org-previous-visible-heading)
     ("s-<down>" 'org-next-visible-heading)
@@ -961,10 +974,27 @@ See [[https://github.com/noctuid/general.el?tab=readme-ov-file#readme][general.e
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((python . t) (scheme . t) (shell . t) (ditaa . t)))
+    :init
+    ;; Hydra for commonly used org commands:
+    (defhydra
+      hydra-org
+      (global-map "C-c o" :exit t color pink :hint nil)
+      "Org commands:"
+      ("o" my/open-org-file)
+      ("l" org-store-link "store link")
+      ("i" org-insert-link "insert link")
+      ("a" org-agenda "agenda")
+      ("c" org-capture "capture")
+      ("m" org-info "read info manual")
+      ("e" org-export-dispatch "export")
+      ("p" org-preview-html-mode "toggle preview mode")
+      ("s" org-insert-source-code-block "insert source code block"))
     )
   (require 'org-tempo) ; required for Structure Templates
                                           ; See https://orgmode.org/manual/Structure-Templates.html
   (use-package htmlize) ; required for colorized HTML code blocks
+  (use-package org-preview-html :after org)
+  (use-package ob-async)
   (progn ; electic pairs for org-mode
     (modify-syntax-entry ?/ "\"" org-mode-syntax-table)
     (modify-syntax-entry ?* "\"" org-mode-syntax-table)
@@ -1172,6 +1202,84 @@ This function tangles this file (=emacs.org=) and exports an HTML page
         ref)))
 #+end_src
 
+*** Template for new org files
+#+begin_src emacs-lisp :tangle "modules/org-mode/org-mode.el" :mkdirp yes
+(defcustom my/org-template
+  (concat "#+TITLE: {{title}}\n"
+          "#+PROPERTY: header-args :results none :eval yes\n"
+          "#+OPTIONS: noweb:t\n\n")
+  "My default Org template.")
+
+(defun my/open-org-file ()
+  "Open a new Org file with the default notes template and create a theme file.
+This function does the following:
+1. Opens a new Org file in the directory ‘org-directory/notes’ and inserts the template
+   (replacing placeholders like {{title}}, {{date}}, etc.).
+2. If the directory ‘org-directory/notes’ does not exist, it is created.
+3. In the same directory, it creates a file named 'simple_dark.theme'. This file
+   is populated with a series of #+HTML_HEAD: lines that wrap the contents of your CSS
+   file (located at `user-emacs-directory/themes/simple_dark.css`) between a starting
+   <style> tag and a closing </style> tag.
+4. The Org file then includes a line: \"#+SETUPFILE: simple_dark.theme\"
+   so that when you export, Org loads the theme file."
+  (interactive)
+  (let* ((formatted-date (format-time-string "%Y-%m-%d"))
+         (user-title (read-string "Title for new note: "))
+         (safe-title (replace-regexp-in-string " " "-" (downcase user-title)))
+         ;; Define the notes directory and ensure it exists.
+         (notes-dir (file-name-as-directory (concat org-directory "/notes")))
+         (_ (unless (file-directory-p notes-dir)
+              (make-directory notes-dir t)))
+         (filename (format "%s/%s-%s.org"
+                           notes-dir
+                           (format-time-string "%Y-%m-%d-%H-%M-%S")
+                           safe-title))
+         (section (read-string "Section: " formatted-date))
+         (title-section (mapconcat #'capitalize (split-string section " ") " ")))
+    (find-file filename)
+    (when (zerop (buffer-size))
+      ;; Insert the Org template with placeholders replaced.
+      (insert
+       (replace-regexp-in-string
+        "{{title}}"
+        user-title
+        (replace-regexp-in-string
+         "{{date}}"
+         formatted-date
+         (replace-regexp-in-string
+          "{{section}}"
+          section
+          (replace-regexp-in-string
+           "{{safe-title}}"
+           safe-title
+           (replace-regexp-in-string
+            "{{title-section}}"
+            title-section
+            my/org-template))))))
+      ;; Create the theme file.
+      (let* ((theme-file (expand-file-name "simple_dark.theme"
+                                             (file-name-directory filename)))
+             (css-file (expand-file-name "theme/simple_dark.css"
+                                          user-emacs-directory)))
+        (with-temp-file theme-file
+          ;; Start the CSS block.
+          (insert "#+HTML_HEAD: <style>\n")
+          (if (file-exists-p css-file)
+              (let ((css-content (with-temp-buffer
+                                   (insert-file-contents css-file)
+                                   (buffer-string))))
+                (dolist (line (split-string css-content "\n"))
+                  (insert (format "#+HTML_HEAD: %s\n" line))))
+            (insert "#+HTML_HEAD: /* CSS file not found */\n"))
+          ;; End the CSS block.
+          (insert "#+HTML_HEAD: </style>\n"))
+        (message "Theme file created at: %s" theme-file)
+        ;; Insert a reference to the theme file into the Org file.
+        (insert (format "\n#+SETUPFILE: %s\n"
+                        (file-name-nondirectory theme-file)))))))
+
+
+#+end_src
 ** Completion (label =completion=)
 
  * [[https://github.com/minad/vertico][vertico]]
@@ -1207,9 +1315,9 @@ This function tangles this file (=emacs.org=) and exports an HTML page
       (vertico-resize 'grow-only)
       (vertico-cycle nil)
       :init
-                                            ;(keymap-set vertico-map "?" #'minibuffer-completion-help)
-                                            ;(keymap-set vertico-map "M-TAB" #'vertico-insert)
-                                            ;(keymap-set vertico-map "TAB" #'minibuffer-complete)
+      ;;(keymap-set vertico-map "?" #'minibuffer-completion-help)
+      ;;(keymap-set vertico-map "M-TAB" #'vertico-insert)
+      ;;(keymap-set vertico-map "TAB" #'minibuffer-complete)
       (vertico-mode))
 
     (use-package orderless

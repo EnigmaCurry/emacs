@@ -25,9 +25,9 @@
     (vertico-resize 'grow-only)
     (vertico-cycle nil)
     :init
-                                          ;(keymap-set vertico-map "?" #'minibuffer-completion-help)
-                                          ;(keymap-set vertico-map "M-TAB" #'vertico-insert)
-                                          ;(keymap-set vertico-map "TAB" #'minibuffer-complete)
+    ;;(keymap-set vertico-map "?" #'minibuffer-completion-help)
+    ;;(keymap-set vertico-map "M-TAB" #'vertico-insert)
+    ;;(keymap-set vertico-map "TAB" #'minibuffer-complete)
     (vertico-mode))
 
   (use-package orderless
