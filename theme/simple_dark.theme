@@ -1,9 +1,15 @@
 #+HTML_HEAD: <style>
+#+HTML_HEAD: html, body {
+#+HTML_HEAD:     margin: 0;
+#+HTML_HEAD:     padding: 0;
+#+HTML_HEAD:     min-height: 100vh;
+#+HTML_HEAD: }
 #+HTML_HEAD: body {
-#+HTML_HEAD: 	margin: 0;
 #+HTML_HEAD: 	background: #121212;
 #+HTML_HEAD: 	color: #e0e0e0;
 #+HTML_HEAD: 	font-family: "Bitstream Vera Sans",Verdana,sans-serif;
+#+HTML_HEAD:     display: flex;
+#+HTML_HEAD:     flex-direction: column;
 #+HTML_HEAD: }
 #+HTML_HEAD: code {
 #+HTML_HEAD: 	color: #ffd269;
@@ -15,6 +21,9 @@
 #+HTML_HEAD: 	border: 1px solid #666;
 #+HTML_HEAD: 	background: #1e1e1e;
 #+HTML_HEAD: 	padding: 2em;
+#+HTML_HEAD:     max-width: none;
+#+HTML_HEAD:     margin: 0;
+#+HTML_HEAD:     margin-bottom: auto;
 #+HTML_HEAD: }
 #+HTML_HEAD: a {
 #+HTML_HEAD: 	color: #62afff;

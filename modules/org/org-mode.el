@@ -11,7 +11,7 @@
   (org-export-with-author t)
   (org-export-with-date t)
   (org-export-with-creator nil)
-  (org-export-with-email t)
+  (org-export-with-email nil)
   (org-export-timestamp-file t)
   (org-export-allow-bind-keywords t)
   (org-directory "~/Org")
@@ -79,7 +79,6 @@
           (make-directory export-emacs-dir t))
         (my/org-create-theme-file)
         (make-symbolic-link "index.html" "emacs.html" t)
-        (make-symbolic-link (expand-file-name "emacs.org" user-emacs-directory) (expand-file-name "emacs.org" export-emacs-dir) t)
         (make-symbolic-link (expand-file-name "index.html" user-emacs-directory) (expand-file-name "index.html" export-emacs-dir) t)
         (make-symbolic-link (expand-file-name "index.html" user-emacs-directory) (expand-file-name "emacs.html" export-emacs-dir) t)
         (make-symbolic-link (expand-file-name "early-init.el" user-emacs-directory) (expand-file-name "early-init.el" export-emacs-dir) t)
@@ -129,7 +128,7 @@ INFO is the export options plist."
 (defvar my/org-html-server-port "7776")
 (defun my/org-html-server (&optional redirect)
   "Start a local live-server for my org notes.
-If the server is already running, use xdg-open to open the URL."
+  If the server is already running, use xdg-open to open the URL."
   (interactive)
   (let* ((host my/org-html-server-host)
          (port my/org-html-server-port)
@@ -155,3 +154,16 @@ If the server is already running, use xdg-open to open the URL."
   "Start a local live-server and redirect to the emacs page"
   (interactive)
   (my/org-html-server "emacs"))
+(defun my/org-notes-html-server ()
+  "Start a local live-server and redirect to the current Org note file.
+If the current buffer is an Org file in `my/org-notes-directory`, tangle
+it and export to HTML before serving it."
+  (interactive)
+  (let ((org-file (buffer-file-name)))
+    (if (and org-file
+             (string= "org" (file-name-extension org-file))
+             (string-prefix-p (expand-file-name my/org-notes-directory) (expand-file-name org-file)))
+        (let ((html-file (concat (file-name-sans-extension org-file) ".html")))
+          (my/org-babel-tangle org-file)
+          (my/org-html-server html-file))
+      (message "Current buffer is not an Org file in %s" my/org-notes-directory))))

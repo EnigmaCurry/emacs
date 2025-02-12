@@ -6,11 +6,11 @@
 
 (defun my/org-create-theme-file ()
   "Create the theme file in the 'theme' directory under `user-emacs-directory`.
-This file wraps the contents of the theme CSS (also in the theme directory)
-with HTML <style> tags for use with Org export.
-Additionally, create a symlink to the .theme file in `my/org-notes-directory`.
-For example, if `my/org-html-theme` is \"simple_dark\", then
-~/Org/notes/simple_dark.theme will point to ~/.emacs.d/theme/simple_dark.theme."
+  This file wraps the contents of the theme CSS (also in the theme directory)
+  with HTML <style> tags for use with Org export.
+  Additionally, create a symlink to the .theme file in `my/org-notes-directory`.
+  For example, if `my/org-html-theme` is \"simple_dark\", then
+  ~/Org/notes/simple_dark.theme will point to ~/.emacs.d/theme/simple_dark.theme."
   (let* ((theme-dir (expand-file-name "theme" user-emacs-directory))
          (theme-file (expand-file-name (concat my/org-html-theme ".theme") theme-dir))
          (css-file (expand-file-name (concat my/org-html-theme ".css") theme-dir)))
@@ -37,14 +37,14 @@ For example, if `my/org-html-theme` is \"simple_dark\", then
 
 (defun my/org-open-file ()
   "Open a new Org file with the default notes template and include the theme file.
-  This function does the following:
-  1. Opens a new Org file in `org-directory/notes` and inserts the template,
-     replacing placeholders like {{title}}, {{date}}, etc.
-  2. If the directory `org-directory/notes` does not exist, it is created.
-  3. It creates (or updates) the theme file via `my/org-create-theme-file`, which is
-     stored in `user-emacs-directory/theme/{{theme}}.theme`.
-  4. The Org file then includes a line: \"#+SETUPFILE: {{theme}}.theme\" so that
-     when you export, Org loads the theme file."
+    This function does the following:
+    1. Opens a new Org file in `org-directory/notes` and inserts the template,
+       replacing placeholders like {{title}}, {{date}}, etc.
+    2. If the directory `org-directory/notes` does not exist, it is created.
+    3. It creates (or updates) the theme file via `my/org-create-theme-file`, which is
+       stored in `user-emacs-directory/theme/{{theme}}.theme`.
+    4. The Org file then includes a line: \"#+SETUPFILE: {{theme}}.theme\" so that
+       when you export, Org loads the theme file."
   (interactive)
   (let* ((formatted-date (format-time-string "%Y-%m-%d"))
          (user-title (read-string "Title for new note: "))
@@ -83,3 +83,11 @@ For example, if `my/org-html-theme` is \"simple_dark\", then
       (let ((theme-file (my/org-create-theme-file)))
         (insert (format "#+SETUPFILE: %s\n\n"
                         (file-name-nondirectory theme-file)))))))
+
+(defun my/org-babel-tangle (org-file)
+  "Tangle and export an Org file to HTML."
+  (when (file-exists-p org-file)
+    (with-current-buffer (find-file-noselect org-file)
+      (org-babel-tangle)
+      (my/org-create-theme-file)
+      (org-export-to-file 'html (org-export-output-file-name ".html" nil)))))

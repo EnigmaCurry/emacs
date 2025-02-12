@@ -1,8 +1,14 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
 body {
-	margin: 0;
 	background: #121212;
 	color: #e0e0e0;
 	font-family: "Bitstream Vera Sans",Verdana,sans-serif;
+    display: flex;
+    flex-direction: column;
 }
 
 code {
@@ -16,6 +22,9 @@ div#content {
 	border: 1px solid #666;
 	background: #1e1e1e;
 	padding: 2em;
+    max-width: none;
+    margin: 0;
+    margin-bottom: auto;
 }
 
 a {
@@ -111,7 +120,6 @@ pre {
 	width: max-content;
     border-bottom: 2px solid #573b3b;
 }
-
 
 .verbatim-caption {
 	border: 1px solid #555;
