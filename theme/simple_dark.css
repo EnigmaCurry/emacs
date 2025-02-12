@@ -242,10 +242,18 @@ details {
 .code-block-header {
 	background: #0d0d0d;
     border-bottom: 2px solid #573b3b;
-	padding: 0 1em 0.2em 0.5em;
+	padding: 0.1em 1em 0.2em 0.5em;
 	font-family: sans-serif;
 	font-weight: bold;
 	font-size: 0.9em;
+}
+
+.code-block-header.shell {
+    color: #27d75b;
+}
+
+.code-block-header.lang {
+    color: #606c71;
 }
 
 .code-block-container pre {

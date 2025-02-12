@@ -1009,19 +1009,31 @@ This function tangles this file (=emacs.org=) and exports an HTML page
           ))))
   (with-eval-after-load 'ox-html
     (defun my/org-html-src-block (orig-fun src-block contents info)
-      "Advice for `org-html-src-block' to add a header showing the tangle file.
+      "Advice for `org-html-src-block' to add a header.
+  If a :tangle header is specified (and not \"no\"), it shows the tangle file.
+  If the block is a shell block, it prints 'Run in Bash shell:'.
+  Otherwise, it prints the code block's language.
   ORIG-FUN is the original function; SRC-BLOCK is the source block;
   INFO is the export options plist."
       (let* ((parameters (org-element-property :parameters src-block))
              (header-args (org-babel-parse-header-arguments parameters))
              (tangle (cdr (assoc :tangle header-args)))
-             (header (if (and tangle (not (string= tangle "no")))
-                         (format "<div class=\"code-block-header\"><span class=\"org-parameter\">:tangle</span> <span class=\"filename\">%s</span></div>\n"
-                                 (org-html-encode-plain-text tangle))
-                       ""))
+             (lang (org-element-property :language src-block))
+             (header (cond
+                      ;; Use :tangle header if specified and not "no"
+                      ((and tangle (not (string= tangle "no")))
+                       (format "<div class=\"code-block-header tangle\"><span class=\"org-parameter\">:tangle</span> <span class=\"filename\">%s</span></div>\n"
+                               (org-html-encode-plain-text tangle)))
+                      ;; For shell blocks, print a specific message.
+                      ((string= lang "shell")
+                       "<div class=\"code-block-header shell\">Run this in your shell ::</div>\n")
+                      ;; Otherwise, show the language type.
+                      (lang
+                       (format "<div class=\"code-block-header lang\">(untangled) %s</div>\n"
+                               (org-html-encode-plain-text lang)))
+                      (t "")))
              (code (funcall orig-fun src-block contents info)))
         (if (not (string= header ""))
-            ;; Wrap both header and code block in a container.
             (format "<div class=\"code-block-container\">%s%s</div>" header code)
           code)))
     (advice-add 'org-html-src-block :around #'my/org-html-src-block))
