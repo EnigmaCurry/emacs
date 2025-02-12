@@ -31,12 +31,13 @@
    'org-babel-load-languages
    '((python . t) (scheme . t) (shell . t) (ditaa . t)))
   :init
+  (defcustom my/org-notes-directory "~/Org/notes" "my org notes directory")
   ;; Hydra for commonly used org commands:
   (defhydra
     hydra-org
     (global-map "C-c o" :exit t color pink :hint nil)
     "Org commands:"
-    ("o" my/open-org-file)
+    ("o" my/org-open-file)
     ("l" org-store-link "store link")
     ("i" org-insert-link "insert link")
     ("a" org-agenda "agenda")
@@ -59,11 +60,13 @@
   (modify-syntax-entry ?_ "\"" org-mode-syntax-table)
   (modify-syntax-entry ?~ "\"" org-mode-syntax-table))
 
+(defcustom my/org-html-theme "simple_dark" "the name of my custom org theme (CSS)")
 (defun my/emacs-org-tangle ()
   "Tangle all code blocks in 'emacs.org' and export this document to HTML."
   (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))
          (modules-dir (expand-file-name "modules" user-emacs-directory))
-         (export-dir (expand-file-name "export" user-emacs-directory))
+         (export-dir (expand-file-name my/org-notes-directory))
+         (export-emacs-dir (expand-file-name "emacs" export-dir))
          (export-file (expand-file-name "index.html" user-emacs-directory)))
     (when (file-exists-p org-file)
       (with-current-buffer (find-file-noselect org-file)
@@ -71,21 +74,20 @@
         (org-babel-tangle)
         (org-export-to-file 'html export-file)
         (unless (file-directory-p export-dir)
-          (make-directory export-dir))
+          (make-directory export-dir t))
+        (unless (file-directory-p export-emacs-dir)
+          (make-directory export-emacs-dir t))
+        (my/org-create-theme-file)
         (make-symbolic-link "index.html" "emacs.html" t)
-        (make-symbolic-link "../index.html" "export/index.html" t)
-        (make-symbolic-link "../favicon.ico" "export/favicon.ico" t)
-        (make-symbolic-link "../index.html" "export/emacs.html" t)
-        (make-symbolic-link "../modules" "export/modules" t)
-        (make-symbolic-link "../theme" "export/theme" t)
-        (make-symbolic-link "../LICENSE.txt" "export/LICENSE.txt" t)
-        (make-symbolic-link "../LICENSE_GPLv3.txt" "export/LICENSE_GPLv3.txt" t)
-        (make-symbolic-link "../early-init.el" "export/early-init.el" t)
-        (make-symbolic-link "../init.el" "export/init.el" t)
-        ;; No reason to save the buffer again, but maybe in the future,
-        ;; we will want to run code blocks automatically and capture output?
-        ;;(save-buffer)
-        ))))
+        (make-symbolic-link (expand-file-name "emacs.org" user-emacs-directory) (expand-file-name "emacs.org" export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name "index.html" user-emacs-directory) (expand-file-name "index.html" export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name "index.html" user-emacs-directory) (expand-file-name "emacs.html" export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name "early-init.el" user-emacs-directory) (expand-file-name "early-init.el" export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name "init.el" user-emacs-directory) (expand-file-name "init.el" export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name "modules" user-emacs-directory) (expand-file-name "modules" export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name "LICENSE.txt" user-emacs-directory) (expand-file-name "LICENSE.txt" export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name "LICENSE_GPLv3.txt" user-emacs-directory) (expand-file-name "LICENSE_GPLv3.txt" export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name "theme" user-emacs-directory) (expand-file-name "theme" export-dir) t)))))
 (with-eval-after-load 'ox-html
   (defun my/org-html-src-block (orig-fun src-block contents info)
     "Advice for `org-html-src-block' to add a header.
@@ -123,23 +125,33 @@ INFO is the export options plist."
              '(org-confirm-babel-evaluate))
 
 (my/cargo-dependency "live-server") ; defers install of live-server Rust crate
-(defvar my/emacs-org-html-server-host "127.0.0.1") ; Set to 0.0.0.0 to serve publicly
-(defvar my/emacs-org-html-server-port "7776")
-(defun my/emacs-org-html-server ()
-  "Start a local live-server for the Emacs org HTML export."
+(defvar my/org-html-server-host "127.0.0.1") ; Set to 0.0.0.0 to serve publicly
+(defvar my/org-html-server-port "7776")
+(defun my/org-html-server (&optional redirect)
+  "Start a local live-server for my org notes.
+If the server is already running, use xdg-open to open the URL."
   (interactive)
-  (let ((live-server-path (executable-find "live-server"))
-        (log-buffer-name "*my/emacs/org-html-server*"))
-    (with-current-buffer (get-buffer-create log-buffer-name)
-      (if live-server-path
-          (progn
-            (message "live-server found at: %s" live-server-path)
-            (let ((host "127.0.0.1")  ; Set to "0.0.0.0" to serve publicly
-                  (port "7776")
-                  (html-file "index.html")
-                  (export-dir (expand-file-name "export" user-emacs-directory)))
-              (start-process "live-server" log-buffer-name "live-server"
-                             "-H" host "-p" port "-o" "" export-dir)
-              (message "Started live-server on http://%s:%s" host port)))
-        (unless (executable-find "live-server")
-          (message "live-server NOT found - please run: cargo install live-server"))))))
+  (let* ((host my/org-html-server-host)
+         (port my/org-html-server-port)
+         (redirect (or redirect ""))
+         (url (format "http://%s:%s/%s" host port redirect))
+         (live-server-proc (get-process "live-server")))
+    (if (and live-server-proc (process-live-p live-server-proc))
+        (progn
+          (message "live-server already running; opening %s" url)
+          (start-process "xdg-open" nil "xdg-open" url))
+      (let ((live-server-path (executable-find "live-server"))
+            (log-buffer-name "*my/org-html-server*")
+            (export-dir (expand-file-name my/org-notes-directory)))
+        (with-current-buffer (get-buffer-create log-buffer-name)
+          (if live-server-path
+              (progn
+                (message "live-server found at: %s" live-server-path)
+                (start-process "live-server" log-buffer-name "live-server"
+                               "-H" host "-p" port "-o" redirect export-dir)
+                (message "Started live-server on %s" url))
+            (message "live-server NOT found – please run: cargo install live-server")))))))
+(defun my/emacs-org-html-server ()
+  "Start a local live-server and redirect to the emacs page"
+  (interactive)
+  (my/org-html-server "emacs"))

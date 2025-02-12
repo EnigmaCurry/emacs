@@ -1,21 +1,50 @@
 (defcustom my/org-template
   (concat "#+TITLE: {{title}}\n"
           "#+PROPERTY: header-args :results none :eval yes\n"
-          "#+OPTIONS: noweb:t\n\n")
+          "#+OPTIONS: noweb:t\n")
   "My default Org template.")
 
-(defun my/open-org-file ()
-  "Open a new Org file with the default notes template and create a theme file.
-This function does the following:
-1. Opens a new Org file in the directory ‘org-directory/notes’ and inserts the template
-   (replacing placeholders like {{title}}, {{date}}, etc.).
-2. If the directory ‘org-directory/notes’ does not exist, it is created.
-3. In the same directory, it creates a file named 'simple_dark.theme'. This file
-   is populated with a series of #+HTML_HEAD: lines that wrap the contents of your CSS
-   file (located at `user-emacs-directory/themes/simple_dark.css`) between a starting
-   <style> tag and a closing </style> tag.
-4. The Org file then includes a line: \"#+SETUPFILE: simple_dark.theme\"
-   so that when you export, Org loads the theme file."
+(defun my/org-create-theme-file ()
+  "Create the theme file in the 'theme' directory under `user-emacs-directory`.
+This file wraps the contents of the theme CSS (also in the theme directory)
+with HTML <style> tags for use with Org export.
+Additionally, create a symlink to the .theme file in `my/org-notes-directory`.
+For example, if `my/org-html-theme` is \"simple_dark\", then
+~/Org/notes/simple_dark.theme will point to ~/.emacs.d/theme/simple_dark.theme."
+  (let* ((theme-dir (expand-file-name "theme" user-emacs-directory))
+         (theme-file (expand-file-name (concat my/org-html-theme ".theme") theme-dir))
+         (css-file (expand-file-name (concat my/org-html-theme ".css") theme-dir)))
+    (unless (file-directory-p theme-dir)
+      (make-directory theme-dir t))
+    (with-temp-file theme-file
+      (insert "#+HTML_HEAD: <style>\n")
+      (if (file-exists-p css-file)
+          (let ((css-content (with-temp-buffer
+                               (insert-file-contents css-file)
+                               (buffer-string))))
+            (dolist (line (split-string css-content "\n" t))
+              (insert (format "#+HTML_HEAD: %s\n" line))))
+        (insert "#+HTML_HEAD: /* CSS file not found */\n"))
+      (insert "#+HTML_HEAD: </style>\n"))
+    (let ((symlink (expand-file-name (concat my/org-html-theme ".theme")
+                                     my/org-notes-directory)))
+      (unless (file-directory-p my/org-notes-directory)
+        (make-directory my/org-notes-directory t))
+      (when (file-exists-p symlink)
+        (delete-file symlink))
+      (make-symbolic-link theme-file symlink))
+    theme-file))
+
+(defun my/org-open-file ()
+  "Open a new Org file with the default notes template and include the theme file.
+  This function does the following:
+  1. Opens a new Org file in `org-directory/notes` and inserts the template,
+     replacing placeholders like {{title}}, {{date}}, etc.
+  2. If the directory `org-directory/notes` does not exist, it is created.
+  3. It creates (or updates) the theme file via `my/org-create-theme-file`, which is
+     stored in `user-emacs-directory/theme/{{theme}}.theme`.
+  4. The Org file then includes a line: \"#+SETUPFILE: {{theme}}.theme\" so that
+     when you export, Org loads the theme file."
   (interactive)
   (let* ((formatted-date (format-time-string "%Y-%m-%d"))
          (user-title (read-string "Title for new note: "))
@@ -50,24 +79,7 @@ This function does the following:
             "{{title-section}}"
             title-section
             my/org-template))))))
-      ;; Create the theme file.
-      (let* ((theme-file (expand-file-name "simple_dark.theme"
-                                             (file-name-directory filename)))
-             (css-file (expand-file-name "theme/simple_dark.css"
-                                          user-emacs-directory)))
-        (with-temp-file theme-file
-          ;; Start the CSS block.
-          (insert "#+HTML_HEAD: <style>\n")
-          (if (file-exists-p css-file)
-              (let ((css-content (with-temp-buffer
-                                   (insert-file-contents css-file)
-                                   (buffer-string))))
-                (dolist (line (split-string css-content "\n"))
-                  (insert (format "#+HTML_HEAD: %s\n" line))))
-            (insert "#+HTML_HEAD: /* CSS file not found */\n"))
-          ;; End the CSS block.
-          (insert "#+HTML_HEAD: </style>\n"))
-        (message "Theme file created at: %s" theme-file)
-        ;; Insert a reference to the theme file into the Org file.
-        (insert (format "\n#+SETUPFILE: %s\n"
+      ;; Create the theme file and insert the setup line.
+      (let ((theme-file (my/org-create-theme-file)))
+        (insert (format "#+SETUPFILE: %s\n\n"
                         (file-name-nondirectory theme-file)))))))

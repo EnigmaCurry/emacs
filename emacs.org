@@ -1,6 +1,7 @@
 #+TITLE: Modular GNU Emacs Configuration
 #+LANGUAGE: en
 #+PROPERTY: header-args :results none :eval yes
+#+SETUPFILE: theme/emacs.theme
 #+SETUPFILE: theme/simple_dark.theme
 #+OPTIONS: noweb:t
 
@@ -975,12 +976,13 @@ selection.
      'org-babel-load-languages
      '((python . t) (scheme . t) (shell . t) (ditaa . t)))
     :init
+    (defcustom my/org-notes-directory "~/Org/notes" "my org notes directory")
     ;; Hydra for commonly used org commands:
     (defhydra
       hydra-org
       (global-map "C-c o" :exit t color pink :hint nil)
       "Org commands:"
-      ("o" my/open-org-file)
+      ("o" my/org-open-file)
       ("l" org-store-link "store link")
       ("i" org-insert-link "insert link")
       ("a" org-agenda "agenda")
@@ -1010,11 +1012,13 @@ This function tangles this file (=emacs.org=) and exports an HTML page
 (=emacs.html=):
 
 #+begin_src emacs-lisp :tangle "modules/org/org-mode.el"  :mkdirp yes
+  (defcustom my/org-html-theme "simple_dark" "the name of my custom org theme (CSS)")
   (defun my/emacs-org-tangle ()
     "Tangle all code blocks in 'emacs.org' and export this document to HTML."
     (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))
            (modules-dir (expand-file-name "modules" user-emacs-directory))
-           (export-dir (expand-file-name "export" user-emacs-directory))
+           (export-dir (expand-file-name my/org-notes-directory))
+           (export-emacs-dir (expand-file-name "emacs" export-dir))
            (export-file (expand-file-name "index.html" user-emacs-directory)))
       (when (file-exists-p org-file)
         (with-current-buffer (find-file-noselect org-file)
@@ -1022,21 +1026,20 @@ This function tangles this file (=emacs.org=) and exports an HTML page
           (org-babel-tangle)
           (org-export-to-file 'html export-file)
           (unless (file-directory-p export-dir)
-            (make-directory export-dir))
+            (make-directory export-dir t))
+          (unless (file-directory-p export-emacs-dir)
+            (make-directory export-emacs-dir t))
+          (my/org-create-theme-file)
           (make-symbolic-link "index.html" "emacs.html" t)
-          (make-symbolic-link "../index.html" "export/index.html" t)
-          (make-symbolic-link "../favicon.ico" "export/favicon.ico" t)
-          (make-symbolic-link "../index.html" "export/emacs.html" t)
-          (make-symbolic-link "../modules" "export/modules" t)
-          (make-symbolic-link "../theme" "export/theme" t)
-          (make-symbolic-link "../LICENSE.txt" "export/LICENSE.txt" t)
-          (make-symbolic-link "../LICENSE_GPLv3.txt" "export/LICENSE_GPLv3.txt" t)
-          (make-symbolic-link "../early-init.el" "export/early-init.el" t)
-          (make-symbolic-link "../init.el" "export/init.el" t)
-          ;; No reason to save the buffer again, but maybe in the future,
-          ;; we will want to run code blocks automatically and capture output?
-          ;;(save-buffer)
-          ))))
+          (make-symbolic-link (expand-file-name "emacs.org" user-emacs-directory) (expand-file-name "emacs.org" export-emacs-dir) t)
+          (make-symbolic-link (expand-file-name "index.html" user-emacs-directory) (expand-file-name "index.html" export-emacs-dir) t)
+          (make-symbolic-link (expand-file-name "index.html" user-emacs-directory) (expand-file-name "emacs.html" export-emacs-dir) t)
+          (make-symbolic-link (expand-file-name "early-init.el" user-emacs-directory) (expand-file-name "early-init.el" export-emacs-dir) t)
+          (make-symbolic-link (expand-file-name "init.el" user-emacs-directory) (expand-file-name "init.el" export-emacs-dir) t)
+          (make-symbolic-link (expand-file-name "modules" user-emacs-directory) (expand-file-name "modules" export-emacs-dir) t)
+          (make-symbolic-link (expand-file-name "LICENSE.txt" user-emacs-directory) (expand-file-name "LICENSE.txt" export-emacs-dir) t)
+          (make-symbolic-link (expand-file-name "LICENSE_GPLv3.txt" user-emacs-directory) (expand-file-name "LICENSE_GPLv3.txt" export-emacs-dir) t)
+          (make-symbolic-link (expand-file-name "theme" user-emacs-directory) (expand-file-name "theme" export-dir) t)))))
   (with-eval-after-load 'ox-html
     (defun my/org-html-src-block (orig-fun src-block contents info)
       "Advice for `org-html-src-block' to add a header.
@@ -1077,31 +1080,42 @@ This function tangles this file (=emacs.org=) and exports an HTML page
 *** Local HTTP server for displaying exported HTML
 #+begin_src emacs-lisp :tangle "modules/org/org-mode.el"  :mkdirp yes
   (my/cargo-dependency "live-server") ; defers install of live-server Rust crate
-  (defvar my/emacs-org-html-server-host "127.0.0.1") ; Set to 0.0.0.0 to serve publicly
-  (defvar my/emacs-org-html-server-port "7776")
-  (defun my/emacs-org-html-server ()
-    "Start a local live-server for the Emacs org HTML export."
+  (defvar my/org-html-server-host "127.0.0.1") ; Set to 0.0.0.0 to serve publicly
+  (defvar my/org-html-server-port "7776")
+  (defun my/org-html-server (&optional redirect)
+    "Start a local live-server for my org notes.
+  If the server is already running, use xdg-open to open the URL."
     (interactive)
-    (let ((live-server-path (executable-find "live-server"))
-          (log-buffer-name "*my/emacs/org-html-server*"))
-      (with-current-buffer (get-buffer-create log-buffer-name)
-        (if live-server-path
-            (progn
-              (message "live-server found at: %s" live-server-path)
-              (let ((host "127.0.0.1")  ; Set to "0.0.0.0" to serve publicly
-                    (port "7776")
-                    (html-file "index.html")
-                    (export-dir (expand-file-name "export" user-emacs-directory)))
-                (start-process "live-server" log-buffer-name "live-server"
-                               "-H" host "-p" port "-o" "" export-dir)
-                (message "Started live-server on http://%s:%s" host port)))
-          (unless (executable-find "live-server")
-            (message "live-server NOT found - please run: cargo install live-server"))))))
+    (let* ((host my/org-html-server-host)
+           (port my/org-html-server-port)
+           (redirect (or redirect ""))
+           (url (format "http://%s:%s/%s" host port redirect))
+           (live-server-proc (get-process "live-server")))
+      (if (and live-server-proc (process-live-p live-server-proc))
+          (progn
+            (message "live-server already running; opening %s" url)
+            (start-process "xdg-open" nil "xdg-open" url))
+        (let ((live-server-path (executable-find "live-server"))
+              (log-buffer-name "*my/org-html-server*")
+              (export-dir (expand-file-name my/org-notes-directory)))
+          (with-current-buffer (get-buffer-create log-buffer-name)
+            (if live-server-path
+                (progn
+                  (message "live-server found at: %s" live-server-path)
+                  (start-process "live-server" log-buffer-name "live-server"
+                                 "-H" host "-p" port "-o" redirect export-dir)
+                  (message "Started live-server on %s" url))
+              (message "live-server NOT found – please run: cargo install live-server")))))))
+  (defun my/emacs-org-html-server ()
+    "Start a local live-server and redirect to the emacs page"
+    (interactive)
+    (my/org-html-server "emacs"))
 #+end_src
 
 |--------------------------------|
 | Start the html server          |
 |--------------------------------|
+| =M-x my/org-html-server=       |
 | =M-x my/emacs-org-html-server= |
 
 *** Use org headings as HTML anchors
@@ -1204,80 +1218,91 @@ This function tangles this file (=emacs.org=) and exports an HTML page
 
 *** Template for new org files
 #+begin_src emacs-lisp :tangle "modules/org-mode/org-mode.el" :mkdirp yes
-(defcustom my/org-template
-  (concat "#+TITLE: {{title}}\n"
-          "#+PROPERTY: header-args :results none :eval yes\n"
-          "#+OPTIONS: noweb:t\n\n")
-  "My default Org template.")
+  (defcustom my/org-template
+    (concat "#+TITLE: {{title}}\n"
+            "#+PROPERTY: header-args :results none :eval yes\n"
+            "#+OPTIONS: noweb:t\n")
+    "My default Org template.")
 
-(defun my/open-org-file ()
-  "Open a new Org file with the default notes template and create a theme file.
-This function does the following:
-1. Opens a new Org file in the directory ‘org-directory/notes’ and inserts the template
-   (replacing placeholders like {{title}}, {{date}}, etc.).
-2. If the directory ‘org-directory/notes’ does not exist, it is created.
-3. In the same directory, it creates a file named 'simple_dark.theme'. This file
-   is populated with a series of #+HTML_HEAD: lines that wrap the contents of your CSS
-   file (located at `user-emacs-directory/themes/simple_dark.css`) between a starting
-   <style> tag and a closing </style> tag.
-4. The Org file then includes a line: \"#+SETUPFILE: simple_dark.theme\"
-   so that when you export, Org loads the theme file."
-  (interactive)
-  (let* ((formatted-date (format-time-string "%Y-%m-%d"))
-         (user-title (read-string "Title for new note: "))
-         (safe-title (replace-regexp-in-string " " "-" (downcase user-title)))
-         ;; Define the notes directory and ensure it exists.
-         (notes-dir (file-name-as-directory (concat org-directory "/notes")))
-         (_ (unless (file-directory-p notes-dir)
-              (make-directory notes-dir t)))
-         (filename (format "%s/%s-%s.org"
-                           notes-dir
-                           (format-time-string "%Y-%m-%d-%H-%M-%S")
-                           safe-title))
-         (section (read-string "Section: " formatted-date))
-         (title-section (mapconcat #'capitalize (split-string section " ") " ")))
-    (find-file filename)
-    (when (zerop (buffer-size))
-      ;; Insert the Org template with placeholders replaced.
-      (insert
-       (replace-regexp-in-string
-        "{{title}}"
-        user-title
-        (replace-regexp-in-string
-         "{{date}}"
-         formatted-date
+  (defun my/org-create-theme-file ()
+    "Create the theme file in the 'theme' directory under `user-emacs-directory`.
+  This file wraps the contents of the theme CSS (also in the theme directory)
+  with HTML <style> tags for use with Org export.
+  Additionally, create a symlink to the .theme file in `my/org-notes-directory`.
+  For example, if `my/org-html-theme` is \"simple_dark\", then
+  ~/Org/notes/simple_dark.theme will point to ~/.emacs.d/theme/simple_dark.theme."
+    (let* ((theme-dir (expand-file-name "theme" user-emacs-directory))
+           (theme-file (expand-file-name (concat my/org-html-theme ".theme") theme-dir))
+           (css-file (expand-file-name (concat my/org-html-theme ".css") theme-dir)))
+      (unless (file-directory-p theme-dir)
+        (make-directory theme-dir t))
+      (with-temp-file theme-file
+        (insert "#+HTML_HEAD: <style>\n")
+        (if (file-exists-p css-file)
+            (let ((css-content (with-temp-buffer
+                                 (insert-file-contents css-file)
+                                 (buffer-string))))
+              (dolist (line (split-string css-content "\n" t))
+                (insert (format "#+HTML_HEAD: %s\n" line))))
+          (insert "#+HTML_HEAD: /* CSS file not found */\n"))
+        (insert "#+HTML_HEAD: </style>\n"))
+      (let ((symlink (expand-file-name (concat my/org-html-theme ".theme")
+                                       my/org-notes-directory)))
+        (unless (file-directory-p my/org-notes-directory)
+          (make-directory my/org-notes-directory t))
+        (when (file-exists-p symlink)
+          (delete-file symlink))
+        (make-symbolic-link theme-file symlink))
+      theme-file))
+
+  (defun my/org-open-file ()
+    "Open a new Org file with the default notes template and include the theme file.
+    This function does the following:
+    1. Opens a new Org file in `org-directory/notes` and inserts the template,
+       replacing placeholders like {{title}}, {{date}}, etc.
+    2. If the directory `org-directory/notes` does not exist, it is created.
+    3. It creates (or updates) the theme file via `my/org-create-theme-file`, which is
+       stored in `user-emacs-directory/theme/{{theme}}.theme`.
+    4. The Org file then includes a line: \"#+SETUPFILE: {{theme}}.theme\" so that
+       when you export, Org loads the theme file."
+    (interactive)
+    (let* ((formatted-date (format-time-string "%Y-%m-%d"))
+           (user-title (read-string "Title for new note: "))
+           (safe-title (replace-regexp-in-string " " "-" (downcase user-title)))
+           ;; Define the notes directory and ensure it exists.
+           (notes-dir (file-name-as-directory (concat org-directory "/notes")))
+           (_ (unless (file-directory-p notes-dir)
+                (make-directory notes-dir t)))
+           (filename (format "%s/%s-%s.org"
+                             notes-dir
+                             (format-time-string "%Y-%m-%d-%H-%M-%S")
+                             safe-title))
+           (section (read-string "Section: " formatted-date))
+           (title-section (mapconcat #'capitalize (split-string section " ") " ")))
+      (find-file filename)
+      (when (zerop (buffer-size))
+        ;; Insert the Org template with placeholders replaced.
+        (insert
          (replace-regexp-in-string
-          "{{section}}"
-          section
+          "{{title}}"
+          user-title
           (replace-regexp-in-string
-           "{{safe-title}}"
-           safe-title
+           "{{date}}"
+           formatted-date
            (replace-regexp-in-string
-            "{{title-section}}"
-            title-section
-            my/org-template))))))
-      ;; Create the theme file.
-      (let* ((theme-file (expand-file-name "simple_dark.theme"
-                                             (file-name-directory filename)))
-             (css-file (expand-file-name "theme/simple_dark.css"
-                                          user-emacs-directory)))
-        (with-temp-file theme-file
-          ;; Start the CSS block.
-          (insert "#+HTML_HEAD: <style>\n")
-          (if (file-exists-p css-file)
-              (let ((css-content (with-temp-buffer
-                                   (insert-file-contents css-file)
-                                   (buffer-string))))
-                (dolist (line (split-string css-content "\n"))
-                  (insert (format "#+HTML_HEAD: %s\n" line))))
-            (insert "#+HTML_HEAD: /* CSS file not found */\n"))
-          ;; End the CSS block.
-          (insert "#+HTML_HEAD: </style>\n"))
-        (message "Theme file created at: %s" theme-file)
-        ;; Insert a reference to the theme file into the Org file.
-        (insert (format "\n#+SETUPFILE: %s\n"
-                        (file-name-nondirectory theme-file)))))))
-
+            "{{section}}"
+            section
+            (replace-regexp-in-string
+             "{{safe-title}}"
+             safe-title
+             (replace-regexp-in-string
+              "{{title-section}}"
+              title-section
+              my/org-template))))))
+        ;; Create the theme file and insert the setup line.
+        (let ((theme-file (my/org-create-theme-file)))
+          (insert (format "#+SETUPFILE: %s\n\n"
+                          (file-name-nondirectory theme-file)))))))
 
 #+end_src
 ** Completion (label =completion=)

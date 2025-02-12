@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-12 Wed 01:12 -->
+<!-- 2025-02-12 Wed 11:24 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -193,7 +193,248 @@
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { }
 </style>
-<link rel="stylesheet" type="text/css" href="/theme/simple_dark.css"/>
+<link rel="icon" href="/theme/icon/emacs.ico" type="image/x-icon">
+<style>
+body {
+margin: 0;
+background: #121212;
+color: #e0e0e0;
+font-family: "Bitstream Vera Sans",Verdana,sans-serif;
+}
+code {
+color: #ffd269;
+font-weight: bold;
+font-size: 1.5em;
+margin: 0 0.25em 0 0.25em;
+}
+div#content {
+border: 1px solid #666;
+background: #1e1e1e;
+padding: 2em;
+}
+a {
+color: #62afff;
+text-decoration: none;
+padding: 1px
+}
+a:hover {
+color: #ff5370
+}
+#table-of-contents {
+margin: 1em 0;
+padding: .1em
+}
+div#content div#org-div-home-and-up {
+background: #001323;
+color: #fff
+}
+div#org-div-home-and-up a:link,div#org-div-home-and-up a:visited {
+color: #fff;
+background: #001323
+}
+div#org-div-home-and-up a:hover {
+color: #ff5370
+}
+div.title {
+margin: -1em -1em 0;
+font-size: 200%;
+font-weight: bold;
+background: #001323;
+color: #fff;
+padding: .75em 1em;
+font-family: "BitStream Vera Sans",Verdana;
+letter-spacing: .1em
+}
+h1 {
+background: #001323;
+color: #fff;
+font-size: 200%;
+font-weight: bold;
+letter-spacing: .1em;
+margin: -1em -1em .2em;
+padding: .75em 1em
+}
+h2 {
+font-size: 180%;
+border-bottom: 1px solid #555;
+padding: .2em
+}
+h3,h4 {
+font-size: 120%;
+border-bottom: 1px solid #444
+}
+tt {
+color: #39f
+}
+.verbatim {
+margin: .5em 0
+}
+pre.src-shell {
+background: #0f1015;
+}
+pre.src-example {
+background: #282928 !important;
+}
+pre {
+font-weight: bolder;
+border: none;
+padding: 1em;
+color: #e0e0e0;
+margin: 0;
+margin-top: 1em;
+padding: 5pt;
+color: #e0e0e0;
+font-family: courier,monospace;
+font-size: 0.8em;
+background: #181f29;
+min-width: 95%;
+width: max-content;
+border-bottom: 2px solid #573b3b;
+}
+.verbatim-caption {
+border: 1px solid #555;
+background: #222;
+display: block;
+font-size: 80%;
+padding: .2em
+}
+div#postamble {
+text-align: left;
+color: #999;
+font-size: 80%;
+padding: 0;
+margin: 0
+}
+div#postamble a {
+color: #62afff
+}
+div#postamble a:hover {
+color: #ff5370
+}
+table {
+font-size: 100%;
+border-collapse: collapse;
+margin: .5em 0;
+color: #e0e0e0
+}
+th,td {
+border: 1px solid #555;
+padding: .3em;
+margin: 2px
+}
+th {
+background: #333
+}
+span.underline {
+text-decoration: underline
+}
+.fixme {
+background: #ff9800;
+font-weight: bold
+}
+.ra {
+text-align: right
+}
+.sidebar {
+float: right;
+width: 25em;
+background-color: #6a1b9a;
+color: #fff;
+margin: 2em -2em 2em 2em;
+padding: 1em
+}
+.sidebar a {
+border: none
+}
+.sidebar a:link {
+color: #80deea
+}
+.sidebar a:visited {
+color: #26c6da
+}
+.sidebar a:hover {
+color: #ffcc80
+}
+.sidebar a:active {
+color: #ff5370
+}
+.title {
+text-align: center
+}
+.todo {
+color: #f44336
+}
+.done {
+color: #4caf50
+}
+.timestamp {
+color: #9e9e9e
+}
+.timestamp-kwd {
+color: #f48fb1
+}
+.tag {
+background-color: #1e88e5;
+font-weight: normal
+}
+.target {
+background-color: #8e24aa
+}
+pre.src:before {
+margin-right: 0.5em;
+}
+pre.src {
+overflow: visible;
+width: 100%;
+}
+.org-ul li {
+padding-top: 0.5em;
+}
+details {
+margin: 2em;
+}
+.code-block-container {
+border-radius: 5px;
+overflow: hidden;
+margin-bottom: 1em;
+box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.code-block-header {
+background: #0d0d0d;
+border-bottom: 2px solid #573b3b;
+padding: 0.1em 1em 0.2em 0.5em;
+font-family: sans-serif;
+font-weight: bold;
+font-size: 0.9em;
+}
+.code-block-header.shell {
+color: #27d75b;
+}
+.code-block-header.lang {
+color: #606c71;
+}
+.code-block-container pre {
+margin: 0;
+padding: 8px;
+}
+span.filename {
+font-family: monospace;
+font-size: 2em;
+margin-left: 0.5em;
+}
+span.org-parameter {
+background-color: #202020;
+padding: 0 0.5em;
+border-radius: 5px;
+font-size: 1.1em;
+}
+@media screen and (max-width:768px) {
+div#content {
+padding: 0 0.5em 0.5em 0.5em;
+h1.title{margin-top: 0em;
+}
+}
+</style>
 </head>
 <body>
 <div id="content" class="content">
@@ -1055,7 +1296,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org554d06d">
+<pre class="example" id="org5e84607">
 - avy
 - completion
 - dashboard
@@ -1519,12 +1760,13 @@ selection.
    'org-babel-load-languages
    '((python . t) (scheme . t) (shell . t) (ditaa . t)))
   <span style="color: #f08080;">:init</span>
+  (<span style="color: #00bfff;">defcustom</span> <span style="color: #4eee94;">my/org-notes-directory</span> <span style="color: #deb887;">"~/Org/notes"</span> <span style="color: #ffe4b5;">"my org notes directory"</span>)
   <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Hydra for commonly used org commands:</span>
   (<span style="color: #00bfff;">defhydra</span>
     hydra-org
     (global-map <span style="color: #deb887;">"C-c o"</span> <span style="color: #f08080;">:exit</span> t color pink <span style="color: #f08080;">:hint</span> nil)
     <span style="color: #ffe4b5;">"Org commands:"</span>
-    (<span style="color: #deb887;">"o"</span> my/open-org-file)
+    (<span style="color: #deb887;">"o"</span> my/org-open-file)
     (<span style="color: #deb887;">"l"</span> org-store-link <span style="color: #deb887;">"store link"</span>)
     (<span style="color: #deb887;">"i"</span> org-insert-link <span style="color: #deb887;">"insert link"</span>)
     (<span style="color: #deb887;">"a"</span> org-agenda <span style="color: #deb887;">"agenda"</span>)
@@ -1559,11 +1801,13 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/org/org-mode.el</span></div>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/emacs-org-tangle</span> ()
+<pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defcustom</span> <span style="color: #4eee94;">my/org-html-theme</span> <span style="color: #deb887;">"simple_dark"</span> <span style="color: #ffe4b5;">"the name of my custom org theme (CSS)"</span>)
+(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/emacs-org-tangle</span> ()
   <span style="color: #ffe4b5;">"Tangle all code blocks in '</span><span style="color: #a2cd5a;">emacs.org</span><span style="color: #ffe4b5;">' and export this document to HTML."</span>
   (<span style="color: #00bfff;">let*</span> ((org-file (expand-file-name <span style="color: #deb887;">"emacs.org"</span> user-emacs-directory))
          (modules-dir (expand-file-name <span style="color: #deb887;">"modules"</span> user-emacs-directory))
-         (export-dir (expand-file-name <span style="color: #deb887;">"export"</span> user-emacs-directory))
+         (export-dir (expand-file-name my/org-notes-directory))
+         (export-emacs-dir (expand-file-name <span style="color: #deb887;">"emacs"</span> export-dir))
          (export-file (expand-file-name <span style="color: #deb887;">"index.html"</span> user-emacs-directory)))
     (<span style="color: #00bfff;">when</span> (file-exists-p org-file)
       (<span style="color: #00bfff;">with-current-buffer</span> (find-file-noselect org-file)
@@ -1571,21 +1815,20 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
         (org-babel-tangle)
         (org-export-to-file 'html export-file)
         (<span style="color: #00bfff;">unless</span> (file-directory-p export-dir)
-          (make-directory export-dir))
+          (make-directory export-dir t))
+        (<span style="color: #00bfff;">unless</span> (file-directory-p export-emacs-dir)
+          (make-directory export-emacs-dir t))
+        (my/org-create-theme-file)
         (make-symbolic-link <span style="color: #deb887;">"index.html"</span> <span style="color: #deb887;">"emacs.html"</span> t)
-        (make-symbolic-link <span style="color: #deb887;">"../index.html"</span> <span style="color: #deb887;">"export/index.html"</span> t)
-        (make-symbolic-link <span style="color: #deb887;">"../favicon.ico"</span> <span style="color: #deb887;">"export/favicon.ico"</span> t)
-        (make-symbolic-link <span style="color: #deb887;">"../index.html"</span> <span style="color: #deb887;">"export/emacs.html"</span> t)
-        (make-symbolic-link <span style="color: #deb887;">"../modules"</span> <span style="color: #deb887;">"export/modules"</span> t)
-        (make-symbolic-link <span style="color: #deb887;">"../theme"</span> <span style="color: #deb887;">"export/theme"</span> t)
-        (make-symbolic-link <span style="color: #deb887;">"../LICENSE.txt"</span> <span style="color: #deb887;">"export/LICENSE.txt"</span> t)
-        (make-symbolic-link <span style="color: #deb887;">"../LICENSE_GPLv3.txt"</span> <span style="color: #deb887;">"export/LICENSE_GPLv3.txt"</span> t)
-        (make-symbolic-link <span style="color: #deb887;">"../early-init.el"</span> <span style="color: #deb887;">"export/early-init.el"</span> t)
-        (make-symbolic-link <span style="color: #deb887;">"../init.el"</span> <span style="color: #deb887;">"export/init.el"</span> t)
-        <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">No reason to save the buffer again, but maybe in the future,</span>
-        <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">we will want to run code blocks automatically and capture output?</span>
-        <span style="color: #7f7f7f;">;;</span><span style="color: #7f7f7f;">(save-buffer)</span>
-        ))))
+        (make-symbolic-link (expand-file-name <span style="color: #deb887;">"emacs.org"</span> user-emacs-directory) (expand-file-name <span style="color: #deb887;">"emacs.org"</span> export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name <span style="color: #deb887;">"index.html"</span> user-emacs-directory) (expand-file-name <span style="color: #deb887;">"index.html"</span> export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name <span style="color: #deb887;">"index.html"</span> user-emacs-directory) (expand-file-name <span style="color: #deb887;">"emacs.html"</span> export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name <span style="color: #deb887;">"early-init.el"</span> user-emacs-directory) (expand-file-name <span style="color: #deb887;">"early-init.el"</span> export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name <span style="color: #deb887;">"init.el"</span> user-emacs-directory) (expand-file-name <span style="color: #deb887;">"init.el"</span> export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name <span style="color: #deb887;">"modules"</span> user-emacs-directory) (expand-file-name <span style="color: #deb887;">"modules"</span> export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name <span style="color: #deb887;">"LICENSE.txt"</span> user-emacs-directory) (expand-file-name <span style="color: #deb887;">"LICENSE.txt"</span> export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name <span style="color: #deb887;">"LICENSE_GPLv3.txt"</span> user-emacs-directory) (expand-file-name <span style="color: #deb887;">"LICENSE_GPLv3.txt"</span> export-emacs-dir) t)
+        (make-symbolic-link (expand-file-name <span style="color: #deb887;">"theme"</span> user-emacs-directory) (expand-file-name <span style="color: #deb887;">"theme"</span> export-dir) t)))))
 (<span style="color: #00bfff;">with-eval-after-load</span> 'ox-html
   (<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/org-html-src-block</span> (orig-fun src-block contents info)
     <span style="color: #ffe4b5;">"Advice for `</span><span style="color: #a2cd5a;">org-html-src-block</span><span style="color: #ffe4b5;">' to add a header.</span>
@@ -1631,26 +1874,36 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/org/org-mode.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(my/cargo-dependency <span style="color: #deb887;">"live-server"</span>) <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">defers install of live-server Rust crate</span>
-(<span style="color: #00bfff;">defvar</span> <span style="color: #4eee94;">my/emacs-org-html-server-host</span> <span style="color: #deb887;">"127.0.0.1"</span>) <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">Set to 0.0.0.0 to serve publicly</span>
-(<span style="color: #00bfff;">defvar</span> <span style="color: #4eee94;">my/emacs-org-html-server-port</span> <span style="color: #deb887;">"7776"</span>)
-(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/emacs-org-html-server</span> ()
-  <span style="color: #ffe4b5;">"Start a local live-server for the Emacs org HTML export."</span>
+(<span style="color: #00bfff;">defvar</span> <span style="color: #4eee94;">my/org-html-server-host</span> <span style="color: #deb887;">"127.0.0.1"</span>) <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">Set to 0.0.0.0 to serve publicly</span>
+(<span style="color: #00bfff;">defvar</span> <span style="color: #4eee94;">my/org-html-server-port</span> <span style="color: #deb887;">"7776"</span>)
+(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/org-html-server</span> (<span style="color: #98f5ff;">&amp;optional</span> redirect)
+  <span style="color: #ffe4b5;">"Start a local live-server for my org notes.</span>
+<span style="color: #ffe4b5;">If the server is already running, use xdg-open to open the URL."</span>
   (<span style="color: #00bfff;">interactive</span>)
-  (<span style="color: #00bfff;">let</span> ((live-server-path (executable-find <span style="color: #deb887;">"live-server"</span>))
-        (log-buffer-name <span style="color: #deb887;">"*my/emacs/org-html-server*"</span>))
-    (<span style="color: #00bfff;">with-current-buffer</span> (get-buffer-create log-buffer-name)
-      (<span style="color: #00bfff;">if</span> live-server-path
-          (<span style="color: #00bfff;">progn</span>
-            (message <span style="color: #deb887;">"live-server found at: %s"</span> live-server-path)
-            (<span style="color: #00bfff;">let</span> ((host <span style="color: #deb887;">"127.0.0.1"</span>)  <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">Set to "0.0.0.0" to serve publicly</span>
-                  (port <span style="color: #deb887;">"7776"</span>)
-                  (html-file <span style="color: #deb887;">"index.html"</span>)
-                  (export-dir (expand-file-name <span style="color: #deb887;">"export"</span> user-emacs-directory)))
-              (start-process <span style="color: #deb887;">"live-server"</span> log-buffer-name <span style="color: #deb887;">"live-server"</span>
-                             <span style="color: #deb887;">"-H"</span> host <span style="color: #deb887;">"-p"</span> port <span style="color: #deb887;">"-o"</span> <span style="color: #deb887;">""</span> export-dir)
-              (message <span style="color: #deb887;">"Started live-server on http://%s:%s"</span> host port)))
-        (<span style="color: #00bfff;">unless</span> (executable-find <span style="color: #deb887;">"live-server"</span>)
-          (message <span style="color: #deb887;">"live-server NOT found - please run: cargo install live-server"</span>))))))
+  (<span style="color: #00bfff;">let*</span> ((host my/org-html-server-host)
+         (port my/org-html-server-port)
+         (redirect (<span style="color: #00bfff;">or</span> redirect <span style="color: #deb887;">""</span>))
+         (url (format <span style="color: #deb887;">"http://%s:%s/%s"</span> host port redirect))
+         (live-server-proc (get-process <span style="color: #deb887;">"live-server"</span>)))
+    (<span style="color: #00bfff;">if</span> (<span style="color: #00bfff;">and</span> live-server-proc (process-live-p live-server-proc))
+        (<span style="color: #00bfff;">progn</span>
+          (message <span style="color: #deb887;">"live-server already running; opening %s"</span> url)
+          (start-process <span style="color: #deb887;">"xdg-open"</span> nil <span style="color: #deb887;">"xdg-open"</span> url))
+      (<span style="color: #00bfff;">let</span> ((live-server-path (executable-find <span style="color: #deb887;">"live-server"</span>))
+            (log-buffer-name <span style="color: #deb887;">"*my/org-html-server*"</span>)
+            (export-dir (expand-file-name my/org-notes-directory)))
+        (<span style="color: #00bfff;">with-current-buffer</span> (get-buffer-create log-buffer-name)
+          (<span style="color: #00bfff;">if</span> live-server-path
+              (<span style="color: #00bfff;">progn</span>
+                (message <span style="color: #deb887;">"live-server found at: %s"</span> live-server-path)
+                (start-process <span style="color: #deb887;">"live-server"</span> log-buffer-name <span style="color: #deb887;">"live-server"</span>
+                               <span style="color: #deb887;">"-H"</span> host <span style="color: #deb887;">"-p"</span> port <span style="color: #deb887;">"-o"</span> redirect export-dir)
+                (message <span style="color: #deb887;">"Started live-server on %s"</span> url))
+            (message <span style="color: #deb887;">"live-server NOT found &#8211; please run: cargo install live-server"</span>)))))))
+(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/emacs-org-html-server</span> ()
+  <span style="color: #ffe4b5;">"Start a local live-server and redirect to the emacs page"</span>
+  (<span style="color: #00bfff;">interactive</span>)
+  (my/org-html-server <span style="color: #deb887;">"emacs"</span>))
 </pre>
 </div></div>
 
@@ -1666,6 +1919,10 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="org-left"><code>M-x my/org-html-server</code></td>
+</tr>
+
 <tr>
 <td class="org-left"><code>M-x my/emacs-org-html-server</code></td>
 </tr>
@@ -1785,21 +2042,50 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defcustom</span> <span style="color: #4eee94;">my/org-template</span>
   (concat <span style="color: #deb887;">"#+TITLE: {{title}}\n"</span>
           <span style="color: #deb887;">"#+PROPERTY: header-args :results none :eval yes\n"</span>
-          <span style="color: #deb887;">"#+OPTIONS: noweb:t\n\n"</span>)
+          <span style="color: #deb887;">"#+OPTIONS: noweb:t\n"</span>)
   <span style="color: #ffe4b5;">"My default Org template."</span>)
 
-(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/open-org-file</span> ()
-  <span style="color: #ffe4b5;">"Open a new Org file with the default notes template and create a theme file.</span>
-<span style="color: #ffe4b5;">This function does the following:</span>
-<span style="color: #ffe4b5;">1. Opens a new Org file in the directory &#8216;</span><span style="color: #a2cd5a;">org-directory/notes</span><span style="color: #ffe4b5;">&#8217; and inserts the template</span>
-<span style="color: #ffe4b5;">   (replacing placeholders like {{title}}, {{date}}, etc.).</span>
-<span style="color: #ffe4b5;">2. If the directory &#8216;</span><span style="color: #a2cd5a;">org-directory/notes</span><span style="color: #ffe4b5;">&#8217; does not exist, it is created.</span>
-<span style="color: #ffe4b5;">3. In the same directory, it creates a file named '</span><span style="color: #a2cd5a;">simple_dark.theme</span><span style="color: #ffe4b5;">'. This file</span>
-<span style="color: #ffe4b5;">   is populated with a series of #+HTML_HEAD: lines that wrap the contents of your CSS</span>
-<span style="color: #ffe4b5;">   file (located at `user-emacs-directory/themes/simple_dark.css`) between a starting</span>
-<span style="color: #ffe4b5;">   &lt;style&gt; tag and a closing &lt;/style&gt; tag.</span>
-<span style="color: #ffe4b5;">4. The Org file then includes a line: \"#+SETUPFILE: simple_dark.theme\"</span>
-<span style="color: #ffe4b5;">   so that when you export, Org loads the theme file."</span>
+(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/org-create-theme-file</span> ()
+  <span style="color: #ffe4b5;">"Create the theme file in the '</span><span style="color: #a2cd5a;">theme</span><span style="color: #ffe4b5;">' directory under `user-emacs-directory`.</span>
+<span style="color: #ffe4b5;">This file wraps the contents of the theme CSS (also in the theme directory)</span>
+<span style="color: #ffe4b5;">with HTML &lt;style&gt; tags for use with Org export.</span>
+<span style="color: #ffe4b5;">Additionally, create a symlink to the .theme file in `my/org-notes-directory`.</span>
+<span style="color: #ffe4b5;">For example, if `my/org-html-theme` is \"simple_dark\", then</span>
+<span style="color: #ffe4b5;">~/Org/notes/simple_dark.theme will point to ~/.emacs.d/theme/simple_dark.theme."</span>
+  (<span style="color: #00bfff;">let*</span> ((theme-dir (expand-file-name <span style="color: #deb887;">"theme"</span> user-emacs-directory))
+         (theme-file (expand-file-name (concat my/org-html-theme <span style="color: #deb887;">".theme"</span>) theme-dir))
+         (css-file (expand-file-name (concat my/org-html-theme <span style="color: #deb887;">".css"</span>) theme-dir)))
+    (<span style="color: #00bfff;">unless</span> (file-directory-p theme-dir)
+      (make-directory theme-dir t))
+    (<span style="color: #00bfff;">with-temp-file</span> theme-file
+      (insert <span style="color: #deb887;">"#+HTML_HEAD: &lt;style&gt;\n"</span>)
+      (<span style="color: #00bfff;">if</span> (file-exists-p css-file)
+          (<span style="color: #00bfff;">let</span> ((css-content (<span style="color: #00bfff;">with-temp-buffer</span>
+                               (insert-file-contents css-file)
+                               (buffer-string))))
+            (<span style="color: #00bfff;">dolist</span> (line (split-string css-content <span style="color: #deb887;">"\n"</span> t))
+              (insert (format <span style="color: #deb887;">"#+HTML_HEAD: %s\n"</span> line))))
+        (insert <span style="color: #deb887;">"#+HTML_HEAD: /* CSS file not found */\n"</span>))
+      (insert <span style="color: #deb887;">"#+HTML_HEAD: &lt;/style&gt;\n"</span>))
+    (<span style="color: #00bfff;">let</span> ((symlink (expand-file-name (concat my/org-html-theme <span style="color: #deb887;">".theme"</span>)
+                                     my/org-notes-directory)))
+      (<span style="color: #00bfff;">unless</span> (file-directory-p my/org-notes-directory)
+        (make-directory my/org-notes-directory t))
+      (<span style="color: #00bfff;">when</span> (file-exists-p symlink)
+        (delete-file symlink))
+      (make-symbolic-link theme-file symlink))
+    theme-file))
+
+(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/org-open-file</span> ()
+  <span style="color: #ffe4b5;">"Open a new Org file with the default notes template and include the theme file.</span>
+<span style="color: #ffe4b5;">  This function does the following:</span>
+<span style="color: #ffe4b5;">  1. Opens a new Org file in `org-directory/notes` and inserts the template,</span>
+<span style="color: #ffe4b5;">     replacing placeholders like {{title}}, {{date}}, etc.</span>
+<span style="color: #ffe4b5;">  2. If the directory `org-directory/notes` does not exist, it is created.</span>
+<span style="color: #ffe4b5;">  3. It creates (or updates) the theme file via `my/org-create-theme-file`, which is</span>
+<span style="color: #ffe4b5;">     stored in `user-emacs-directory/theme/{{theme}}.theme`.</span>
+<span style="color: #ffe4b5;">  4. The Org file then includes a line: \"#+SETUPFILE: {{theme}}.theme\" so that</span>
+<span style="color: #ffe4b5;">     when you export, Org loads the theme file."</span>
   (<span style="color: #00bfff;">interactive</span>)
   (<span style="color: #00bfff;">let*</span> ((formatted-date (format-time-string <span style="color: #deb887;">"%Y-%m-%d"</span>))
          (user-title (read-string <span style="color: #deb887;">"Title for new note: "</span>))
@@ -1834,28 +2120,10 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
             <span style="color: #deb887;">"{{title-section}}"</span>
             title-section
             my/org-template))))))
-      <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Create the theme file.</span>
-      (<span style="color: #00bfff;">let*</span> ((theme-file (expand-file-name <span style="color: #deb887;">"simple_dark.theme"</span>
-                                             (file-name-directory filename)))
-             (css-file (expand-file-name <span style="color: #deb887;">"theme/simple_dark.css"</span>
-                                          user-emacs-directory)))
-        (<span style="color: #00bfff;">with-temp-file</span> theme-file
-          <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Start the CSS block.</span>
-          (insert <span style="color: #deb887;">"#+HTML_HEAD: &lt;style&gt;\n"</span>)
-          (<span style="color: #00bfff;">if</span> (file-exists-p css-file)
-              (<span style="color: #00bfff;">let</span> ((css-content (<span style="color: #00bfff;">with-temp-buffer</span>
-                                   (insert-file-contents css-file)
-                                   (buffer-string))))
-                (<span style="color: #00bfff;">dolist</span> (line (split-string css-content <span style="color: #deb887;">"\n"</span>))
-                  (insert (format <span style="color: #deb887;">"#+HTML_HEAD: %s\n"</span> line))))
-            (insert <span style="color: #deb887;">"#+HTML_HEAD: /* CSS file not found */\n"</span>))
-          <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">End the CSS block.</span>
-          (insert <span style="color: #deb887;">"#+HTML_HEAD: &lt;/style&gt;\n"</span>))
-        (message <span style="color: #deb887;">"Theme file created at: %s"</span> theme-file)
-        <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Insert a reference to the theme file into the Org file.</span>
-        (insert (format <span style="color: #deb887;">"\n#+SETUPFILE: %s\n"</span>
+      <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Create the theme file and insert the setup line.</span>
+      (<span style="color: #00bfff;">let</span> ((theme-file (my/org-create-theme-file)))
+        (insert (format <span style="color: #deb887;">"#+SETUPFILE: %s\n\n"</span>
                         (file-name-nondirectory theme-file)))))))
-
 
 </pre>
 </div></div>
@@ -2463,7 +2731,7 @@ enabled):
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
 <p class="email">Email: <a href="mailto:ryan@enigmacurry.com">ryan@enigmacurry.com</a></p>
-<p class="date">Last Modified: 2025-02-12 Wed 01:12</p>
+<p class="date">Last Modified: 2025-02-12 Wed 11:24</p>
 </div>
 </body>
 </html>
