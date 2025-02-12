@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-11 Tue 23:20 -->
+<!-- 2025-02-11 Tue 23:40 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -1053,7 +1053,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="orgff45659">
+<pre class="example" id="org67f7d44">
 - avy
 - completion
 - dashboard
@@ -1101,7 +1101,7 @@ you want to enable for the current machine: <code>general</code>, <code>org</cod
 <code>markdown</code>, etc:
 </p>
 
-<div class="code-block-container"><div class="code-block-header lang">(untangled) example</div>
+<div class="code-block-container"><div class="code-block-header example">Example ::</div>
 <div class="org-src-container">
 <pre class="src src-example">↓ My Machine Labels:
 Repeat:
@@ -1555,14 +1555,13 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
            (tangle (cdr (assoc <span style="color: #f08080;">:tangle</span> header-args)))
            (lang (org-element-property <span style="color: #f08080;">:language</span> src-block))
            (header (<span style="color: #00bfff;">cond</span>
-                    <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Use :tangle header if specified and not "no"</span>
                     ((<span style="color: #00bfff;">and</span> tangle (not (string= tangle <span style="color: #deb887;">"no"</span>)))
                      (format <span style="color: #deb887;">"&lt;div class=\"code-block-header tangle\"&gt;&lt;span class=\"org-parameter\"&gt;:tangle&lt;/span&gt; &lt;span class=\"filename\"&gt;%s&lt;/span&gt;&lt;/div&gt;\n"</span>
                              (org-html-encode-plain-text tangle)))
-                    <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">For shell blocks, print a specific message.</span>
                     ((string= lang <span style="color: #deb887;">"shell"</span>)
                      <span style="color: #deb887;">"&lt;div class=\"code-block-header shell\"&gt;Run this in your shell ::&lt;/div&gt;\n"</span>)
-                    <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Otherwise, show the language type.</span>
+                    ((string= lang <span style="color: #deb887;">"example"</span>)
+                     <span style="color: #deb887;">"&lt;div class=\"code-block-header example\"&gt;Example ::&lt;/div&gt;\n"</span>)
                     (lang
                      (format <span style="color: #deb887;">"&lt;div class=\"code-block-header lang\"&gt;(untangled) %s&lt;/div&gt;\n"</span>
                              (org-html-encode-plain-text lang)))
@@ -2336,7 +2335,7 @@ enabled):
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
 <p class="email">Email: <a href="mailto:ryan@enigmacurry.com">ryan@enigmacurry.com</a></p>
-<p class="date">Last Modified: 2025-02-11 Tue 23:20</p>
+<p class="date">Last Modified: 2025-02-11 Tue 23:40</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 29.4 (<a href="https://orgmode.org">Org</a> mode 9.8-pre)</p>
 </div>
 </body>

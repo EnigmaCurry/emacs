@@ -1020,14 +1020,13 @@ This function tangles this file (=emacs.org=) and exports an HTML page
              (tangle (cdr (assoc :tangle header-args)))
              (lang (org-element-property :language src-block))
              (header (cond
-                      ;; Use :tangle header if specified and not "no"
                       ((and tangle (not (string= tangle "no")))
                        (format "<div class=\"code-block-header tangle\"><span class=\"org-parameter\">:tangle</span> <span class=\"filename\">%s</span></div>\n"
                                (org-html-encode-plain-text tangle)))
-                      ;; For shell blocks, print a specific message.
                       ((string= lang "shell")
                        "<div class=\"code-block-header shell\">Run this in your shell ::</div>\n")
-                      ;; Otherwise, show the language type.
+                      ((string= lang "example")
+                       "<div class=\"code-block-header example\">Example ::</div>\n")
                       (lang
                        (format "<div class=\"code-block-header lang\">(untangled) %s</div>\n"
                                (org-html-encode-plain-text lang)))

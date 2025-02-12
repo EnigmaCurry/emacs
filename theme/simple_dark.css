@@ -87,6 +87,14 @@ tt {
 	margin: .5em 0
 }
 
+pre.src-shell {
+    background: #0f1015;
+}
+
+pre.src-example {
+    background: #282928 !important;
+}
+
 pre {
 	font-weight: bolder;
 	border: none;
@@ -98,10 +106,12 @@ pre {
 	color: #e0e0e0;
 	font-family: courier,monospace;
 	font-size: 0.8em;
-	background: #0e2124;
+	background: #181f29;
 	min-width: 95%;
 	width: max-content;
+    border-bottom: 2px solid #573b3b;
 }
+
 
 .verbatim-caption {
 	border: 1px solid #555;
