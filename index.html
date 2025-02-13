@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-12 Wed 22:56 -->
+<!-- 2025-02-12 Wed 23:35 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -512,6 +512,7 @@ h1.title{margin-top: 0em;
 <li><a href="#Local_HTTP_server_for_displaying_exported_HTML">9.6.2. Local HTTP server for displaying exported HTML</a></li>
 <li><a href="#Use_org_headings_as_HTML_anchors">9.6.3. Use org headings as HTML anchors</a></li>
 <li><a href="#Template_for_new_org_files">9.6.4. Template for new org files</a></li>
+<li><a href="#Org-babel_evaluation">9.6.5. Org-babel evaluation</a></li>
 </ul>
 </li>
 <li><a href="#Completion_%28label_%3Dcompletion%3D%29">9.7. Completion (label <code>completion</code>)</a></li>
@@ -1306,7 +1307,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org681513b">
+<pre class="example" id="orgfaf0852">
 - avy
 - completion
 - dashboard
@@ -2169,6 +2170,32 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 </div></div>
 </div>
 </div>
+<div id="outline-container-Org-babel_evaluation" class="outline-4">
+<h4 id="Org-babel_evaluation"><span class="section-number-4">9.6.5.</span> Org-babel evaluation</h4>
+<div class="outline-text-4" id="text-9-6-5">
+<div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/org/org.el</span></div>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/save-buffer-after-code-execution</span> (orig-fun <span style="color: #98f5ff;">&amp;rest</span> args)
+  <span style="color: #ffe4b5;">"Execute ORIG-FUN with ARGS and save the buffer afterward.</span>
+<span style="color: #ffe4b5;">If the code block is executed asynchronously (i.e. returns a process),</span>
+<span style="color: #ffe4b5;">attach a sentinel so that `save-buffer` is called when the process finishes.</span>
+<span style="color: #ffe4b5;">Otherwise, call `save-buffer` immediately."</span>
+  (<span style="color: #00bfff;">let</span> ((result (apply orig-fun args)))
+    (<span style="color: #00bfff;">if</span> (processp result)
+        (set-process-sentinel
+         result
+         (<span style="color: #00bfff;">lambda</span> (_proc event)
+           <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Adjust this if your process returns a different finished event.</span>
+           (<span style="color: #00bfff;">when</span> (string-match-p <span style="color: #deb887;">"finished"</span> event)
+             (save-buffer))))
+      (save-buffer))
+    result))
+(advice-add 'org-babel-execute-src-block <span style="color: #f08080;">:around</span> #'my/save-buffer-after-code-execution)
+(advice-add 'rustic-babel-run-update-result-block <span style="color: #f08080;">:around</span> #'my/save-buffer-after-code-execution)
+</pre>
+</div></div>
+</div>
+</div>
 </div>
 <div id="outline-container-Completion_%28label_%3Dcompletion%3D%29" class="outline-3">
 <h3 id="Completion_%28label_%3Dcompletion%3D%29"><span class="section-number-3">9.7.</span> Completion (label <code>completion</code>)</h3>
@@ -2704,6 +2731,8 @@ load.</li>
   (<span style="color: #00bfff;">setq</span> rustic-format-on-save t)
   (<span style="color: #00bfff;">setq</span> rustic-rustfmt-args <span style="color: #deb887;">"--edition 2021"</span>)
   (add-to-list 'exec-path <span style="color: #deb887;">"~/.cargo/bin"</span>)
+  (<span style="color: #00bfff;">defalias</span> '<span style="color: #daa520;">org-babel-execute:rust</span> 'org-babel-execute:rustic)
+  (describe-function 'org-babel-execute:rust)
   (add-hook
    'rustic-mode-hook
    (<span style="color: #00bfff;">lambda</span> ()
@@ -2808,7 +2837,7 @@ enabled):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2025-02-12 Wed 22:56</p>
+<p class="date">Last Modified: 2025-02-12 Wed 23:35</p>
 </div>
 </body>
 </html>

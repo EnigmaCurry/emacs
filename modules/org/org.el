@@ -258,3 +258,21 @@ it and export to HTML before serving it."
       (org-export-to-file 'html
           (expand-file-name (org-export-output-file-name ".html" nil)
                             my/org-notes-export-directory)))))
+
+(defun my/save-buffer-after-code-execution (orig-fun &rest args)
+  "Execute ORIG-FUN with ARGS and save the buffer afterward.
+If the code block is executed asynchronously (i.e. returns a process),
+attach a sentinel so that `save-buffer` is called when the process finishes.
+Otherwise, call `save-buffer` immediately."
+  (let ((result (apply orig-fun args)))
+    (if (processp result)
+        (set-process-sentinel
+         result
+         (lambda (_proc event)
+           ;; Adjust this if your process returns a different finished event.
+           (when (string-match-p "finished" event)
+             (save-buffer))))
+      (save-buffer))
+    result))
+(advice-add 'org-babel-execute-src-block :around #'my/save-buffer-after-code-execution)
+(advice-add 'rustic-babel-run-update-result-block :around #'my/save-buffer-after-code-execution)

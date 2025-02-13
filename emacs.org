@@ -1334,6 +1334,26 @@ This function tangles this file (=emacs.org=) and exports an HTML page
                (expand-file-name (org-export-output-file-name ".html" nil)
                                  my/org-notes-export-directory)))))
 #+end_src
+*** Org-babel evaluation
+#+begin_src emacs-lisp :tangle "modules/org/org.el" :mkdirp yes
+  (defun my/save-buffer-after-code-execution (orig-fun &rest args)
+    "Execute ORIG-FUN with ARGS and save the buffer afterward.
+  If the code block is executed asynchronously (i.e. returns a process),
+  attach a sentinel so that `save-buffer` is called when the process finishes.
+  Otherwise, call `save-buffer` immediately."
+    (let ((result (apply orig-fun args)))
+      (if (processp result)
+          (set-process-sentinel
+           result
+           (lambda (_proc event)
+             ;; Adjust this if your process returns a different finished event.
+             (when (string-match-p "finished" event)
+               (save-buffer))))
+        (save-buffer))
+      result))
+  (advice-add 'org-babel-execute-src-block :around #'my/save-buffer-after-code-execution)
+  (advice-add 'rustic-babel-run-update-result-block :around #'my/save-buffer-after-code-execution)
+#+end_src
 ** Completion (label =completion=)
 
  * [[https://github.com/minad/vertico][vertico]]
@@ -1774,6 +1794,8 @@ regions, and files to S3 storage and the web.
     (setq rustic-format-on-save t)
     (setq rustic-rustfmt-args "--edition 2021")
     (add-to-list 'exec-path "~/.cargo/bin")
+    (defalias 'org-babel-execute:rust 'org-babel-execute:rustic)
+    (describe-function 'org-babel-execute:rust)
     (add-hook
      'rustic-mode-hook
      (lambda ()
