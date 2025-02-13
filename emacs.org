@@ -169,12 +169,14 @@ manager and install it that way:
   # e.g., on Fedora:
   sudo dnf install rustup
   rustup-init
+  rustup component add rust-analyzer
 #+end_src
 
 But you can also [[https://rustup.rs/][install it]] the "curl bomb" way on most other systems:
 
 #+begin_src shell
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+  rustup component add rust-analyzer
 #+end_src
 
 Cargo packages are declared by Emacs modules themselves:
@@ -941,7 +943,7 @@ selection.
 
  * [[https://orgmode.org/][org-mode]]
    
-#+begin_src emacs-lisp :tangle "modules/org/org-mode.el"
+#+begin_src emacs-lisp :tangle "modules/org/org.el"
   ;; hydra (rapid fire mnemonic keybindings) :: https://github.com/abo-abo/hydra
   (use-package hydra)
   (use-package org
@@ -975,7 +977,8 @@ selection.
      'org-babel-load-languages
      '((python . t) (scheme . t) (shell . t) (ditaa . t)))
     :init
-    (defcustom my/org-notes-directory "~/Org/notes" "my org notes directory")
+    (defcustom my/org-notes-directory "~/Org/notes" "My org notes directory")
+    (defcustom my/org-notes-export-directory "~/Org/export/notes" "My org notes HTML export directory")
     ;; Hydra for commonly used org commands:
     (defhydra
       hydra-org
@@ -1022,13 +1025,13 @@ selection.
 This function tangles this file (=emacs.org=) and exports an HTML page
 (=emacs.html=):
 
-#+begin_src emacs-lisp :tangle "modules/org/org-mode.el"  :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/org/org.el"  :mkdirp yes
   (defcustom my/org-html-theme "simple_dark" "the name of my custom org theme (CSS)")
   (defun my/emacs-org-tangle ()
     "Tangle all code blocks in 'emacs.org' and export this document to HTML."
     (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))
            (modules-dir (expand-file-name "modules" user-emacs-directory))
-           (export-dir (expand-file-name my/org-notes-directory))
+           (export-dir (expand-file-name my/org-notes-export-directory))
            (export-emacs-dir (expand-file-name "emacs" export-dir))
            (export-file (expand-file-name "index.html" user-emacs-directory)))
       (when (file-exists-p org-file)
@@ -1049,7 +1052,9 @@ This function tangles this file (=emacs.org=) and exports an HTML page
           (make-symbolic-link (expand-file-name "modules" user-emacs-directory) (expand-file-name "modules" export-emacs-dir) t)
           (make-symbolic-link (expand-file-name "LICENSE.txt" user-emacs-directory) (expand-file-name "LICENSE.txt" export-emacs-dir) t)
           (make-symbolic-link (expand-file-name "LICENSE_GPLv3.txt" user-emacs-directory) (expand-file-name "LICENSE_GPLv3.txt" export-emacs-dir) t)
-          (make-symbolic-link (expand-file-name "theme" user-emacs-directory) (expand-file-name "theme" export-dir) t)))))
+          (make-symbolic-link (expand-file-name "theme" user-emacs-directory) (expand-file-name "theme" export-dir) t)
+          (make-symbolic-link (expand-file-name "theme" user-emacs-directory) (expand-file-name "theme" my/org-notes-directory) t)
+          ))))
   (with-eval-after-load 'ox-html
     (defun my/org-html-src-block (orig-fun src-block contents info)
       "Advice for `org-html-src-block' to add a header.
@@ -1088,13 +1093,13 @@ This function tangles this file (=emacs.org=) and exports an HTML page
 #+end_src
 
 *** Local HTTP server for displaying exported HTML
-#+begin_src emacs-lisp :tangle "modules/org/org-mode.el"  :mkdirp yes
+#+begin_src emacs-lisp :tangle "modules/org/org.el"  :mkdirp yes
   (my/cargo-dependency "live-server") ; defers install of live-server Rust crate
   (defvar my/org-html-server-host "127.0.0.1") ; Set to 0.0.0.0 to serve publicly
   (defvar my/org-html-server-port "7776")
   (defun my/org-html-server (&optional redirect)
     "Start a local live-server for my org notes.
-    If the server is already running, use xdg-open to open the URL."
+    If the server is already running, open the URL."
     (interactive)
     (let* ((host my/org-html-server-host)
            (port my/org-html-server-port)
@@ -1104,10 +1109,10 @@ This function tangles this file (=emacs.org=) and exports an HTML page
       (if (and live-server-proc (process-live-p live-server-proc))
           (progn
             (message "live-server already running; opening %s" url)
-            (start-process "xdg-open" nil "xdg-open" url))
+            (browse-url url))
         (let ((live-server-path (executable-find "live-server"))
               (log-buffer-name "*my/org-html-server*")
-              (export-dir (expand-file-name my/org-notes-directory)))
+              (export-dir (expand-file-name my/org-notes-export-directory)))
           (with-current-buffer (get-buffer-create log-buffer-name)
             (if live-server-path
                 (progn
@@ -1240,100 +1245,94 @@ This function tangles this file (=emacs.org=) and exports an HTML page
 #+end_src
 
 *** Template for new org files
-#+begin_src emacs-lisp :tangle "modules/org-mode/org-mode.el" :mkdirp yes
-  (defcustom my/org-template
-    (concat "#+TITLE: {{title}}\n"
-            "#+PROPERTY: header-args :results none :eval yes\n"
-            "#+OPTIONS: noweb:t\n")
-    "My default Org template.")
+#+begin_src emacs-lisp :tangle "modules/org/org.el" :mkdirp yes
+     (defcustom my/org-template
+       (concat "#+TITLE: {{title}}\n"
+               "#+PROPERTY: header-args :exports both :results both :eval never-export\n"
+               "#+OPTIONS: noweb:t\n")
+       "My default Org template.")
 
-  (defun my/org-create-theme-file ()
-    "Create the theme file in the 'theme' directory under `user-emacs-directory`.
-    This file wraps the contents of the theme CSS (also in the theme directory)
-    with HTML <style> tags for use with Org export.
-    Additionally, create a symlink to the .theme file in `my/org-notes-directory`.
-    For example, if `my/org-html-theme` is \"simple_dark\", then
-    ~/Org/notes/simple_dark.theme will point to ~/.emacs.d/theme/simple_dark.theme."
-    (let* ((theme-dir (expand-file-name "theme" user-emacs-directory))
-           (theme-file (expand-file-name (concat my/org-html-theme ".theme") theme-dir))
-           (css-file (expand-file-name (concat my/org-html-theme ".css") theme-dir)))
-      (unless (file-directory-p theme-dir)
-        (make-directory theme-dir t))
-      (with-temp-file theme-file
-        (insert "#+HTML_HEAD: <style>\n")
-        (if (file-exists-p css-file)
-            (let ((css-content (with-temp-buffer
-                                 (insert-file-contents css-file)
-                                 (buffer-string))))
-              (dolist (line (split-string css-content "\n" t))
-                (insert (format "#+HTML_HEAD: %s\n" line))))
-          (insert "#+HTML_HEAD: /* CSS file not found */\n"))
-        (insert "#+HTML_HEAD: </style>\n"))
-      (let ((symlink (expand-file-name (concat my/org-html-theme ".theme")
-                                       my/org-notes-directory)))
-        (unless (file-directory-p my/org-notes-directory)
-          (make-directory my/org-notes-directory t))
-        (when (file-exists-p symlink)
-          (delete-file symlink))
-        (make-symbolic-link theme-file symlink))
-      theme-file))
+     (defun my/org-create-theme-file ()
+       "Create the theme file in the 'theme' directory under `user-emacs-directory`.
+       This file wraps the contents of the theme CSS (also in the theme directory)
+       with HTML <style> tags for use with Org export."
+       (let* ((theme-dir (expand-file-name "theme" user-emacs-directory))
+              (theme-file (expand-file-name (concat my/org-html-theme ".theme") theme-dir))
+              (css-file (expand-file-name (concat my/org-html-theme ".css") theme-dir)))
+         (unless (file-directory-p theme-dir)
+           (make-directory theme-dir t))
+         (with-temp-file theme-file
+           (insert "#+HTML_HEAD: <style>\n")
+           (if (file-exists-p css-file)
+               (let ((css-content (with-temp-buffer
+                                    (insert-file-contents css-file)
+                                    (buffer-string))))
+                 (dolist (line (split-string css-content "\n" t))
+                   (insert (format "#+HTML_HEAD: %s\n" line))))
+             (insert "#+HTML_HEAD: /* CSS file not found */\n"))
+           (insert "#+HTML_HEAD: </style>\n")
+           theme-file)))
 
-  (defun my/org-open-file ()
-    "Open a new Org file with the default notes template and include the theme file.
-      This function does the following:
-      1. Opens a new Org file in `org-directory/notes` and inserts the template,
-         replacing placeholders like {{title}}, {{date}}, etc.
-      2. If the directory `org-directory/notes` does not exist, it is created.
-      3. It creates (or updates) the theme file via `my/org-create-theme-file`, which is
-         stored in `user-emacs-directory/theme/{{theme}}.theme`.
-      4. The Org file then includes a line: \"#+SETUPFILE: {{theme}}.theme\" so that
-         when you export, Org loads the theme file."
-    (interactive)
-    (let* ((formatted-date (format-time-string "%Y-%m-%d"))
-           (user-title (read-string "Title for new note: "))
-           (safe-title (replace-regexp-in-string " " "-" (downcase user-title)))
-           ;; Define the notes directory and ensure it exists.
-           (notes-dir (file-name-as-directory (concat org-directory "/notes")))
-           (_ (unless (file-directory-p notes-dir)
-                (make-directory notes-dir t)))
-           (filename (format "%s/%s-%s.org"
-                             notes-dir
-                             (format-time-string "%Y-%m-%d-%H-%M-%S")
-                             safe-title))
-           (section (read-string "Section: " formatted-date))
-           (title-section (mapconcat #'capitalize (split-string section " ") " ")))
-      (find-file filename)
-      (when (zerop (buffer-size))
-        ;; Insert the Org template with placeholders replaced.
-        (insert
-         (replace-regexp-in-string
-          "{{title}}"
-          user-title
-          (replace-regexp-in-string
-           "{{date}}"
-           formatted-date
-           (replace-regexp-in-string
-            "{{section}}"
-            section
+     (defun my/org-open-file ()
+       "Open a new Org file with the default notes template and include the theme file.
+         This function does the following:
+         1. Opens a new Org file in `org-directory/notes` and inserts the template,
+            replacing placeholders like {{title}}, {{date}}, etc.
+         2. If the directory `org-directory/notes` does not exist, it is created.
+         3. It creates (or updates) the theme file via `my/org-create-theme-file`, which is
+            stored in `user-emacs-directory/theme/{{theme}}.theme`.
+         4. The Org file then includes a line: \"#+SETUPFILE: {{theme}}.theme\" so that
+            when you export, Org loads the theme file."
+       (interactive)
+       (let* ((formatted-date (format-time-string "%Y-%m-%d"))
+              (user-title (read-string "Title for new note: "))
+              (safe-title (replace-regexp-in-string " " "-" (downcase user-title)))
+              ;; Define the notes directory and ensure it exists.
+              (notes-dir (file-name-as-directory (concat org-directory "/notes")))
+              (_ (unless (file-directory-p notes-dir)
+                   (make-directory notes-dir t)))
+              (filename (format "%s/%s-%s.org"
+                                notes-dir
+                                (format-time-string "%Y-%m-%d-%H-%M-%S")
+                                safe-title))
+              (section (read-string "Section: " formatted-date))
+              (title-section (mapconcat #'capitalize (split-string section " ") " ")))
+         (unless (file-directory-p my/org-notes-directory)
+           (make-directory my/org-notes-directory t))
+         (find-file filename)
+         (when (zerop (buffer-size))
+           ;; Insert the Org template with placeholders replaced.
+           (insert
             (replace-regexp-in-string
-             "{{safe-title}}"
-             safe-title
+             "{{title}}"
+             user-title
              (replace-regexp-in-string
-              "{{title-section}}"
-              title-section
-              my/org-template))))))
-        ;; Create the theme file and insert the setup line.
-        (let ((theme-file (my/org-create-theme-file)))
-          (insert (format "#+SETUPFILE: %s\n\n"
-                          (file-name-nondirectory theme-file)))))))
+              "{{date}}"
+              formatted-date
+              (replace-regexp-in-string
+               "{{section}}"
+               section
+               (replace-regexp-in-string
+                "{{safe-title}}"
+                safe-title
+                (replace-regexp-in-string
+                 "{{title-section}}"
+                 title-section
+                 my/org-template))))))
+           ;; Create the theme file and insert the setup line.
+           (let ((theme-file (my/org-create-theme-file)))
+             (insert (format "#+SETUPFILE: theme/%s\n\n"
+                             (file-name-nondirectory theme-file)))))))
 
-  (defun my/org-babel-tangle (org-file)
-    "Tangle and export an Org file to HTML."
-    (when (file-exists-p org-file)
-      (with-current-buffer (find-file-noselect org-file)
-        (org-babel-tangle)
-        (my/org-create-theme-file)
-        (org-export-to-file 'html (org-export-output-file-name ".html" nil)))))
+     (defun my/org-babel-tangle (org-file)
+       "Tangle and export an Org file to HTML."
+       (when (file-exists-p org-file)
+         (with-current-buffer (find-file-noselect org-file)
+           (org-babel-tangle)
+           (my/org-create-theme-file)
+           (org-export-to-file 'html
+               (expand-file-name (org-export-output-file-name ".html" nil)
+                                 my/org-notes-export-directory)))))
 #+end_src
 ** Completion (label =completion=)
 
@@ -1341,7 +1340,8 @@ This function tangles this file (=emacs.org=) and exports an HTML page
  * [[https://github.com/oantolin/orderless][orderless]]
  * [[https://github.com/minad/marginalia][marginalia]]
  * [[https://company-mode.github.io/][company-mode]]
-   
+ * [[https://github.com/minad/consult][consult]]
+ 
 #+begin_src emacs-lisp :tangle "modules/completion/completion.el" :mkdirp yes
     ;; Allow minibuffers to stack:
     (setq-default enable-recursive-minibuffers t)
@@ -1362,8 +1362,15 @@ This function tangles this file (=emacs.org=) and exports an HTML page
     (setq minibuffer-prompt-properties
           '(read-only t cursor-intangible t face minibuffer-prompt))
     (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  (use-package
+    consult
+    :general ("C-x b" 'consult-buffer)
+      (setq consult-buffer-sources
+        '(consult--source-buffers
+          consult--source-recent-file
+          consult--source-project-buffer)))
 
-    (use-package vertico
+  (use-package vertico
       :custom
       (vertico-scroll-margin 2)
       (vertico-count 10)
@@ -1628,6 +1635,71 @@ This package requires the system dependency [[https://jqlang.github.io/jq/downlo
   (use-package dap-mode)
   ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 #+end_src
+** Avy (label =avy=)
+
+ * [[https://github.com/abo-abo/avy][avy]] lets you jump to any word you can see in your Emacs frame.
+
+#+begin_src emacs-lisp :tangle "modules/avy/avy.el" :mkdirp yes
+  ;; Avy (like ace-jump) :: https://github.com/abo-abo/avy
+  (use-package
+   avy
+   :general
+   ;;; These are if you want to use avy by itself,
+   ;;; Otherwise these keys will be defined by treesit-jump instead.
+   ("s-s" 'avy-goto-word-1)
+   ("C-c s" 'avy-goto-char)
+   ("C-c S" 'avy-goto-word-1))
+#+end_src
+
+** Treesit (label =treesit=)
+
+Treesit is an Emacs builtin language syntax parser.
+
+ * [[https://www.masteringemacs.org/article/how-to-get-started-tree-sitter][Mastering Emacs: How to Get Started with Tree-Sitter]]
+
+There are several third party modules to configure and enhance it:
+
+ * [[https://github.com/renzmann/treesit-auto][treesit-auto]]
+ * [[https://github.com/dmille56/treesit-jump][treesit-jump]]
+
+#+begin_src emacs-lisp :tangle "modules/treesit/treesit.el" :mkdirp yes
+  (use-package treesit-auto
+    :custom
+    (treesit-auto-langs '(awk bash bibtex blueprint c c-sharp
+                              clojure cmake commonlisp cpp css dart dockerfile elixir glsl go
+                              gomod heex html janet java javascript json julia kotlin latex
+                              lua magik make markdown nix nu org perl proto python r ruby
+                              scala sql surface toml tsx typescript typst verilog vhdl vue
+                              wast wat wgsl yaml))
+    (treesit-auto-install 'prompt)
+    :config
+    (treesit-auto-add-to-auto-mode-alist 'all)
+    (global-treesit-auto-mode))
+
+  (use-package treesit-jump
+    :straight (:host github :repo "dmille56/treesit-jump" :files ("*.el" "treesit-queries"))
+    :config
+    ;; Optional: add some queries to filter out of results (since they can be too cluttered sometimes)
+    ;;(setq treesit-jump-queries-filter-list '("inner" "test" "param"))
+#+end_src
+
+** S3-publish (label =s3-publish=)
+
+[[https://github.com/EnigmaCurry/s3-publish.el][s3-publish.el]] is a quick/temporary way to publish Emacs buffers,
+regions, and files to S3 storage and the web.
+
+#+begin_src emacs-lisp :tangle "modules/s3-publish/s3-publish.el" :mkdirp yes
+  (use-package
+    s3-publish
+    :straight
+    (s3-publish
+     :type
+     git
+     :repo
+     "https://github.com/EnigmaCurry/s3-publish.el.git")
+    :general
+    ("C-c p" 's3-publish))
+#+end_src
 ** Python (label =python=)
 
  * [[https://github.com/astral-sh/uv][uv]] - The uv package manager is installed from source when
@@ -1686,71 +1758,31 @@ This package requires the system dependency [[https://jqlang.github.io/jq/downlo
     )
 
 #+end_src
-** Avy (label =avy=)
-
- * [[https://github.com/abo-abo/avy][avy]] lets you jump to any word you can see in your Emacs frame.
-
-#+begin_src emacs-lisp :tangle "modules/avy/avy.el" :mkdirp yes
-  ;; Avy (like ace-jump) :: https://github.com/abo-abo/avy
+** Rust (label =rust=)
+#+begin_src emacs-lisp :tangle "modules/rust/rust.el" :mkdirp yes
+  ;; Rust
+  ;; must manually install cargo-watch, wasm-pack, wasm-bindgen, cargo-generate
+  (my/cargo-dependency "cargo-watch")
+  (my/cargo-dependency "wasm-pack")
+  (my/cargo-dependency "wasm-bindgen")
+  (my/cargo-dependency "cargo-generate")
   (use-package
-   avy
-   :general
-   ;;; These are if you want to use avy by itself,
-   ;;; Otherwise these keys will be defined by treesit-jump instead.
-   ("s-s" 'avy-goto-word-1)
-   ("C-c s" 'avy-goto-char)
-   ("C-c S" 'avy-goto-word-1))
+    rustic
+    :mode ("\\.rs\\'" . rustic-mode)
+    ;; :hook (rustic-mode . yas-minor-mode)
+    :init
+    (setq rustic-format-on-save t)
+    (setq rustic-rustfmt-args "--edition 2021")
+    (add-to-list 'exec-path "~/.cargo/bin")
+    (add-hook
+     'rustic-mode-hook
+     (lambda ()
+       (define-key
+        rustic-mode-map
+        (kbd "C-c M-.")
+        'lsp-rust-analyzer-open-external-docs))))
 #+end_src
 
-** Treesit (label =treesit=)
-
-Treesit is an Emacs builtin language syntax parser.
-
- * [[https://www.masteringemacs.org/article/how-to-get-started-tree-sitter][Mastering Emacs: How to Get Started with Tree-Sitter]]
-
-There are several third party modules to configure and enhance it:
-
- * [[https://github.com/renzmann/treesit-auto][treesit-auto]]
- * [[https://github.com/dmille56/treesit-jump][treesit-jump]]
-
-#+begin_src emacs-lisp :tangle "modules/treesit/treesit.el" :mkdirp yes
-  (use-package treesit-auto
-    :custom
-    ;;(treesit-auto-langs '(awk bash bibtex blueprint c c-sharp
-    ;; clojure cmake commonlisp cpp css dart dockerfile elixir glsl go
-    ;; gomod heex html janet java javascript json julia kotlin latex
-    ;; lua magik make markdown nix nu org perl proto python r ruby rust
-    ;; scala sql surface toml tsx typescript typst verilog vhdl vue
-    ;; wast wat wgsl yaml))
-    (treesit-auto-install 'prompt)
-    :config
-    (treesit-auto-add-to-auto-mode-alist 'all)
-    (global-treesit-auto-mode))
-
-  (use-package treesit-jump
-    :straight (:host github :repo "dmille56/treesit-jump" :files ("*.el" "treesit-queries"))
-    :config
-    ;; Optional: add some queries to filter out of results (since they can be too cluttered sometimes)
-    ;;(setq treesit-jump-queries-filter-list '("inner" "test" "param"))
-#+end_src
-
-** S3-publish (label =s3-publish=)
-
-[[https://github.com/EnigmaCurry/s3-publish.el][s3-publish.el]] is a quick/temporary way to publish Emacs buffers,
-regions, and files to S3 storage and the web.
-
-#+begin_src emacs-lisp :tangle "modules/s3-publish/s3-publish.el" :mkdirp yes
-  (use-package
-    s3-publish
-    :straight
-    (s3-publish
-     :type
-     git
-     :repo
-     "https://github.com/EnigmaCurry/s3-publish.el.git")
-    :general
-    ("C-c p" 's3-publish))
-#+end_src
 * Load modules
 
 The code-blocks in this file are tangled to separate categorized files

@@ -17,8 +17,15 @@
   (setq minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+(use-package
+  consult
+  :general ("C-x b" 'consult-buffer)
+    (setq consult-buffer-sources
+      '(consult--source-buffers
+        consult--source-recent-file
+        consult--source-project-buffer)))
 
-  (use-package vertico
+(use-package vertico
     :custom
     (vertico-scroll-margin 2)
     (vertico-count 10)
