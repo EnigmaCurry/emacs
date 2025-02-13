@@ -1006,13 +1006,15 @@ selection.
 #+end_src
 
 #+begin_src emacs-lisp :tangle "~/Org/notes/.dir-locals.el" :mkdirp yes
-  ((org-mode . ((eval .
-       (add-hook 'after-save-hook
-                 (lambda ()
-                   (when (and buffer-file-name
-                              (string= "org" (file-name-extension buffer-file-name)))
-                     (my/org-babel-tangle buffer-file-name))
-                   nil t))))))
+((org-mode
+  . ((org-confirm-babel-evaluate . nil)
+     (eval .
+           (add-hook 'after-save-hook
+                     (lambda ()
+                       (when (and buffer-file-name
+                                  (string= "org" (file-name-extension buffer-file-name)))
+                         (my/org-babel-tangle buffer-file-name)))
+                     nil t))))))
 #+end_src
 
 *** Tangle Emacs config and write HTML document
@@ -1129,7 +1131,7 @@ This function tangles this file (=emacs.org=) and exports an HTML page
                (string-prefix-p (expand-file-name my/org-notes-directory) (expand-file-name org-file)))
           (let ((html-file (concat (file-name-sans-extension org-file) ".html")))
             (my/org-babel-tangle org-file)
-            (my/org-html-server html-file))
+            (my/org-html-server (file-name-nondirectory html-file)))
         (message "Current buffer is not an Org file in %s" my/org-notes-directory))))
 #+end_src
 

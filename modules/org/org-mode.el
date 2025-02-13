@@ -165,5 +165,5 @@ it and export to HTML before serving it."
              (string-prefix-p (expand-file-name my/org-notes-directory) (expand-file-name org-file)))
         (let ((html-file (concat (file-name-sans-extension org-file) ".html")))
           (my/org-babel-tangle org-file)
-          (my/org-html-server html-file))
+          (my/org-html-server (file-name-nondirectory html-file)))
       (message "Current buffer is not an Org file in %s" my/org-notes-directory))))
