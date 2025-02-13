@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-12 Wed 14:40 -->
+<!-- 2025-02-12 Wed 18:05 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -206,6 +206,9 @@ color: #e0e0e0;
 font-family: "Bitstream Vera Sans",Verdana,sans-serif;
 display: flex;
 flex-direction: column;
+max-width: 90em;
+justify-content: center;
+margin:0 auto;
 }
 code {
 color: #ffd269;
@@ -289,15 +292,13 @@ font-weight: bolder;
 border: none;
 padding: 1em;
 color: #e0e0e0;
-margin: 0;
-margin-top: 1em;
+margin: 1em 0 1em 0;
 padding: 5pt;
 color: #e0e0e0;
 font-family: courier,monospace;
 font-size: 0.8em;
 background: #181f29;
-min-width: 95%;
-width: max-content;
+max-width: 90.5em;
 border-bottom: 2px solid #573b3b;
 }
 .verbatim-caption {
@@ -392,10 +393,6 @@ background-color: #8e24aa
 pre.src:before {
 margin-right: 0.5em;
 }
-pre.src {
-overflow: visible;
-width: 100%;
-}
 .org-ul li {
 padding-top: 0.5em;
 }
@@ -404,9 +401,10 @@ margin: 2em;
 }
 .code-block-container {
 border-radius: 5px;
-overflow: hidden;
+overflow: visible;
 margin-bottom: 1em;
 box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+max-width: 80em;
 }
 .code-block-header {
 background: #0d0d0d;
@@ -415,6 +413,7 @@ padding: 0.1em 1em 0.2em 0.5em;
 font-family: sans-serif;
 font-weight: bold;
 font-size: 0.9em;
+max-width: 80em;
 }
 .code-block-header.shell {
 color: #27d75b;
@@ -424,7 +423,6 @@ color: #606c71;
 }
 .code-block-container pre {
 margin: 0;
-padding: 8px;
 }
 span.filename {
 font-family: monospace;
@@ -1305,7 +1303,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org51ac9e9">
+<pre class="example" id="org49286d1">
 - avy
 - completion
 - dashboard
@@ -2770,7 +2768,7 @@ enabled):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2025-02-12 Wed 14:40</p>
+<p class="date">Last Modified: 2025-02-12 Wed 18:05</p>
 </div>
 </body>
 </html>

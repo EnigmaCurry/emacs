@@ -10,6 +10,9 @@
 #+HTML_HEAD: 	font-family: "Bitstream Vera Sans",Verdana,sans-serif;
 #+HTML_HEAD:     display: flex;
 #+HTML_HEAD:     flex-direction: column;
+#+HTML_HEAD:     max-width: 90em;
+#+HTML_HEAD:     justify-content: center;
+#+HTML_HEAD:     margin:0 auto;
 #+HTML_HEAD: }
 #+HTML_HEAD: code {
 #+HTML_HEAD: 	color: #ffd269;
@@ -93,15 +96,13 @@
 #+HTML_HEAD: 	border: none;
 #+HTML_HEAD: 	padding: 1em;
 #+HTML_HEAD: 	color: #e0e0e0;
-#+HTML_HEAD: 	margin: 0;
-#+HTML_HEAD: 	margin-top: 1em;
+#+HTML_HEAD: 	margin: 1em 0 1em 0;
 #+HTML_HEAD: 	padding: 5pt;
 #+HTML_HEAD: 	color: #e0e0e0;
 #+HTML_HEAD: 	font-family: courier,monospace;
 #+HTML_HEAD: 	font-size: 0.8em;
 #+HTML_HEAD: 	background: #181f29;
-#+HTML_HEAD: 	min-width: 95%;
-#+HTML_HEAD: 	width: max-content;
+#+HTML_HEAD:     max-width: 90.5em;
 #+HTML_HEAD:     border-bottom: 2px solid #573b3b;
 #+HTML_HEAD: }
 #+HTML_HEAD: .verbatim-caption {
@@ -196,10 +197,6 @@
 #+HTML_HEAD: pre.src:before {
 #+HTML_HEAD:     margin-right: 0.5em;
 #+HTML_HEAD: }
-#+HTML_HEAD: pre.src {
-#+HTML_HEAD: 	overflow: visible;
-#+HTML_HEAD: 	width: 100%;
-#+HTML_HEAD: }
 #+HTML_HEAD: .org-ul li {
 #+HTML_HEAD: 	padding-top: 0.5em;
 #+HTML_HEAD: }
@@ -208,9 +205,10 @@
 #+HTML_HEAD: }
 #+HTML_HEAD: .code-block-container {
 #+HTML_HEAD: 	border-radius: 5px;
-#+HTML_HEAD: 	overflow: hidden;
+#+HTML_HEAD: 	overflow: visible;
 #+HTML_HEAD: 	margin-bottom: 1em;
 #+HTML_HEAD: 	box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+#+HTML_HEAD:     max-width: 80em;
 #+HTML_HEAD: }
 #+HTML_HEAD: .code-block-header {
 #+HTML_HEAD: 	background: #0d0d0d;
@@ -219,6 +217,7 @@
 #+HTML_HEAD: 	font-family: sans-serif;
 #+HTML_HEAD: 	font-weight: bold;
 #+HTML_HEAD: 	font-size: 0.9em;
+#+HTML_HEAD:     max-width: 80em;
 #+HTML_HEAD: }
 #+HTML_HEAD: .code-block-header.shell {
 #+HTML_HEAD:     color: #27d75b;
@@ -228,7 +227,6 @@
 #+HTML_HEAD: }
 #+HTML_HEAD: .code-block-container pre {
 #+HTML_HEAD: 	margin: 0;
-#+HTML_HEAD: 	padding: 8px;
 #+HTML_HEAD: }
 #+HTML_HEAD: span.filename {
 #+HTML_HEAD:     font-family: monospace;
