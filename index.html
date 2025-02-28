@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-12 Wed 23:35 -->
+<!-- 2025-02-28 Fri 10:38 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -455,10 +455,11 @@ h1.title{margin-top: 0em;
 <li><a href="#Dependencies">3. Dependencies</a>
 <ul>
 <li><a href="#Emacs">3.1. Emacs</a></li>
-<li><a href="#Rustup_and_Cargo">3.2. Rustup and Cargo</a></li>
-<li><a href="#Git">3.3. Git</a></li>
-<li><a href="#Tree-sitter">3.4. Tree-sitter</a></li>
-<li><a href="#Create_your_Emacs_config_directory">3.5. Create your Emacs config directory</a></li>
+<li><a href="#Build_dependencies">3.2. Build dependencies</a></li>
+<li><a href="#Rustup_and_Cargo">3.3. Rustup and Cargo</a></li>
+<li><a href="#Git">3.4. Git</a></li>
+<li><a href="#Tree-sitter">3.5. Tree-sitter</a></li>
+<li><a href="#Create_your_Emacs_config_directory">3.6. Create your Emacs config directory</a></li>
 </ul>
 </li>
 <li><a href="#Early_Init">4. Early Init</a></li>
@@ -653,14 +654,24 @@ sudo dnf install emacs
 </div></div>
 
 <pre class="example">
-GNU Emacs 29.4 (build 1, x86_64-redhat-linux-gnu, GTK+ Version 3.24.43, cairo version 1.18.2)
+GNU Emacs 29.4 (build 1, aarch64-redhat-linux-gnu, GTK+ Version 3.24.43, cairo version 1.18.2)
  of 2025-01-03
 </pre>
 </div>
 </div>
-<div id="outline-container-Rustup_and_Cargo" class="outline-3">
-<h3 id="Rustup_and_Cargo"><span class="section-number-3">3.2.</span> Rustup and Cargo</h3>
+<div id="outline-container-Build_dependencies" class="outline-3">
+<h3 id="Build_dependencies"><span class="section-number-3">3.2.</span> Build dependencies</h3>
 <div class="outline-text-3" id="text-3-2">
+<div class="org-src-container">
+<pre class="src src-nil">#e.g., on Fedora:
+sudo dnf install cmake libtool openssl-devel
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-Rustup_and_Cargo" class="outline-3">
+<h3 id="Rustup_and_Cargo"><span class="section-number-3">3.3.</span> Rustup and Cargo</h3>
+<div class="outline-text-3" id="text-3-3">
 <p>
 <a href="https://rustup.rs/">Rustup</a> is a tool that installs the latest versions of <a href="https://www.rust-lang.org/">Rust</a> and <a href="https://doc.rust-lang.org/cargo/">Cargo</a>
 <i>in your home directory</i>. Cargo is a user-space source-package manager
@@ -713,8 +724,8 @@ have been loaded</a>.
 </div>
 </div>
 <div id="outline-container-Git" class="outline-3">
-<h3 id="Git"><span class="section-number-3">3.3.</span> Git</h3>
-<div class="outline-text-3" id="text-3-3">
+<h3 id="Git"><span class="section-number-3">3.4.</span> Git</h3>
+<div class="outline-text-3" id="text-3-4">
 <p>
 Install <code>git</code> via your package manager:
 </p>
@@ -747,8 +758,8 @@ git checkout literate-new
 </div>
 </div>
 <div id="outline-container-Tree-sitter" class="outline-3">
-<h3 id="Tree-sitter"><span class="section-number-3">3.4.</span> Tree-sitter</h3>
-<div class="outline-text-3" id="text-3-4">
+<h3 id="Tree-sitter"><span class="section-number-3">3.5.</span> Tree-sitter</h3>
+<div class="outline-text-3" id="text-3-5">
 <p>
 Tree-sitter is an optional dependency. It adds advanced syntax tree
 parser to language modes.
@@ -763,8 +774,8 @@ sudo dnf install libtree-sitter
 </div>
 </div>
 <div id="outline-container-Create_your_Emacs_config_directory" class="outline-3">
-<h3 id="Create_your_Emacs_config_directory"><span class="section-number-3">3.5.</span> Create your Emacs config directory</h3>
-<div class="outline-text-3" id="text-3-5">
+<h3 id="Create_your_Emacs_config_directory"><span class="section-number-3">3.6.</span> Create your Emacs config directory</h3>
+<div class="outline-text-3" id="text-3-6">
 <p>
 You can try this config out without modifying your existing config.
 The following command tells Emacs to load config directly (ignoring
@@ -1307,7 +1318,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="orgfaf0852">
+<pre class="example" id="org1daceb3">
 - avy
 - completion
 - dashboard
@@ -2641,6 +2652,8 @@ regions, and files to S3 storage and the web.
    git
    <span style="color: #f08080;">:repo</span>
    <span style="color: #deb887;">"https://github.com/EnigmaCurry/s3-publish.el.git"</span>)
+  <span style="color: #f08080;">:init</span>
+  (<span style="color: #00bfff;">require</span> '<span style="color: #a2cd5a;">s3-publish</span>)
   <span style="color: #f08080;">:general</span>
   (<span style="color: #deb887;">"C-c p"</span> 's3-publish))
 </pre>
@@ -2718,10 +2731,9 @@ load.</li>
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/rust/rust.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Rust</span>
-<span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">must manually install cargo-watch, wasm-pack, wasm-bindgen, cargo-generate</span>
+<span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">must manually install cargo-watch, wasm-pack, cargo-generate</span>
 (my/cargo-dependency <span style="color: #deb887;">"cargo-watch"</span>)
 (my/cargo-dependency <span style="color: #deb887;">"wasm-pack"</span>)
-(my/cargo-dependency <span style="color: #deb887;">"wasm-bindgen"</span>)
 (my/cargo-dependency <span style="color: #deb887;">"cargo-generate"</span>)
 (<span style="color: #00bfff;">use-package</span>
   rustic
@@ -2837,7 +2849,7 @@ enabled):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2025-02-12 Wed 23:35</p>
+<p class="date">Last Modified: 2025-02-28 Fri 10:38</p>
 </div>
 </body>
 </html>

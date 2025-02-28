@@ -154,6 +154,14 @@ You will need a recent version of Emacs.
 (message (emacs-version))
 #+end_src
 
+
+** Build dependencies
+
+#+begin_src
+  #e.g., on Fedora:
+  sudo dnf install cmake libtool openssl-devel
+#+end_src
+
 ** Rustup and Cargo
 
 [[https://rustup.rs/][Rustup]] is a tool that installs the latest versions of [[https://www.rust-lang.org/][Rust]] and [[https://doc.rust-lang.org/cargo/][Cargo]]
@@ -1717,6 +1725,8 @@ regions, and files to S3 storage and the web.
      git
      :repo
      "https://github.com/EnigmaCurry/s3-publish.el.git")
+    :init
+    (require 's3-publish)
     :general
     ("C-c p" 's3-publish))
 #+end_src
@@ -1781,10 +1791,9 @@ regions, and files to S3 storage and the web.
 ** Rust (label =rust=)
 #+begin_src emacs-lisp :tangle "modules/rust/rust.el" :mkdirp yes
   ;; Rust
-  ;; must manually install cargo-watch, wasm-pack, wasm-bindgen, cargo-generate
+  ;; must manually install cargo-watch, wasm-pack, cargo-generate
   (my/cargo-dependency "cargo-watch")
   (my/cargo-dependency "wasm-pack")
-  (my/cargo-dependency "wasm-bindgen")
   (my/cargo-dependency "cargo-generate")
   (use-package
     rustic
