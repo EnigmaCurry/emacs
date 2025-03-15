@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-28 Fri 10:38 -->
+<!-- 2025-03-14 Fri 23:47 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -654,8 +654,8 @@ sudo dnf install emacs
 </div></div>
 
 <pre class="example">
-GNU Emacs 29.4 (build 1, aarch64-redhat-linux-gnu, GTK+ Version 3.24.43, cairo version 1.18.2)
- of 2025-01-03
+GNU Emacs 29.4 (build 1, x86_64-redhat-linux-gnu, GTK+ Version 3.24.43, cairo version 1.18.0)
+ of 2024-10-10
 </pre>
 </div>
 </div>
@@ -1318,7 +1318,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org1daceb3">
+<pre class="example" id="org3449633">
 - avy
 - completion
 - dashboard
@@ -2492,46 +2492,7 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
     <span style="color: #f08080;">:stream</span> t
     <span style="color: #f08080;">:protocol</span> <span style="color: #deb887;">"http"</span>
     <span style="color: #f08080;">:host</span> <span style="color: #deb887;">"localhost:1234"</span>
-    <span style="color: #f08080;">:models</span> '(test)))
-  (<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my-gptel-deepseek-wrap-think-block</span> (beg end)
-    <span style="color: #ffe4b5;">"Wrap '</span><span style="color: #a2cd5a;">&lt;think&gt;</span><span style="color: #ffe4b5;">' blocks in an Org-mode drawer if not already wrapped."</span>
-    (<span style="color: #00bfff;">when</span> (derived-mode-p 'org-mode)
-      (<span style="color: #00bfff;">save-excursion</span>
-        (goto-char beg)
-        <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Find all occurrences of &lt;think&gt; blocks</span>
-        (<span style="color: #00bfff;">while</span> (re-search-forward <span style="color: #deb887;">"^&lt;think&gt;"</span> end t)
-          (<span style="color: #00bfff;">let</span> ((start (line-beginning-position)))
-            <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Check if the block is already wrapped</span>
-            (<span style="color: #00bfff;">unless</span> (<span style="color: #00bfff;">save-excursion</span>
-                      (forward-line -4)
-                      (looking-at <span style="color: #deb887;">"^:THINKING:$"</span>))
-              <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Insert Org-mode drawer start</span>
-              (goto-char start)
-              (kill-region (point) (line-end-position))
-              (insert-and-inherit <span style="color: #deb887;">":THINKING:\n"</span>)
-              (insert-and-inherit
-               <span style="color: #deb887;">"#+attr_shortcode: :title Thinking ...\n"</span>)
-              (insert-and-inherit <span style="color: #deb887;">"#+begin_expand\n"</span>)
-              (insert-and-inherit <span style="color: #deb887;">"&lt;pre&gt;"</span>)
-              (forward-line 4)
-              <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Find the closing tag again after insertion</span>
-              (<span style="color: #00bfff;">when</span> (re-search-forward <span style="color: #deb887;">"&lt;/think&gt;"</span> nil t)
-                (end-of-line)
-                (kill-region (line-beginning-position) (point))
-                (insert-and-inherit <span style="color: #deb887;">"&lt;/pre&gt;"</span>)
-                (end-of-line)
-                <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Ensure we don't add duplicate :END:</span>
-                (<span style="color: #00bfff;">unless</span> (looking-at <span style="color: #deb887;">"\n#+end_expand"</span>)
-                  (insert-and-inherit <span style="color: #deb887;">"\n#+end_expand\n"</span>)
-                  (insert-and-inherit <span style="color: #deb887;">":END:\n"</span>))
-                <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Move back to the start of the drawer for org-cycle</span>
-                (goto-char start)
-                (org-cycle)))))))
-    (message <span style="color: #deb887;">"Think blocks wrapped and folded."</span>))
-
-  (add-hook
-   'gptel-post-response-functions
-   #'my-gptel-deepseek-wrap-think-block))
+    <span style="color: #f08080;">:models</span> '(test))))
 </pre>
 </div></div>
 </div>
@@ -2849,7 +2810,7 @@ enabled):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2025-02-28 Fri 10:38</p>
+<p class="date">Last Modified: 2025-03-14 Fri 23:47</p>
 </div>
 </body>
 </html>
