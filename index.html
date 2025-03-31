@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-03-31 Mon 10:55 -->
+<!-- 2025-03-31 Mon 11:09 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -1320,7 +1320,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="orgb17b8ad">
+<pre class="example" id="orgc1a6b91">
 - avy
 - completion
 - dashboard
@@ -2734,14 +2734,21 @@ load.</li>
   <span style="color: #f08080;">:straight</span> t
   <span style="color: #f08080;">:mode</span> (<span style="color: #deb887;">"\\.svelte\\'"</span> . svelte-mode)
   <span style="color: #f08080;">:init</span>
-  <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Ensure lsp-mode and prettier-js are installed</span>
-  (<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">prettier-js</span>
+  (<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">lsp-mode</span>
     <span style="color: #f08080;">:straight</span> t)
-  <span style="color: #f08080;">:hook</span> ((svelte-mode . lsp)           <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">Start LSP when opening a Svelte file</span>
-         (svelte-mode . prettier-js-mode)) <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">Enable Prettier formatting</span>
+  (<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">apheleia</span>
+    <span style="color: #f08080;">:straight</span> t)
+  <span style="color: #f08080;">:hook</span> ((svelte-mode . lsp))  <span style="color: #7f7f7f;">; </span><span style="color: #7f7f7f;">Start LSP when opening a Svelte file</span>
   <span style="color: #f08080;">:config</span>
-  <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Optional additional settings (e.g., enable snippets in LSP)</span>
-  (<span style="color: #00bfff;">setq</span> lsp-enable-snippet t))
+  (<span style="color: #00bfff;">setq</span> lsp-enable-snippet t)
+
+  <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Configure Apheleia to format Svelte files using Prettier v3.</span>
+  <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">This command passes the current file path and forces the "svelte" parser.</span>
+  (<span style="color: #00bfff;">setf</span> (alist-get 'svelte-mode apheleia-formatters)
+        '(<span style="color: #deb887;">"prettier"</span> <span style="color: #deb887;">"--stdin-filepath"</span> filepath <span style="color: #deb887;">"--parser"</span> <span style="color: #deb887;">"svelte"</span>))
+  (<span style="color: #00bfff;">setf</span> (alist-get 'svelte-mode apheleia-mode-alist) 'svelte-mode)
+
+  (apheleia-global-mode +1))
 </pre>
 </div></div>
 </div>
@@ -2839,7 +2846,7 @@ enabled):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2025-03-31 Mon 10:55</p>
+<p class="date">Last Modified: 2025-03-31 Mon 11:09</p>
 </div>
 </body>
 </html>
