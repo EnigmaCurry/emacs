@@ -16,3 +16,5 @@
 /.dap-breakpoints
 /.lsp-session*
 tree-sitter/
+/tramp
+/.cache/

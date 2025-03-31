@@ -11,7 +11,12 @@
 (use-package
   python-mode
   :general ("s-a" 'lsp-execute-code-action)
-  :init (my/python-install-ruff)
+  :init
+  (my/python-install-ruff)
+  (setq auto-mode-alist
+        (rassq-delete-all 'python-mode auto-mode-alist))
+  (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+  (autoload 'python-mode "python-mode" "Python mode." t)
   :hook
   (python-mode . pyvenv-mode)
   (python-mode . flycheck-mode)

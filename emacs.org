@@ -1657,7 +1657,7 @@ There are several third party modules to configure and enhance it:
     (treesit-auto-langs '(awk bash bibtex blueprint c c-sharp
                               clojure cmake commonlisp cpp css dart dockerfile elixir glsl go
                               gomod heex html janet java javascript json julia kotlin latex
-                              lua magik make markdown nix nu org perl proto python r ruby
+                              lua magik make markdown nix nu org perl proto r ruby
                               scala sql surface toml tsx typescript typst verilog vhdl vue
                               wast wat wgsl yaml))
     (treesit-auto-install 'prompt)
@@ -1711,7 +1711,12 @@ regions, and files to S3 storage and the web.
   (use-package
     python-mode
     :general ("s-a" 'lsp-execute-code-action)
-    :init (my/python-install-ruff)
+    :init
+    (my/python-install-ruff)
+    (setq auto-mode-alist
+          (rassq-delete-all 'python-mode auto-mode-alist))
+    (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+    (autoload 'python-mode "python-mode" "Python mode." t)
     :hook
     (python-mode . pyvenv-mode)
     (python-mode . flycheck-mode)
@@ -1773,6 +1778,23 @@ regions, and files to S3 storage and the web.
         rustic-mode-map
         (kbd "C-c M-.")
         'lsp-rust-analyzer-open-external-docs))))
+#+end_src
+
+** Svelte (label =svelte=)
+
+#+begin_src emacs-lisp :tangle "modules/svelte/svelte.el" :mkdirp yes
+(use-package svelte-mode
+  :straight t
+  :mode ("\\.svelte\\'" . svelte-mode)
+  :init
+  ;; Ensure lsp-mode and prettier-js are installed
+  (use-package prettier-js
+    :straight t)
+  :hook ((svelte-mode . lsp)           ; Start LSP when opening a Svelte file
+         (svelte-mode . prettier-js-mode)) ; Enable Prettier formatting
+  :config
+  ;; Optional additional settings (e.g., enable snippets in LSP)
+  (setq lsp-enable-snippet t))
 #+end_src
 
 * Load modules
