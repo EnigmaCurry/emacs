@@ -14,6 +14,7 @@
 (setq-default tramp-default-method "ssh")
 (setq-default native-comp-deferred-compilation-deny-list nil)
 (setq-default browse-url-browser-function 'browse-url-firefox)
+(setq-default require-final-newline t)
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
