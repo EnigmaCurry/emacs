@@ -8,6 +8,6 @@
    "C-c f" 'sqlformat)
   :init
   (setq sqlformat-command 'pgformatter)
-  (setq sqlformat-args '("-f" "1"))
-  ;(add-hook 'sql-mode-hook 'sqlformat-on-save-mode)
+  (setq sqlformat-args '("-f1" "-u1"))
+  (add-hook 'sql-mode-hook 'sqlformat-on-save-mode)
   )

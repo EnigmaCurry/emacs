@@ -1799,8 +1799,8 @@ regions, and files to S3 storage and the web.
      "C-c f" 'sqlformat)
     :init
     (setq sqlformat-command 'pgformatter)
-    (setq sqlformat-args '("-f" "1"))
-    ;(add-hook 'sql-mode-hook 'sqlformat-on-save-mode)
+    (setq sqlformat-args '("-f1" "-u1"))
+    (add-hook 'sql-mode-hook 'sqlformat-on-save-mode)
     )
 #+end_src
 
@@ -1811,6 +1811,7 @@ podman (script must be named =pg_format=):
    podman build -t pgformatter https://github.com/darold/pgFormatter.git
    echo -e "#!/bin/bash\n podman run --rm -a stdin -a stdout -i localhost/pgformatter \$@" > /tmp/pg_format
    sudo install /tmp/pg_format /usr/local/bin/pg_format
+#+end_src
 
 ** Svelte (label =svelte=)
 
