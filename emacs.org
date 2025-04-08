@@ -1809,11 +1809,14 @@ podman (script must be named =pg_format=):
 
 #+begin_src shell
    podman build -t pgformatter https://github.com/darold/pgFormatter.git
-   echo -e "#!/bin/bash\n podman run --rm -a stdin -a stdout -i localhost/pgformatter \$@" > /tmp/pg_format
+   echo -e "#\!/bin/bash\n podman run --rm -a stdin -a stdout -i localhost/pgformatter \$@" > /tmp/pg_format
    sudo install /tmp/pg_format /usr/local/bin/pg_format
 #+end_src
 
 ** Svelte (label =svelte=)
+
+ * Install the =typescript= package.
+ * Install prettier: =sudo npm install -g prettier prettier-plugin-svelte=.
 
 #+begin_src emacs-lisp :tangle "modules/svelte/svelte.el" :mkdirp yes
 (use-package svelte-mode
