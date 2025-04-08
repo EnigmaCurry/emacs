@@ -696,6 +696,7 @@ configs, etc.
 quickly come back to it from anywhere.
 
  * =C-c j e=    jump to the Emacs config file (=emacs.org=)
+ * =C-c j o=    jump to the user Org notes directory (=my/org-notes-directory=)
  * =C-c j g= open the user's git directory (You must customize =my/git-user-directory=)
  * =C-c j v= open the vendor git directory (You may customize =my/git-vendor-directory=)
  * =C-c j d=    open the Docker projects directory ([[https://github.com/EnigmaCurry/d.rymcg.tech][d.rymcg.tech]])
@@ -724,6 +725,7 @@ sub-menu, and change the following settings:
     :group 'my/path-settings)
 
   (set-register ?e `(file . ,(expand-file-name "emacs.org" user-emacs-directory)))
+  (set-register ?o `(file . ,my/org-notes-directory))
   (set-register ?g `(file . ,my/git-user-directory))
   (set-register ?d `(file . ,(expand-file-name "enigmacurry/d.rymcg.tech/" my/git-vendor-directory)))
   (set-register ?v `(file . ,my/git-vendor-directory))
@@ -1803,6 +1805,36 @@ regions, and files to S3 storage and the web.
         rustic-mode-map
         (kbd "C-c M-.")
         'lsp-rust-analyzer-open-external-docs))))
+#+end_src
+
+** SQL (label =sql=)
+
+ * [[https://github.com/purcell/sqlformat][sqlformat.el]]
+ * [[https://github.com/darold/pgFormatter][pgformatter]]
+
+#+begin_src emacs-lisp :tangle "modules/sql/sql.el" :mkdirp yes
+  ;; https://github.com/purcell/sqlformat
+  ;; https://github.com/darold/pgFormatter
+  (use-package
+    sqlformat
+    :config
+    (general-define-key
+     :keymaps 'sql-mode-map
+     "C-c f" 'sqlformat)
+    :init
+    (setq sqlformat-command 'pgformatter)
+    (setq sqlformat-args '("-f" "1"))
+    ;(add-hook 'sql-mode-hook 'sqlformat-on-save-mode)
+    )
+#+end_src
+
+pgformatter, if its not packaged by your OS, can be installed via
+podman (script must be named =pg_format=):
+
+#+begin_src shell
+   podman build -t pgformatter https://github.com/darold/pgFormatter.git
+   echo -e "#!/bin/bash\n podman run --rm -a stdin -a stdout -i localhost/pgformatter \$@" > /tmp/pg_format
+   sudo install /tmp/pg_format /usr/local/bin/pg_format
 #+end_src
 
 * Load modules

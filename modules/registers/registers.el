@@ -11,6 +11,7 @@
   :group 'my/path-settings)
 
 (set-register ?e `(file . ,(expand-file-name "emacs.org" user-emacs-directory)))
+(set-register ?o `(file . ,my/org-notes-directory))
 (set-register ?g `(file . ,my/git-user-directory))
 (set-register ?d `(file . ,(expand-file-name "enigmacurry/d.rymcg.tech/" my/git-vendor-directory)))
 (set-register ?v `(file . ,my/git-vendor-directory))

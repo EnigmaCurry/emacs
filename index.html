@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-12 Wed 23:35 -->
+<!-- 2025-04-07 Mon 16:59 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -531,6 +531,7 @@ h1.title{margin-top: 0em;
 <li><a href="#S3-publish_%28label_%3Ds3-publish%3D%29">9.20. S3-publish (label <code>s3-publish</code>)</a></li>
 <li><a href="#Python_%28label_%3Dpython%3D%29">9.21. Python (label <code>python</code>)</a></li>
 <li><a href="#Rust_%28label_%3Drust%3D%29">9.22. Rust (label <code>rust</code>)</a></li>
+<li><a href="#SQL_%28label_%3Dsql%3D%29">9.23. SQL (label <code>sql</code>)</a></li>
 </ul>
 </li>
 <li><a href="#Load_modules">10. Load modules</a>
@@ -1307,7 +1308,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="orgfaf0852">
+<pre class="example" id="orga27a2d6">
 - avy
 - completion
 - dashboard
@@ -1324,6 +1325,7 @@ Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/mod
 - registers
 - rust
 - s3-publish
+- sql
 - ssh-agent
 - text-scale
 - theme
@@ -1416,6 +1418,7 @@ quickly come back to it from anywhere.
 
 <ul class="org-ul">
 <li><code>C-c j e</code>    jump to the Emacs config file (<code>emacs.org</code>)</li>
+<li><code>C-c j o</code>    jump to the user Org notes directory (<code>my/org-notes-directory</code>)</li>
 <li><code>C-c j g</code> open the user's git directory (You must customize <code>my/git-user-directory</code>)</li>
 <li><code>C-c j v</code> open the vendor git directory (You may customize <code>my/git-vendor-directory</code>)</li>
 <li><code>C-c j d</code>    open the Docker projects directory (<a href="https://github.com/EnigmaCurry/d.rymcg.tech">d.rymcg.tech</a>)</li>
@@ -1450,6 +1453,7 @@ your <i>personal</i> git repositories (e.g.,
   <span style="color: #f08080;">:group</span> 'my/path-settings)
 
 (set-register ?e `(file . ,(expand-file-name <span style="color: #deb887;">"emacs.org"</span> user-emacs-directory)))
+(set-register ?o `(file . ,my/org-notes-directory))
 (set-register ?g `(file . ,my/git-user-directory))
 (set-register ?d `(file . ,(expand-file-name <span style="color: #deb887;">"enigmacurry/d.rymcg.tech/"</span> my/git-vendor-directory)))
 (set-register ?v `(file . ,my/git-vendor-directory))
@@ -2744,6 +2748,46 @@ load.</li>
 </div></div>
 </div>
 </div>
+<div id="outline-container-SQL_%28label_%3Dsql%3D%29" class="outline-3">
+<h3 id="SQL_%28label_%3Dsql%3D%29"><span class="section-number-3">9.23.</span> SQL (label <code>sql</code>)</h3>
+<div class="outline-text-3" id="text-9-23">
+<ul class="org-ul">
+<li><a href="https://github.com/purcell/sqlformat">sqlformat.el</a></li>
+<li><a href="https://github.com/darold/pgFormatter">pgformatter</a></li>
+</ul>
+
+<div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/sql/sql.el</span></div>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">https://github.com/purcell/sqlformat</span>
+<span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">https://github.com/darold/pgFormatter</span>
+(<span style="color: #00bfff;">use-package</span>
+  sqlformat
+  <span style="color: #f08080;">:config</span>
+  (general-define-key
+   <span style="color: #f08080;">:keymaps</span> 'sql-mode-map
+   <span style="color: #deb887;">"C-c f"</span> 'sqlformat)
+  <span style="color: #f08080;">:init</span>
+  (<span style="color: #00bfff;">setq</span> sqlformat-command 'pgformatter)
+  (<span style="color: #00bfff;">setq</span> sqlformat-args '(<span style="color: #deb887;">"-f"</span> <span style="color: #deb887;">"1"</span>))
+  <span style="color: #7f7f7f;">;</span><span style="color: #7f7f7f;">(add-hook 'sql-mode-hook 'sqlformat-on-save-mode)</span>
+  )
+</pre>
+</div></div>
+
+<p>
+pgformatter, if its not packaged by your OS, can be installed via
+podman (script must be named <code>pg_format</code>):
+</p>
+
+<div class="code-block-container"><div class="code-block-header shell">Run this in your shell ::</div>
+<div class="org-src-container">
+<pre class="src src-shell">podman build -t pgformatter https://github.com/darold/pgFormatter.git
+<span style="color: #f08080;">echo</span> -e <span style="color: #deb887;">"#!/bin/bash\n podman run --rm -a stdin -a stdout -i localhost/pgformatter \$@"</span> &gt; /tmp/pg_format
+sudo install /tmp/pg_format /usr/local/bin/pg_format
+</pre>
+</div></div>
+</div>
+</div>
 </div>
 <div id="outline-container-Load_modules" class="outline-2">
 <h2 id="Load_modules"><span class="section-number-2">10.</span> Load modules</h2>
@@ -2837,7 +2881,7 @@ enabled):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2025-02-12 Wed 23:35</p>
+<p class="date">Last Modified: 2025-04-07 Mon 16:59</p>
 </div>
 </body>
 </html>
