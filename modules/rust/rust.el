@@ -1,8 +1,7 @@
 ;; Rust
-;; must manually install cargo-watch, wasm-pack, wasm-bindgen, cargo-generate
+;; must manually install cargo-watch, wasm-pack, cargo-generate
 (my/cargo-dependency "cargo-watch")
 (my/cargo-dependency "wasm-pack")
-(my/cargo-dependency "wasm-bindgen")
 (my/cargo-dependency "cargo-generate")
 (use-package
   rustic
