@@ -1818,7 +1818,7 @@ podman (script must be named =pg_format=):
  * Install the =typescript= package from system package manager.
  * Install prettier globally: =sudo npm install -g prettier
    prettier-plugin-svelte=.
- * In your Svelte project, you must also install: ==npm install
+ * In your Svelte project, you must also install: =npm install
    --save-dev prettier prettier-plugin-svelte=.
  * In your Svelte project run =npm install= once more to be sure it grabbed everything.
 
