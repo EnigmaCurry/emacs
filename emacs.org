@@ -1815,29 +1815,35 @@ podman (script must be named =pg_format=):
 
 ** Svelte (label =svelte=)
 
- * Install the =typescript= package.
- * Install prettier: =sudo npm install -g prettier prettier-plugin-svelte=.
+ * Install the =typescript= package from system package manager.
+ * Install prettier globally: =sudo npm install -g prettier
+   prettier-plugin-svelte=.
+ * In your Svelte project, you must also install: ==npm install
+   --save-dev prettier prettier-plugin-svelte=.
+ * In your Svelte project run =npm install= once more to be sure it grabbed everything.
 
 #+begin_src emacs-lisp :tangle "modules/svelte/svelte.el" :mkdirp yes
-(use-package svelte-mode
-  :straight t
-  :mode ("\\.svelte\\'" . svelte-mode)
-  :init
-  (use-package lsp-mode
-    :straight t)
-  (use-package apheleia
-    :straight t)
-  :hook ((svelte-mode . lsp))  ; Start LSP when opening a Svelte file
-  :config
-  (setq lsp-enable-snippet t)
-  
-  ;; Configure Apheleia to format Svelte files using Prettier v3.
-  ;; This command passes the current file path and forces the "svelte" parser.
-  (setf (alist-get 'svelte-mode apheleia-formatters)
-        '("prettier" "--stdin-filepath" filepath "--parser" "svelte"))
-  (setf (alist-get 'svelte-mode apheleia-mode-alist) 'svelte-mode)
-  
-  (apheleia-global-mode +1))
+      (use-package svelte-mode
+        :straight t
+        :mode ("\\.svelte\\'" . svelte-mode)
+        :init
+        (use-package lsp-mode
+          :straight t)
+        (use-package apheleia
+          :straight t)
+        :hook ((svelte-mode . lsp)
+               (svelte-mode . apheleia-mode))        
+        :config
+        (setq lsp-enable-snippet t)
+        
+        ;; Configure Apheleia to format Svelte files using Prettier v3.
+        ;; This command passes the current file path and forces the "svelte" parser.
+        (setf (alist-get 'svelte-mode apheleia-formatters)
+              '("prettier" "--stdin-filepath" filepath "--parser" "svelte"))
+        (setf (alist-get 'svelte-mode apheleia-mode-alist) 'svelte-mode)
+        
+        ;;(apheleia-global-mode +1)
+        )
 #+end_src
 
 * Load modules

@@ -6,7 +6,8 @@
     :straight t)
   (use-package apheleia
     :straight t)
-  :hook ((svelte-mode . lsp))  ; Start LSP when opening a Svelte file
+  :hook ((svelte-mode . lsp)
+         (svelte-mode . apheleia-mode))        
   :config
   (setq lsp-enable-snippet t)
   
@@ -16,4 +17,5 @@
         '("prettier" "--stdin-filepath" filepath "--parser" "svelte"))
   (setf (alist-get 'svelte-mode apheleia-mode-alist) 'svelte-mode)
   
-  (apheleia-global-mode +1))
+  ;;(apheleia-global-mode +1)
+  )
