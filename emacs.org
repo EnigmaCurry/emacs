@@ -1367,6 +1367,9 @@ This function tangles this file (=emacs.org=) and exports an HTML page
   (advice-add 'rustic-babel-run-update-result-block :around #'my/save-buffer-after-code-execution)
 #+end_src
 ** Ace window (label =ace-window=)
+
+ * [[https://github.com/abo-abo/ace-window][ace-window]]
+
 #+begin_src emacs-lisp :tangle "modules/ace-window/ace-window.el"  :mkdirp yes
   (use-package ace-window
     :general ("C-x o" 'ace-window))
