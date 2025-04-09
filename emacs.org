@@ -1366,6 +1366,11 @@ This function tangles this file (=emacs.org=) and exports an HTML page
   (advice-add 'org-babel-execute-src-block :around #'my/save-buffer-after-code-execution)
   (advice-add 'rustic-babel-run-update-result-block :around #'my/save-buffer-after-code-execution)
 #+end_src
+** Ace window (label =ace-window=)
+#+begin_src emacs-lisp :tangle "modules/ace-window/ace-window.el"  :mkdirp yes
+  (use-package ace-window
+    :general ("C-x o" 'ace-window))
+#+end_src
 ** Completion (label =completion=)
 
  * [[https://github.com/minad/vertico][vertico]]
