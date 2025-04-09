@@ -19,4 +19,5 @@
 ;;; Enter debugger on specific logger regex (see *Messages* buffer):
 ;; (setq debug-on-message "Example log message to trace")
 ;;; M-x toggle-debug-on-error
-(setq debug-on-error t)
+;;(setq debug-on-error t)
+(setq warning-minimum-level :error)
