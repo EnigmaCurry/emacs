@@ -1755,7 +1755,7 @@ regions, and files to S3 storage and the web.
     ;;                                ".dir-locals.el")))
     ;;               (pyvenv-activate (expand-file-name "virtualenv" project-root)))))))
     )
-
+  (use-package jinja2-mode)
 #+end_src
 ** Rust (label =rust=)
 #+begin_src emacs-lisp :tangle "modules/rust/rust.el" :mkdirp yes

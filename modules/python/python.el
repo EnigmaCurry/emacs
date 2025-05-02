@@ -52,3 +52,4 @@
   ;;                                ".dir-locals.el")))
   ;;               (pyvenv-activate (expand-file-name "virtualenv" project-root)))))))
   )
+(use-package jinja2-mode)
