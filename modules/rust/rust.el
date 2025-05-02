@@ -11,8 +11,8 @@
   (setq rustic-format-on-save t)
   (setq rustic-rustfmt-args "--edition 2021")
   (add-to-list 'exec-path "~/.cargo/bin")
-  (defalias 'org-babel-execute:rust 'org-babel-execute:rustic)
-  (describe-function 'org-babel-execute:rust)
+  ;(defalias 'org-babel-execute:rust 'org-babel-execute:rustic)
+  ;(describe-function 'org-babel-execute:rust)
   (add-hook
    'rustic-mode-hook
    (lambda ()

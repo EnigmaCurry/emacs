@@ -286,7 +286,8 @@ Additionally, early debug options are set here.
   ;;; Enter debugger on specific logger regex (see *Messages* buffer):
   ;; (setq debug-on-message "Example log message to trace")
   ;;; M-x toggle-debug-on-error
-  (setq debug-on-error t)
+  ;;(setq debug-on-error t)
+  (setq warning-minimum-level :error)
 #+end_src
 
 * Base config
@@ -413,6 +414,11 @@ machine only.
                               (setq show-trailing-whitespace t)
                               (display-fill-column-indicator-mode 1)
                               (display-line-numbers-mode 1)))
+
+  ;; Edit .env files with shell-script-mode
+  (add-to-list 'auto-mode-alist '("\\.env\\'" . shell-script-mode))
+  (add-to-list 'auto-mode-alist '("\\.env_.*\\'" . shell-script-mode))
+  (add-to-list 'auto-mode-alist '("\\.env-dist\\'" . shell-script-mode))
 #+end_src
 
 ** Shell processes
@@ -1365,6 +1371,14 @@ This function tangles this file (=emacs.org=) and exports an HTML page
   (advice-add 'org-babel-execute-src-block :around #'my/save-buffer-after-code-execution)
   (advice-add 'rustic-babel-run-update-result-block :around #'my/save-buffer-after-code-execution)
 #+end_src
+** Ace window (label =ace-window=)
+
+ * [[https://github.com/abo-abo/ace-window][ace-window]]
+
+#+begin_src emacs-lisp :tangle "modules/ace-window/ace-window.el"  :mkdirp yes
+  (use-package ace-window
+    :general ("C-x o" 'ace-window))
+#+end_src
 ** Completion (label =completion=)
 
  * [[https://github.com/minad/vertico][vertico]]
@@ -1772,8 +1786,8 @@ regions, and files to S3 storage and the web.
     (setq rustic-format-on-save t)
     (setq rustic-rustfmt-args "--edition 2021")
     (add-to-list 'exec-path "~/.cargo/bin")
-    (defalias 'org-babel-execute:rust 'org-babel-execute:rustic)
-    (describe-function 'org-babel-execute:rust)
+    ;(defalias 'org-babel-execute:rust 'org-babel-execute:rustic)
+    ;(describe-function 'org-babel-execute:rust)
     (add-hook
      'rustic-mode-hook
      (lambda ()
@@ -1818,7 +1832,7 @@ podman (script must be named =pg_format=):
  * Install the =typescript= package from system package manager.
  * Install prettier globally: =sudo npm install -g prettier
    prettier-plugin-svelte=.
- * In your Svelte project, you must also install: ==npm install
+ * In your Svelte project, you must also install: =npm install
    --save-dev prettier prettier-plugin-svelte=.
  * In your Svelte project run =npm install= once more to be sure it grabbed everything.
 
