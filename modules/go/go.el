@@ -1,0 +1,3 @@
+(use-package
+  go-mode
+  )

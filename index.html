@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-05-02 Fri 17:40 -->
+<!-- 2025-05-22 Thu 09:59 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -535,6 +535,7 @@ h1.title{margin-top: 0em;
 <li><a href="#Rust_%28label_%3Drust%3D%29">9.23. Rust (label <code>rust</code>)</a></li>
 <li><a href="#SQL_%28label_%3Dsql%3D%29">9.24. SQL (label <code>sql</code>)</a></li>
 <li><a href="#Svelte_%28label_%3Dsvelte%3D%29">9.25. Svelte (label <code>svelte</code>)</a></li>
+<li><a href="#Go_%28label_%3Dgo%3D%29">9.26. Go (label <code>go</code>)</a></li>
 </ul>
 </li>
 <li><a href="#Load_modules">10. Load modules</a>
@@ -658,7 +659,7 @@ sudo dnf install emacs
 
 <pre class="example">
 GNU Emacs 29.4 (build 1, x86_64-redhat-linux-gnu, GTK+ Version 3.24.43, cairo version 1.18.2)
- of 2025-01-03
+ of 2025-03-13
 </pre>
 </div>
 </div>
@@ -1328,13 +1329,14 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org77a1d4a">
+<pre class="example" id="orgd182864">
 - ace-window
 - avy
 - completion
 - dashboard
 - fonts
 - general
+- go
 - gptel
 - just
 - latin-words
@@ -2606,8 +2608,8 @@ There are several third party modules to configure and enhance it:
 <pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span> <span style="color: #a2cd5a;">treesit-auto</span>
   <span style="color: #f08080;">:custom</span>
   (treesit-auto-langs '(awk bash bibtex blueprint c c-sharp
-                            clojure cmake commonlisp cpp css dart dockerfile elixir glsl go
-                            gomod heex html janet java javascript json julia kotlin latex
+                            clojure cmake commonlisp cpp css dart dockerfile elixir glsl 
+                            heex html janet java javascript json julia kotlin latex
                             lua magik make markdown nix nu org perl proto r ruby
                             scala sql surface toml tsx typescript typst verilog vhdl vue
                             wast wat wgsl yaml))
@@ -2831,6 +2833,18 @@ sudo install /tmp/pg_format /usr/local/bin/pg_format
 </div></div>
 </div>
 </div>
+<div id="outline-container-Go_%28label_%3Dgo%3D%29" class="outline-3">
+<h3 id="Go_%28label_%3Dgo%3D%29"><span class="section-number-3">9.26.</span> Go (label <code>go</code>)</h3>
+<div class="outline-text-3" id="text-9-26">
+<div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/go/go.el</span></div>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="color: #00bfff;">use-package</span>
+  go-mode
+  )
+</pre>
+</div></div>
+</div>
+</div>
 </div>
 <div id="outline-container-Load_modules" class="outline-2">
 <h2 id="Load_modules"><span class="section-number-2">10.</span> Load modules</h2>
@@ -2924,7 +2938,7 @@ enabled):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2025-05-02 Fri 17:40</p>
+<p class="date">Last Modified: 2025-05-22 Thu 09:59</p>
 </div>
 </body>
 </html>

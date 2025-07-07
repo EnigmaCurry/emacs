@@ -1,8 +1,8 @@
 (use-package treesit-auto
   :custom
   (treesit-auto-langs '(awk bash bibtex blueprint c c-sharp
-                            clojure cmake commonlisp cpp css dart dockerfile elixir glsl go
-                            gomod heex html janet java javascript json julia kotlin latex
+                            clojure cmake commonlisp cpp css dart dockerfile elixir glsl 
+                            heex html janet java javascript json julia kotlin latex
                             lua magik make markdown nix nu org perl proto r ruby
                             scala sql surface toml tsx typescript typst verilog vhdl vue
                             wast wat wgsl yaml))
