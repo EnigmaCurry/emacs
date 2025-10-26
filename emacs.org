@@ -1467,18 +1467,33 @@ This function tangles this file (=emacs.org=) and exports an HTML page
     :init
     ;; shell-pop for vterm :: https://github.com/jixiuf/vterm-toggle
     (use-package vterm-toggle)
-    (defun my/vterm-toggle (&optional args)
-      "Customized vterm-toggle wrapper- this fixes the universal
-      argument (C-u) to always create a new terminal"
+    (defun my/vterm-toggle (arg)
+      "Toggle or create vterm buffers with prefix semantics.
+
+  No prefix: behave like `vterm-toggle' (reuse most-recent vterm or create one).
+
+  C-u:       always create a NEW vterm buffer (local or remote context
+  follows the current buffer’s TRAMP-ness).
+
+  C-u C-u:   always create a NEW vterm buffer on the LOCAL host,
+  regardless of the current buffer’s TRAMP context."
       (interactive "P")
-      (if (not
-           (or (derived-mode-p 'vterm-mode)
-               (and (vterm-toggle--get-window)
-                    vterm-toggle-hide-method)))
-          (if (equal current-prefix-arg '(4))
-              (vterm-toggle--new args)
-            (vterm-toggle args))
-        (vterm-toggle args))))
+      (cond
+       ;; --- Case 3: two or more universal prefixes -> force LOCAL new terminal
+       ((and arg (>= (prefix-numeric-value arg) 16))
+        (let ((default-directory (expand-file-name "~"))
+              (name (generate-new-buffer-name vterm-buffer-name)))
+          (vterm-toggle--new name)))
+       
+       ;; --- Case 2: single C-u -> new terminal following current TRAMP context
+       ((equal arg '(4))
+        (let* ((name (generate-new-buffer-name vterm-buffer-name)))
+          (vterm-toggle--new name)))
+       
+       ;; --- Case 1: no (or other) prefix -> defer to vterm-toggle's default behavior
+       (t
+        (vterm-toggle arg))))
+    )
 #+end_src
 
 ** Markdown mode (label =markdown=)
@@ -1609,11 +1624,13 @@ This package requires the system dependency [[https://jqlang.github.io/jq/downlo
      gptel-model 'test
      gptel-backend
      (gptel-make-openai
-      "lm-studio"
+      "openweb-ui"
       :stream t
-      :protocol "http"
-      :host "localhost:1234"
-      :models '(test))))
+      :protocol "https"
+      :host "openwebui.example.com"
+      :key "sk-1231231231341354123123123123"
+      :endpoint "/api/chat/completions"
+      :models '(gpt-oss:120b))))
 #+end_src
 ** LSP (label =lsp=)
 #+begin_src emacs-lisp :tangle "modules/lsp/lsp.el" :mkdirp yes

@@ -12,8 +12,10 @@
    gptel-model 'test
    gptel-backend
    (gptel-make-openai
-    "lm-studio"
+    "openweb-ui"
     :stream t
-    :protocol "http"
-    :host "localhost:1234"
-    :models '(test))))
+    :protocol "https"
+    :host "openwebui.example.com"
+    :key "sk-1231231231341354123123123123"
+    :endpoint "/api/chat/completions"
+    :models '(gpt-oss:120b))))
