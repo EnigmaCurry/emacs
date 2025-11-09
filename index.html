@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-11-09 Sun 14:23 -->
+<!-- 2025-11-09 Sun 15:43 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -1329,7 +1329,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="orgb536b24">
+<pre class="example" id="org1dd179a">
 - ace-window
 - avy
 - completion
@@ -2521,96 +2521,93 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
 <div class="outline-text-3" id="text-9-17">
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/gptel/gptel.el</span></div>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><code>(<span style="color: #00bfff;">use-package</span>
-  gptel
-  <span style="color: #f08080;">:general</span>
-  (<span style="color: #deb887;">"C-c C-g"</span> 'gptel-menu)
-  (<span style="color: #f08080;">:keymaps</span> 'gptel-mode-map <span style="color: #deb887;">"C-c C-c"</span> 'gptel-send)
-  <span style="color: #f08080;">:config</span> (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
-                                        <span style="color: #7f7f7f;">;</span><span style="color: #7f7f7f;">(add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
-</span>  (<span style="color: #00bfff;">setq</span> gptel-org-branching-context t)
-  <span style="color: #f08080;">:init</span>
-  <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">LM-studio offers an OpenAI compatible API
-</span>  (<span style="color: #00bfff;">setq</span>
-   gptel-model 'test
-   gptel-backend
-   (gptel-make-openai
-       <span style="color: #deb887;">"openweb-ui"</span>
-     <span style="color: #f08080;">:stream</span> t
-     <span style="color: #f08080;">:protocol</span> <span style="color: #deb887;">"https"</span>
-     <span style="color: #f08080;">:host</span> <span style="color: #deb887;">"openwebui.example.com"</span>
-     <span style="color: #f08080;">:key</span> <span style="color: #deb887;">"sk-1231231231341354123123123123"</span>
-     <span style="color: #f08080;">:endpoint</span> <span style="color: #deb887;">"/api/chat/completions"</span>
-     <span style="color: #f08080;">:models</span> '(gpt-oss:120b)))
-  (<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my-gptel-export-context-markdown</span> ()
-    <span style="color: #ffe4b5;">"Export the current GPTel context as Markdown with file-labeled code blocks."</span>
-    (<span style="color: #00bfff;">interactive</span>)
-    (<span style="color: #00bfff;">require</span> '<span style="color: #a2cd5a;">gptel</span>)
-    (<span style="color: #00bfff;">unless</span> (boundp 'gptel-context--alist)
-      (<span style="color: #fec43f;">user-error</span> <span style="color: #deb887;">"GPTel context not found"</span>))
-    <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Build the Markdown content
-</span>    (<span style="color: #00bfff;">let</span> ((md-output <span style="color: #deb887;">""</span>))
-      (<span style="color: #00bfff;">dolist</span> (entry (symbol-value 'gptel-context--alist))
-        (<span style="color: #00bfff;">let</span> ((src (car entry))
-              (data (cdr entry)))
-          (<span style="color: #00bfff;">cond</span>
-           <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">If context item is a live buffer (region or whole buffer content)
-</span>           ((bufferp src)
-            (<span style="color: #00bfff;">when</span> (buffer-live-p src)
-              <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Determine a name for the source (file name if available, else buffer name)
-</span>              (<span style="color: #00bfff;">let*</span> ((buf src)
-                     (file-name (buffer-file-name buf))
-                     (src-name (<span style="color: #00bfff;">if</span> file-name
-                                   (file-name-nondirectory file-name)
-                                 (buffer-name buf))))
-                <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Loop through overlays (regions) or treat whole buffer
-</span>                (<span style="color: #00bfff;">with-current-buffer</span> buf
-                  (<span style="color: #00bfff;">if</span> (listp data)
-                      <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Multiple regions (overlays) stored for this buffer
-</span>                      (<span style="color: #00bfff;">dolist</span> (ov data)
-                        (<span style="color: #00bfff;">when</span> (overlayp ov)
-                          (<span style="color: #00bfff;">let</span> ((code (buffer-substring-no-properties (overlay-start ov)
-                                                                      (overlay-end ov))))
-                            (<span style="color: #00bfff;">setq</span> md-output
-                                  (concat md-output
-                                          (format <span style="color: #deb887;">"**File:** %s\n\n"</span> src-name)
-                                          <span style="color: #deb887;">"```"</span>
-                                          <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Optionally, add language hint based on file extension or mode
-</span>                                          (<span style="color: #00bfff;">let</span> ((mode major-mode))
-                                            (<span style="color: #00bfff;">cond</span>
-                                             ((<span style="color: #00bfff;">and</span> file-name (string-match <span style="color: #deb887;">"\\.</span><span style="color: #feacd0; font-weight: bold;">\\</span><span style="color: #00c06f; font-weight: bold;">(</span><span style="color: #deb887;">[</span><span style="color: #ff0000; font-weight: bold;">^</span><span style="color: #deb887;">.]+</span><span style="color: #feacd0; font-weight: bold;">\\</span><span style="color: #00c06f; font-weight: bold;">)</span><span style="color: #deb887;">$"</span> src-name))
-                                              (concat (match-string 1 src-name) <span style="color: #deb887;">"\n"</span>))
-                                             ((eq mode 'emacs-lisp-mode) <span style="color: #deb887;">"elisp\n"</span>)
-                                             (t <span style="color: #deb887;">"\n"</span>)))
-                                          code
-                                          <span style="color: #deb887;">"\n```\n\n"</span>)))))
-                    <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">If `data` is not a list, assume whole buffer content
-</span>                    (<span style="color: #00bfff;">let</span> ((code (buffer-substring-no-properties (point-min) (point-max))))
-                      (<span style="color: #00bfff;">setq</span> md-output
-                            (concat md-output
-                                    (format <span style="color: #deb887;">"**File:** %s\n\n"</span> src-name)
-                                    <span style="color: #deb887;">"```\n"</span> code <span style="color: #deb887;">"\n```\n\n"</span>))))))))
-           <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">If context item is a file path (string)
-</span>           ((stringp src)
-            (<span style="color: #00bfff;">let</span> ((path src))
-              (<span style="color: #00bfff;">when</span> (file-readable-p path)
-                (<span style="color: #00bfff;">with-temp-buffer</span>
-                  (insert-file-contents path)
-                  (<span style="color: #00bfff;">let*</span> ((src-name (file-name-nondirectory path))
-                         (code (buffer-substring-no-properties (point-min) (point-max)))
-                         (ext (file-name-extension src-name)))
+<pre class="src src-emacs-lisp"><code>  (<span style="color: #00bfff;">use-package</span>
+    gptel
+    <span style="color: #f08080;">:general</span>
+    (<span style="color: #deb887;">"C-c C-g"</span> 'gptel-menu)
+    (<span style="color: #f08080;">:keymaps</span> 'gptel-mode-map <span style="color: #deb887;">"C-c C-c"</span> 'gptel-send)
+    <span style="color: #f08080;">:config</span> (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+                                          <span style="color: #7f7f7f;">;</span><span style="color: #7f7f7f;">(add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+</span>    (<span style="color: #00bfff;">setq</span> gptel-org-branching-context t)
+    <span style="color: #f08080;">:init</span>
+    <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">LM-studio offers an OpenAI compatible API
+</span>    (<span style="color: #00bfff;">setq</span>
+     gptel-model 'test
+     gptel-backend
+     (gptel-make-openai
+         <span style="color: #deb887;">"openweb-ui"</span>
+       <span style="color: #f08080;">:stream</span> t
+       <span style="color: #f08080;">:protocol</span> <span style="color: #deb887;">"https"</span>
+       <span style="color: #f08080;">:host</span> <span style="color: #deb887;">"openwebui.example.com"</span>
+       <span style="color: #f08080;">:key</span> <span style="color: #deb887;">"sk-1231231231341354123123123123"</span>
+       <span style="color: #f08080;">:endpoint</span> <span style="color: #deb887;">"/api/chat/completions"</span>
+       <span style="color: #f08080;">:models</span> '(gpt-oss:120b)))
+(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my-gptel-export-context-markdown</span> ()
+  <span style="color: #ffe4b5;">"Export the current GPTel context as Markdown with file-labeled code blocks."</span>
+  (<span style="color: #00bfff;">interactive</span>)
+  (<span style="color: #00bfff;">require</span> '<span style="color: #a2cd5a;">gptel</span>)
+  (<span style="color: #00bfff;">unless</span> (boundp 'gptel-context--alist)
+    (<span style="color: #fec43f;">user-error</span> <span style="color: #deb887;">"GPTel context not found"</span>))
+  <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Build the Markdown content
+</span>  (<span style="color: #00bfff;">let</span> ((md-output <span style="color: #deb887;">""</span>))
+    (<span style="color: #00bfff;">dolist</span> (entry (symbol-value 'gptel-context--alist))
+      (<span style="color: #00bfff;">let</span> ((src (car entry))
+            (data (cdr entry)))
+        (<span style="color: #00bfff;">cond</span>
+         <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">If context item is a live buffer (region or whole buffer content)
+</span>         ((bufferp src)
+          (<span style="color: #00bfff;">when</span> (buffer-live-p src)
+            <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Determine a name for the source (file name if available, else buffer name)
+</span>            (<span style="color: #00bfff;">let*</span> ((buf src)
+                   (file-name (buffer-file-name buf))
+                   (src-name (<span style="color: #00bfff;">if</span> file-name
+                                 (file-name-nondirectory file-name)
+                               (buffer-name buf))))
+              <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Loop through overlays (regions) or treat whole buffer
+</span>              (<span style="color: #00bfff;">with-current-buffer</span> buf
+                (<span style="color: #00bfff;">if</span> (listp data)
+                    <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Multiple regions (overlays) stored for this buffer
+</span>                    (<span style="color: #00bfff;">dolist</span> (ov data)
+                      (<span style="color: #00bfff;">when</span> (overlayp ov)
+                        (<span style="color: #00bfff;">let</span> ((code (buffer-substring-no-properties (overlay-start ov)
+                                                                    (overlay-end ov))))
+                          (<span style="color: #00bfff;">setq</span> md-output
+                                (concat md-output
+                                        (format <span style="color: #deb887;">"**File:** %s\n\n"</span> src-name)
+                                        <span style="color: #deb887;">"```"</span>
+                                        <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Optionally, add language hint based on file extension or mode
+</span>                                        (<span style="color: #00bfff;">let</span> ((mode major-mode))
+                                          (<span style="color: #00bfff;">cond</span>
+                                           ((<span style="color: #00bfff;">and</span> file-name (string-match <span style="color: #deb887;">"\\.</span><span style="color: #feacd0; font-weight: bold;">\\</span><span style="color: #00c06f; font-weight: bold;">(</span><span style="color: #deb887;">[</span><span style="color: #ff0000; font-weight: bold;">^</span><span style="color: #deb887;">.]+</span><span style="color: #feacd0; font-weight: bold;">\\</span><span style="color: #00c06f; font-weight: bold;">)</span><span style="color: #deb887;">$"</span> src-name))
+                                            (concat (match-string 1 src-name) <span style="color: #deb887;">"\n"</span>))
+                                           ((eq mode 'emacs-lisp-mode) <span style="color: #deb887;">"elisp\n"</span>)
+                                           (t <span style="color: #deb887;">"\n"</span>)))
+                                        code
+                                        <span style="color: #deb887;">"\n```\n\n"</span>)))))
+                  <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">If `data` is not a list, assume whole buffer content
+</span>                  (<span style="color: #00bfff;">let</span> ((code (buffer-substring-no-properties (point-min) (point-max))))
                     (<span style="color: #00bfff;">setq</span> md-output
                           (concat md-output
                                   (format <span style="color: #deb887;">"**File:** %s\n\n"</span> src-name)
-                                  (<span style="color: #00bfff;">if</span> ext (concat <span style="color: #deb887;">"```"</span> ext <span style="color: #deb887;">"\n"</span>) <span style="color: #deb887;">"```\n"</span>)
-                                  code
-                                  <span style="color: #deb887;">"\n```\n\n"</span>))))))))))
-      <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Show the result in a new buffer for the user to copy
-</span>      (<span style="color: #00bfff;">with-current-buffer</span> (get-buffer-create <span style="color: #deb887;">"*GPTel Context Markdown*"</span>)
-        (erase-buffer)
-        (insert md-output)
-        (markdown-mode)
-        (display-buffer (current-buffer))))))
+                                  <span style="color: #deb887;">"```\n"</span> code <span style="color: #deb887;">"\n```\n\n"</span>))))))))
+         <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">If context item is a file path (string)
+</span>         ((stringp src)
+          (<span style="color: #00bfff;">let</span> ((path src))
+            (<span style="color: #00bfff;">when</span> (file-readable-p path)
+              (<span style="color: #00bfff;">with-temp-buffer</span>
+                (insert-file-contents path)
+                (<span style="color: #00bfff;">let*</span> ((src-name (file-name-nondirectory path))
+                       (code (buffer-substring-no-properties (point-min) (point-max)))
+                       (ext (file-name-extension src-name)))
+                  (<span style="color: #00bfff;">setq</span> md-output
+                        (concat md-output
+                                (format <span style="color: #deb887;">"**File:** %s\n\n"</span> src-name)
+                                (<span style="color: #00bfff;">if</span> ext (concat <span style="color: #deb887;">"```"</span> ext <span style="color: #deb887;">"\n"</span>) <span style="color: #deb887;">"```\n"</span>)
+                                code
+                                <span style="color: #deb887;">"\n```\n\n"</span>))))))))))
+    (kill-new md-output)
+    (message <span style="color: #deb887;">"GPTel context exported as Markdown and copied to clipboard (%d chars)"</span>
+             (length md-output)))))
 </code></pre>
 </div></div>
 </div>
@@ -3023,7 +3020,7 @@ enabled):
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2025-11-09 Sun 14:23</p>
+<p class="date">Last Modified: 2025-11-09 Sun 15:43</p>
 </div>
 </body>
 </html>
