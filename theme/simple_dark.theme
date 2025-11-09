@@ -195,7 +195,7 @@
 #+HTML_HEAD: 	background-color: #8e24aa
 #+HTML_HEAD: }
 #+HTML_HEAD: pre.src:before {
-#+HTML_HEAD:     content: none !important;
+#+HTML_HEAD:     margin-right: 0.5em;
 #+HTML_HEAD: }
 #+HTML_HEAD: .org-ul li {
 #+HTML_HEAD: 	padding-top: 0.5em;
@@ -246,66 +246,3 @@
 #+HTML_HEAD: 	}
 #+HTML_HEAD: }
 #+HTML_HEAD: </style>
-#+HTML_HEAD: <style>
-#+HTML_HEAD: .org-src-container {
-#+HTML_HEAD:   position: relative;
-#+HTML_HEAD: }
-#+HTML_HEAD: .copy-container {
-#+HTML_HEAD:   position: relative;
-#+HTML_HEAD:   display: block;
-#+HTML_HEAD: }
-#+HTML_HEAD: .copy-container pre {
-#+HTML_HEAD:   margin: 0;
-#+HTML_HEAD:   padding: 1em;
-#+HTML_HEAD:   font-family: monospace;
-#+HTML_HEAD:   font-size: 0.9em;
-#+HTML_HEAD:   background: #181f29;
-#+HTML_HEAD:   color: #e0e0e0;
-#+HTML_HEAD: }
-#+HTML_HEAD: .copy-button {
-#+HTML_HEAD:   position: absolute;
-#+HTML_HEAD:   top: 0.5em;
-#+HTML_HEAD:   right: 0.7em;
-#+HTML_HEAD:   padding: 0.2em 0.5em;
-#+HTML_HEAD:   font-size: 0.75em;
-#+HTML_HEAD:   font-family: sans-serif;
-#+HTML_HEAD:   background: #333;
-#+HTML_HEAD:   color: white;
-#+HTML_HEAD:   border: none;
-#+HTML_HEAD:   border-radius: 4px;
-#+HTML_HEAD:   cursor: pointer;
-#+HTML_HEAD:   z-index: 10;
-#+HTML_HEAD:   opacity: 0;
-#+HTML_HEAD:   pointer-events: none;
-#+HTML_HEAD:   transition: opacity 0.2s ease-in-out;
-#+HTML_HEAD: }
-#+HTML_HEAD: .copy-container:hover .copy-button {
-#+HTML_HEAD:   opacity: 1;
-#+HTML_HEAD:   pointer-events: auto;
-#+HTML_HEAD: }
-#+HTML_HEAD: pre.src::before {
-#+HTML_HEAD:   content: none !important;
-#+HTML_HEAD: }
-#+HTML_HEAD: </style>
-#+HTML_HEAD_EXTRA: <script>
-#+HTML_HEAD_EXTRA: document.addEventListener("DOMContentLoaded", function () {
-#+HTML_HEAD_EXTRA:   document.querySelectorAll("pre.src, pre.example").forEach(pre => {
-#+HTML_HEAD_EXTRA:     const wrapper = document.createElement("div");
-#+HTML_HEAD_EXTRA:     wrapper.className = "copy-container";
-#+HTML_HEAD_EXTRA:     pre.parentNode.insertBefore(wrapper, pre);
-#+HTML_HEAD_EXTRA:     wrapper.appendChild(pre);
-#+HTML_HEAD_EXTRA:     const button = document.createElement("button");
-#+HTML_HEAD_EXTRA:     button.className = "copy-button";
-#+HTML_HEAD_EXTRA:     button.textContent = "Copy";
-#+HTML_HEAD_EXTRA:     button.addEventListener("click", () => {
-#+HTML_HEAD_EXTRA:       navigator.clipboard.writeText(pre.innerText).then(() => {
-#+HTML_HEAD_EXTRA:         button.textContent = "Copied!";
-#+HTML_HEAD_EXTRA:         setTimeout(() => button.textContent = "Copy", 2000);
-#+HTML_HEAD_EXTRA:       }).catch(() => {
-#+HTML_HEAD_EXTRA:         button.textContent = "Error";
-#+HTML_HEAD_EXTRA:       });
-#+HTML_HEAD_EXTRA:     });
-#+HTML_HEAD_EXTRA:     wrapper.appendChild(button);
-#+HTML_HEAD_EXTRA:   });
-#+HTML_HEAD_EXTRA: });
-#+HTML_HEAD_EXTRA: </script>
