@@ -1867,7 +1867,7 @@ regions, and files to S3 storage and the web.
     ;; :hook (rustic-mode . yas-minor-mode)
     :init
     (setq rustic-format-on-save t)
-    (setq rustic-rustfmt-args "--edition 2021")
+    (setq rustic-rustfmt-args "--edition 2024")
     (add-to-list 'exec-path "~/.cargo/bin")
     ;(defalias 'org-babel-execute:rust 'org-babel-execute:rustic)
     ;(describe-function 'org-babel-execute:rust)
@@ -1948,6 +1948,11 @@ podman (script must be named =pg_format=):
   (use-package
     go-mode
     )
+#+end_src
+** Nix (label =nix=)
+#+begin_src emacs-lisp :tangle "modules/nix/nix.el" :mkdirp yes
+(use-package nix-mode
+  :mode "\\.nix\\'")
 #+end_src
 * Load modules
 
