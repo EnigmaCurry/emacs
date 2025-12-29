@@ -1954,6 +1954,16 @@ podman (script must be named =pg_format=):
 (use-package nix-mode
   :mode "\\.nix\\'")
 #+end_src
+** Ripgrep (label =ripgrep=)
+#+begin_src emacs-lisp :tangle "modules/ripgrep/ripgrep.el" :mkdirp yes
+  (use-package rg
+    :straight t
+    :config
+    ;(rg-enable-default-bindings)
+    ;(rg-enable-menu)
+    :general
+    ("C-c f" (lambda () (interactive) (rg-menu))))
+#+end_src
 * Load modules
 
 The code-blocks in this file are tangled to separate categorized files
