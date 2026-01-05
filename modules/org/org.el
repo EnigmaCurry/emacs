@@ -61,43 +61,79 @@
   (modify-syntax-entry ?_ "\"" org-mode-syntax-table)
   (modify-syntax-entry ?~ "\"" org-mode-syntax-table))
 
-(defcustom my/org-html-theme "simple_dark" "the name of my custom org theme (CSS)")
-(defun my/emacs-org-tangle ()
-  "Tangle all code blocks in 'emacs.org' and export this document to HTML."
-  (let* ((org-file (expand-file-name "emacs.org" user-emacs-directory))
-         (modules-dir (expand-file-name "modules" user-emacs-directory))
+(defcustom my/org-html-theme "simple_dark"
+  "The name of my custom org theme (CSS).")
+
+(defun my/emacs-org-tangle (&optional file)
+  "Tangle all code blocks in emacs.org (or FILE) and export this document to HTML.
+
+Important: output paths are rooted at the *real* directory where emacs.org lives
+(i.e. after following symlinks), so this works even if ~/.emacs.d is read-only."
+  (interactive)
+  (let* (;; Prefer: explicit FILE, then if you're *in* emacs.org use that, else fall back.
+         (org-file (or file
+                     (and (buffer-file-name)
+                          (string-equal (file-name-nondirectory (buffer-file-name)) "emacs.org")
+                          (buffer-file-name))
+                     ;; Use baked-in “source emacs.org” if available:
+                     (and (fboundp 'my/emacs-org-file) (my/emacs-org-file))
+                     ;; last resort:
+                     (locate-user-emacs-file "emacs.org")))
+         ;; Follow symlinks so we write next to the real file, not into the nix store.
+         (org-file (file-truename org-file))
+         (root-dir (file-name-directory org-file))
+
+         ;; Everything below is now based on root-dir (where emacs.org actually resides).
+         (modules-dir (expand-file-name "modules" root-dir))
          (export-dir (expand-file-name my/org-notes-export-directory))
          (export-emacs-dir (expand-file-name "emacs" export-dir))
-         (export-file (expand-file-name "index.html" user-emacs-directory)))
+         (export-file (expand-file-name "index.html" root-dir)))
+
     (when (file-exists-p org-file)
       (with-current-buffer (find-file-noselect org-file)
-        (delete-directory modules-dir t)
-        (org-babel-tangle)
-        (org-export-to-file 'html export-file)
-        (unless (file-directory-p export-dir)
-          (make-directory export-dir t))
-        (unless (file-directory-p export-emacs-dir)
-          (make-directory export-emacs-dir t))
-        (my/org-create-theme-file)
-        (make-symbolic-link "index.html" "emacs.html" t)
-        (make-symbolic-link (expand-file-name "index.html" user-emacs-directory) (expand-file-name "index.html" export-emacs-dir) t)
-        (make-symbolic-link (expand-file-name "index.html" user-emacs-directory) (expand-file-name "emacs.html" export-emacs-dir) t)
-        (make-symbolic-link (expand-file-name "early-init.el" user-emacs-directory) (expand-file-name "early-init.el" export-emacs-dir) t)
-        (make-symbolic-link (expand-file-name "init.el" user-emacs-directory) (expand-file-name "init.el" export-emacs-dir) t)
-        (make-symbolic-link (expand-file-name "modules" user-emacs-directory) (expand-file-name "modules" export-emacs-dir) t)
-        (make-symbolic-link (expand-file-name "LICENSE.txt" user-emacs-directory) (expand-file-name "LICENSE.txt" export-emacs-dir) t)
-        (make-symbolic-link (expand-file-name "LICENSE_GPLv3.txt" user-emacs-directory) (expand-file-name "LICENSE_GPLv3.txt" export-emacs-dir) t)
-        (make-symbolic-link (expand-file-name "theme" user-emacs-directory) (expand-file-name "theme" export-dir) t)
-        (make-symbolic-link (expand-file-name "theme" user-emacs-directory) (expand-file-name "theme" my/org-notes-directory) t)
-        ))))
+        ;; Make sure relative :tangle paths resolve relative to emacs.org’s real dir.
+        (let ((default-directory root-dir))
+          (when (file-directory-p modules-dir)
+            (delete-directory modules-dir t))
+          (org-babel-tangle)
+          (org-export-to-file 'html export-file)
+
+          (unless (file-directory-p export-dir)
+            (make-directory export-dir t))
+          (unless (file-directory-p export-emacs-dir)
+            (make-directory export-emacs-dir t))
+
+          (my/org-create-theme-file org-file)
+
+          ;; Links created relative to root-dir/export dirs:
+          (make-symbolic-link "index.html" "emacs.html" t)
+
+          (make-symbolic-link (expand-file-name "index.html" root-dir)
+                              (expand-file-name "index.html" export-emacs-dir) t)
+          (make-symbolic-link (expand-file-name "index.html" root-dir)
+                              (expand-file-name "emacs.html" export-emacs-dir) t)
+
+          ;; If these files are also in your org repo dir, link from root-dir:
+          (make-symbolic-link (expand-file-name "early-init.el" root-dir)
+                              (expand-file-name "early-init.el" export-emacs-dir) t)
+          (make-symbolic-link (expand-file-name "init.el" root-dir)
+                              (expand-file-name "init.el" export-emacs-dir) t)
+          (make-symbolic-link (expand-file-name "modules" root-dir)
+                              (expand-file-name "modules" export-emacs-dir) t)
+
+          (make-symbolic-link (expand-file-name "LICENSE.txt" root-dir)
+                              (expand-file-name "LICENSE.txt" export-emacs-dir) t)
+          (make-symbolic-link (expand-file-name "LICENSE_GPLv3.txt" root-dir)
+                              (expand-file-name "LICENSE_GPLv3.txt" export-emacs-dir) t)
+
+          (make-symbolic-link (expand-file-name "theme" root-dir)
+                              (expand-file-name "theme" export-dir) t)
+          (make-symbolic-link (expand-file-name "theme" root-dir)
+                              (expand-file-name "theme" my/org-notes-directory) t))))))
+
 (with-eval-after-load 'ox-html
   (defun my/org-html-src-block (orig-fun src-block contents info)
-    "Advice for `org-html-src-block' to add a header.
-If a :tangle header is specified (and not \"no\"), it shows the tangle file.
-If the block is a shell block, it prints 'Run in Bash shell:'.
-Otherwise, it prints the code block's language.
-ORIG-FUN is the original function; SRC-BLOCK is the source block;
-INFO is the export options plist."
+    "Advice for `org-html-src-block' to add a header."
     (let* ((parameters (org-element-property :parameters src-block))
            (header-args (org-babel-parse-header-arguments parameters))
            (tangle (cdr (assoc :tangle header-args)))
@@ -177,13 +213,26 @@ it and export to HTML before serving it."
           "#+OPTIONS: noweb:t\n")
   "My default Org template.")
 
-(defun my/org-create-theme-file ()
-  "Create the theme file in the 'theme' directory under `user-emacs-directory`.
-  This file wraps the contents of the theme CSS (also in the theme directory)
-  with HTML <style> tags for use with Org export."
-  (let* ((theme-dir (expand-file-name "theme" user-emacs-directory))
+(defun my/org--real-dir (&optional org-file)
+  "Return the truename directory for ORG-FILE (or the current buffer file)."
+  (let ((f (or org-file (buffer-file-name))))
+    (when (and f (stringp f))
+      (file-name-directory (file-truename f)))))
+
+(defun my/org-create-theme-file (&optional org-file)
+  "Create the theme file in a 'theme' directory next to ORG-FILE.
+
+Theme dir is: <org-file-dir>/theme/
+Theme file is: <org-file-dir>/theme/<my/org-html-theme>.theme
+CSS file is:   <org-file-dir>/theme/<my/org-html-theme>.css
+
+Returns the absolute theme file path."
+  (let* ((base-dir (or (my/org--real-dir org-file)
+                       ;; Fallback if called outside a file buffer:
+                       (file-name-as-directory (expand-file-name org-directory))))
+         (theme-dir (expand-file-name "theme" base-dir))
          (theme-file (expand-file-name (concat my/org-html-theme ".theme") theme-dir))
-         (css-file (expand-file-name (concat my/org-html-theme ".css") theme-dir)))
+         (css-file   (expand-file-name (concat my/org-html-theme ".css") theme-dir)))
     (unless (file-directory-p theme-dir)
       (make-directory theme-dir t))
     (with-temp-file theme-file
@@ -195,24 +244,18 @@ it and export to HTML before serving it."
             (dolist (line (split-string css-content "\n" t))
               (insert (format "#+HTML_HEAD: %s\n" line))))
         (insert "#+HTML_HEAD: /* CSS file not found */\n"))
-      (insert "#+HTML_HEAD: </style>\n")
-      theme-file)))
+      (insert "#+HTML_HEAD: </style>\n"))
+    theme-file))
 
 (defun my/org-open-file ()
   "Open a new Org file with the default notes template and include the theme file.
-    This function does the following:
-    1. Opens a new Org file in `org-directory/notes` and inserts the template,
-       replacing placeholders like {{title}}, {{date}}, etc.
-    2. If the directory `org-directory/notes` does not exist, it is created.
-    3. It creates (or updates) the theme file via `my/org-create-theme-file`, which is
-       stored in `user-emacs-directory/theme/{{theme}}.theme`.
-    4. The Org file then includes a line: \"#+SETUPFILE: {{theme}}.theme\" so that
-       when you export, Org loads the theme file."
+
+Theme file will be created at: <new-file-dir>/theme/<theme>.theme
+And the new file will include: #+SETUPFILE: theme/<theme>.theme"
   (interactive)
   (let* ((formatted-date (format-time-string "%Y-%m-%d"))
          (user-title (read-string "Title for new note: "))
          (safe-title (replace-regexp-in-string " " "-" (downcase user-title)))
-         ;; Define the notes directory and ensure it exists.
          (notes-dir (file-name-as-directory (concat org-directory "/notes")))
          (_ (unless (file-directory-p notes-dir)
               (make-directory notes-dir t)))
@@ -226,38 +269,40 @@ it and export to HTML before serving it."
       (make-directory my/org-notes-directory t))
     (find-file filename)
     (when (zerop (buffer-size))
-      ;; Insert the Org template with placeholders replaced.
       (insert
        (replace-regexp-in-string
-        "{{title}}"
-        user-title
+        "{{title}}" user-title
         (replace-regexp-in-string
-         "{{date}}"
-         formatted-date
+         "{{date}}" formatted-date
          (replace-regexp-in-string
-          "{{section}}"
-          section
+          "{{section}}" section
           (replace-regexp-in-string
-           "{{safe-title}}"
-           safe-title
+           "{{safe-title}}" safe-title
            (replace-regexp-in-string
-            "{{title-section}}"
-            title-section
+            "{{title-section}}" title-section
             my/org-template))))))
-      ;; Create the theme file and insert the setup line.
-      (let ((theme-file (my/org-create-theme-file)))
+      ;; Create the theme file next to this new org file, and include it.
+      (let ((theme-file (my/org-create-theme-file filename)))
         (insert (format "#+SETUPFILE: theme/%s\n\n"
                         (file-name-nondirectory theme-file)))))))
 
 (defun my/org-babel-tangle (org-file)
-  "Tangle and export an Org file to HTML."
+  "Tangle and export ORG-FILE to HTML.
+
+Creates/updates theme in <org-file-dir>/theme/ before exporting."
   (when (file-exists-p org-file)
-    (with-current-buffer (find-file-noselect org-file)
-      (org-babel-tangle)
-      (my/org-create-theme-file)
-      (org-export-to-file 'html
-          (expand-file-name (org-export-output-file-name ".html" nil)
-                            my/org-notes-export-directory)))))
+    (let* ((org-file (file-truename org-file))
+           (base-dir (file-name-directory org-file)))
+      (with-current-buffer (find-file-noselect org-file)
+        ;; Ensure relative :tangle paths resolve next to the org file.
+        (let ((default-directory base-dir))
+          (org-babel-tangle)
+          (my/org-create-theme-file org-file)
+          (org-export-to-file
+              'html
+            (expand-file-name
+             (file-name-nondirectory (org-export-output-file-name ".html" nil))
+             my/org-notes-export-directory)))))))
 
 (defun my/save-buffer-after-code-execution (orig-fun &rest args)
   "Execute ORIG-FUN with ARGS and save the buffer afterward.

@@ -1,3 +1,20 @@
+;; Tangled from emacs.org — record where the source lives:
+(defconst my/emacs-org-origin-dir
+  (file-name-directory (file-truename (or (buffer-file-name) default-directory)))
+  "Directory of the original emacs.org file (git checkout), recorded at tangle time.")
+(defconst my/emacs-org-origin-file
+  (expand-file-name "emacs.org" my/emacs-org-origin-dir)
+  "Full path to the original emacs.org file, recorded at tangle time.")
+(defun my/emacs-org-file ()
+  "Return the path to the source emacs.org file (recorded at tangle time)."
+  (cond
+   ((and (boundp 'my/emacs-org-origin-file)
+         (stringp my/emacs-org-origin-file)
+         (file-exists-p my/emacs-org-origin-file))
+    my/emacs-org-origin-file)
+   ;; fallback if something went wrong
+   (t (locate-user-emacs-file "emacs.org"))))
+
 ;; core libraries
 (require 'cl-lib)
 
