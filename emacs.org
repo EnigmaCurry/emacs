@@ -293,22 +293,14 @@ Additionally, early debug options are set here.
 * Record the original source directory
 
 #+begin_src emacs-lisp :tangle "init.el"
-  ;; Tangled from emacs.org — record where the source lives:
-  (defconst my/emacs-org-origin-dir
-    (file-name-directory (file-truename (or (buffer-file-name) default-directory)))
-    "Directory of the original emacs.org file (git checkout), recorded at tangle time.")
-  (defconst my/emacs-org-origin-file
-    (expand-file-name "emacs.org" my/emacs-org-origin-dir)
-    "Full path to the original emacs.org file, recorded at tangle time.")
-  (defun my/emacs-org-file ()
-    "Return the path to the source emacs.org file (recorded at tangle time)."
-    (cond
-     ((and (boundp 'my/emacs-org-origin-file)
-           (stringp my/emacs-org-origin-file)
-           (file-exists-p my/emacs-org-origin-file))
-      my/emacs-org-origin-file)
-     ;; fallback if something went wrong
-     (t (locate-user-emacs-file "emacs.org"))))
+(defun my/emacs-org-file ()
+  (cond
+   ((and (boundp 'my/emacs-org-origin-file)
+         (stringp my/emacs-org-origin-file)
+         (file-exists-p my/emacs-org-origin-file))
+    my/emacs-org-origin-file)
+   ;; fallback
+   (t (user-error "Can't find emacs.org origin; re-run my/emacs-org-tangle"))))
 #+end_src
 
 * Base config
@@ -1064,106 +1056,116 @@ This function tangles this file (=emacs.org=) and exports an HTML page
 (=emacs.html=):
 
 #+begin_src emacs-lisp :tangle "modules/org/org.el"  :mkdirp yes
-(defcustom my/org-html-theme "simple_dark"
-  "The name of my custom org theme (CSS).")
+  (defcustom my/org-html-theme "simple_dark"
+    "The name of my custom org theme (CSS).")
 
-(defun my/emacs-org-tangle (&optional file)
-  "Tangle all code blocks in emacs.org (or FILE) and export this document to HTML.
+  (defun my/emacs-org-tangle (&optional file)
+    "Tangle all code blocks in emacs.org (or FILE) and export this document to HTML.
 
-Important: output paths are rooted at the *real* directory where emacs.org lives
-(i.e. after following symlinks), so this works even if ~/.emacs.d is read-only."
-  (interactive)
-  (let* (;; Prefer: explicit FILE, then if you're *in* emacs.org use that, else fall back.
-         (org-file (or file
-                     (and (buffer-file-name)
-                          (string-equal (file-name-nondirectory (buffer-file-name)) "emacs.org")
-                          (buffer-file-name))
-                     ;; Use baked-in “source emacs.org” if available:
-                     (and (fboundp 'my/emacs-org-file) (my/emacs-org-file))
-                     ;; last resort:
-                     (locate-user-emacs-file "emacs.org")))
-         ;; Follow symlinks so we write next to the real file, not into the nix store.
-         (org-file (file-truename org-file))
-         (root-dir (file-name-directory org-file))
+  Important: output paths are rooted at the *real* directory where emacs.org lives
+  (i.e. after following symlinks), so this works even if ~/.emacs.d is read-only."
+    (interactive)
+    (let* (;; Prefer: explicit FILE, then if you're *in* emacs.org use that, else fall back.
+           (org-file (or file
+                       (and (buffer-file-name)
+                            (string-equal (file-name-nondirectory (buffer-file-name)) "emacs.org")
+                            (buffer-file-name))
+                       ;; Use baked-in “source emacs.org” if available:
+                       (and (fboundp 'my/emacs-org-file) (my/emacs-org-file))
+                       ;; last resort:
+                       (locate-user-emacs-file "emacs.org")))
+           ;; Follow symlinks so we write next to the real file, not into the nix store.
+           (org-file (file-truename org-file))
+           (root-dir (file-name-directory org-file))
 
-         ;; Everything below is now based on root-dir (where emacs.org actually resides).
-         (modules-dir (expand-file-name "modules" root-dir))
-         (export-dir (expand-file-name my/org-notes-export-directory))
-         (export-emacs-dir (expand-file-name "emacs" export-dir))
-         (export-file (expand-file-name "index.html" root-dir)))
+           ;; Everything below is now based on root-dir (where emacs.org actually resides).
+           (modules-dir (expand-file-name "modules" root-dir))
+           (export-dir (expand-file-name my/org-notes-export-directory))
+           (export-emacs-dir (expand-file-name "emacs" export-dir))
+           (export-file (expand-file-name "index.html" root-dir)))
 
-    (when (file-exists-p org-file)
-      (with-current-buffer (find-file-noselect org-file)
-        ;; Make sure relative :tangle paths resolve relative to emacs.org’s real dir.
-        (let ((default-directory root-dir))
-          (when (file-directory-p modules-dir)
-            (delete-directory modules-dir t))
-          (org-babel-tangle)
-          (org-export-to-file 'html export-file)
+      (when (file-exists-p org-file)
+        (with-current-buffer (find-file-noselect org-file)
+          ;; Make sure relative :tangle paths resolve relative to emacs.org’s real dir.
+          (let ((default-directory root-dir))
+            (when (file-directory-p modules-dir)
+              (delete-directory modules-dir t))
+            ;; Record origin dir/file at *tangle time* by writing literal strings.
+            (let ((origin-el (expand-file-name "modules/origin.el" root-dir)))
+              (make-directory (file-name-directory origin-el) t)
+              (with-temp-file origin-el
+                (insert ";; Auto-generated at tangle time. DO NOT EDIT.\n")
+                (insert (format "(defconst my/emacs-org-origin-dir %S\n" root-dir))
+                (insert "  \"Directory of the original emacs.org (git checkout), recorded at tangle time.\")\n\n")
+                (insert "(defconst my/emacs-org-origin-file\n")
+                (insert "  (expand-file-name \"emacs.org\" my/emacs-org-origin-dir)\n")
+                (insert "  \"Full path to the original emacs.org, recorded at tangle time.\")\n")))
+            (org-babel-tangle)
+            (org-export-to-file 'html export-file)
 
-          (unless (file-directory-p export-dir)
-            (make-directory export-dir t))
-          (unless (file-directory-p export-emacs-dir)
-            (make-directory export-emacs-dir t))
+            (unless (file-directory-p export-dir)
+              (make-directory export-dir t))
+            (unless (file-directory-p export-emacs-dir)
+              (make-directory export-emacs-dir t))
 
-          (my/org-create-theme-file org-file)
+            (my/org-create-theme-file org-file)
 
-          ;; Links created relative to root-dir/export dirs:
-          (make-symbolic-link "index.html" "emacs.html" t)
+            ;; Links created relative to root-dir/export dirs:
+            (make-symbolic-link "index.html" "emacs.html" t)
 
-          (make-symbolic-link (expand-file-name "index.html" root-dir)
-                              (expand-file-name "index.html" export-emacs-dir) t)
-          (make-symbolic-link (expand-file-name "index.html" root-dir)
-                              (expand-file-name "emacs.html" export-emacs-dir) t)
+            (make-symbolic-link (expand-file-name "index.html" root-dir)
+                                (expand-file-name "index.html" export-emacs-dir) t)
+            (make-symbolic-link (expand-file-name "index.html" root-dir)
+                                (expand-file-name "emacs.html" export-emacs-dir) t)
 
-          ;; If these files are also in your org repo dir, link from root-dir:
-          (make-symbolic-link (expand-file-name "early-init.el" root-dir)
-                              (expand-file-name "early-init.el" export-emacs-dir) t)
-          (make-symbolic-link (expand-file-name "init.el" root-dir)
-                              (expand-file-name "init.el" export-emacs-dir) t)
-          (make-symbolic-link (expand-file-name "modules" root-dir)
-                              (expand-file-name "modules" export-emacs-dir) t)
+            ;; If these files are also in your org repo dir, link from root-dir:
+            (make-symbolic-link (expand-file-name "early-init.el" root-dir)
+                                (expand-file-name "early-init.el" export-emacs-dir) t)
+            (make-symbolic-link (expand-file-name "init.el" root-dir)
+                                (expand-file-name "init.el" export-emacs-dir) t)
+            (make-symbolic-link (expand-file-name "modules" root-dir)
+                                (expand-file-name "modules" export-emacs-dir) t)
 
-          (make-symbolic-link (expand-file-name "LICENSE.txt" root-dir)
-                              (expand-file-name "LICENSE.txt" export-emacs-dir) t)
-          (make-symbolic-link (expand-file-name "LICENSE_GPLv3.txt" root-dir)
-                              (expand-file-name "LICENSE_GPLv3.txt" export-emacs-dir) t)
+            (make-symbolic-link (expand-file-name "LICENSE.txt" root-dir)
+                                (expand-file-name "LICENSE.txt" export-emacs-dir) t)
+            (make-symbolic-link (expand-file-name "LICENSE_GPLv3.txt" root-dir)
+                                (expand-file-name "LICENSE_GPLv3.txt" export-emacs-dir) t)
 
-          (make-symbolic-link (expand-file-name "theme" root-dir)
-                              (expand-file-name "theme" export-dir) t)
-          (make-symbolic-link (expand-file-name "theme" root-dir)
-                              (expand-file-name "theme" my/org-notes-directory) t))))))
+            (make-symbolic-link (expand-file-name "theme" root-dir)
+                                (expand-file-name "theme" export-dir) t)
+            (make-symbolic-link (expand-file-name "theme" root-dir)
+                                (expand-file-name "theme" my/org-notes-directory) t))))))
 
-(with-eval-after-load 'ox-html
-  (defun my/org-html-src-block (orig-fun src-block contents info)
-    "Advice for `org-html-src-block' to add a header."
-    (let* ((parameters (org-element-property :parameters src-block))
-           (header-args (org-babel-parse-header-arguments parameters))
-           (tangle (cdr (assoc :tangle header-args)))
-           (lang (org-element-property :language src-block))
-           (header (cond
-                    ((and tangle (not (string= tangle "no")))
-                     (format "<div class=\"code-block-header tangle\"><span class=\"org-parameter\">:tangle</span> <span class=\"filename\">%s</span></div>\n"
-                             (org-html-encode-plain-text tangle)))
-                    ((string= lang "shell")
-                     "<div class=\"code-block-header shell\">Run this in your shell ::</div>\n")
-                    ((string= lang "example")
-                     "<div class=\"code-block-header example\">Example ::</div>\n")
-                    (lang
-                     (format "<div class=\"code-block-header lang\">(untangled) %s</div>\n"
-                             (org-html-encode-plain-text lang)))
-                    (t "")))
-           (code (funcall orig-fun src-block contents info)))
-      (if (not (string= header ""))
-          (format "<div class=\"code-block-container\">%s%s</div>" header code)
-        code)))
-  (advice-add 'org-html-src-block :around #'my/org-html-src-block))
+  (with-eval-after-load 'ox-html
+    (defun my/org-html-src-block (orig-fun src-block contents info)
+      "Advice for `org-html-src-block' to add a header."
+      (let* ((parameters (org-element-property :parameters src-block))
+             (header-args (org-babel-parse-header-arguments parameters))
+             (tangle (cdr (assoc :tangle header-args)))
+             (lang (org-element-property :language src-block))
+             (header (cond
+                      ((and tangle (not (string= tangle "no")))
+                       (format "<div class=\"code-block-header tangle\"><span class=\"org-parameter\">:tangle</span> <span class=\"filename\">%s</span></div>\n"
+                               (org-html-encode-plain-text tangle)))
+                      ((string= lang "shell")
+                       "<div class=\"code-block-header shell\">Run this in your shell ::</div>\n")
+                      ((string= lang "example")
+                       "<div class=\"code-block-header example\">Example ::</div>\n")
+                      (lang
+                       (format "<div class=\"code-block-header lang\">(untangled) %s</div>\n"
+                               (org-html-encode-plain-text lang)))
+                      (t "")))
+             (code (funcall orig-fun src-block contents info)))
+        (if (not (string= header ""))
+            (format "<div class=\"code-block-container\">%s%s</div>" header code)
+          code)))
+    (advice-add 'org-html-src-block :around #'my/org-html-src-block))
 
-;; Tell Emacs to trust this code in all buffer local vars:
-(add-to-list 'safe-local-variable-values
-             '(eval add-hook 'after-save-hook 'my/emacs-org-tangle nil t))
-(add-to-list 'safe-local-variable-values
-             '(org-confirm-babel-evaluate))
+  ;; Tell Emacs to trust this code in all buffer local vars:
+  (add-to-list 'safe-local-variable-values
+               '(eval add-hook 'after-save-hook 'my/emacs-org-tangle nil t))
+  (add-to-list 'safe-local-variable-values
+               '(org-confirm-babel-evaluate))
 #+end_src
 
 *** Local HTTP server for displaying exported HTML

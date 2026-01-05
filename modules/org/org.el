@@ -95,6 +95,16 @@ Important: output paths are rooted at the *real* directory where emacs.org lives
         (let ((default-directory root-dir))
           (when (file-directory-p modules-dir)
             (delete-directory modules-dir t))
+          ;; Record origin dir/file at *tangle time* by writing literal strings.
+          (let ((origin-el (expand-file-name "modules/origin.el" root-dir)))
+            (make-directory (file-name-directory origin-el) t)
+            (with-temp-file origin-el
+              (insert ";; Auto-generated at tangle time. DO NOT EDIT.\n")
+              (insert (format "(defconst my/emacs-org-origin-dir %S\n" root-dir))
+              (insert "  \"Directory of the original emacs.org (git checkout), recorded at tangle time.\")\n\n")
+              (insert "(defconst my/emacs-org-origin-file\n")
+              (insert "  (expand-file-name \"emacs.org\" my/emacs-org-origin-dir)\n")
+              (insert "  \"Full path to the original emacs.org, recorded at tangle time.\")\n")))
           (org-babel-tangle)
           (org-export-to-file 'html export-file)
 

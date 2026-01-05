@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2026-01-05 Mon 13:56 -->
+<!-- 2026-01-05 Mon 14:27 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -861,22 +861,14 @@ Additionally, early debug options are set here.
 <div class="outline-text-2" id="text-5">
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><code><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Tangled from emacs.org &#8212; record where the source lives:
-</span>(<span style="color: #00bfff;">defconst</span> <span style="color: #4eee94;">my/emacs-org-origin-dir</span>
-  (file-name-directory (file-truename (<span style="color: #00bfff;">or</span> (buffer-file-name) default-directory)))
-  <span style="color: #ffe4b5;">"Directory of the original emacs.org file (git checkout), recorded at tangle time."</span>)
-(<span style="color: #00bfff;">defconst</span> <span style="color: #4eee94;">my/emacs-org-origin-file</span>
-  (expand-file-name <span style="color: #deb887;">"emacs.org"</span> my/emacs-org-origin-dir)
-  <span style="color: #ffe4b5;">"Full path to the original emacs.org file, recorded at tangle time."</span>)
-(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/emacs-org-file</span> ()
-  <span style="color: #ffe4b5;">"Return the path to the source emacs.org file (recorded at tangle time)."</span>
+<pre class="src src-emacs-lisp"><code>(<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/emacs-org-file</span> ()
   (<span style="color: #00bfff;">cond</span>
    ((<span style="color: #00bfff;">and</span> (boundp 'my/emacs-org-origin-file)
          (stringp my/emacs-org-origin-file)
          (file-exists-p my/emacs-org-origin-file))
     my/emacs-org-origin-file)
-   <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">fallback if something went wrong
-</span>   (t (locate-user-emacs-file <span style="color: #deb887;">"emacs.org"</span>))))
+   <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">fallback
+</span>   (t (<span style="color: #fec43f;">user-error</span> <span style="color: #deb887;">"Can't find emacs.org origin; re-run my/emacs-org-tangle"</span>))))
 </code></pre>
 </div></div>
 </div>
@@ -1356,7 +1348,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="orgaf28800">
+<pre class="example" id="orga423671">
 - ace-window
 - avy
 - completion
@@ -1918,6 +1910,16 @@ Important: output paths are rooted at the *real* directory where emacs.org lives
 </span>        (<span style="color: #00bfff;">let</span> ((default-directory root-dir))
           (<span style="color: #00bfff;">when</span> (file-directory-p modules-dir)
             (delete-directory modules-dir t))
+          <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Record origin dir/file at *tangle time* by writing literal strings.
+</span>          (<span style="color: #00bfff;">let</span> ((origin-el (expand-file-name <span style="color: #deb887;">"modules/origin.el"</span> root-dir)))
+            (make-directory (file-name-directory origin-el) t)
+            (<span style="color: #00bfff;">with-temp-file</span> origin-el
+              (insert <span style="color: #deb887;">";; Auto-generated at tangle time. DO NOT EDIT.\n"</span>)
+              (insert (format <span style="color: #deb887;">"(defconst my/emacs-org-origin-dir %S\n"</span> root-dir))
+              (insert <span style="color: #deb887;">"  \"Directory of the original emacs.org (git checkout), recorded at tangle time.\")\n\n"</span>)
+              (insert <span style="color: #deb887;">"(defconst my/emacs-org-origin-file\n"</span>)
+              (insert <span style="color: #deb887;">"  (expand-file-name \"emacs.org\" my/emacs-org-origin-dir)\n"</span>)
+              (insert <span style="color: #deb887;">"  \"Full path to the original emacs.org, recorded at tangle time.\")\n"</span>)))
           (org-babel-tangle)
           (org-export-to-file 'html export-file)
 
@@ -3129,7 +3131,7 @@ file.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2026-01-05 Mon 13:56</p>
+<p class="date">Last Modified: 2026-01-05 Mon 14:27</p>
 </div>
 </body>
 </html>
