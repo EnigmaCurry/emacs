@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2026-01-17 Sat 14:04 -->
+<!-- 2026-01-17 Sat 14:36 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -475,7 +475,8 @@ h1.title{margin-top: 0em;
 <li><a href="#PATH_setup">6.6. PATH setup</a></li>
 <li><a href="#Programming_mode">6.7. Programming mode</a></li>
 <li><a href="#Shell_processes">6.8. Shell processes</a></li>
-<li><a href="#TRAMP">6.9. TRAMP</a></li>
+<li><a href="#Bookmarks">6.9. Bookmarks</a></li>
+<li><a href="#TRAMP">6.10. TRAMP</a></li>
 </ul>
 </li>
 <li><a href="#Cargo">7. Cargo</a>
@@ -1072,9 +1073,27 @@ machine only.
 </div></div>
 </div>
 </div>
-<div id="outline-container-TRAMP" class="outline-3">
-<h3 id="TRAMP"><span class="section-number-3">6.9.</span> TRAMP</h3>
+<div id="outline-container-Bookmarks" class="outline-3">
+<h3 id="Bookmarks"><span class="section-number-3">6.9.</span> Bookmarks</h3>
 <div class="outline-text-3" id="text-6-9">
+<div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">init.el</span></div>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code>(<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/bookmarks</span> (<span style="color: #6ae4b9;">&amp;optional</span> arg)
+  <span style="color: #9ac8e0;">"Jump to a bookmark, or list bookmarks with a prefix arg.
+
+No prefix ARG: run `bookmark-jump`.
+With C-u (or any prefix ARG): run `list-bookmarks`."</span>
+  (<span style="color: #b6a0ff;">interactive</span> <span style="color: #79a8ff;">"P"</span>)
+  (<span style="color: #b6a0ff;">if</span> arg
+      (call-interactively #'list-bookmarks)
+    (call-interactively #'bookmark-jump)))
+</code></pre>
+</div></div>
+</div>
+</div>
+<div id="outline-container-TRAMP" class="outline-3">
+<h3 id="TRAMP"><span class="section-number-3">6.10.</span> TRAMP</h3>
+<div class="outline-text-3" id="text-6-10">
 <p>
 TRAMP allows you to edit files on remote systems. For normal SSH
 connections it works to open a file this way:
@@ -1379,7 +1398,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org24db651">
+<pre class="example" id="orgcb1b88c">
 - ace-window
 - avy
 - completion
@@ -1771,7 +1790,7 @@ selection.
    <span style="color: #79a8ff;">"M-&lt;f3&gt;"</span>    'my/register-save-f3
    <span style="color: #79a8ff;">"C-&lt;f4&gt;"</span>    'my/register-jump-f4
    <span style="color: #79a8ff;">"M-&lt;f4&gt;"</span>    'my/register-save-f4
-   <span style="color: #79a8ff;">"C-c b"</span>     'list-bookmarks
+   <span style="color: #79a8ff;">"C-c b"</span>     'my/bookmarks
    <span style="color: #79a8ff;">"C-c B"</span>     'bookmark-set
    )
   <span style="color: #ff9f80;">;;; </span><span style="color: #ff9f80;">Put the Emacs default keybindings you want included
@@ -3164,7 +3183,7 @@ file.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2026-01-17 Sat 14:04</p>
+<p class="date">Last Modified: 2026-01-17 Sat 14:36</p>
 </div>
 </body>
 </html>

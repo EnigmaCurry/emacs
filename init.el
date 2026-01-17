@@ -91,6 +91,16 @@
      command)
     (pop-to-buffer buffer)))
 
+(defun my/bookmarks (&optional arg)
+  "Jump to a bookmark, or list bookmarks with a prefix arg.
+
+No prefix ARG: run `bookmark-jump`.
+With C-u (or any prefix ARG): run `list-bookmarks`."
+  (interactive "P")
+  (if arg
+      (call-interactively #'list-bookmarks)
+    (call-interactively #'bookmark-jump)))
+
 (with-eval-after-load 'tramp
   (setq tramp-default-proxies-alist
         '((".*" "\\`root\\'" "/ssh:%h:"))))

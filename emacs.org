@@ -451,6 +451,19 @@ machine only.
        command)
       (pop-to-buffer buffer)))
 #+end_src
+
+** Bookmarks
+#+begin_src emacs-lisp :tangle "init.el"
+(defun my/bookmarks (&optional arg)
+  "Jump to a bookmark, or list bookmarks with a prefix arg.
+
+No prefix ARG: run `bookmark-jump`.
+With C-u (or any prefix ARG): run `list-bookmarks`."
+  (interactive "P")
+  (if arg
+      (call-interactively #'list-bookmarks)
+    (call-interactively #'bookmark-jump)))
+#+end_src
 ** TRAMP
 
 TRAMP allows you to edit files on remote systems. For normal SSH
@@ -961,7 +974,7 @@ selection.
      "M-<f3>"    'my/register-save-f3
      "C-<f4>"    'my/register-jump-f4
      "M-<f4>"    'my/register-save-f4
-     "C-c b"     'list-bookmarks
+     "C-c b"     'my/bookmarks
      "C-c B"     'bookmark-set
      )
     ;;; Put the Emacs default keybindings you want included
