@@ -91,6 +91,10 @@
      command)
     (pop-to-buffer buffer)))
 
+(with-eval-after-load 'tramp
+  (setq tramp-default-proxies-alist
+        '((".*" "\\`root\\'" "/ssh:%h:"))))
+
 (defun my/bootstrap-straight (&rest _)
   "Bootstrap straight.el only if it's not already installed."
   (unless (bound-and-true-p straight--build-dir)

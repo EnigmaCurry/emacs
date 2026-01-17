@@ -1,5 +1,5 @@
 ;; Auto-generated at tangle time. DO NOT EDIT.
-(defconst my/emacs-org-origin-dir "/home/ryan/git/vendor/enigmacurry/emacs/"
+(defconst my/emacs-org-origin-dir "/var/home/enigma/git/vendor/enigmacurry/emacs/"
   "Directory of the original emacs.org (git checkout), recorded at tangle time.")
 
 (defconst my/emacs-org-origin-file

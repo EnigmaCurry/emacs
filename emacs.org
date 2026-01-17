@@ -451,6 +451,26 @@ machine only.
        command)
       (pop-to-buffer buffer)))
 #+end_src
+** TRAMP
+
+TRAMP allows you to edit files on remote systems. For normal SSH
+connections it works to open a file this way:
+=/ssh:host:/path/to/file=. However, if the file you need to edit
+require root access, but the only way to get root is to use =sudo=,
+then you must use the longer form:
+=/ssh:host|sudo:root@host:/path/to/file=. This is obtuse, and it
+doesn't work with Emacs bookmarks (Emacs will throw away the
+=/ssh:host= part).
+
+Set a TRAMP proxy so that the form =/sudo:root@host:/path/to/file=
+automatically uses SSH:
+
+#+begin_src emacs-lisp :tangle "init.el"
+(with-eval-after-load 'tramp
+  (setq tramp-default-proxies-alist
+        '((".*" "\\`root\\'" "/ssh:%h:"))))
+#+end_src
+
 * Cargo
 
 [[https://doc.rust-lang.org/cargo/][Cargo]] is used to install some system programs automatically.
