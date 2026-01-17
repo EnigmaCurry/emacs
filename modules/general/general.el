@@ -23,8 +23,9 @@
    "M-<f3>"    'my/register-save-f3
    "C-<f4>"    'my/register-jump-f4
    "M-<f4>"    'my/register-save-f4
-   "C-c b"     'my/bookmarks
-   "C-c B"     'bookmark-set
+   "C-c b"     'bookmark-jump
+   "C-c B"     'list-bookmarks
+   "C-c M-b"   'bookmark-set
    )
   ;;; Put the Emacs default keybindings you want included
   ;;;   in general-describe-keybindings here:

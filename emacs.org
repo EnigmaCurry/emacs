@@ -452,18 +452,6 @@ machine only.
       (pop-to-buffer buffer)))
 #+end_src
 
-** Bookmarks
-#+begin_src emacs-lisp :tangle "init.el"
-(defun my/bookmarks (&optional arg)
-  "Jump to a bookmark, or list bookmarks with a prefix arg.
-
-No prefix ARG: run `bookmark-jump`.
-With C-u (or any prefix ARG): run `list-bookmarks`."
-  (interactive "P")
-  (if arg
-      (call-interactively #'list-bookmarks)
-    (call-interactively #'bookmark-jump)))
-#+end_src
 ** TRAMP
 
 TRAMP allows you to edit files on remote systems. For normal SSH
@@ -480,9 +468,30 @@ automatically uses SSH:
 
 #+begin_src emacs-lisp :tangle "init.el"
 (with-eval-after-load 'tramp
-  (setq tramp-default-proxies-alist
-        '((".*" "\\`root\\'" "/ssh:%h:"))))
+  ;; General rule first...
+  (add-to-list 'tramp-default-proxies-alist
+               '(".*" "\\`root\\'" "/ssh:%h:"))
+  ;; ...then exception goes to the front and wins.
+  (add-to-list 'tramp-default-proxies-alist
+               '("\\`\\(localhost\\|127\\.0\\.0\\.1\\)\\'" "\\`root\\'" nil)))
 #+end_src
+
+Add a TRAMP method named =dbxhost= which has the ability to escape a
+[[https://distrobox.it/][distrobox]] container to edit files on the real system host.
+
+#+begin_src emacs-lisp :tangle "init.el"
+(with-eval-after-load 'tramp
+  (add-to-list 'tramp-methods
+               '("dbxhost"
+                 (tramp-login-program "distrobox-host-exec")
+                 ;; Start an interactive shell on the *host*
+                 (tramp-login-args (("sh" "-i")))
+                 (tramp-remote-shell "/bin/sh")
+                 (tramp-remote-shell-args ("-c")))))
+#+end_src
+
+With this enabled you can open files of the form
+=/dbxhost:localhost|sudo:root@localhost:/etc/hosts=.
 
 * Cargo
 
@@ -974,8 +983,9 @@ selection.
      "M-<f3>"    'my/register-save-f3
      "C-<f4>"    'my/register-jump-f4
      "M-<f4>"    'my/register-save-f4
-     "C-c b"     'my/bookmarks
-     "C-c B"     'bookmark-set
+     "C-c b"     'bookmark-jump
+     "C-c B"     'list-bookmarks
+     "C-c M-b"   'bookmark-set
      )
     ;;; Put the Emacs default keybindings you want included
     ;;;   in general-describe-keybindings here:

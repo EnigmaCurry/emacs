@@ -91,19 +91,22 @@
      command)
     (pop-to-buffer buffer)))
 
-(defun my/bookmarks (&optional arg)
-  "Jump to a bookmark, or list bookmarks with a prefix arg.
-
-No prefix ARG: run `bookmark-jump`.
-With C-u (or any prefix ARG): run `list-bookmarks`."
-  (interactive "P")
-  (if arg
-      (call-interactively #'list-bookmarks)
-    (call-interactively #'bookmark-jump)))
+(with-eval-after-load 'tramp
+  ;; General rule first...
+  (add-to-list 'tramp-default-proxies-alist
+               '(".*" "\\`root\\'" "/ssh:%h:"))
+  ;; ...then exception goes to the front and wins.
+  (add-to-list 'tramp-default-proxies-alist
+               '("\\`\\(localhost\\|127\\.0\\.0\\.1\\)\\'" "\\`root\\'" nil)))
 
 (with-eval-after-load 'tramp
-  (setq tramp-default-proxies-alist
-        '((".*" "\\`root\\'" "/ssh:%h:"))))
+  (add-to-list 'tramp-methods
+               '("dbxhost"
+                 (tramp-login-program "distrobox-host-exec")
+                 ;; Start an interactive shell on the *host*
+                 (tramp-login-args (("sh" "-i")))
+                 (tramp-remote-shell "/bin/sh")
+                 (tramp-remote-shell-args ("-c")))))
 
 (defun my/bootstrap-straight (&rest _)
   "Bootstrap straight.el only if it's not already installed."
