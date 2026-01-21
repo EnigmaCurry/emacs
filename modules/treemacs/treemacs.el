@@ -2,6 +2,8 @@
   :general
   ( "C-c l"   #'my/treemacs-open-or-focus
     "C-c M-l" #'my/treemacs-close)
+  :config
+  (treemacs-peek-mode t)
   :init    
   (defun my/treemacs-open-or-focus ()
     "Open Treemacs if not visible; otherwise focus the Treemacs window."
