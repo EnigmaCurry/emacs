@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2026-01-17 Sat 15:38 -->
+<!-- 2026-01-21 Wed 14:03 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -541,6 +541,7 @@ h1.title{margin-top: 0em;
 <li><a href="#Go_%28label_%3Dgo%3D%29">10.26. Go (label <code>go</code>)</a></li>
 <li><a href="#Nix_%28label_%3Dnix%3D%29">10.27. Nix (label <code>nix</code>)</a></li>
 <li><a href="#Ripgrep_%28label_%3Dripgrep%3D%29">10.28. Ripgrep (label <code>ripgrep</code>)</a></li>
+<li><a href="#Treemacs_%28label_%3Dtreemacs%3D%29">10.29. Treemacs (label <code>treemacs</code>)</a></li>
 </ul>
 </li>
 <li><a href="#Load_modules">11. Load modules</a>
@@ -1406,7 +1407,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org984666c">
+<pre class="example" id="org1278ef2">
 - ace-window
 - avy
 - completion
@@ -1432,6 +1433,7 @@ Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/mod
 - svelte
 - text-scale
 - theme
+- treemacs
 - treesit
 - vterm
 - which-key
@@ -2771,8 +2773,8 @@ This package requires the system dependency <a href="https://jqlang.github.io/jq
   <span style="color: #f78fe7;">:config</span>)
 (<span style="color: #b6a0ff;">use-package</span> lsp-ui <span style="color: #f78fe7;">:commands</span> lsp-ui-mode)
 (<span style="color: #b6a0ff;">use-package</span> lsp-ivy <span style="color: #f78fe7;">:commands</span> lsp-ivy-workspace-symbol)
-(<span style="color: #b6a0ff;">use-package</span> lsp-treemacs <span style="color: #f78fe7;">:commands</span> lsp-treemacs-errors-list)
-(<span style="color: #b6a0ff;">use-package</span> flycheck)
+<span style="color: #ff9f80;">;; </span><span style="color: #ff9f80;">moved to treemacs module: (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+</span>(<span style="color: #b6a0ff;">use-package</span> flycheck)
 
 <span style="color: #ff9f80;">;; </span><span style="color: #ff9f80;">LSP debuggers
 </span>(<span style="color: #b6a0ff;">use-package</span> dap-mode)
@@ -3092,6 +3094,35 @@ sudo install /tmp/pg_format /usr/local/bin/pg_format
 </div></div>
 </div>
 </div>
+<div id="outline-container-Treemacs_%28label_%3Dtreemacs%3D%29" class="outline-3">
+<h3 id="Treemacs_%28label_%3Dtreemacs%3D%29"><span class="section-number-3">10.29.</span> Treemacs (label <code>treemacs</code>)</h3>
+<div class="outline-text-3" id="text-10-29">
+<div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/treemacs/treemacs.el</span></div>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code>(<span style="color: #b6a0ff;">use-package</span> lsp-treemacs <span style="color: #f78fe7;">:commands</span> lsp-treemacs-errors-list
+  <span style="color: #f78fe7;">:general</span>
+  ( <span style="color: #79a8ff;">"C-c l"</span>   #'my/treemacs-open-or-focus
+    <span style="color: #79a8ff;">"C-c M-l"</span> #'my/treemacs-close)
+  <span style="color: #f78fe7;">:init</span>    
+  (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/treemacs-open-or-focus</span> ()
+    <span style="color: #9ac8e0;">"Open Treemacs if not visible; otherwise focus the Treemacs window."</span>
+    (<span style="color: #b6a0ff;">interactive</span>)
+    (<span style="color: #b6a0ff;">require</span> '<span style="color: #00bcff;">treemacs</span>)
+    (<span style="color: #b6a0ff;">if-let</span> ((win (treemacs-get-local-window)))
+        (select-window win)
+      (treemacs))) <span style="color: #ff9f80;">;; </span><span style="color: #ff9f80;">note: `treemacs` itself is a show/hide toggle :contentReference[oaicite:1]{index=1}
+</span>  (<span style="color: #b6a0ff;">defun</span> <span style="color: #feacd0;">my/treemacs-close</span> ()
+    <span style="color: #9ac8e0;">"Close (hide) the Treemacs window if it's visible."</span>
+    (<span style="color: #b6a0ff;">interactive</span>)
+    (<span style="color: #b6a0ff;">require</span> '<span style="color: #00bcff;">treemacs</span>)
+    (<span style="color: #b6a0ff;">when-let</span> ((win (treemacs-get-local-window)))
+      <span style="color: #ff9f80;">;; </span><span style="color: #ff9f80;">Close the *Treemacs* window, not the current editing window:
+</span>      (delete-window win)))
+  )
+</code></pre>
+</div></div>
+</div>
+</div>
 </div>
 <div id="outline-container-Load_modules" class="outline-2">
 <h2 id="Load_modules"><span class="section-number-2">11.</span> Load modules</h2>
@@ -3192,7 +3223,7 @@ file.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2026-01-17 Sat 15:38</p>
+<p class="date">Last Modified: 2026-01-21 Wed 14:03</p>
 </div>
 </body>
 </html>

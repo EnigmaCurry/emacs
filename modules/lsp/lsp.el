@@ -15,7 +15,7 @@
   :config)
 (use-package lsp-ui :commands lsp-ui-mode)
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+;; moved to treemacs module: (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 (use-package flycheck)
 
 ;; LSP debuggers
