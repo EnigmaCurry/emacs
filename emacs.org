@@ -192,7 +192,7 @@ Cargo packages are declared by Emacs modules themselves:
 #+begin_src emacs-lisp
   ;; this example declares the "just" crate needs to be installed.
   ;; (the actual install is deferred until later):
-  (my/cargo-dependency "just")
+  ;(my/cargo-dependency "just")
 #+end_src
 
 All of the crates are installed together [[#cargo-install-my-cargo-dependencies][/after/ all of the modules
@@ -586,7 +586,7 @@ Ensure that this path is set (because Emacs might not have read
 #+begin_src emacs-lisp :tangle "modules/just/just.el" :mkdirp yes
   ;; depend on the just crate so its installed automatically
   ;; you must add "just" to the list of my/machine-labels for this to work:
-  (my/cargo-dependency "just")
+  ;(my/cargo-dependency "just")
 #+end_src
 
 This =Justfile= consolidates commands that operate
@@ -1215,7 +1215,7 @@ This function tangles this file (=emacs.org=) and exports an HTML page
 
 *** Local HTTP server for displaying exported HTML
 #+begin_src emacs-lisp :tangle "modules/org/org.el"  :mkdirp yes
-  (my/cargo-dependency "live-server") ; defers install of live-server Rust crate
+  ;(my/cargo-dependency "live-server") ; defers install of live-server Rust crate
   (defvar my/org-html-server-host "127.0.0.1") ; Set to 0.0.0.0 to serve publicly
   (defvar my/org-html-server-port "7776")
   (defun my/org-html-server (&optional redirect)
@@ -1914,7 +1914,8 @@ regions, and files to S3 storage and the web.
   (my/add-exec-path "~/.local/bin")
   (defun my/python-install-uv-package-manager ()
     "Install uv package manager via cargo"
-    (my/cargo-install '(("uv" . "https://github.com/astral-sh/uv"))))
+    ;(my/cargo-install '(("uv" . "https://github.com/astral-sh/uv")))
+    )
   (defun my/python-uv-execute (command)
     (my/python-install-uv-package-manager)
     (my/shell-execute command))
