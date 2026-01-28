@@ -1598,7 +1598,7 @@ Creates/updates theme in <org-file-dir>/theme/ before exporting."
     vterm
     :custom (vterm-always-compile-module t)
     :general ("C-c t" 'my/vterm-toggle)
-             ("C-c M-t" 'consult-vterm-buffer)
+             ("C-c M-t" 'my/vterm-buffer-menu)
     :config (define-key vterm-mode-map (kbd "<f5>") nil)
     :hook ((vterm-mode . (lambda () (setq-local show-trailing-whitespace nil))))
     :init
@@ -1646,6 +1646,13 @@ Creates/updates theme in <org-file-dir>/theme/ before exporting."
       "Switch to a vterm buffer using consult."
       (interactive)
       (consult-buffer '(consult--source-vterm)))
+    (defun my/vterm-buffer-menu ()
+      "Display a buffer menu with only vterm buffers."
+      (interactive)
+      (let ((vterm-buffers (seq-filter (lambda (buf)
+                                          (eq (buffer-local-value 'major-mode buf) 'vterm-mode))
+                                        (buffer-list))))
+        (display-buffer (list-buffers-noselect nil vterm-buffers))))
     )
 #+end_src
 
