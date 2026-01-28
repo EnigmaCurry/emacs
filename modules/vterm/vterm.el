@@ -60,5 +60,5 @@ regardless of the current buffer’s TRAMP context."
     (let ((vterm-buffers (seq-filter (lambda (buf)
                                         (eq (buffer-local-value 'major-mode buf) 'vterm-mode))
                                       (buffer-list))))
-      (display-buffer (list-buffers-noselect nil vterm-buffers))))
+      (pop-to-buffer (list-buffers-noselect nil vterm-buffers))))
   )
