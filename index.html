@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2026-01-27 Tue 23:46 -->
+<!-- 2026-01-27 Tue 23:52 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -1406,7 +1406,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="org475e91e">
+<pre class="example" id="orgfcc929e">
 - ace-window
 - avy
 - completion
@@ -2391,91 +2391,91 @@ Otherwise, call `save-buffer` immediately."</span>
 
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/completion/completion.el</span></div>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><code>    <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Allow minibuffers to stack:
-</span>    (<span style="color: #00bfff;">setq-default</span> enable-recursive-minibuffers t)
-    <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Filter command completions to only include commands
-</span>    <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">applicable to the current major mode:
-</span>    (<span style="color: #00bfff;">setq-default</span> read-extended-command-predicate
-                  #'command-completion-default-include-p)
-    <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Add custom prompt when asking for multiple values as (comma) separated list:
-</span>    (advice-add #'completing-read-multiple <span style="color: #f08080;">:filter-args</span>
-                (<span style="color: #00bfff;">lambda</span> (args)
-                  (cons (format <span style="color: #deb887;">"[CRM%s] %s"</span>
-                                (replace-regexp-in-string
-                                 <span style="color: #deb887;">"\\`\\[</span><span style="color: #a2cd5a;">.*?</span><span style="color: #deb887;">]\\*</span><span style="color: #feacd0; font-weight: bold;">\\</span><span style="color: #00c06f; font-weight: bold;">|</span><span style="color: #deb887;">\\[</span><span style="color: #a2cd5a;">.*?</span><span style="color: #deb887;">]\\*\\'"</span> <span style="color: #deb887;">""</span>
-                                 crm-separator)
-                                (car args))
-                        (cdr args))))
-    <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Do not allow the cursor in the minibuffer prompt
-</span>    (<span style="color: #00bfff;">setq</span> minibuffer-prompt-properties
-          '(read-only t cursor-intangible t face minibuffer-prompt))
-    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-  (<span style="color: #00bfff;">use-package</span>
-    consult
-    <span style="color: #f08080;">:general</span> (<span style="color: #deb887;">"C-x b"</span> 'my/consult-buffer)
-    <span style="color: #f08080;">:init</span>
-    (<span style="color: #00bfff;">defvar</span> <span style="color: #4eee94;">consult--source-bookmark</span>
-      `(<span style="color: #f08080;">:name</span> <span style="color: #deb887;">"Bookmark"</span>
-        <span style="color: #f08080;">:narrow</span> ?b
-        <span style="color: #f08080;">:category</span> bookmark
-        <span style="color: #f08080;">:face</span> consult-bookmark
-        <span style="color: #f08080;">:items</span> ,(<span style="color: #00bfff;">lambda</span> () (bookmark-all-names))
-        <span style="color: #f08080;">:action</span> ,(<span style="color: #00bfff;">lambda</span> (name) (bookmark-jump name)))
-      <span style="color: #ffe4b5;">"Bookmark source for `</span><span style="color: #a2cd5a;">consult-buffer</span><span style="color: #ffe4b5;">'."</span>)
-    (<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/consult-buffer</span> (arg)
-      <span style="color: #ffe4b5;">"Consult buffer with optional prefix for vterm/bookmark view.
+<pre class="src src-emacs-lisp"><code><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Allow minibuffers to stack:
+</span>(<span style="color: #00bfff;">setq-default</span> enable-recursive-minibuffers t)
+<span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Filter command completions to only include commands
+</span><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">applicable to the current major mode:
+</span>(<span style="color: #00bfff;">setq-default</span> read-extended-command-predicate
+              #'command-completion-default-include-p)
+<span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Add custom prompt when asking for multiple values as (comma) separated list:
+</span>(advice-add #'completing-read-multiple <span style="color: #f08080;">:filter-args</span>
+            (<span style="color: #00bfff;">lambda</span> (args)
+              (cons (format <span style="color: #deb887;">"[CRM%s] %s"</span>
+                            (replace-regexp-in-string
+                             <span style="color: #deb887;">"\\`\\[</span><span style="color: #a2cd5a;">.*?</span><span style="color: #deb887;">]\\*</span><span style="color: #feacd0; font-weight: bold;">\\</span><span style="color: #00c06f; font-weight: bold;">|</span><span style="color: #deb887;">\\[</span><span style="color: #a2cd5a;">.*?</span><span style="color: #deb887;">]\\*\\'"</span> <span style="color: #deb887;">""</span>
+                             crm-separator)
+                            (car args))
+                    (cdr args))))
+<span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Do not allow the cursor in the minibuffer prompt
+</span>(<span style="color: #00bfff;">setq</span> minibuffer-prompt-properties
+      '(read-only t cursor-intangible t face minibuffer-prompt))
+(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+(<span style="color: #00bfff;">use-package</span>
+  consult
+  <span style="color: #f08080;">:general</span> (<span style="color: #deb887;">"C-x b"</span> 'my/consult-buffer)
+  <span style="color: #f08080;">:init</span>
+  (<span style="color: #00bfff;">defvar</span> <span style="color: #4eee94;">consult--source-bookmark</span>
+    `(<span style="color: #f08080;">:name</span> <span style="color: #deb887;">"Bookmark"</span>
+            <span style="color: #f08080;">:narrow</span> ?b
+            <span style="color: #f08080;">:category</span> bookmark
+            <span style="color: #f08080;">:face</span> consult-bookmark
+            <span style="color: #f08080;">:items</span> ,(<span style="color: #00bfff;">lambda</span> () (bookmark-all-names))
+            <span style="color: #f08080;">:action</span> ,(<span style="color: #00bfff;">lambda</span> (name) (bookmark-jump name)))
+    <span style="color: #ffe4b5;">"Bookmark source for `</span><span style="color: #a2cd5a;">consult-buffer</span><span style="color: #ffe4b5;">'."</span>)
+  (<span style="color: #00bfff;">defun</span> <span style="color: #daa520;">my/consult-buffer</span> (arg)
+    <span style="color: #ffe4b5;">"Consult buffer with optional prefix for vterm/bookmark view.
 Without prefix: normal consult-buffer.
 With C-u: show vterms at top, bookmarks at bottom."</span>
-      (<span style="color: #00bfff;">interactive</span> <span style="color: #deb887;">"P"</span>)
-      (<span style="color: #00bfff;">if</span> arg
-          (consult-buffer '(consult--source-vterm consult--source-bookmark))
-        (consult-buffer)))
-    )
+    (<span style="color: #00bfff;">interactive</span> <span style="color: #deb887;">"P"</span>)
+    (<span style="color: #00bfff;">if</span> arg
+        (consult-buffer '(consult--source-vterm consult--source-bookmark))
+      (consult-buffer)))
+  )
 
-  (<span style="color: #00bfff;">use-package</span> vertico
-      <span style="color: #f08080;">:custom</span>
-      (vertico-scroll-margin 2)
-      (vertico-count 10)
-      (vertico-resize 'grow-only)
-      (vertico-cycle nil)
-      <span style="color: #f08080;">:init</span>
-      <span style="color: #7f7f7f;">;;</span><span style="color: #7f7f7f;">(keymap-set vertico-map "?" #'minibuffer-completion-help)
-</span>      <span style="color: #7f7f7f;">;;</span><span style="color: #7f7f7f;">(keymap-set vertico-map "M-TAB" #'vertico-insert)
-</span>      <span style="color: #7f7f7f;">;;</span><span style="color: #7f7f7f;">(keymap-set vertico-map "TAB" #'minibuffer-complete)
-</span>      (vertico-mode))
+(<span style="color: #00bfff;">use-package</span> vertico
+  <span style="color: #f08080;">:custom</span>
+  (vertico-scroll-margin 2)
+  (vertico-count 10)
+  (vertico-resize 'grow-only)
+  (vertico-cycle nil)
+  <span style="color: #f08080;">:init</span>
+  <span style="color: #7f7f7f;">;;</span><span style="color: #7f7f7f;">(keymap-set vertico-map "?" #'minibuffer-completion-help)
+</span>  <span style="color: #7f7f7f;">;;</span><span style="color: #7f7f7f;">(keymap-set vertico-map "M-TAB" #'vertico-insert)
+</span>  <span style="color: #7f7f7f;">;;</span><span style="color: #7f7f7f;">(keymap-set vertico-map "TAB" #'minibuffer-complete)
+</span>  (vertico-mode))
 
-    (<span style="color: #00bfff;">use-package</span> orderless
-      <span style="color: #f08080;">:custom</span>
-      <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Configure a custom style dispatcher (see the Consult wiki)
-</span>      <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">(orderless-style-dispatchers
-</span>      <span style="color: #7f7f7f;">;;   </span><span style="color: #7f7f7f;">'(+orderless-consult-dispatch orderless-affix-dispatch))
-</span>      <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">(orderless-component-separator #'orderless-escapable-split-on-space)
-</span>      (completion-styles '(orderless basic))
-      (completion-category-defaults nil)
-      (completion-category-overrides '((file (styles partial-completion)))))
+(<span style="color: #00bfff;">use-package</span> orderless
+  <span style="color: #f08080;">:custom</span>
+  <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">Configure a custom style dispatcher (see the Consult wiki)
+</span>  <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">(orderless-style-dispatchers
+</span>  <span style="color: #7f7f7f;">;;   </span><span style="color: #7f7f7f;">'(+orderless-consult-dispatch orderless-affix-dispatch))
+</span>  <span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">(orderless-component-separator #'orderless-escapable-split-on-space)
+</span>  (completion-styles '(orderless basic))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles partial-completion)))))
 
-    (<span style="color: #00bfff;">use-package</span> marginalia
-      <span style="color: #f08080;">:hook</span>
-      ((marginalia-mode . all-the-icons-completion-marginalia-setup))
-      <span style="color: #f08080;">:bind</span> (<span style="color: #f08080;">:map</span> minibuffer-local-map
-                  (<span style="color: #deb887;">"M-A"</span> . marginalia-cycle))
-      <span style="color: #f08080;">:init</span>
-      (marginalia-mode))
+(<span style="color: #00bfff;">use-package</span> marginalia
+  <span style="color: #f08080;">:hook</span>
+  ((marginalia-mode . all-the-icons-completion-marginalia-setup))
+  <span style="color: #f08080;">:bind</span> (<span style="color: #f08080;">:map</span> minibuffer-local-map
+              (<span style="color: #deb887;">"M-A"</span> . marginalia-cycle))
+  <span style="color: #f08080;">:init</span>
+  (marginalia-mode))
 
-    (<span style="color: #00bfff;">use-package</span> nerd-icons-completion
-      <span style="color: #f08080;">:init</span>
-      (nerd-icons-completion-mode))
+(<span style="color: #00bfff;">use-package</span> nerd-icons-completion
+  <span style="color: #f08080;">:init</span>
+  (nerd-icons-completion-mode))
 
-  (<span style="color: #00bfff;">use-package</span> embark
-    <span style="color: #f08080;">:general</span> (<span style="color: #deb887;">"C-."</span> 'embark-act)
-    <span style="color: #f08080;">:init</span>
-    (<span style="color: #00bfff;">setq</span> prefix-help-command #'embark-prefix-help-command))
+(<span style="color: #00bfff;">use-package</span> embark
+  <span style="color: #f08080;">:general</span> (<span style="color: #deb887;">"C-."</span> 'embark-act)
+  <span style="color: #f08080;">:init</span>
+  (<span style="color: #00bfff;">setq</span> prefix-help-command #'embark-prefix-help-command))
 
-  (<span style="color: #00bfff;">use-package</span> embark-consult
-    <span style="color: #f08080;">:after</span> (embark consult)
-    <span style="color: #f08080;">:hook</span> (embark-collect-mode . consult-preview-at-point-mode))
+(<span style="color: #00bfff;">use-package</span> embark-consult
+  <span style="color: #f08080;">:after</span> (embark consult)
+  <span style="color: #f08080;">:hook</span> (embark-collect-mode . consult-preview-at-point-mode))
 
-  (<span style="color: #00bfff;">use-package</span> company)
+(<span style="color: #00bfff;">use-package</span> company)
 </code></pre>
 </div></div>
 </div>
@@ -3272,7 +3272,7 @@ file.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2026-01-27 Tue 23:46</p>
+<p class="date">Last Modified: 2026-01-27 Tue 23:52</p>
 </div>
 </body>
 </html>
