@@ -1652,7 +1652,7 @@ Creates/updates theme in <org-file-dir>/theme/ before exporting."
       (let ((vterm-buffers (seq-filter (lambda (buf)
                                           (eq (buffer-local-value 'major-mode buf) 'vterm-mode))
                                         (buffer-list))))
-        (display-buffer (list-buffers-noselect nil vterm-buffers))))
+        (pop-to-buffer (list-buffers-noselect nil vterm-buffers))))
     )
 #+end_src
 
