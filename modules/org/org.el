@@ -172,7 +172,7 @@ Important: output paths are rooted at the *real* directory where emacs.org lives
 (add-to-list 'safe-local-variable-values
              '(org-confirm-babel-evaluate))
 
-(my/cargo-dependency "live-server") ; defers install of live-server Rust crate
+;(my/cargo-dependency "live-server") ; defers install of live-server Rust crate
 (defvar my/org-html-server-host "127.0.0.1") ; Set to 0.0.0.0 to serve publicly
 (defvar my/org-html-server-port "7776")
 (defun my/org-html-server (&optional redirect)

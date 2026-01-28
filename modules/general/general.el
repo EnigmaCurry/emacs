@@ -23,7 +23,7 @@
    "M-<f3>"    'my/register-save-f3
    "C-<f4>"    'my/register-jump-f4
    "M-<f4>"    'my/register-save-f4
-   "C-c b"     'bookmark-jump
+   "C-c b"     (lambda () (interactive) (my/consult-buffer '(4)))
    "C-c B"     'list-bookmarks
    "C-c M-b"   'bookmark-set
    )
