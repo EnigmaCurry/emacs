@@ -1,7 +1,8 @@
 (my/add-exec-path "~/.local/bin")
 (defun my/python-install-uv-package-manager ()
   "Install uv package manager via cargo"
-  (my/cargo-install '(("uv" . "https://github.com/astral-sh/uv"))))
+  ;(my/cargo-install '(("uv" . "https://github.com/astral-sh/uv")))
+  )
 (defun my/python-uv-execute (command)
   (my/python-install-uv-package-manager)
   (my/shell-execute command))

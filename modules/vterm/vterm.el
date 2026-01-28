@@ -6,6 +6,7 @@
   vterm
   :custom (vterm-always-compile-module t)
   :general ("C-c t" 'my/vterm-toggle)
+           ("C-c M-t" 'my/vterm-buffer-menu)
   :config (define-key vterm-mode-map (kbd "<f5>") nil)
   :hook ((vterm-mode . (lambda () (setq-local show-trailing-whitespace nil))))
   :init
@@ -37,4 +38,27 @@ regardless of the current buffer’s TRAMP context."
      ;; --- Case 1: no (or other) prefix -> defer to vterm-toggle's default behavior
      (t
       (vterm-toggle arg))))
+  (defvar consult--source-vterm
+    `(:name "Vterm"
+      :narrow ?t
+      :category buffer
+      :face consult-buffer
+      :state ,#'consult--buffer-state
+      :items ,(lambda ()
+                (mapcar #'buffer-name
+                        (seq-filter (lambda (buf)
+                                      (eq (buffer-local-value 'major-mode buf) 'vterm-mode))
+                                    (buffer-list)))))
+    "Vterm buffer source for `consult-buffer'.")
+  (defun consult-vterm-buffer ()
+    "Switch to a vterm buffer using consult."
+    (interactive)
+    (consult-buffer '(consult--source-vterm)))
+  (defun my/vterm-buffer-menu ()
+    "Display a buffer menu with only vterm buffers."
+    (interactive)
+    (let ((vterm-buffers (seq-filter (lambda (buf)
+                                        (eq (buffer-local-value 'major-mode buf) 'vterm-mode))
+                                      (buffer-list))))
+      (display-buffer (list-buffers-noselect nil vterm-buffers))))
   )
