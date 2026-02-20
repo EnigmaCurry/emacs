@@ -11,7 +11,7 @@
   :hook ((vterm-mode . (lambda () (setq-local show-trailing-whitespace nil))))
   :init
   ;; shell-pop for vterm :: https://github.com/jixiuf/vterm-toggle
-  (use-package vterm-toggle)
+  (use-package vterm-toggle :demand t)
   (defun my/vterm-toggle (arg)
     "Toggle or create vterm buffers with prefix semantics.
 
