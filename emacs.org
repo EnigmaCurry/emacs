@@ -2150,6 +2150,12 @@ podman (script must be named =pg_format=):
         (delete-window win)))
     )
 #+end_src
+** HCL mode (label =hcl=)
+HCL is [[https://github.com/hashicorp/hcl][hashicorps config file format]], you can also [[https://crates.io/crates/hcl-rs][create your own parsers]].
+#+begin_src emacs-lisp :tangle "modules/hcl/hcl.el" :mkdirp yes
+(use-package hcl-mode)
+#+end_src
+
 * Load modules
 
 The code-blocks in this file are tangled to separate categorized files
