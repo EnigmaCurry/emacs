@@ -2159,6 +2159,10 @@ HCL is [[https://github.com/hashicorp/hcl][hashicorps config file format]], you 
    ("\\.tf\\'" . hcl-mode)
    ("\\.tfvars\\'" . hcl-mode)))
 #+end_src
+** Clojure (label =clojure=)
+#+begin_src emacs-lisp :tangle "modules/clojure/clojure.el" :mkdirp yes
+(use-package clojure-mode)
+#+end_src
 
 * Load modules
 
