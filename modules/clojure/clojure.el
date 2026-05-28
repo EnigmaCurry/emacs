@@ -1,11 +1,24 @@
 (use-package clojure-mode
   :general
-  ("C-c SPC" #'clojure-align)
-  ("C-c M-SPC" #'my/clojure-format-file)
+  (:keymaps 'clojure-mode-map
+            "C-c SPC" #'clojure-align
+            "C-c h" #'cider-doc)
   :hook
   (clojure-mode . my/clojure-mode-setup)
   :init
-  (use-package cider)
+  (add-to-list
+   'display-buffer-alist
+   '("\\*cider-doc\\*"
+     (display-buffer-in-side-window)
+     (side . bottom)
+     (slot . 1)
+     (window-height . 0.30)))
+  (use-package cider
+    :config
+    (tooltip-mode -1)
+    (add-hook 'cider-connected-hook
+              (lambda ()
+                (tooltip-mode -1))))
   (use-package parinfer-rust-mode)
   (defun my/clojure-format-file ()
     "Format the current Clojure file with cljfmt."
