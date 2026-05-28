@@ -407,7 +407,6 @@ machine only.
   (save-place-mode t)
   (savehist-mode t)
   (recentf-mode t)
-  (electric-pair-mode t)
 #+end_src
 ** PATH setup
 #+begin_src emacs-lisp :tangle "init.el" :mkdirp yes
