@@ -16,3 +16,4 @@
   :config
   ;; Optional: add some queries to filter out of results (since they can be too cluttered sometimes)
   ;;(setq treesit-jump-queries-filter-list '("inner" "test" "param"))
+  )
