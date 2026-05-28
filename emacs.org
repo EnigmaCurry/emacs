@@ -2161,7 +2161,18 @@ HCL is [[https://github.com/hashicorp/hcl][hashicorps config file format]], you 
 #+end_src
 ** Clojure (label =clojure=)
 #+begin_src emacs-lisp :tangle "modules/clojure/clojure.el" :mkdirp yes
-(use-package clojure-mode)
+  (use-package clojure-mode
+    :hook
+    ((clojure-mode . subword-mode))
+    :init
+    (use-package cider)
+    (defun my/cljfmt-buffer ()
+      (interactive)
+      (when buffer-file-name
+        (shell-command (format "cljfmt fix %s"
+                               (shell-quote-argument buffer-file-name)))
+        (revert-buffer :ignore-auto :noconfirm)))
+    (use-package parinfer-rust-mode))
 #+end_src
 
 * Load modules
