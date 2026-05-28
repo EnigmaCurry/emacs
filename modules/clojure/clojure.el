@@ -1,7 +1,7 @@
 (use-package clojure-mode
   :general
   ("C-c SPC" #'clojure-align)
-  ("C-c M-SPC" #'my/cljfmt-file)
+  ("C-c M-SPC" #'my/clojure-format-file)
   :hook
   (clojure-mode . my/clojure-mode-setup)
   :init
