@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2026-05-28 Thu 10:26 -->
+<!-- 2026-05-28 Thu 11:15 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -543,7 +543,11 @@ h1.title{margin-top: 0em;
 <li><a href="#Ripgrep_%28label_%3Dripgrep%3D%29">10.28. Ripgrep (label <code>ripgrep</code>)</a></li>
 <li><a href="#Treemacs_%28label_%3Dtreemacs%3D%29">10.29. Treemacs (label <code>treemacs</code>)</a></li>
 <li><a href="#HCL_mode_%28label_%3Dhcl%3D%29">10.30. HCL mode (label <code>hcl</code>)</a></li>
-<li><a href="#Clojure_%28label_%3Dclojure%3D%29">10.31. Clojure (label <code>clojure</code>)</a></li>
+<li><a href="#Smart_Parentheses_mode_%28label_%3Dsmart-parens%3D%29">10.31. Smart Parentheses mode (label <code>smart-parens</code>)</a></li>
+<li><a href="#Lispy_mode_%28label_%3Dlispy%3D%29">10.32. Lispy mode (label <code>lispy</code>)</a></li>
+<li><a href="#CIDER_mode_%28label_%3Dcider%3D%29">10.33. CIDER mode (label <code>cider</code>)</a></li>
+<li><a href="#Parinfer_mode_%28label_%3Dparinfer%3D%29">10.34. Parinfer mode (label <code>parinfer</code>)</a></li>
+<li><a href="#Clojure_%28label_%3Dclojure%3D%29">10.35. Clojure (label <code>clojure</code>)</a></li>
 </ul>
 </li>
 <li><a href="#Load_modules">11. Load modules</a>
@@ -1407,7 +1411,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="orge802122">
+<pre class="example" id="orgb4edd86">
 - ace-window
 - avy
 - clojure
@@ -2394,8 +2398,8 @@ Otherwise, call `save-buffer` immediately."</span>
 
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/completion/completion.el</span></div>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><code><span style="color: #73d216;">;; </span><span style="color: #73d216;">Allow minibuffers to stack:
-</span>(<span style="color: #b4fa70;">setq-default</span> enable-recursive-minibuffers t)
+<pre class="src src-emacs-lisp"><code><span style="color: #73d216;">;; </span><span style="color: #73d216;">Don't allow minibuffers to stack:
+</span>(<span style="color: #b4fa70;">setq-default</span> enable-recursive-minibuffers nil)
 <span style="color: #73d216;">;; </span><span style="color: #73d216;">Filter command completions to only include commands
 </span><span style="color: #73d216;">;; </span><span style="color: #73d216;">applicable to the current major mode:
 </span>(<span style="color: #b4fa70;">setq-default</span> read-extended-command-predicate
@@ -3193,16 +3197,77 @@ HCL is <a href="https://github.com/hashicorp/hcl">hashicorps config file format<
 </div></div>
 </div>
 </div>
-<div id="outline-container-Clojure_%28label_%3Dclojure%3D%29" class="outline-3">
-<h3 id="Clojure_%28label_%3Dclojure%3D%29"><span class="section-number-3">10.31.</span> Clojure (label <code>clojure</code>)</h3>
+<div id="outline-container-Smart_Parentheses_mode_%28label_%3Dsmart-parens%3D%29" class="outline-3">
+<h3 id="Smart_Parentheses_mode_%28label_%3Dsmart-parens%3D%29"><span class="section-number-3">10.31.</span> Smart Parentheses mode (label <code>smart-parens</code>)</h3>
 <div class="outline-text-3" id="text-10-31">
+<div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/smart-parens/smart-parens.el</span></div>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code>(<span style="color: #b4fa70;">use-package</span> smartparens
+  <span style="color: #e090d7;">:hook</span> (clojure-mode . smartparens-mode)
+  <span style="color: #e090d7;">:config</span>
+  (<span style="color: #b4fa70;">require</span> '<span style="color: #e9b2e3;">smartparens-config</span>)
+  <span style="color: #e090d7;">:general</span>
+  (<span style="color: #e090d7;">:keymaps</span> 'smartparens-mode-map
+            <span style="color: #e9b96e;">"M-l"</span> #'sp-forward-sexp
+            <span style="color: #e9b96e;">"M-h"</span> #'sp-backward-sexp
+            <span style="color: #e9b96e;">"M-k"</span> #'sp-up-sexp
+            <span style="color: #e9b96e;">"M-j"</span> #'sp-down-sexp
+            <span style="color: #e9b96e;">"M-e"</span> #'sp-end-of-sexp
+            <span style="color: #e9b96e;">"M-a"</span> #'sp-beginning-of-sexp))
+</code></pre>
+</div></div>
+</div>
+</div>
+<div id="outline-container-Lispy_mode_%28label_%3Dlispy%3D%29" class="outline-3">
+<h3 id="Lispy_mode_%28label_%3Dlispy%3D%29"><span class="section-number-3">10.32.</span> Lispy mode (label <code>lispy</code>)</h3>
+<div class="outline-text-3" id="text-10-32">
+<div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/lispy/lispy.el</span></div>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code>(<span style="color: #b4fa70;">use-package</span> lispy
+  <span style="color: #e090d7;">:commands</span> lispy-mode
+  <span style="color: #e090d7;">:config</span>
+  (<span style="color: #b4fa70;">setq</span> lispy-compat '(edebug cider)))
+</code></pre>
+</div></div>
+</div>
+</div>
+<div id="outline-container-CIDER_mode_%28label_%3Dcider%3D%29" class="outline-3">
+<h3 id="CIDER_mode_%28label_%3Dcider%3D%29"><span class="section-number-3">10.33.</span> CIDER mode (label <code>cider</code>)</h3>
+<div class="outline-text-3" id="text-10-33">
+<div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/cider/cider.el</span></div>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code>(<span style="color: #b4fa70;">use-package</span> cider
+  <span style="color: #e090d7;">:config</span>
+  (tooltip-mode -1)
+  (add-hook 'cider-connected-hook
+            (<span style="color: #b4fa70;">lambda</span> ()
+              (tooltip-mode -1))))
+</code></pre>
+</div></div>
+</div>
+</div>
+<div id="outline-container-Parinfer_mode_%28label_%3Dparinfer%3D%29" class="outline-3">
+<h3 id="Parinfer_mode_%28label_%3Dparinfer%3D%29"><span class="section-number-3">10.34.</span> Parinfer mode (label <code>parinfer</code>)</h3>
+<div class="outline-text-3" id="text-10-34">
+<div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/parinfer/parinfer.el</span></div>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code>(<span style="color: #b4fa70;">use-package</span> parinfer-rust-mode
+  <span style="color: #e090d7;">:commands</span> parinfer-rust-mode)
+</code></pre>
+</div></div>
+</div>
+</div>
+<div id="outline-container-Clojure_%28label_%3Dclojure%3D%29" class="outline-3">
+<h3 id="Clojure_%28label_%3Dclojure%3D%29"><span class="section-number-3">10.35.</span> Clojure (label <code>clojure</code>)</h3>
+<div class="outline-text-3" id="text-10-35">
 <div class="code-block-container"><div class="code-block-header tangle"><span class="org-parameter">:tangle</span> <span class="filename">modules/clojure/clojure.el</span></div>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><code>(<span style="color: #b4fa70;">use-package</span> clojure-mode
   <span style="color: #e090d7;">:general</span>
   (<span style="color: #e090d7;">:keymaps</span> 'clojure-mode-map
             <span style="color: #e9b96e;">"C-c SPC"</span> #'clojure-align
-            <span style="color: #e9b96e;">"C-c h"</span> #'cider-doc)
+            <span style="color: #e9b96e;">"C-c h"</span> #'my/cider-doc-no-select
+            <span style="color: #e9b96e;">"C-c m"</span> #'my/toggle-clojure-structure-mode)
   <span style="color: #e090d7;">:hook</span>
   (clojure-mode . my/clojure-mode-setup)
   <span style="color: #e090d7;">:init</span>
@@ -3213,13 +3278,24 @@ HCL is <a href="https://github.com/hashicorp/hcl">hashicorps config file format<
      (side . bottom)
      (slot . 1)
      (window-height . 0.30)))
-  (<span style="color: #b4fa70;">use-package</span> cider
-    <span style="color: #e090d7;">:config</span>
-    (tooltip-mode -1)
-    (add-hook 'cider-connected-hook
-              (<span style="color: #b4fa70;">lambda</span> ()
-                (tooltip-mode -1))))
-  (<span style="color: #b4fa70;">use-package</span> parinfer-rust-mode)
+  (<span style="color: #b4fa70;">defun</span> <span style="color: #fce94f;">my/toggle-clojure-structure-mode</span> ()
+    <span style="color: #9ac8e0;">"Toggle between parinfer-rust-mode and lispy-mode in Clojure buffers."</span>
+    (<span style="color: #b4fa70;">interactive</span>)
+    (<span style="color: #b4fa70;">cond</span>
+     <span style="color: #73d216;">;; </span><span style="color: #73d216;">If Parinfer is active, switch to Lispy.
+</span>     ((<span style="color: #b4fa70;">bound-and-true-p</span> parinfer-rust-mode)
+      (parinfer-rust-mode -1)
+      (lispy-mode 1)
+      (message <span style="color: #e9b96e;">"Clojure structure mode: lispy"</span>))
+     <span style="color: #73d216;">;; </span><span style="color: #73d216;">If Lispy is active, switch to Parinfer.
+</span>     ((<span style="color: #b4fa70;">bound-and-true-p</span> lispy-mode)
+      (lispy-mode -1)
+      (parinfer-rust-mode 1)
+      (message <span style="color: #e9b96e;">"Clojure structure mode: parinfer-rust"</span>))
+     <span style="color: #73d216;">;; </span><span style="color: #73d216;">If neither is active, default to Parinfer.
+</span>     (t
+      (parinfer-rust-mode 1)
+      (message <span style="color: #e9b96e;">"Clojure structure mode: parinfer-rust"</span>))))
   (<span style="color: #b4fa70;">defun</span> <span style="color: #fce94f;">my/clojure-format-file</span> ()
     <span style="color: #9ac8e0;">"Format the current Clojure file with cljfmt."</span>
     (<span style="color: #b4fa70;">interactive</span>)
@@ -3232,7 +3308,13 @@ HCL is <a href="https://github.com/hashicorp/hcl">hashicorps config file format<
     (subword-mode 1)
     (parinfer-rust-mode 1)
     (electric-pair-local-mode -1)
-    (add-hook 'after-save-hook #'my/clojure-format-file nil t)))
+    (add-hook 'after-save-hook #'my/clojure-format-file nil t))
+  (<span style="color: #b4fa70;">defun</span> <span style="color: #fce94f;">my/cider-doc-no-select</span> ()
+    <span style="color: #9ac8e0;">"Show CIDER docs without leaving the current window selected."</span>
+    (<span style="color: #b4fa70;">interactive</span>)
+    (<span style="color: #b4fa70;">let</span> ((win (selected-window)))
+      (call-interactively #'cider-doc)
+      (select-window win))))
 </code></pre>
 </div></div>
 </div>
@@ -3337,7 +3419,7 @@ file.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2026-05-28 Thu 10:26</p>
+<p class="date">Last Modified: 2026-05-28 Thu 11:15</p>
 </div>
 </body>
 </html>

@@ -1,5 +1,5 @@
-;; Allow minibuffers to stack:
-(setq-default enable-recursive-minibuffers t)
+;; Don't allow minibuffers to stack:
+(setq-default enable-recursive-minibuffers nil)
 ;; Filter command completions to only include commands
 ;; applicable to the current major mode:
 (setq-default read-extended-command-predicate

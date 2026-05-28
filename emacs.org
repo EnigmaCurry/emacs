@@ -1500,8 +1500,8 @@ Creates/updates theme in <org-file-dir>/theme/ before exporting."
  * [[https://github.com/minad/consult][consult]]
  
 #+begin_src emacs-lisp :tangle "modules/completion/completion.el" :mkdirp yes
-  ;; Allow minibuffers to stack:
-  (setq-default enable-recursive-minibuffers t)
+  ;; Don't allow minibuffers to stack:
+  (setq-default enable-recursive-minibuffers nil)
   ;; Filter command completions to only include commands
   ;; applicable to the current major mode:
   (setq-default read-extended-command-predicate
@@ -2159,43 +2159,99 @@ HCL is [[https://github.com/hashicorp/hcl][hashicorps config file format]], you 
    ("\\.tf\\'" . hcl-mode)
    ("\\.tfvars\\'" . hcl-mode)))
 #+end_src
+** Smart Parentheses mode (label =smart-parens=)
+#+begin_src emacs-lisp :tangle "modules/smart-parens/smart-parens.el" :mkdirp yes
+  (use-package smartparens
+    :hook (clojure-mode . smartparens-mode)
+    :config
+    (require 'smartparens-config)
+    :general
+    (:keymaps 'smartparens-mode-map
+              "M-l" #'sp-forward-sexp
+              "M-h" #'sp-backward-sexp
+              "M-k" #'sp-up-sexp
+              "M-j" #'sp-down-sexp
+              "M-e" #'sp-end-of-sexp
+              "M-a" #'sp-beginning-of-sexp))
+#+end_src
+** Lispy mode (label =lispy=)
+#+begin_src emacs-lisp :tangle "modules/lispy/lispy.el" :mkdirp yes
+  (use-package lispy
+    :commands lispy-mode
+    :config
+    (setq lispy-compat '(edebug cider)))
+#+end_src
+
+** CIDER mode (label =cider=)
+#+begin_src emacs-lisp :tangle "modules/cider/cider.el" :mkdirp yes
+  (use-package cider
+    :config
+    (tooltip-mode -1)
+    (add-hook 'cider-connected-hook
+              (lambda ()
+                (tooltip-mode -1))))
+#+end_src
+** Parinfer mode (label =parinfer=)
+#+begin_src emacs-lisp :tangle "modules/parinfer/parinfer.el" :mkdirp yes
+    (use-package parinfer-rust-mode
+      :commands parinfer-rust-mode)
+#+end_src
+
 ** Clojure (label =clojure=)
 #+begin_src emacs-lisp :tangle "modules/clojure/clojure.el" :mkdirp yes
-   (use-package clojure-mode
-     :general
-     (:keymaps 'clojure-mode-map
-               "C-c SPC" #'clojure-align
-               "C-c h" #'cider-doc)
-     :hook
-     (clojure-mode . my/clojure-mode-setup)
-     :init
-     (add-to-list
-      'display-buffer-alist
-      '("\\*cider-doc\\*"
-        (display-buffer-in-side-window)
-        (side . bottom)
-        (slot . 1)
-        (window-height . 0.30)))
-     (use-package cider
-       :config
-       (tooltip-mode -1)
-       (add-hook 'cider-connected-hook
-                 (lambda ()
-                   (tooltip-mode -1))))
-     (use-package parinfer-rust-mode)
-     (defun my/clojure-format-file ()
-       "Format the current Clojure file with cljfmt."
-       (interactive)
-       (when buffer-file-name
-         (let ((file buffer-file-name))
-           (call-process "cljfmt" nil "*cljfmt*" nil "fix" file)
-           (revert-buffer :ignore-auto :noconfirm))))
-     (defun my/clojure-mode-setup ()
-       "My Clojure editing defaults."
-       (subword-mode 1)
-       (parinfer-rust-mode 1)
-       (electric-pair-local-mode -1)
-       (add-hook 'after-save-hook #'my/clojure-format-file nil t)))
+  (use-package clojure-mode
+    :general
+    (:keymaps 'clojure-mode-map
+              "C-c SPC" #'clojure-align
+              "C-c h" #'my/cider-doc-no-select
+              "C-c m" #'my/toggle-clojure-structure-mode)
+    :hook
+    (clojure-mode . my/clojure-mode-setup)
+    :init
+    (add-to-list
+     'display-buffer-alist
+     '("\\*cider-doc\\*"
+       (display-buffer-in-side-window)
+       (side . bottom)
+       (slot . 1)
+       (window-height . 0.30)))
+    (defun my/toggle-clojure-structure-mode ()
+      "Toggle between parinfer-rust-mode and lispy-mode in Clojure buffers."
+      (interactive)
+      (cond
+       ;; If Parinfer is active, switch to Lispy.
+       ((bound-and-true-p parinfer-rust-mode)
+        (parinfer-rust-mode -1)
+        (lispy-mode 1)
+        (message "Clojure structure mode: lispy"))
+       ;; If Lispy is active, switch to Parinfer.
+       ((bound-and-true-p lispy-mode)
+        (lispy-mode -1)
+        (parinfer-rust-mode 1)
+        (message "Clojure structure mode: parinfer-rust"))
+       ;; If neither is active, default to Parinfer.
+       (t
+        (parinfer-rust-mode 1)
+        (message "Clojure structure mode: parinfer-rust"))))
+    (defun my/clojure-format-file ()
+      "Format the current Clojure file with cljfmt."
+      (interactive)
+      (when buffer-file-name
+        (let ((file buffer-file-name))
+          (call-process "cljfmt" nil "*cljfmt*" nil "fix" file)
+          (revert-buffer :ignore-auto :noconfirm))))
+    (defun my/clojure-mode-setup ()
+      "My Clojure editing defaults."
+      (subword-mode 1)
+      (parinfer-rust-mode 1)
+      (electric-pair-local-mode -1)
+      (add-hook 'after-save-hook #'my/clojure-format-file nil t))
+    (defun my/cider-doc-no-select ()
+      "Show CIDER docs without leaving the current window selected."
+      (interactive)
+      (let ((win (selected-window)))
+        (call-interactively #'cider-doc)
+        (select-window win))))
 #+end_src
 
 * Load modules
