@@ -2,7 +2,7 @@
 (unless (executable-find "cargo")
   (message "cargo binary NOT found."))
 
-(require 'seq)
+ (require 'seq)
  (require 'comint)
 
  (defun my/cargo-package-installed-p (package)

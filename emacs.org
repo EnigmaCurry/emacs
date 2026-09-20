@@ -2254,6 +2254,12 @@ HCL is [[https://github.com/hashicorp/hcl][hashicorps config file format]], you 
         (select-window win))))
 #+end_src
 
+** Netfilter (label =nftables=)
+Mode for editing nftables config files.
+#+begin_src emacs-lisp :tangle "modules/nftables/nftables.el" :mkdirp yes
+  (use-package nftables-mode)
+#+end_src
+
 * Load modules
 
 The code-blocks in this file are tangled to separate categorized files

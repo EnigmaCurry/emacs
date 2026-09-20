@@ -1,4 +1,4 @@
-(use-package
+  (use-package
     gptel
     :general
     ("C-c C-g" 'gptel-menu)
