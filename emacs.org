@@ -5,7 +5,7 @@
 #+SETUPFILE: theme/simple_dark.theme
 #+OPTIONS: noweb:t
 
-* Configure your distribution here :noexport:
+* Configure your distribution here                                 :noexport:
 :CUSTOM:
 
 If you are making this config your own, you must personalize all of
@@ -2350,7 +2350,8 @@ enabled):
   (when my/cargo-dependencies
     (my/cargo-install my/cargo-dependencies))
 #+end_src
-`* Local Variables                                                  :noexport:
+
+* Local Variables                                                  :noexport:
 
 The local variables section needs to be at the very bottom of this
 file.
