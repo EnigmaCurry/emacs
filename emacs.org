@@ -1103,6 +1103,20 @@ This function tangles this file (=emacs.org=) and exports an HTML page
   (defcustom my/org-html-theme "simple_dark"
     "The name of my custom org theme (CSS).")
 
+  (defun my/force-symlink (target linkname)
+    "Symlink TARGET at LINKNAME, replacing LINKNAME even if it is a real directory.
+
+  `make-symbolic-link' with OK-IF-ALREADY-EXISTS replaces LINKNAME by unlinking
+  it, which fails with EISDIR when LINKNAME is a real directory.  Those get moved
+  to trash first (recoverable, since the contents are not ours to destroy);
+  existing symlinks are left for `make-symbolic-link' to replace."
+    (when (and (file-directory-p linkname)
+               (not (file-symlink-p linkname)))
+      ;; Bound locally: the TRASH argument is inert unless this is non-nil.
+      (let ((delete-by-moving-to-trash t))
+        (delete-directory linkname t t)))
+    (make-symbolic-link target linkname t))
+
   (defun my/emacs-org-tangle (&optional file)
     "Tangle all code blocks in emacs.org (or FILE) and export this document to HTML.
 
@@ -1167,18 +1181,18 @@ This function tangles this file (=emacs.org=) and exports an HTML page
                                 (expand-file-name "early-init.el" export-emacs-dir) t)
             (make-symbolic-link (expand-file-name "init.el" root-dir)
                                 (expand-file-name "init.el" export-emacs-dir) t)
-            (make-symbolic-link (expand-file-name "modules" root-dir)
-                                (expand-file-name "modules" export-emacs-dir) t)
+            (my/force-symlink (expand-file-name "modules" root-dir)
+                              (expand-file-name "modules" export-emacs-dir))
 
             (make-symbolic-link (expand-file-name "LICENSE.txt" root-dir)
                                 (expand-file-name "LICENSE.txt" export-emacs-dir) t)
             (make-symbolic-link (expand-file-name "LICENSE_GPLv3.txt" root-dir)
                                 (expand-file-name "LICENSE_GPLv3.txt" export-emacs-dir) t)
 
-            (make-symbolic-link (expand-file-name "theme" root-dir)
-                                (expand-file-name "theme" export-dir) t)
-            (make-symbolic-link (expand-file-name "theme" root-dir)
-                                (expand-file-name "theme" my/org-notes-directory) t))))))
+            (my/force-symlink (expand-file-name "theme" root-dir)
+                              (expand-file-name "theme" export-dir))
+            (my/force-symlink (expand-file-name "theme" root-dir)
+                              (expand-file-name "theme" my/org-notes-directory)))))))
 
   (with-eval-after-load 'ox-html
     (defun my/org-html-src-block (orig-fun src-block contents info)

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2026-09-19 Sat 22:42 -->
+<!-- 2026-11-08 Sun 12:38 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Modular GNU Emacs Configuration</title>
@@ -217,10 +217,11 @@ max-width: 90em;
 justify-content: center;
 margin:0 auto;
 }
+/* 1.5em is loud where inline code is dense, which Markdown tends to be. */
 code {
 color: #ffd269;
 font-weight: bold;
-font-size: 1.5em;
+font-size: 0.95em;
 margin: 0 0.25em 0 0.25em;
 }
 div#content {
@@ -442,11 +443,172 @@ padding: 0 0.5em;
 border-radius: 5px;
 font-size: 1.1em;
 }
+/* Fixed: this rule used to nest `h1.title' inside `div#content' and leave the
+@media block unterminated, which swallowed every rule after it. */
 @media screen and (max-width:768px) {
 div#content {
 padding: 0 0.5em 0.5em 0.5em;
-h1.title{margin-top: 0em;
 }
+h1.title {
+margin-top: 0;
+}
+}
+/* --- Additions ---------------------------------------------------------- */
+/* Shared verbatim with the copy embedded in s3-publish.el as
+`s3-publish-html-default-style'.  Keep the two in step. */
+/* Dark-only theme: match form controls and scrollbars to it. */
+:root { color-scheme: dark; }
+/* `org-html-self-link-headlines' wraps each heading's text in a link to its
+own anchor, so clicking a heading puts that anchor in the address bar.
+Headings must still read as headings, so the link only shows on hover. */
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+color: inherit;
+text-decoration: none;
+}
+h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
+color: #62afff;
+}
+h2 a:hover::after, h3 a:hover::after, h4 a:hover::after,
+h5 a:hover::after, h6 a:hover::after {
+content: " #";
+color: #ff5370;
+font-weight: normal;
+}
+/* Keep a linked heading clear of a fixed-position browser chrome and give
+:target a visible landing cue. */
+h1, h2, h3, h4, h5, h6 { scroll-margin-top: 1em; }
+:target { scroll-margin-top: 1em; }
+/* Org emits `pre.example' for a block with no language, which is what a
+Markdown fence without a language becomes.  The source theme's
+`pre.src-example' rule never matches any Org output. */
+pre.example {
+background: #282928;
+}
+/* Images out of Markdown carry no size constraint, so cap them. */
+#content img {
+max-width: 100%;
+height: auto;
+}
+/* The source-file link s3-publish appends to the bottom of every page. */
+#org-download {
+margin-top: 2em;
+padding-top: 1em;
+border-top: 1px solid #555;
+font-size: 90%;
+}
+#org-download a {
+display: inline-block;
+padding: 0.4em 0.9em;
+border: 1px solid #555;
+border-radius: 5px;
+background: #181f29;
+}
+#org-download a:hover {
+border-color: #ff5370;
+}
+/* Source block syntax colours, for exports where htmlize emits classes
+rather than inline colours, i.e. `org-html-htmlize-output-type' set to
+`css' -- which is what s3-publish publishes with. */
+pre .org-keyword, pre .org-preprocessor { color: #ff7b72; }
+pre .org-string, pre .org-doc { color: #a5d6ff; }
+pre .org-comment, pre .org-comment-delimiter { color: #8b949e; font-style: italic; }
+pre .org-function-name { color: #d2a8ff; }
+pre .org-variable-name { color: #ffa657; }
+pre .org-type, pre .org-constant { color: #79c0ff; }
+pre .org-builtin { color: #d2a8ff; }
+pre .org-warning { color: #ffa198; }
+/* A contents list headed by the document's own title instead of the generic
+"Table of Contents", which is what s3-publish rewrites it to.  Inert on a
+page that does not carry the class. */
+#table-of-contents h2.toc-title {
+font-size: 110%;
+margin: 0 0 .5em 0;
+padding: 0 0 .3em 0;
+border-bottom: 1px solid #555;
+letter-spacing: 0;
+}
+#table-of-contents h2.toc-title a {
+color: #e0e0e0;
+text-decoration: none;
+}
+#table-of-contents h2.toc-title a:hover {
+color: #62afff;
+}
+#text-table-of-contents ul ul {
+padding-left: 1.1em;
+}
+/* On a wide screen the table of contents moves into its own sticky,
+scrollable column on the right, narrower than the content, so it stays
+visible however far you scroll.
+Org renders the TOC as a sibling inside #content, so #content becomes a
+two column grid: every child lands in column 1, the TOC is pinned to
+column 2, and the title banner spans both.  The TOC spans far more rows
+than any document has, which is what gives the sticky box room to travel
+-- the surplus rows are empty, and with no row gap they add no height, so
+the grid must never set `gap' or `row-gap', only `column-gap'.
+`:has()' keeps the sidebar off documents exported without a TOC, which
+would otherwise leave an empty column.  A browser without `:has()' drops
+the whole block and keeps the single column layout. */
+@media screen and (min-width: 1100px) {
+div#content:has(> #table-of-contents) {
+display: grid;
+grid-template-columns: minmax(0, 1fr) 17em;
+column-gap: 2.5em;
+}
+div#content:has(> #table-of-contents) > * {
+grid-column: 1;
+min-width: 0;
+}
+div#content:has(> #table-of-contents) > h1.title,
+div#content:has(> #table-of-contents) > div.title {
+grid-column: 1 / -1;
+}
+div#content > #table-of-contents {
+grid-column: 2;
+grid-row: 2 / span 500;
+align-self: start;
+position: sticky;
+top: 1.5em;
+max-height: calc(100vh - 3em);
+display: flex;
+flex-direction: column;
+margin: 0;
+padding: 0;
+}
+/* The heading stays put; only the list scrolls. */
+#text-table-of-contents {
+min-height: 0;
+overflow-y: auto;
+overscroll-behavior: contain;
+font-size: 90%;
+}
+#text-table-of-contents ul {
+margin: 0;
+padding-left: 1.1em;
+}
+#text-table-of-contents > ul {
+padding-left: 0;
+list-style: none;
+}
+#text-table-of-contents li {
+padding-top: .3em;
+}
+}
+/* When publishing, s3-publish moves the postamble inside #content so that on
+a wide screen it stays in the content column instead of spanning underneath
+the contents sidebar.  These rules only bite where it has been moved; a
+postamble left as a sibling of #content is untouched. */
+div#content > #postamble {
+margin-top: 2em;
+padding-top: 1em;
+border-top: 1px solid #555;
+}
+/* ...unless the source link sits directly above it, having already drawn the
+separating rule. */
+#org-download + #postamble {
+margin-top: .5em;
+padding-top: 0;
+border-top: none;
 }
 </style>
 </head>
@@ -1418,7 +1580,7 @@ labeled with the names of additional modules to load.
 Here are the <a href="https://github.com/EnigmaCurry/emacs/tree/literate-new/modules">available modules</a>:
 </p>
 
-<pre class="example" id="orgf9ba407">
+<pre class="example" id="org943dddd">
 - ace-window
 - avy
 - cider
@@ -1958,6 +2120,20 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
 <pre class="src src-emacs-lisp"><code>(<span style="color: #8ac6f2; font-weight: bold;">defcustom</span> <span style="color: #cae682;">my/org-html-theme</span> <span style="color: #95e454;">"simple_dark"</span>
   <span style="color: #9ac8e0;">"The name of my custom org theme (CSS)."</span>)
 
+(<span style="color: #8ac6f2; font-weight: bold;">defun</span> <span style="color: #cae682;">my/force-symlink</span> (target linkname)
+  <span style="color: #9ac8e0;">"Symlink TARGET at LINKNAME, replacing LINKNAME even if it is a real directory.</span>
+
+<span style="color: #9ac8e0;">`</span><span style="color: #e5786d;">make-symbolic-link</span><span style="color: #9ac8e0;">' with OK-IF-ALREADY-EXISTS replaces LINKNAME by unlinking</span>
+<span style="color: #9ac8e0;">it, which fails with EISDIR when LINKNAME is a real directory.  Those get moved</span>
+<span style="color: #9ac8e0;">to trash first (recoverable, since the contents are not ours to destroy);</span>
+<span style="color: #9ac8e0;">existing symlinks are left for `</span><span style="color: #e5786d;">make-symbolic-link</span><span style="color: #9ac8e0;">' to replace."</span>
+  (<span style="color: #8ac6f2; font-weight: bold;">when</span> (<span style="color: #8ac6f2; font-weight: bold;">and</span> (file-directory-p linkname)
+             (not (file-symlink-p linkname)))
+    <span style="color: #99968b;">;; </span><span style="color: #99968b;">Bound locally: the TRASH argument is inert unless this is non-nil.</span>
+    (<span style="color: #8ac6f2; font-weight: bold;">let</span> ((delete-by-moving-to-trash t))
+      (delete-directory linkname t t)))
+  (make-symbolic-link target linkname t))
+
 (<span style="color: #8ac6f2; font-weight: bold;">defun</span> <span style="color: #cae682;">my/emacs-org-tangle</span> (<span style="color: #92a65e; font-weight: bold;">&amp;optional</span> file)
   <span style="color: #9ac8e0;">"Tangle all code blocks in emacs.org (or FILE) and export this document to HTML.</span>
 
@@ -2022,18 +2198,18 @@ This function tangles this file (<code>emacs.org</code>) and exports an HTML pag
                               (expand-file-name <span style="color: #95e454;">"early-init.el"</span> export-emacs-dir) t)
           (make-symbolic-link (expand-file-name <span style="color: #95e454;">"init.el"</span> root-dir)
                               (expand-file-name <span style="color: #95e454;">"init.el"</span> export-emacs-dir) t)
-          (make-symbolic-link (expand-file-name <span style="color: #95e454;">"modules"</span> root-dir)
-                              (expand-file-name <span style="color: #95e454;">"modules"</span> export-emacs-dir) t)
+          (my/force-symlink (expand-file-name <span style="color: #95e454;">"modules"</span> root-dir)
+                            (expand-file-name <span style="color: #95e454;">"modules"</span> export-emacs-dir))
 
           (make-symbolic-link (expand-file-name <span style="color: #95e454;">"LICENSE.txt"</span> root-dir)
                               (expand-file-name <span style="color: #95e454;">"LICENSE.txt"</span> export-emacs-dir) t)
           (make-symbolic-link (expand-file-name <span style="color: #95e454;">"LICENSE_GPLv3.txt"</span> root-dir)
                               (expand-file-name <span style="color: #95e454;">"LICENSE_GPLv3.txt"</span> export-emacs-dir) t)
 
-          (make-symbolic-link (expand-file-name <span style="color: #95e454;">"theme"</span> root-dir)
-                              (expand-file-name <span style="color: #95e454;">"theme"</span> export-dir) t)
-          (make-symbolic-link (expand-file-name <span style="color: #95e454;">"theme"</span> root-dir)
-                              (expand-file-name <span style="color: #95e454;">"theme"</span> my/org-notes-directory) t))))))
+          (my/force-symlink (expand-file-name <span style="color: #95e454;">"theme"</span> root-dir)
+                            (expand-file-name <span style="color: #95e454;">"theme"</span> export-dir))
+          (my/force-symlink (expand-file-name <span style="color: #95e454;">"theme"</span> root-dir)
+                            (expand-file-name <span style="color: #95e454;">"theme"</span> my/org-notes-directory)))))))
 
 (<span style="color: #8ac6f2; font-weight: bold;">with-eval-after-load</span> 'ox-html
   (<span style="color: #8ac6f2; font-weight: bold;">defun</span> <span style="color: #cae682;">my/org-html-src-block</span> (orig-fun src-block contents info)
@@ -3442,7 +3618,7 @@ file.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: EnigmaCurry</p>
-<p class="date">Last Modified: 2026-09-19 Sat 22:42</p>
+<p class="date">Last Modified: 2026-11-08 Sun 12:38</p>
 </div>
 </body>
 </html>
