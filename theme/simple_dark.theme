@@ -14,10 +14,11 @@
 #+HTML_HEAD:     justify-content: center;
 #+HTML_HEAD:     margin:0 auto;
 #+HTML_HEAD: }
+#+HTML_HEAD: /* 1.5em is loud where inline code is dense, which Markdown tends to be. */
 #+HTML_HEAD: code {
 #+HTML_HEAD: 	color: #ffd269;
 #+HTML_HEAD: 	font-weight: bold;
-#+HTML_HEAD: 	font-size: 1.5em;
+#+HTML_HEAD: 	font-size: 0.95em;
 #+HTML_HEAD: 	margin: 0 0.25em 0 0.25em;
 #+HTML_HEAD: }
 #+HTML_HEAD: div#content {
@@ -239,10 +240,171 @@
 #+HTML_HEAD:     border-radius: 5px;
 #+HTML_HEAD:     font-size: 1.1em;
 #+HTML_HEAD: }
+#+HTML_HEAD: /* Fixed: this rule used to nest `h1.title' inside `div#content' and leave the
+#+HTML_HEAD:    @media block unterminated, which swallowed every rule after it. */
 #+HTML_HEAD: @media screen and (max-width:768px) {
 #+HTML_HEAD: 	div#content {
 #+HTML_HEAD: 		padding: 0 0.5em 0.5em 0.5em;
-#+HTML_HEAD: 		h1.title{margin-top: 0em;
 #+HTML_HEAD: 	}
+#+HTML_HEAD: 	h1.title {
+#+HTML_HEAD: 		margin-top: 0;
+#+HTML_HEAD: 	}
+#+HTML_HEAD: }
+#+HTML_HEAD: /* --- Additions ---------------------------------------------------------- */
+#+HTML_HEAD: /* Shared verbatim with the copy embedded in s3-publish.el as
+#+HTML_HEAD:    `s3-publish-html-default-style'.  Keep the two in step. */
+#+HTML_HEAD: /* Dark-only theme: match form controls and scrollbars to it. */
+#+HTML_HEAD: :root { color-scheme: dark; }
+#+HTML_HEAD: /* `org-html-self-link-headlines' wraps each heading's text in a link to its
+#+HTML_HEAD:    own anchor, so clicking a heading puts that anchor in the address bar.
+#+HTML_HEAD:    Headings must still read as headings, so the link only shows on hover. */
+#+HTML_HEAD: h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+#+HTML_HEAD: 	color: inherit;
+#+HTML_HEAD: 	text-decoration: none;
+#+HTML_HEAD: }
+#+HTML_HEAD: h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
+#+HTML_HEAD: 	color: #62afff;
+#+HTML_HEAD: }
+#+HTML_HEAD: h2 a:hover::after, h3 a:hover::after, h4 a:hover::after,
+#+HTML_HEAD: h5 a:hover::after, h6 a:hover::after {
+#+HTML_HEAD: 	content: " #";
+#+HTML_HEAD: 	color: #ff5370;
+#+HTML_HEAD: 	font-weight: normal;
+#+HTML_HEAD: }
+#+HTML_HEAD: /* Keep a linked heading clear of a fixed-position browser chrome and give
+#+HTML_HEAD:    :target a visible landing cue. */
+#+HTML_HEAD: h1, h2, h3, h4, h5, h6 { scroll-margin-top: 1em; }
+#+HTML_HEAD: :target { scroll-margin-top: 1em; }
+#+HTML_HEAD: /* Org emits `pre.example' for a block with no language, which is what a
+#+HTML_HEAD:    Markdown fence without a language becomes.  The source theme's
+#+HTML_HEAD:    `pre.src-example' rule never matches any Org output. */
+#+HTML_HEAD: pre.example {
+#+HTML_HEAD: 	background: #282928;
+#+HTML_HEAD: }
+#+HTML_HEAD: /* Images out of Markdown carry no size constraint, so cap them. */
+#+HTML_HEAD: #content img {
+#+HTML_HEAD: 	max-width: 100%;
+#+HTML_HEAD: 	height: auto;
+#+HTML_HEAD: }
+#+HTML_HEAD: /* The source-file link s3-publish appends to the bottom of every page. */
+#+HTML_HEAD: #org-download {
+#+HTML_HEAD: 	margin-top: 2em;
+#+HTML_HEAD: 	padding-top: 1em;
+#+HTML_HEAD: 	border-top: 1px solid #555;
+#+HTML_HEAD: 	font-size: 90%;
+#+HTML_HEAD: }
+#+HTML_HEAD: #org-download a {
+#+HTML_HEAD: 	display: inline-block;
+#+HTML_HEAD: 	padding: 0.4em 0.9em;
+#+HTML_HEAD: 	border: 1px solid #555;
+#+HTML_HEAD: 	border-radius: 5px;
+#+HTML_HEAD: 	background: #181f29;
+#+HTML_HEAD: }
+#+HTML_HEAD: #org-download a:hover {
+#+HTML_HEAD: 	border-color: #ff5370;
+#+HTML_HEAD: }
+#+HTML_HEAD: /* Source block syntax colours, for exports where htmlize emits classes
+#+HTML_HEAD:    rather than inline colours, i.e. `org-html-htmlize-output-type' set to
+#+HTML_HEAD:    `css' -- which is what s3-publish publishes with. */
+#+HTML_HEAD: pre .org-keyword, pre .org-preprocessor { color: #ff7b72; }
+#+HTML_HEAD: pre .org-string, pre .org-doc { color: #a5d6ff; }
+#+HTML_HEAD: pre .org-comment, pre .org-comment-delimiter { color: #8b949e; font-style: italic; }
+#+HTML_HEAD: pre .org-function-name { color: #d2a8ff; }
+#+HTML_HEAD: pre .org-variable-name { color: #ffa657; }
+#+HTML_HEAD: pre .org-type, pre .org-constant { color: #79c0ff; }
+#+HTML_HEAD: pre .org-builtin { color: #d2a8ff; }
+#+HTML_HEAD: pre .org-warning { color: #ffa198; }
+#+HTML_HEAD: /* A contents list headed by the document's own title instead of the generic
+#+HTML_HEAD:    "Table of Contents", which is what s3-publish rewrites it to.  Inert on a
+#+HTML_HEAD:    page that does not carry the class. */
+#+HTML_HEAD: #table-of-contents h2.toc-title {
+#+HTML_HEAD: 	font-size: 110%;
+#+HTML_HEAD: 	margin: 0 0 .5em 0;
+#+HTML_HEAD: 	padding: 0 0 .3em 0;
+#+HTML_HEAD: 	border-bottom: 1px solid #555;
+#+HTML_HEAD: 	letter-spacing: 0;
+#+HTML_HEAD: }
+#+HTML_HEAD: #table-of-contents h2.toc-title a {
+#+HTML_HEAD: 	color: #e0e0e0;
+#+HTML_HEAD: 	text-decoration: none;
+#+HTML_HEAD: }
+#+HTML_HEAD: #table-of-contents h2.toc-title a:hover {
+#+HTML_HEAD: 	color: #62afff;
+#+HTML_HEAD: }
+#+HTML_HEAD: #text-table-of-contents ul ul {
+#+HTML_HEAD: 	padding-left: 1.1em;
+#+HTML_HEAD: }
+#+HTML_HEAD: /* On a wide screen the table of contents moves into its own sticky,
+#+HTML_HEAD:    scrollable column on the right, narrower than the content, so it stays
+#+HTML_HEAD:    visible however far you scroll.
+#+HTML_HEAD:    Org renders the TOC as a sibling inside #content, so #content becomes a
+#+HTML_HEAD:    two column grid: every child lands in column 1, the TOC is pinned to
+#+HTML_HEAD:    column 2, and the title banner spans both.  The TOC spans far more rows
+#+HTML_HEAD:    than any document has, which is what gives the sticky box room to travel
+#+HTML_HEAD:    -- the surplus rows are empty, and with no row gap they add no height, so
+#+HTML_HEAD:    the grid must never set `gap' or `row-gap', only `column-gap'.
+#+HTML_HEAD:    `:has()' keeps the sidebar off documents exported without a TOC, which
+#+HTML_HEAD:    would otherwise leave an empty column.  A browser without `:has()' drops
+#+HTML_HEAD:    the whole block and keeps the single column layout. */
+#+HTML_HEAD: @media screen and (min-width: 1100px) {
+#+HTML_HEAD: 	div#content:has(> #table-of-contents) {
+#+HTML_HEAD: 		display: grid;
+#+HTML_HEAD: 		grid-template-columns: minmax(0, 1fr) 17em;
+#+HTML_HEAD: 		column-gap: 2.5em;
+#+HTML_HEAD: 	}
+#+HTML_HEAD: 	div#content:has(> #table-of-contents) > * {
+#+HTML_HEAD: 		grid-column: 1;
+#+HTML_HEAD: 		min-width: 0;
+#+HTML_HEAD: 	}
+#+HTML_HEAD: 	div#content:has(> #table-of-contents) > h1.title,
+#+HTML_HEAD: 	div#content:has(> #table-of-contents) > div.title {
+#+HTML_HEAD: 		grid-column: 1 / -1;
+#+HTML_HEAD: 	}
+#+HTML_HEAD: 	div#content > #table-of-contents {
+#+HTML_HEAD: 		grid-column: 2;
+#+HTML_HEAD: 		grid-row: 2 / span 500;
+#+HTML_HEAD: 		align-self: start;
+#+HTML_HEAD: 		position: sticky;
+#+HTML_HEAD: 		top: 1.5em;
+#+HTML_HEAD: 		max-height: calc(100vh - 3em);
+#+HTML_HEAD: 		display: flex;
+#+HTML_HEAD: 		flex-direction: column;
+#+HTML_HEAD: 		margin: 0;
+#+HTML_HEAD: 		padding: 0;
+#+HTML_HEAD: 	}
+#+HTML_HEAD: 	/* The heading stays put; only the list scrolls. */
+#+HTML_HEAD: 	#text-table-of-contents {
+#+HTML_HEAD: 		min-height: 0;
+#+HTML_HEAD: 		overflow-y: auto;
+#+HTML_HEAD: 		overscroll-behavior: contain;
+#+HTML_HEAD: 		font-size: 90%;
+#+HTML_HEAD: 	}
+#+HTML_HEAD: 	#text-table-of-contents ul {
+#+HTML_HEAD: 		margin: 0;
+#+HTML_HEAD: 		padding-left: 1.1em;
+#+HTML_HEAD: 	}
+#+HTML_HEAD: 	#text-table-of-contents > ul {
+#+HTML_HEAD: 		padding-left: 0;
+#+HTML_HEAD: 		list-style: none;
+#+HTML_HEAD: 	}
+#+HTML_HEAD: 	#text-table-of-contents li {
+#+HTML_HEAD: 		padding-top: .3em;
+#+HTML_HEAD: 	}
+#+HTML_HEAD: }
+#+HTML_HEAD: /* When publishing, s3-publish moves the postamble inside #content so that on
+#+HTML_HEAD:    a wide screen it stays in the content column instead of spanning underneath
+#+HTML_HEAD:    the contents sidebar.  These rules only bite where it has been moved; a
+#+HTML_HEAD:    postamble left as a sibling of #content is untouched. */
+#+HTML_HEAD: div#content > #postamble {
+#+HTML_HEAD: 	margin-top: 2em;
+#+HTML_HEAD: 	padding-top: 1em;
+#+HTML_HEAD: 	border-top: 1px solid #555;
+#+HTML_HEAD: }
+#+HTML_HEAD: /* ...unless the source link sits directly above it, having already drawn the
+#+HTML_HEAD:    separating rule. */
+#+HTML_HEAD: #org-download + #postamble {
+#+HTML_HEAD: 	margin-top: .5em;
+#+HTML_HEAD: 	padding-top: 0;
+#+HTML_HEAD: 	border-top: none;
 #+HTML_HEAD: }
 #+HTML_HEAD: </style>
